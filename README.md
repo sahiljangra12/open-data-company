@@ -182,6 +182,21 @@ A dataset has one of three shapes, and the shape decides what the site can do wi
 3. Try it on GitHub's servers before it joins the daily run: Actions, "Try data sources", with the builder's name.
 4. Record the source in `STATUS` in `scripts/build_catalog.py`, so the catalog says where it stands.
 
+### Sources that ask for a free key
+
+A few sources hand out data only to callers with a free key. Their loaders are written and read the key from a GitHub
+secret (repository Settings, Secrets and variables, Actions). Until a secret exists its loader is skipped, which is not a
+failure, and the catalog page says the source is waiting for its key.
+
+| Secret | Where to get the key | What it turns on |
+|---|---|---|
+| `EIA_API_KEY` | https://www.eia.gov/opendata/register.php | Daily electricity demand for PJM, MISO, ERCOT, CAISO, SPP, NYISO and ISO New England |
+| `DATA_GOV_API_KEY` | https://api.data.gov/signup/ | Bills and laws by Congress (Congress.gov); documents and comments by year (Regulations.gov) |
+| `CENSUS_API_KEY` | https://api.census.gov/data/key_signup.html | Every US state by year: population, income, housing, poverty, education, businesses |
+
+Keys are never written to the repository or printed in a log. These three loaders could not be tested without a key, so
+run "Try data sources" with `eia_grid,us_lawmaking,census_states` after adding one.
+
 A builder that fails keeps the last good version. Projections are kept in datasets of their own, so "the latest value"
 is never a year that has not happened. A yearly count whose last point is the year in progress sets `partial`, and the
 site then reports the last full year.
