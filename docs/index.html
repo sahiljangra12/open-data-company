@@ -1,24 +1,22 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Open Data Company</title><meta name="description" content="Data products built from open US and world data."><link rel="stylesheet" href="assets/site.css"></head>
+<title>Open Data Company</title><meta name="description" content="Browse open US and world datasets, choose variables and years, preview, merge and download in one click."><link rel="stylesheet" href="assets/site.css"></head>
 <body data-page="home"><header class="top"><div class="wrap"><a class="brand" href="index.html">Open Data <span>Company</span></a>
-<nav><a href="index.html" class="on">Home</a><a href="catalog.html" class="">Catalog</a><a href="scorecard.html" class="">Scorecard</a><a href="https://github.com/sahiljangra12/open-data-company">GitHub</a></nav></div></header><main>
+<nav><a href="index.html" class="on">Datasets</a><a href="explore.html" class="">Explore</a><a href="catalog.html" class="">Sources</a><a href="scorecard.html" class="">Scorecard</a><a href="https://github.com/sahiljangra12/open-data-company">GitHub</a></nav></div></header><main>
 <div class="wrap">
-<div class="hero"><h1>Open data, turned into answers you can act on.</h1>
-<p class="lead">Public data is free but scattered, messy and hard to read. We clean it, keep it current and publish what it means, with every method open to inspection.</p>
-<a class="btn" href="scorecard.html">See the first product</a><a class="btn ghost" href="catalog.html">Browse the data catalog</a></div>
-<section><div class="grid">
-<div class="card"><div class="stat" id="n-src">–</div><p>open data sources catalogued across the US and the world</p></div>
-<div class="card"><div class="stat" id="n-ok">–</div><p>of them clearly allow reuse in commercial products</p></div>
-<div class="card"><div class="stat" id="n-fast">–</div><p>update weekly or faster, which is what a subscription needs</p></div>
+<div class="hero"><h1>Open data, ready to download.</h1>
+<p class="lead">Pick a dataset, choose the variables, places and years you need, check the preview, and download it as CSV, Excel or JSON. Compare series on a chart or merge two datasets before you download.</p>
+<div class="filters" style="max-width:760px"><input id="q" type="search" placeholder="Search datasets and variables, for example solar, GDP, oil price" aria-label="Search datasets">
+<select id="f-region" aria-label="Region"><option value="">US and world</option><option>US</option><option>World</option></select></div></div>
+<section style="padding-top:0"><div class="count" id="count"></div><div class="dsgrid" id="sets"></div></section>
+<section><h2>How it works</h2><div class="grid steps">
+<div class="card"><h3>Choose</h3><p>Tick the variables you want, pick countries or zones, and set the years.</p></div>
+<div class="card"><h3>Filter</h3><p>Add conditions such as "GDP per capita above 10,000" and drop empty rows.</p></div>
+<div class="card"><h3>Compare or merge</h3><p>Chart places against each other, or join a second dataset on the same keys.</p></div>
+<div class="card"><h3>Preview and download</h3><p>See the exact table first, then download CSV, TSV, Excel or JSON.</p></div>
 </div></section>
-<section><h2>Products</h2><div class="grid">
-<div class="card"><span class="tag yes">Preview live</span><h3 style="margin-top:10px"><a href="scorecard.html">Load Forecast Scorecard</a></h3><p>How close were grid forecasts to what actually happened, zone by zone? Starts with PJM, the largest US grid and the centre of data-center growth.</p></div>
-<div class="card"><span class="tag yes">Live</span><h3 style="margin-top:10px"><a href="catalog.html">Open Data Catalog</a></h3><p>A searchable list of major open datasets with licence, update frequency, API access and who would pay for products built on them.</p></div>
-<div class="card"><span class="tag plain">Next</span><h3 style="margin-top:10px">More scorecards</h3><p>The same independent forecast-versus-actual check for other grid regions, chosen by what readers ask for.</p></div>
-</div></section>
-<section><h2>How we work</h2><div class="grid">
-<div class="card"><h3>Public sources only</h3><p>Every number traces back to a named public file that anyone can download.</p></div>
-<div class="card"><h3>Open methods</h3><p>The code that produces each product is in the repository. If we are wrong, you can see where.</p></div>
-<div class="card"><h3>Kept current</h3><p>Products are rebuilt when the source publishes, not once and left to age.</p></div>
+<section><h2>What is coming</h2><div class="grid">
+<div class="card"><div class="stat" id="n-src">–</div><p>open sources mapped in the <a href="catalog.html">source catalog</a>, added to the portal in batches</p></div>
+<div class="card"><h3><a href="scorecard.html">Load Forecast Scorecard</a></h3><p>Our first analysis product: how close PJM's zonal load forecasts were to what happened.</p></div>
+<div class="card"><h3>Kept current</h3><p>A scheduled job rebuilds every dataset from its source each week.</p></div>
 </div></section></div>
-</main><footer><div class="wrap">Open Data Company (working name). Built on public data; methods and code are open on <a href="https://github.com/sahiljangra12/open-data-company">GitHub</a>. Everything on this site is a free preview.</div></footer><script src="assets/site.js"></script></body></html>
+</main><footer><div class="wrap">Open Data Company (working name). Built on public data; each dataset keeps its source and licence, shown beside it. Methods and code are open on <a href="https://github.com/sahiljangra12/open-data-company">GitHub</a>. Free preview.</div></footer><script src="assets/site.js"></script></body></html>

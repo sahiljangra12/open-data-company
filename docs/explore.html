@@ -1,0 +1,28 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Explore and download | Open Data Company</title><meta name="description" content="Choose variables, places, years and filters, preview the table, compare, merge and download."><link rel="stylesheet" href="assets/site.css"></head>
+<body data-page="explore"><header class="top"><div class="wrap"><a class="brand" href="index.html">Open Data <span>Company</span></a>
+<nav><a href="index.html" class="">Datasets</a><a href="explore.html" class="on">Explore</a><a href="catalog.html" class="">Sources</a><a href="scorecard.html" class="">Scorecard</a><a href="https://github.com/sahiljangra12/open-data-company">GitHub</a></nav></div></header><main>
+<div class="wrap">
+<div class="xhead"><label for="ds" class="legend">Dataset</label><br><select id="ds"></select>
+<h1 id="title">Loading…</h1><p id="desc"></p><p class="meta" id="meta"></p></div>
+<p id="loading" class="note">Loading…</p>
+<div class="x" id="work" hidden>
+<aside>
+<div class="panel"><h3>1. Variables</h3><input id="v-q" type="search" placeholder="Search variables" aria-label="Search variables"><div class="list" id="vars"></div>
+<div class="mini"><span id="v-count"></span><span><button type="button" id="v-all">Select all shown</button> · <button type="button" id="v-none">Clear shown</button></span></div></div>
+<div class="panel" id="ent-panel"><h3>2. <span id="e-title">Places</span></h3><input id="e-q" type="search" placeholder="Search" aria-label="Search places"><div class="list" id="ents"></div>
+<div class="mini"><span id="e-count"></span><button type="button" id="e-all">Include all</button></div></div>
+<div class="panel"><h3>3. Time</h3><div class="two"><label class="legend" style="margin:0">From<input id="t-from"></label><label class="legend" style="margin:0">To<input id="t-to"></label></div><div class="mini"><span id="t-note"></span></div></div>
+<div class="panel"><h3>4. Filters</h3><div id="filters"></div><button type="button" class="link" id="add-filter">+ Add a condition</button>
+<label style="display:flex;gap:8px;font-size:14px;margin-top:10px"><input type="checkbox" id="drop" checked> Drop rows where every selected variable is empty</label></div>
+<div class="panel"><h3>5. Merge another dataset</h3><select id="merge" aria-label="Dataset to merge"></select><div id="merge-body"></div></div>
+</aside>
+<div>
+<div class="bar2"><span id="summary"></span><select id="fmt" aria-label="Download format"><option value="csv">CSV</option><option value="xlsx">Excel (.xlsx)</option><option value="json">JSON</option><option value="tsv">TSV</option></select>
+<button type="button" id="dl">Download</button><button type="button" class="link" id="share">Copy link to this view</button><span id="dl-note"></span></div>
+<div class="tabs" role="tablist"><button class="on" data-t="preview">Preview</button><button data-t="chart">Compare</button><button data-t="stats">Summary</button></div>
+<div class="pane" id="pane-preview"><div class="tablewrap"><table id="preview"></table></div><p class="legend" id="preview-note"></p></div>
+<div class="pane" id="pane-chart" hidden><div class="chartctl"><label>Variable <select id="chart-var"></select></label><label><input type="checkbox" id="chart-index"> Index to first value = 100</label></div><div id="chart"></div></div>
+<div class="pane" id="pane-stats" hidden><div class="tablewrap"><table id="stats"></table></div></div>
+</div></div></div>
+</main><footer><div class="wrap">Open Data Company (working name). Built on public data; each dataset keeps its source and licence, shown beside it. Methods and code are open on <a href="https://github.com/sahiljangra12/open-data-company">GitHub</a>. Free preview.</div></footer><script src="vendor/xlsx.mini.min.js"></script><script src="assets/explore.js"></script></body></html>

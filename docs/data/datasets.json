@@ -1,0 +1,1915 @@
+{
+ "datasets": [
+  {
+   "id": "co2-and-greenhouse-gases",
+   "title": "CO2 and greenhouse gas emissions",
+   "description": "Annual emissions by country: CO2 by fuel and sector, per-capita and cumulative figures, methane, nitrous oxide, and each country's share of the world total.",
+   "region": "World",
+   "domain": "Climate and emissions",
+   "source": "Our World in Data",
+   "source_url": "https://github.com/owid/co2-data",
+   "licence": "CC BY 4.0 (Our World in Data; underlying sources listed per variable in the OWID codebook)",
+   "file": "data/sets/co2-and-greenhouse-gases.csv",
+   "keys": [
+    "code",
+    "year"
+   ],
+   "time": {
+    "col": "year",
+    "type": "year",
+    "min": "1750",
+    "max": "2025"
+   },
+   "entity": {
+    "col": "code",
+    "label_col": "country",
+    "label": "Country or region"
+   },
+   "rows": 56269,
+   "columns": [
+    {
+     "name": "population",
+     "title": "Population",
+     "unit": "people",
+     "description": "Population by country, available from 10,000 BCE to 2100, based on data and estimates from different sources.",
+     "type": "num",
+     "filled": 44124
+    },
+    {
+     "name": "gdp",
+     "title": "Gross domestic product (GDP)",
+     "unit": "international-$ in 2011 prices ($)",
+     "description": "Total economic output of a country or region per year. This data is adjusted for inflation and differences in living costs between countries.",
+     "type": "num",
+     "filled": 15367
+    },
+    {
+     "name": "cement_co2",
+     "title": "Annual CO₂ emissions from cement",
+     "unit": "million tonnes (Mt)",
+     "description": "Annual emissions of carbon dioxide (CO₂) from cement, measured in million tonnes.",
+     "type": "num",
+     "filled": 38425
+    },
+    {
+     "name": "cement_co2_per_capita",
+     "title": "Annual CO₂ emissions from cement (per capita)",
+     "unit": "tonnes per person (t/person)",
+     "description": "Annual emissions of carbon dioxide (CO₂) from cement, measured in tonnes per person.",
+     "type": "num",
+     "filled": 31816
+    },
+    {
+     "name": "co2",
+     "title": "Annual CO₂ emissions",
+     "unit": "million tonnes (Mt)",
+     "description": "Annual total emissions of carbon dioxide (CO₂), excluding land-use change, measured in million tonnes.",
+     "type": "num",
+     "filled": 30219
+    },
+    {
+     "name": "co2_growth_abs",
+     "title": "Annual CO₂ emissions growth (abs)",
+     "unit": "million tonnes (Mt)",
+     "description": "Annual growth in total emissions of carbon dioxide (CO₂), excluding land-use change, measured in million tonnes.",
+     "type": "num",
+     "filled": 28038
+    },
+    {
+     "name": "co2_growth_prct",
+     "title": "Annual CO₂ emissions growth (%)",
+     "unit": "%",
+     "description": "Annual percentage growth in total emissions of carbon dioxide (CO₂), excluding land-use change.",
+     "type": "num",
+     "filled": 26839
+    },
+    {
+     "name": "co2_including_luc",
+     "title": "Annual CO₂ emissions including land-use change",
+     "unit": "million tonnes (Mt)",
+     "description": "Annual total emissions of carbon dioxide (CO₂), including land-use change, measured in million tonnes.",
+     "type": "num",
+     "filled": 24065
+    },
+    {
+     "name": "co2_including_luc_growth_abs",
+     "title": "Growth rate of emissions including land-use change",
+     "unit": "million tonnes (Mt)",
+     "description": "Annual growth in total emissions of carbon dioxide (CO₂), including land-use change, measured in million tonnes.",
+     "type": "num",
+     "filled": 23770
+    },
+    {
+     "name": "co2_including_luc_growth_prct",
+     "title": "Growth rate of emissions including land-use change (%)",
+     "unit": "%",
+     "description": "Annual percentage growth in total emissions of carbon dioxide (CO₂), including land-use change.",
+     "type": "num",
+     "filled": 23770
+    },
+    {
+     "name": "co2_including_luc_per_capita",
+     "title": "Annual CO₂ emissions including land-use change per capita",
+     "unit": "tonnes per person (t/person)",
+     "description": "Annual emissions of carbon dioxide (CO₂), including land-use change, measured in tonnes per person.",
+     "type": "num",
+     "filled": 24026
+    },
+    {
+     "name": "co2_including_luc_per_gdp",
+     "title": "Annual CO₂ emissions including land-use change per GDP",
+     "unit": "kilograms per international-$ (kg/$)",
+     "description": "Annual total emissions of carbon dioxide (CO₂), including land-use change, measured in kilograms per dollar of GDP (2011 international-$).",
+     "type": "num",
+     "filled": 16802
+    },
+    {
+     "name": "co2_including_luc_per_unit_energy",
+     "title": "CO₂ emissions including land-use change per unit energy",
+     "unit": "grams per kilowatt-hour (g/kWh)",
+     "description": "Carbon dioxide (CO₂) emitted per unit of primary energy consumption, measured in grams of CO₂ per kilowatt-hour. Land-use change emissions are included.",
+     "type": "num",
+     "filled": 10133
+    },
+    {
+     "name": "co2_per_capita",
+     "title": "CO₂ emissions per capita",
+     "unit": "tonnes per person (t/person)",
+     "description": "Carbon dioxide (CO₂) emissions from burning fossil fuels and industrial processes. This includes emissions from transport, electricity generation, and heating, but not land-use change.",
+     "type": "num",
+     "filled": 27238
+    },
+    {
+     "name": "co2_per_gdp",
+     "title": "Annual CO₂ emissions per GDP (kg per international-$)",
+     "unit": "kilograms per international-$ (kg/$)",
+     "description": "Annual total emissions of carbon dioxide (CO₂), excluding land-use change, measured in kilograms per dollar of GDP (2011 international-$).",
+     "type": "num",
+     "filled": 17540
+    },
+    {
+     "name": "co2_per_unit_energy",
+     "title": "CO₂ emissions per unit energy",
+     "unit": "grams per kilowatt-hour (g/kWh)",
+     "description": "Carbon dioxide (CO₂) emitted per unit of primary energy consumption, measured in grams of CO₂ per kilowatt-hour.",
+     "type": "num",
+     "filled": 10953
+    },
+    {
+     "name": "coal_co2",
+     "title": "Annual CO₂ emissions from coal",
+     "unit": "million tonnes (Mt)",
+     "description": "Annual emissions of carbon dioxide (CO₂) from coal, measured in million tonnes.",
+     "type": "num",
+     "filled": 22148
+    },
+    {
+     "name": "coal_co2_per_capita",
+     "title": "Annual CO₂ emissions from coal (per capita)",
+     "unit": "tonnes per person (t/person)",
+     "description": "Annual emissions of carbon dioxide (CO₂) from coal, measured in tonnes per person.",
+     "type": "num",
+     "filled": 21535
+    },
+    {
+     "name": "consumption_co2",
+     "title": "Annual consumption-based CO₂ emissions",
+     "unit": "million tonnes (Mt)",
+     "description": "Annual consumption-based emissions of carbon dioxide (CO₂), measured in million tonnes.",
+     "type": "num",
+     "filled": 5202
+    },
+    {
+     "name": "consumption_co2_per_capita",
+     "title": "Per capita consumption-based CO₂ emissions",
+     "unit": "tonnes per person (t/person)",
+     "description": "Annual consumption-based emissions of carbon dioxide (CO₂), measured in tonnes per person.",
+     "type": "num",
+     "filled": 4780
+    },
+    {
+     "name": "consumption_co2_per_gdp",
+     "title": "Annual consumption-based CO₂ emissions per GDP (kg per international-$)",
+     "unit": "kilograms per international-$ (kg/$)",
+     "description": "Annual consumption-based emissions of carbon dioxide (CO₂), measured in kilograms per dollar of GDP (2011 international-$).",
+     "type": "num",
+     "filled": 4448
+    },
+    {
+     "name": "cumulative_cement_co2",
+     "title": "Cumulative CO₂ emissions from cement",
+     "unit": "million tonnes (Mt)",
+     "description": "Cumulative emissions of carbon dioxide (CO₂) from cement since the first year of available data, measured in million tonnes.",
+     "type": "num",
+     "filled": 38403
+    },
+    {
+     "name": "cumulative_co2",
+     "title": "Cumulative CO₂ emissions",
+     "unit": "million tonnes (Mt)",
+     "description": "Total cumulative emissions of carbon dioxide (CO₂), excluding land-use change, since the first year of available data, measured in million tonnes.",
+     "type": "num",
+     "filled": 28386
+    },
+    {
+     "name": "cumulative_co2_including_luc",
+     "title": "Cumulative CO₂ emissions including land-use change",
+     "unit": "million tonnes (Mt)",
+     "description": "Total cumulative emissions of carbon dioxide (CO₂), including land-use change, since the first year of available data, measured in million tonnes.",
+     "type": "num",
+     "filled": 24065
+    },
+    {
+     "name": "cumulative_coal_co2",
+     "title": "Cumulative CO₂ emissions from coal",
+     "unit": "million tonnes (Mt)",
+     "description": "Cumulative emissions of carbon dioxide (CO₂) from coal since the first year of available data, measured in million tonnes.",
+     "type": "num",
+     "filled": 22148
+    },
+    {
+     "name": "cumulative_flaring_co2",
+     "title": "Cumulative CO₂ emissions from flaring",
+     "unit": "million tonnes (Mt)",
+     "description": "Cumulative emissions of carbon dioxide (CO₂) from flaring since the first year of available data, measured in million tonnes.",
+     "type": "num",
+     "filled": 16346
+    },
+    {
+     "name": "cumulative_gas_co2",
+     "title": "Cumulative CO₂ emissions from gas",
+     "unit": "million tonnes (Mt)",
+     "description": "Cumulative emissions of carbon dioxide (CO₂) from gas since the first year of available data, measured in million tonnes.",
+     "type": "num",
+     "filled": 18305
+    },
+    {
+     "name": "cumulative_luc_co2",
+     "title": "Cumulative CO₂ emissions from land-use change",
+     "unit": "million tonnes (Mt)",
+     "description": "Cumulative emissions of carbon dioxide (CO₂) from land-use change since the first year of available data, measured in million tonnes.",
+     "type": "num",
+     "filled": 37664
+    },
+    {
+     "name": "cumulative_oil_co2",
+     "title": "Cumulative CO₂ emissions from oil",
+     "unit": "million tonnes (Mt)",
+     "description": "Cumulative emissions of carbon dioxide (CO₂) from oil since the first year of available data, measured in million tonnes.",
+     "type": "num",
+     "filled": 26031
+    },
+    {
+     "name": "cumulative_other_co2",
+     "title": "Cumulative CO₂ emissions from other industry",
+     "unit": "million tonnes (Mt)",
+     "description": "Cumulative emissions of carbon dioxide (CO₂) from other industry sources since the first year of available data, measured in million tonnes.",
+     "type": "num",
+     "filled": 3448
+    },
+    {
+     "name": "energy_per_capita",
+     "title": "Primary energy consumption per capita",
+     "unit": "kilowatt-hours per person (kWh)",
+     "description": "Measured in kilowatt-hours per person.",
+     "type": "num",
+     "filled": 10766
+    },
+    {
+     "name": "energy_per_gdp",
+     "title": "Primary energy consumption per GDP",
+     "unit": "kilowatt-hours per $ (kWh)",
+     "description": "Measured in kilowatt-hours per international-$.",
+     "type": "num",
+     "filled": 7787
+    },
+    {
+     "name": "flaring_co2",
+     "title": "Annual CO₂ emissions from flaring",
+     "unit": "million tonnes (Mt)",
+     "description": "Annual emissions of carbon dioxide (CO₂) from flaring, measured in million tonnes.",
+     "type": "num",
+     "filled": 16411
+    },
+    {
+     "name": "flaring_co2_per_capita",
+     "title": "Annual CO₂ emissions from flaring (per capita)",
+     "unit": "tonnes per person (t/person)",
+     "description": "Annual emissions of carbon dioxide (CO₂) from flaring, measured in tonnes per person.",
+     "type": "num",
+     "filled": 15141
+    },
+    {
+     "name": "gas_co2",
+     "title": "Annual CO₂ emissions from gas",
+     "unit": "million tonnes (Mt)",
+     "description": "Annual emissions of carbon dioxide (CO₂) from gas, measured in million tonnes.",
+     "type": "num",
+     "filled": 18305
+    },
+    {
+     "name": "gas_co2_per_capita",
+     "title": "Annual CO₂ emissions from gas (per capita)",
+     "unit": "tonnes per person (t/person)",
+     "description": "Annual emissions of carbon dioxide (CO₂) from gas, measured in tonnes per person.",
+     "type": "num",
+     "filled": 17602
+    },
+    {
+     "name": "ghg_excluding_lucf_per_capita",
+     "title": "Per capita greenhouse gas emissions from fossil fuels and industry",
+     "unit": "tonnes of CO₂ equivalents per person (t/person)",
+     "description": "Greenhouse gas emissions are measured in tonnes per person of carbon dioxide-equivalents over a 100-year timescale.",
+     "type": "num",
+     "filled": 35842
+    },
+    {
+     "name": "ghg_per_capita",
+     "title": "Per capita greenhouse gas emissions including land use",
+     "unit": "tonnes of CO₂ equivalents per person (t/person)",
+     "description": "Greenhouse gas emissions are measured in tonnes per person of carbon dioxide-equivalents over a 100-year timescale.",
+     "type": "num",
+     "filled": 36179
+    },
+    {
+     "name": "land_use_change_co2",
+     "title": "Annual CO₂ emissions from land-use change",
+     "unit": "million tonnes (Mt)",
+     "description": "Annual emissions of carbon dioxide (CO₂) from land-use change, measured in million tonnes.",
+     "type": "num",
+     "filled": 37664
+    },
+    {
+     "name": "land_use_change_co2_per_capita",
+     "title": "Annual CO₂ emissions from land-use change per capita",
+     "unit": "tonnes per person (t/person)",
+     "description": "Annual emissions of carbon dioxide (CO₂) from land-use change, measured in tonnes per person.",
+     "type": "num",
+     "filled": 36846
+    },
+    {
+     "name": "methane",
+     "title": "Annual methane emissions including land use",
+     "unit": "million tonnes (Mt)",
+     "description": "Measured in tonnes of carbon dioxide-equivalents over a 100-year timescale.",
+     "type": "num",
+     "filled": 38150
+    },
+    {
+     "name": "methane_per_capita",
+     "title": "Per capita methane emissions including land use",
+     "unit": "tonnes of CO₂ equivalents per person (t/person)",
+     "description": "Measured in tonnes per person of carbon dioxide-equivalents over a 100-year timescale.",
+     "type": "num",
+     "filled": 36179
+    },
+    {
+     "name": "nitrous_oxide",
+     "title": "Annual nitrous oxide emissions including land use",
+     "unit": "million tonnes (Mt)",
+     "description": "Measured in tonnes of carbon dioxide-equivalents over a 100-year timescale.",
+     "type": "num",
+     "filled": 38500
+    },
+    {
+     "name": "nitrous_oxide_per_capita",
+     "title": "Per capita nitrous oxide emissions including land use",
+     "unit": "tonnes of CO₂ equivalents per person (t/person)",
+     "description": "Measured in tonnes per person of carbon dioxide-equivalents over a 100-year timescale.",
+     "type": "num",
+     "filled": 36439
+    },
+    {
+     "name": "oil_co2",
+     "title": "Annual CO₂ emissions from oil",
+     "unit": "million tonnes (Mt)",
+     "description": "Annual emissions of carbon dioxide (CO₂) from oil, measured in million tonnes.",
+     "type": "num",
+     "filled": 26032
+    },
+    {
+     "name": "oil_co2_per_capita",
+     "title": "Annual CO₂ emissions from oil (per capita)",
+     "unit": "tonnes per person (t/person)",
+     "description": "Annual emissions of carbon dioxide (CO₂) from oil, measured in tonnes per person.",
+     "type": "num",
+     "filled": 25293
+    },
+    {
+     "name": "other_co2_per_capita",
+     "title": "Annual CO₂ emissions from other industry (per capita)",
+     "unit": "tonnes per person (t/person)",
+     "description": "Annual emissions of carbon dioxide (CO₂) from other industry sources, measured in tonnes per person.",
+     "type": "num",
+     "filled": 2851
+    },
+    {
+     "name": "other_industry_co2",
+     "title": "Annual CO₂ emissions from other industry",
+     "unit": "million tonnes (Mt)",
+     "description": "Annual emissions of carbon dioxide (CO₂) from other industry sources, measured in million tonnes.",
+     "type": "num",
+     "filled": 3448
+    },
+    {
+     "name": "primary_energy_consumption",
+     "title": "Primary energy consumption",
+     "unit": "terawatt-hours (TWh)",
+     "description": "Measured in terawatt-hours.",
+     "type": "num",
+     "filled": 10811
+    },
+    {
+     "name": "share_global_cement_co2",
+     "title": "Share of global annual CO₂ emissions from cement",
+     "unit": "%",
+     "description": "Annual emissions of carbon dioxide (CO₂) from cement, measured as a percentage of global emissions of CO₂ from cement in the same year.",
+     "type": "num",
+     "filled": 31399
+    },
+    {
+     "name": "share_global_co2",
+     "title": "Share of global annual CO₂ emissions",
+     "unit": "%",
+     "description": "Annual total emissions of carbon dioxide (CO₂), excluding land-use change, measured as a percentage of global emissions of CO₂ in the same year.",
+     "type": "num",
+     "filled": 28386
+    },
+    {
+     "name": "share_global_co2_including_luc",
+     "title": "Share of global annual CO₂ emissions including land-use change",
+     "unit": "%",
+     "description": "Annual total emissions of carbon dioxide (CO₂), including land-use change, measured as a percentage of global total emissions of CO₂ in the same year.",
+     "type": "num",
+     "filled": 24065
+    },
+    {
+     "name": "share_global_coal_co2",
+     "title": "Share of global annual CO₂ emissions from coal",
+     "unit": "%",
+     "description": "Annual emissions of carbon dioxide (CO₂) from coal, measured as a percentage of global emissions of CO₂ from coal in the same year.",
+     "type": "num",
+     "filled": 22148
+    },
+    {
+     "name": "share_global_cumulative_cement_co2",
+     "title": "Share of global cumulative CO₂ emissions from cement",
+     "unit": "%",
+     "description": "Cumulative emissions of carbon dioxide (CO₂) from cement since the first year of available data, measured as a percentage of global cumulative emissions of CO₂ from cement.",
+     "type": "num",
+     "filled": 31399
+    },
+    {
+     "name": "share_global_cumulative_co2",
+     "title": "Share of global cumulative CO₂ emissions",
+     "unit": "%",
+     "description": "Total cumulative emissions of carbon dioxide (CO₂), excluding land-use change, since the first year of available data, measured as a percentage of global total cumulative emissions of CO₂.",
+     "type": "num",
+     "filled": 28386
+    },
+    {
+     "name": "share_global_cumulative_co2_including_luc",
+     "title": "Share of global cumulative CO₂ emissions including land-use change",
+     "unit": "%",
+     "description": "Total cumulative emissions of carbon dioxide (CO₂), including land-use change, since the first year of available data, measured as a percentage of global total cumulative emissions of CO₂ (including land-use change).",
+     "type": "num",
+     "filled": 24065
+    },
+    {
+     "name": "share_global_cumulative_coal_co2",
+     "title": "Share of global cumulative CO₂ emissions from coal",
+     "unit": "%",
+     "description": "Cumulative emissions of carbon dioxide (CO₂) from coal since the first year of available data, measured as a percentage of global cumulative emissions of CO₂ from coal.",
+     "type": "num",
+     "filled": 22148
+    },
+    {
+     "name": "share_global_cumulative_flaring_co2",
+     "title": "Share of global cumulative CO₂ emissions from flaring",
+     "unit": "%",
+     "description": "Cumulative emissions of carbon dioxide (CO₂) from flaring since the first year of available data, measured as a percentage of global cumulative emissions of CO₂ from flaring.",
+     "type": "num",
+     "filled": 11324
+    },
+    {
+     "name": "share_global_cumulative_gas_co2",
+     "title": "Share of global cumulative CO₂ emissions from gas",
+     "unit": "%",
+     "description": "Cumulative emissions of carbon dioxide (CO₂) from gas since the first year of available data, measured as a percentage of global cumulative emissions of CO₂ from gas.",
+     "type": "num",
+     "filled": 15325
+    },
+    {
+     "name": "share_global_cumulative_luc_co2",
+     "title": "Share of global cumulative CO₂ emissions from land-use change",
+     "unit": "%",
+     "description": "Cumulative emissions of carbon dioxide (CO₂) from land-use change since the first year of available data, measured as a percentage of global cumulative emissions of CO₂ from land-use change.",
+     "type": "num",
+     "filled": 37664
+    },
+    {
+     "name": "share_global_cumulative_oil_co2",
+     "title": "Share of global cumulative CO₂ emissions from oil",
+     "unit": "%",
+     "description": "Cumulative emissions of carbon dioxide (CO₂) from oil since the first year of available data, measured as a percentage of global cumulative emissions of CO₂ from oil.",
+     "type": "num",
+     "filled": 24406
+    },
+    {
+     "name": "share_global_cumulative_other_co2",
+     "title": "Share of global cumulative CO₂ emissions from other industry",
+     "unit": "%",
+     "description": "Cumulative emissions of carbon dioxide (CO₂) from other industry sources since the first year of available data, measured as a percentage of global cumulative emissions of CO₂ from other industry sources.",
+     "type": "num",
+     "filled": 2232
+    },
+    {
+     "name": "share_global_flaring_co2",
+     "title": "Share of global annual CO₂ emissions from flaring",
+     "unit": "%",
+     "description": "Annual emissions of carbon dioxide (CO₂) from flaring, measured as a percentage of global emissions of CO₂ from flaring in the same year.",
+     "type": "num",
+     "filled": 11324
+    },
+    {
+     "name": "share_global_gas_co2",
+     "title": "Share of global annual CO₂ emissions from gas",
+     "unit": "%",
+     "description": "Annual emissions of carbon dioxide (CO₂) from gas, measured as a percentage of global emissions of CO₂ from gas in the same year.",
+     "type": "num",
+     "filled": 15325
+    },
+    {
+     "name": "share_global_luc_co2",
+     "title": "Share of global annual CO₂ emissions from land-use change",
+     "unit": "%",
+     "description": "Annual emissions of carbon dioxide (CO₂) from land-use change, measured as a percentage of global emissions of CO₂ from land-use change in the same year.",
+     "type": "num",
+     "filled": 37664
+    },
+    {
+     "name": "share_global_oil_co2",
+     "title": "Share of global annual CO₂ emissions from oil",
+     "unit": "%",
+     "description": "Annual emissions of carbon dioxide (CO₂) from oil, measured as a percentage of global emissions of CO₂ from oil in the same year.",
+     "type": "num",
+     "filled": 24406
+    },
+    {
+     "name": "share_global_other_co2",
+     "title": "Share of global annual CO₂ emissions from other industry",
+     "unit": "%",
+     "description": "Annual emissions of carbon dioxide (CO₂) from other industry sources, measured as a percentage of global emissions of CO₂ from other industry sources in the same year.",
+     "type": "num",
+     "filled": 2232
+    },
+    {
+     "name": "share_of_temperature_change_from_ghg",
+     "title": "Share of contribution to global warming",
+     "unit": "%",
+     "description": "Measured as a percentage of the world's temperature change.",
+     "type": "num",
+     "filled": 41238
+    },
+    {
+     "name": "temperature_change_from_ch4",
+     "title": "Change in global mean surface temperature caused by methane emissions",
+     "unit": "°C",
+     "description": "Measured in °C.",
+     "type": "num",
+     "filled": 38280
+    },
+    {
+     "name": "temperature_change_from_co2",
+     "title": "Change in global mean surface temperature caused by CO₂ emissions",
+     "unit": "°C",
+     "description": "Measured in °C.",
+     "type": "num",
+     "filled": 41238
+    },
+    {
+     "name": "temperature_change_from_ghg",
+     "title": "Change in global mean surface temperature caused by greenhouse gas emissions",
+     "unit": "°C",
+     "description": "Measured in °C.",
+     "type": "num",
+     "filled": 41238
+    },
+    {
+     "name": "temperature_change_from_n2o",
+     "title": "Change in global mean surface temperature caused by nitrous oxide emissions",
+     "unit": "°C",
+     "description": "Measured in °C.",
+     "type": "num",
+     "filled": 38280
+    },
+    {
+     "name": "total_ghg",
+     "title": "Annual greenhouse gas emissions including land use",
+     "unit": "million tonnes (Mt)",
+     "description": "Greenhouse gas emissions are measured in tonnes of carbon dioxide-equivalents over a 100-year timescale.",
+     "type": "num",
+     "filled": 38150
+    },
+    {
+     "name": "total_ghg_excluding_lucf",
+     "title": "Annual greenhouse gas emissions from fossil fuels and industry",
+     "unit": "million tonnes (Mt)",
+     "description": "Greenhouse gas emissions are measured in tonnes of carbon dioxide-equivalents over a 100-year timescale.",
+     "type": "num",
+     "filled": 37813
+    },
+    {
+     "name": "trade_co2",
+     "title": "Annual CO₂ emissions embedded in trade",
+     "unit": "million tonnes (Mt)",
+     "description": "Annual net carbon dioxide (CO₂) emissions embedded in trade, measured in million tonnes.",
+     "type": "num",
+     "filled": 4851
+    },
+    {
+     "name": "trade_co2_share",
+     "title": "Share of annual CO₂ emissions embedded in trade",
+     "unit": "%",
+     "description": "Annual net carbon dioxide (CO₂) emissions embedded in trade, measured as a percentage of emissions of CO₂.",
+     "type": "num",
+     "filled": 4851
+    }
+   ],
+   "bytes": 15462636,
+   "built": "2026-11-23",
+   "default_vars": [
+    "co2",
+    "co2_per_capita"
+   ],
+   "default_entities": [
+    "USA",
+    "CHN",
+    "IND",
+    "WLD"
+   ],
+   "entities": 259
+  },
+  {
+   "id": "energy",
+   "title": "Energy production, consumption and electricity mix",
+   "description": "Annual energy data by country: primary energy, electricity generation by source, shares of coal, gas, nuclear, solar and wind, and per-capita use.",
+   "region": "World",
+   "domain": "Energy",
+   "source": "Our World in Data",
+   "source_url": "https://github.com/owid/energy-data",
+   "licence": "CC BY 4.0 (Our World in Data; underlying sources listed per variable in the OWID codebook)",
+   "file": "data/sets/energy.csv",
+   "keys": [
+    "code",
+    "year"
+   ],
+   "time": {
+    "col": "year",
+    "type": "year",
+    "min": "1900",
+    "max": "2025"
+   },
+   "entity": {
+    "col": "code",
+    "label_col": "country",
+    "label": "Country or region"
+   },
+   "rows": 23377,
+   "columns": [
+    {
+     "name": "population",
+     "title": "Population",
+     "unit": "people",
+     "description": "Population by country, available from 10,000 BCE to 2100, based on data and estimates from different sources.",
+     "type": "num",
+     "filled": 18894
+    },
+    {
+     "name": "gdp",
+     "title": "Gross domestic product (GDP)",
+     "unit": "international-$ in 2011 prices ($)",
+     "description": "Total economic output of a country or region per year. This data is adjusted for inflation and differences in living costs between countries.",
+     "type": "num",
+     "filled": 11780
+    },
+    {
+     "name": "biofuel_cons_change_pct",
+     "title": "Annual percentage change in biofuel consumption",
+     "unit": "%",
+     "description": "Includes biogasoline (such as ethanol) and biodiesel. Volumes have been adjusted for energy content.",
+     "type": "num",
+     "filled": 2070
+    },
+    {
+     "name": "biofuel_cons_change_twh",
+     "title": "Annual change in biofuel consumption",
+     "unit": "terawatt-hours (TWh)",
+     "description": "Includes biogasoline (such as ethanol) and biodiesel. Volumes have been adjusted for energy content.",
+     "type": "num",
+     "filled": 7903
+    },
+    {
+     "name": "biofuel_cons_per_capita",
+     "title": "Biofuel consumption per capita",
+     "unit": "kilowatt-hours (kWh)",
+     "description": "Measured in kilowatt-hours per person.",
+     "type": "num",
+     "filled": 6338
+    },
+    {
+     "name": "biofuel_consumption",
+     "title": "Primary energy consumption from biofuels",
+     "unit": "terawatt-hours (TWh)",
+     "description": "Measured in terawatt-hours.",
+     "type": "num",
+     "filled": 8057
+    },
+    {
+     "name": "biofuel_elec_per_capita",
+     "title": "Electricity generation from bioenergy per person",
+     "unit": "kilowatt-hours (kWh)",
+     "description": "Measured in kilowatt-hours per person.",
+     "type": "num",
+     "filled": 6015
+    },
+    {
+     "name": "biofuel_electricity",
+     "title": "Electricity generation from bioenergy",
+     "unit": "terawatt-hours (TWh)",
+     "description": "Measured in terawatt-hours.",
+     "type": "num",
+     "filled": 6337
+    },
+    {
+     "name": "biofuel_share_elec",
+     "title": "Share of electricity generated by bioenergy",
+     "unit": "%",
+     "description": "Measured as a percentage of total electricity produced in the country or region.",
+     "type": "num",
+     "filled": 6311
+    },
+    {
+     "name": "biofuel_share_energy",
+     "title": "Share of primary energy consumption that comes from biofuels",
+     "unit": "%",
+     "description": "Measured as a percentage of the total primary energy, using the substitution method.",
+     "type": "num",
+     "filled": 6379
+    },
+    {
+     "name": "carbon_intensity_elec",
+     "title": "Lifecycle carbon intensity of electricity generation",
+     "unit": "grams of CO₂ equivalents per kilowatt-hour (gCO₂)",
+     "description": "Greenhouse gases emitted per unit of generated electricity, measured in grams of CO₂ equivalents per kilowatt-hour.",
+     "type": "num",
+     "filled": 6332
+    },
+    {
+     "name": "coal_cons_change_pct",
+     "title": "Annual percentage change in coal consumption",
+     "unit": "%",
+     "description": "",
+     "type": "num",
+     "filled": 5827
+    },
+    {
+     "name": "coal_cons_change_twh",
+     "title": "Annual change in coal consumption",
+     "unit": "terawatt-hours (TWh)",
+     "description": "",
+     "type": "num",
+     "filled": 6293
+    },
+    {
+     "name": "coal_cons_per_capita",
+     "title": "Coal consumption per capita",
+     "unit": "kilowatt-hours (kWh)",
+     "description": "Measured in kilowatt-hours per person.",
+     "type": "num",
+     "filled": 5145
+    },
+    {
+     "name": "coal_consumption",
+     "title": "Primary energy consumption from coal",
+     "unit": "terawatt-hours (TWh)",
+     "description": "Measured in terawatt-hours.",
+     "type": "num",
+     "filled": 6405
+    },
+    {
+     "name": "coal_elec_per_capita",
+     "title": "Electricity generation from coal per person",
+     "unit": "kilowatt-hours (kWh)",
+     "description": "Measured in kilowatt-hours per person.",
+     "type": "num",
+     "filled": 6486
+    },
+    {
+     "name": "coal_electricity",
+     "title": "Electricity generation from coal",
+     "unit": "terawatt-hours (TWh)",
+     "description": "Measured in terawatt-hours.",
+     "type": "num",
+     "filled": 7168
+    },
+    {
+     "name": "coal_prod_change_pct",
+     "title": "Annual change in coal production",
+     "unit": "%",
+     "description": "Measured as a percentage of the previous year's production.",
+     "type": "num",
+     "filled": 9922
+    },
+    {
+     "name": "coal_prod_change_twh",
+     "title": "Annual change in coal production",
+     "unit": "terawatt-hours (TWh)",
+     "description": "Measured in terawatt-hours.",
+     "type": "num",
+     "filled": 16562
+    },
+    {
+     "name": "coal_prod_per_capita",
+     "title": "Coal production per capita",
+     "unit": "kilowatt-hours (kWh)",
+     "description": "Measured in kilowatt-hours per capita.",
+     "type": "num",
+     "filled": 14808
+    },
+    {
+     "name": "coal_production",
+     "title": "Coal production",
+     "unit": "terawatt-hours (TWh)",
+     "description": "Measured in terawatt-hours.",
+     "type": "num",
+     "filled": 16822
+    },
+    {
+     "name": "coal_share_elec",
+     "title": "Share of electricity generated by coal",
+     "unit": "%",
+     "description": "Measured as a percentage of total electricity produced in the country or region.",
+     "type": "num",
+     "filled": 7142
+    },
+    {
+     "name": "coal_share_energy",
+     "title": "Share of primary energy consumption that comes from coal",
+     "unit": "%",
+     "description": "Measured as a percentage of the total primary energy, using the substitution method.",
+     "type": "num",
+     "filled": 6379
+    },
+    {
+     "name": "electricity_demand",
+     "title": "Electricity demand",
+     "unit": "terawatt-hours (TWh)",
+     "description": "Measured in terawatt-hours.",
+     "type": "num",
+     "filled": 6378
+    },
+    {
+     "name": "electricity_demand_per_capita",
+     "title": "Total electricity demand per person",
+     "unit": "kilowatt-hours (kWh)",
+     "description": "Measured in kilowatt-hours per person.",
+     "type": "num",
+     "filled": 6056
+    },
+    {
+     "name": "electricity_generation",
+     "title": "Total electricity generation",
+     "unit": "terawatt-hours (TWh)",
+     "description": "Total electricity generated in each country or region, measured in terawatt-hours.",
+     "type": "num",
+     "filled": 7913
+    },
+    {
+     "name": "electricity_share_energy",
+     "title": "Total electricity generation as share of primary energy",
+     "unit": "%",
+     "description": "Measured as a percentage of total, direct primary energy consumption in the country or region.",
+     "type": "num",
+     "filled": 4103
+    },
+    {
+     "name": "energy_cons_change_pct",
+     "title": "Annual change in primary energy consumption",
+     "unit": "%",
+     "description": "",
+     "type": "num",
+     "filled": 12745
+    },
+    {
+     "name": "energy_cons_change_twh",
+     "title": "Annual change in primary energy consumption",
+     "unit": "terawatt-hours (TWh)",
+     "description": "",
+     "type": "num",
+     "filled": 12978
+    },
+    {
+     "name": "energy_per_capita",
+     "title": "Primary energy consumption per capita",
+     "unit": "kilowatt-hours per person (kWh)",
+     "description": "Measured in kilowatt-hours per person.",
+     "type": "num",
+     "filled": 11086
+    },
+    {
+     "name": "energy_per_gdp",
+     "title": "Primary energy consumption per GDP",
+     "unit": "kilowatt-hours per $ (kWh)",
+     "description": "Measured in kilowatt-hours per international-$.",
+     "type": "num",
+     "filled": 7882
+    },
+    {
+     "name": "fossil_cons_change_pct",
+     "title": "Annual percentage change in fossil fuel consumption",
+     "unit": "%",
+     "description": "",
+     "type": "num",
+     "filled": 6267
+    },
+    {
+     "name": "fossil_cons_change_twh",
+     "title": "Annual change in fossil fuel consumption",
+     "unit": "terawatt-hours (TWh)",
+     "description": "",
+     "type": "num",
+     "filled": 6293
+    },
+    {
+     "name": "fossil_elec_per_capita",
+     "title": "Electricity generation from fossil fuels per person",
+     "unit": "kilowatt-hours (kWh)",
+     "description": "Electricity generation from coal, oil, and gas, measured in kilowatt-hours per person.",
+     "type": "num",
+     "filled": 6526
+    },
+    {
+     "name": "fossil_electricity",
+     "title": "Electricity generation from fossil fuels",
+     "unit": "terawatt-hours (TWh)",
+     "description": "Electricity generation from coal, oil, and gas, measured in terawatt-hours.",
+     "type": "num",
+     "filled": 7208
+    },
+    {
+     "name": "fossil_energy_per_capita",
+     "title": "Fossil fuel consumption per capita",
+     "unit": "kilowatt-hours (kWh)",
+     "description": "Measured in kilowatt-hours per person.",
+     "type": "num",
+     "filled": 5145
+    },
+    {
+     "name": "fossil_fuel_consumption",
+     "title": "Primary energy consumption from fossil fuels",
+     "unit": "terawatt-hours (TWh)",
+     "description": "Measured in terawatt-hours.",
+     "type": "num",
+     "filled": 6405
+    },
+    {
+     "name": "fossil_share_elec",
+     "title": "Share of electricity generated by fossil fuels",
+     "unit": "%",
+     "description": "Electricity generation from coal, oil, and gas, measured as a percentage of total electricity produced in the country or region.",
+     "type": "num",
+     "filled": 7182
+    },
+    {
+     "name": "fossil_share_energy",
+     "title": "Share of primary energy consumption that comes from fossil fuels",
+     "unit": "%",
+     "description": "Measured as a percentage of the total primary energy, using the substitution method.",
+     "type": "num",
+     "filled": 6379
+    },
+    {
+     "name": "gas_cons_change_pct",
+     "title": "Annual percentage change in gas consumption",
+     "unit": "%",
+     "description": "",
+     "type": "num",
+     "filled": 5643
+    },
+    {
+     "name": "gas_cons_change_twh",
+     "title": "Annual change in gas consumption",
+     "unit": "terawatt-hours (TWh)",
+     "description": "",
+     "type": "num",
+     "filled": 6293
+    },
+    {
+     "name": "gas_consumption",
+     "title": "Primary energy consumption from gas",
+     "unit": "terawatt-hours (TWh)",
+     "description": "Measured in terawatt-hours.",
+     "type": "num",
+     "filled": 6405
+    },
+    {
+     "name": "gas_elec_per_capita",
+     "title": "Electricity generation from gas per person",
+     "unit": "kilowatt-hours (kWh)",
+     "description": "Measured in kilowatt-hours per person.",
+     "type": "num",
+     "filled": 6343
+    },
+    {
+     "name": "gas_electricity",
+     "title": "Electricity generation from gas",
+     "unit": "terawatt-hours (TWh)",
+     "description": "Measured in terawatt-hours.",
+     "type": "num",
+     "filled": 7025
+    },
+    {
+     "name": "gas_energy_per_capita",
+     "title": "Gas consumption per capita",
+     "unit": "kilowatt-hours (kWh)",
+     "description": "Measured in kilowatt-hours per person.",
+     "type": "num",
+     "filled": 5145
+    },
+    {
+     "name": "gas_prod_change_pct",
+     "title": "Annual change in gas production",
+     "unit": "%",
+     "description": "Measured as a percentage of the previous year's production.",
+     "type": "num",
+     "filled": 8103
+    },
+    {
+     "name": "gas_prod_change_twh",
+     "title": "Annual change in gas production",
+     "unit": "terawatt-hours (TWh)",
+     "description": "Measured in terawatt-hours.",
+     "type": "num",
+     "filled": 16990
+    },
+    {
+     "name": "gas_prod_per_capita",
+     "title": "Gas production per capita",
+     "unit": "kilowatt-hours (kWh)",
+     "description": "Measured in kilowatt-hours per capita.",
+     "type": "num",
+     "filled": 15028
+    },
+    {
+     "name": "gas_production",
+     "title": "Gas production",
+     "unit": "terawatt-hours (TWh)",
+     "description": "Measured in terawatt-hours.",
+     "type": "num",
+     "filled": 17251
+    },
+    {
+     "name": "gas_share_elec",
+     "title": "Share of electricity generated by gas",
+     "unit": "%",
+     "description": "Measured as a percentage of total electricity produced in the country or region.",
+     "type": "num",
+     "filled": 6999
+    },
+    {
+     "name": "gas_share_energy",
+     "title": "Share of primary energy consumption that comes from gas",
+     "unit": "%",
+     "description": "Measured as a percentage of the total primary energy, using the substitution method.",
+     "type": "num",
+     "filled": 6379
+    },
+    {
+     "name": "greenhouse_gas_emissions",
+     "title": "Lifecycle emissions from electricity generation",
+     "unit": "million tonnes CO₂ equivalents (Mt)",
+     "description": "Measured in megatonnes of CO₂ equivalents.",
+     "type": "num",
+     "filled": 6028
+    },
+    {
+     "name": "hydro_cons_change_pct",
+     "title": "Annual percentage change in hydropower consumption",
+     "unit": "%",
+     "description": "Figures are based on gross primary hydroelectric generation and do not account for cross-border electricity supply.",
+     "type": "num",
+     "filled": 5686
+    },
+    {
+     "name": "hydro_cons_change_twh",
+     "title": "Annual change in hydropower consumption",
+     "unit": "terawatt-hours (TWh)",
+     "description": "Input-equivalent energy is based on gross generation and does not account for cross-border electricity supply.",
+     "type": "num",
+     "filled": 6293
+    },
+    {
+     "name": "hydro_consumption",
+     "title": "Primary energy consumption from hydropower",
+     "unit": "terawatt-hours (TWh)",
+     "description": "Measured in terawatt-hours, using the substitution method.",
+     "type": "num",
+     "filled": 6405
+    },
+    {
+     "name": "hydro_elec_per_capita",
+     "title": "Electricity generation from hydropower per person",
+     "unit": "kilowatt-hours (kWh)",
+     "description": "Measured in kilowatt-hours per person.",
+     "type": "num",
+     "filled": 8501
+    },
+    {
+     "name": "hydro_electricity",
+     "title": "Electricity generation from hydropower",
+     "unit": "terawatt-hours (TWh)",
+     "description": "Measured in terawatt-hours.",
+     "type": "num",
+     "filled": 9603
+    },
+    {
+     "name": "hydro_energy_per_capita",
+     "title": "Hydropower consumption per capita",
+     "unit": "kilowatt-hours (kWh)",
+     "description": "Measured in kilowatt-hours per person.",
+     "type": "num",
+     "filled": 5145
+    },
+    {
+     "name": "hydro_share_elec",
+     "title": "Share of electricity generated by hydropower",
+     "unit": "%",
+     "description": "Measured as a percentage of total electricity produced in the country or region.",
+     "type": "num",
+     "filled": 7777
+    },
+    {
+     "name": "hydro_share_energy",
+     "title": "Share of primary energy consumption that comes from hydropower",
+     "unit": "%",
+     "description": "Measured as a percentage of the total primary energy, using the substitution method.",
+     "type": "num",
+     "filled": 6379
+    },
+    {
+     "name": "low_carbon_cons_change_pct",
+     "title": "Annual percentage change in low-carbon energy consumption",
+     "unit": "%",
+     "description": "Figures are based on gross generation and do not account for cross-border electricity supply.",
+     "type": "num",
+     "filled": 5902
+    },
+    {
+     "name": "low_carbon_cons_change_twh",
+     "title": "Annual change in low-carbon energy consumption",
+     "unit": "terawatt-hours (TWh)",
+     "description": "Input-equivalent energy is based on gross generation and does not account for cross-border electricity supply.",
+     "type": "num",
+     "filled": 6293
+    },
+    {
+     "name": "low_carbon_consumption",
+     "title": "Primary energy consumption from low-carbon sources",
+     "unit": "terawatt-hours (TWh)",
+     "description": "Measured in terawatt-hours, using the substitution method.",
+     "type": "num",
+     "filled": 6405
+    },
+    {
+     "name": "low_carbon_elec_per_capita",
+     "title": "Electricity generation from low-carbon sources per person",
+     "unit": "kilowatt-hours (kWh)",
+     "description": "Measured in kilowatt-hours per person. Low-carbon sources correspond to renewables and nuclear power, that produce significantly less greenhouse-gas emissions than fossil fuels. Renewables include solar, wind, hydropower, bioenergy, geothermal, wave, and tidal.",
+     "type": "num",
+     "filled": 8596
+    },
+    {
+     "name": "low_carbon_electricity",
+     "title": "Electricity generation from low-carbon sources",
+     "unit": "terawatt-hours (TWh)",
+     "description": "Measured in terawatt-hours. Low-carbon sources correspond to renewables and nuclear power, that produce significantly less greenhouse-gas emissions than fossil fuels. Renewables include solar, wind, hydropower, bioenergy, geothermal, wave, and tidal.",
+     "type": "num",
+     "filled": 9698
+    },
+    {
+     "name": "low_carbon_energy_per_capita",
+     "title": "Low-carbon energy consumption per capita",
+     "unit": "kilowatt-hours (kWh)",
+     "description": "Measured in kilowatt-hours per person.",
+     "type": "num",
+     "filled": 5145
+    },
+    {
+     "name": "low_carbon_share_elec",
+     "title": "Share of electricity generated by low-carbon sources",
+     "unit": "%",
+     "description": "Measured as a percentage of total electricity produced in the country or region. Low-carbon sources correspond to renewables and nuclear power, that produce significantly less greenhouse-gas emissions than fossil fuels. Renewables include solar, wind, hydropower, bioenergy, geothermal, wave, and tidal.",
+     "type": "num",
+     "filled": 7872
+    },
+    {
+     "name": "low_carbon_share_energy",
+     "title": "Share of primary energy consumption that comes from low-carbon sources",
+     "unit": "%",
+     "description": "Measured as a percentage of the total primary energy, using the substitution method.",
+     "type": "num",
+     "filled": 6379
+    },
+    {
+     "name": "net_elec_imports",
+     "title": "Net electricity imports",
+     "unit": "terawatt-hours (TWh)",
+     "description": "Electricity imports minus exports, measured in terawatt-hours.",
+     "type": "num",
+     "filled": 6056
+    },
+    {
+     "name": "net_elec_imports_share_demand",
+     "title": "Net electricity imports as a share of demand",
+     "unit": "%",
+     "description": "Electricity imports minus exports, measured as a percentage of total electricity demand in the country or region.",
+     "type": "num",
+     "filled": 6032
+    },
+    {
+     "name": "nuclear_cons_change_pct",
+     "title": "Annual percentage change in nuclear power consumption",
+     "unit": "%",
+     "description": "Figures are based on gross generation and do not account for cross-border electricity supply.",
+     "type": "num",
+     "filled": 2579
+    },
+    {
+     "name": "nuclear_cons_change_twh",
+     "title": "Annual change in nuclear power consumption",
+     "unit": "terawatt-hours (TWh)",
+     "description": "Input-equivalent energy is based on gross generation and does not account for cross-border electricity supply.",
+     "type": "num",
+     "filled": 7717
+    },
+    {
+     "name": "nuclear_consumption",
+     "title": "Primary energy consumption from nuclear power",
+     "unit": "terawatt-hours (TWh)",
+     "description": "Measured in terawatt-hours, using the substitution method.",
+     "type": "num",
+     "filled": 7859
+    },
+    {
+     "name": "nuclear_elec_per_capita",
+     "title": "Electricity generation from nuclear power per person",
+     "unit": "kilowatt-hours (kWh)",
+     "description": "Measured in kilowatt-hours per person.",
+     "type": "num",
+     "filled": 9090
+    },
+    {
+     "name": "nuclear_electricity",
+     "title": "Electricity generation from nuclear",
+     "unit": "terawatt-hours (TWh)",
+     "description": "Measured in terawatt-hours.",
+     "type": "num",
+     "filled": 10192
+    },
+    {
+     "name": "nuclear_energy_per_capita",
+     "title": "Nuclear power consumption per capita",
+     "unit": "kilowatt-hours (kWh)",
+     "description": "Measured in kilowatt-hours per person.",
+     "type": "num",
+     "filled": 6585
+    },
+    {
+     "name": "nuclear_share_elec",
+     "title": "Share of electricity generated by nuclear power",
+     "unit": "%",
+     "description": "Measured as a percentage of total electricity produced in the country or region.",
+     "type": "num",
+     "filled": 7718
+    },
+    {
+     "name": "nuclear_share_energy",
+     "title": "Share of primary energy consumption that comes from nuclear power",
+     "unit": "%",
+     "description": "Measured as a percentage of the total primary energy, using the substitution method.",
+     "type": "num",
+     "filled": 6379
+    },
+    {
+     "name": "oil_cons_change_pct",
+     "title": "Annual percentage change in oil consumption",
+     "unit": "%",
+     "description": "",
+     "type": "num",
+     "filled": 6267
+    },
+    {
+     "name": "oil_cons_change_twh",
+     "title": "Annual change in oil consumption",
+     "unit": "terawatt-hours (TWh)",
+     "description": "",
+     "type": "num",
+     "filled": 6293
+    },
+    {
+     "name": "oil_consumption",
+     "title": "Primary energy consumption from oil",
+     "unit": "terawatt-hours (TWh)",
+     "description": "Measured in terawatt-hours.",
+     "type": "num",
+     "filled": 6405
+    },
+    {
+     "name": "oil_elec_per_capita",
+     "title": "Electricity generation from oil per person",
+     "unit": "kilowatt-hours (kWh)",
+     "description": "Measured in kilowatt-hours per person.",
+     "type": "num",
+     "filled": 6465
+    },
+    {
+     "name": "oil_electricity",
+     "title": "Electricity generation from oil",
+     "unit": "terawatt-hours (TWh)",
+     "description": "Measured in terawatt-hours.",
+     "type": "num",
+     "filled": 7147
+    },
+    {
+     "name": "oil_energy_per_capita",
+     "title": "Oil consumption per capita",
+     "unit": "kilowatt-hours (kWh)",
+     "description": "Measured in kilowatt-hours per person.",
+     "type": "num",
+     "filled": 5145
+    },
+    {
+     "name": "oil_prod_change_pct",
+     "title": "Annual change in oil production",
+     "unit": "%",
+     "description": "Measured as a percentage of the previous year's production.",
+     "type": "num",
+     "filled": 10182
+    },
+    {
+     "name": "oil_prod_change_twh",
+     "title": "Annual change in oil production",
+     "unit": "terawatt-hours (TWh)",
+     "description": "Measured in terawatt-hours.",
+     "type": "num",
+     "filled": 17729
+    },
+    {
+     "name": "oil_prod_per_capita",
+     "title": "Oil production per capita",
+     "unit": "kilowatt-hours (kWh)",
+     "description": "Measured in kilowatt-hours per capita.",
+     "type": "num",
+     "filled": 15574
+    },
+    {
+     "name": "oil_production",
+     "title": "Oil production",
+     "unit": "terawatt-hours (TWh)",
+     "description": "Measured in terawatt-hours.",
+     "type": "num",
+     "filled": 17992
+    },
+    {
+     "name": "oil_share_elec",
+     "title": "Share of electricity generated by oil",
+     "unit": "%",
+     "description": "Measured as a percentage of total electricity produced in the country or region.",
+     "type": "num",
+     "filled": 7121
+    },
+    {
+     "name": "oil_share_energy",
+     "title": "Share of primary energy consumption that comes from oil",
+     "unit": "%",
+     "description": "Measured as a percentage of the total primary energy, using the substitution method.",
+     "type": "num",
+     "filled": 6379
+    },
+    {
+     "name": "other_renewable_consumption",
+     "title": "Primary energy consumption from other renewables",
+     "unit": "terawatt-hours (TWh)",
+     "description": "Measured in terawatt-hours, using the substitution method.",
+     "type": "num",
+     "filled": 6405
+    },
+    {
+     "name": "other_renewable_electricity",
+     "title": "Electricity generation from other renewables, including bioenergy",
+     "unit": "terawatt-hours (TWh)",
+     "description": "Measured in terawatt-hours.",
+     "type": "num",
+     "filled": 9670
+    },
+    {
+     "name": "other_renewable_exc_biofuel_electricity",
+     "title": "Electricity generation from other renewables, excluding bioenergy",
+     "unit": "terawatt-hours (TWh)",
+     "description": "Measured in terawatt-hours.",
+     "type": "num",
+     "filled": 5716
+    },
+    {
+     "name": "other_renewables_cons_change_pct",
+     "title": "Annual percentage change in other renewables consumption",
+     "unit": "%",
+     "description": "Figures are based on gross generation and do not account for cross-border electricity supply.",
+     "type": "num",
+     "filled": 3988
+    },
+    {
+     "name": "other_renewables_cons_change_twh",
+     "title": "Annual change in other renewables consumption",
+     "unit": "terawatt-hours (TWh)",
+     "description": "Input-equivalent energy, in terawatt-hours, is based on gross generation and does not account for cross-border electricity supply.",
+     "type": "num",
+     "filled": 6293
+    },
+    {
+     "name": "other_renewables_elec_per_capita",
+     "title": "Electricity generation from other renewables, including bioenergy, per person",
+     "unit": "kilowatt-hours (kWh)",
+     "description": "Measured in kilowatt-hours per person.",
+     "type": "num",
+     "filled": 8568
+    },
+    {
+     "name": "other_renewables_elec_per_capita_exc_biofuel",
+     "title": "Electricity generation from other renewables, excluding bioenergy, per person",
+     "unit": "kilowatt-hours (kWh)",
+     "description": "Measured in kilowatt-hours per person.",
+     "type": "num",
+     "filled": 5394
+    },
+    {
+     "name": "other_renewables_energy_per_capita",
+     "title": "Other renewables consumption per capita",
+     "unit": "kilowatt-hours (kWh)",
+     "description": "Measured in kilowatt-hours per person.",
+     "type": "num",
+     "filled": 5145
+    },
+    {
+     "name": "other_renewables_share_elec",
+     "title": "Share of electricity generated by other renewables, including bioenergy",
+     "unit": "%",
+     "description": "Measured as a percentage of total electricity produced in the country or region.",
+     "type": "num",
+     "filled": 7844
+    },
+    {
+     "name": "other_renewables_share_elec_exc_biofuel",
+     "title": "Share of electricity generated by other renewables, excluding bioenergy",
+     "unit": "%",
+     "description": "Measured as a percentage of total electricity produced in the country or region.",
+     "type": "num",
+     "filled": 5690
+    },
+    {
+     "name": "other_renewables_share_energy",
+     "title": "Share of primary energy consumption that comes from other renewables",
+     "unit": "%",
+     "description": "Measured as a percentage of the total primary energy, using the substitution method.",
+     "type": "num",
+     "filled": 6379
+    },
+    {
+     "name": "per_capita_electricity",
+     "title": "Total electricity generation per person",
+     "unit": "kilowatt-hours (kWh)",
+     "description": "Measured in kilowatt-hours per person.",
+     "type": "num",
+     "filled": 7071
+    },
+    {
+     "name": "primary_energy_consumption",
+     "title": "Primary energy consumption",
+     "unit": "terawatt-hours (TWh)",
+     "description": "Measured in terawatt-hours.",
+     "type": "num",
+     "filled": 13255
+    },
+    {
+     "name": "renewables_cons_change_pct",
+     "title": "Annual percentage change in renewables consumption",
+     "unit": "%",
+     "description": "",
+     "type": "num",
+     "filled": 5895
+    },
+    {
+     "name": "renewables_cons_change_twh",
+     "title": "Annual change in renewables consumption",
+     "unit": "terawatt-hours (TWh)",
+     "description": "",
+     "type": "num",
+     "filled": 6293
+    },
+    {
+     "name": "renewables_consumption",
+     "title": "Primary energy consumption from renewables",
+     "unit": "terawatt-hours (TWh)",
+     "description": "Measured in terawatt-hours, using the substitution method.",
+     "type": "num",
+     "filled": 6405
+    },
+    {
+     "name": "renewables_elec_per_capita",
+     "title": "Electricity generation from renewables per person",
+     "unit": "kilowatt-hours (kWh)",
+     "description": "Measured in kilowatt-hours per person.",
+     "type": "num",
+     "filled": 8596
+    },
+    {
+     "name": "renewables_electricity",
+     "title": "Electricity generation from renewables",
+     "unit": "terawatt-hours (TWh)",
+     "description": "Measured in terawatt-hours.",
+     "type": "num",
+     "filled": 9698
+    },
+    {
+     "name": "renewables_energy_per_capita",
+     "title": "Renewables consumption per capita",
+     "unit": "kilowatt-hours (kWh)",
+     "description": "Measured in kilowatt-hours per person.",
+     "type": "num",
+     "filled": 5145
+    },
+    {
+     "name": "renewables_share_elec",
+     "title": "Share of electricity generated by renewables",
+     "unit": "%",
+     "description": "Measured as a percentage of total electricity produced in the country or region.",
+     "type": "num",
+     "filled": 7872
+    },
+    {
+     "name": "renewables_share_energy",
+     "title": "Share of primary energy consumption that comes from renewables",
+     "unit": "%",
+     "description": "Measured as a percentage of the total primary energy, using the substitution method.",
+     "type": "num",
+     "filled": 6379
+    },
+    {
+     "name": "solar_cons_change_pct",
+     "title": "Annual percentage change in solar power consumption",
+     "unit": "%",
+     "description": "Figures are based on gross generation and do not account for cross-border electricity supply.",
+     "type": "num",
+     "filled": 2515
+    },
+    {
+     "name": "solar_cons_change_twh",
+     "title": "Annual change in solar power consumption",
+     "unit": "terawatt-hours (TWh)",
+     "description": "Input-equivalent energy, in terawatt-hours, is based on gross generation and does not account for cross-border electricity supply.",
+     "type": "num",
+     "filled": 6293
+    },
+    {
+     "name": "solar_consumption",
+     "title": "Primary energy consumption from solar power",
+     "unit": "terawatt-hours (TWh)",
+     "description": "Measured in terawatt-hours, using the substitution method.",
+     "type": "num",
+     "filled": 6405
+    },
+    {
+     "name": "solar_elec_per_capita",
+     "title": "Electricity generation from solar power per person",
+     "unit": "kilowatt-hours (kWh)",
+     "description": "Measured in kilowatt-hours per person.",
+     "type": "num",
+     "filled": 8613
+    },
+    {
+     "name": "solar_electricity",
+     "title": "Electricity generation from solar power",
+     "unit": "terawatt-hours (TWh)",
+     "description": "Measured in terawatt-hours.",
+     "type": "num",
+     "filled": 9715
+    },
+    {
+     "name": "solar_energy_per_capita",
+     "title": "Solar power consumption per capita",
+     "unit": "kilowatt-hours (kWh)",
+     "description": "Measured in kilowatt-hours per person.",
+     "type": "num",
+     "filled": 5145
+    },
+    {
+     "name": "solar_share_elec",
+     "title": "Share of electricity generated by solar power",
+     "unit": "%",
+     "description": "Measured as a percentage of total electricity produced in the country or region.",
+     "type": "num",
+     "filled": 7869
+    },
+    {
+     "name": "solar_share_energy",
+     "title": "Share of primary energy consumption that comes from solar power",
+     "unit": "%",
+     "description": "Measured as a percentage of the total primary energy, using the substitution method.",
+     "type": "num",
+     "filled": 6379
+    },
+    {
+     "name": "wind_cons_change_pct",
+     "title": "Annual percentage change in wind power consumption",
+     "unit": "%",
+     "description": "Figures are based on gross generation and do not account for cross-border electricity supply.",
+     "type": "num",
+     "filled": 2798
+    },
+    {
+     "name": "wind_cons_change_twh",
+     "title": "Annual change in wind power consumption",
+     "unit": "terawatt-hours (TWh)",
+     "description": "Input-equivalent energy, in terawatt-hours, is based on gross generation and does not account for cross-border electricity supply.",
+     "type": "num",
+     "filled": 6293
+    },
+    {
+     "name": "wind_consumption",
+     "title": "Primary energy consumption from wind power",
+     "unit": "terawatt-hours (TWh)",
+     "description": "Measured in terawatt-hours, using the substitution method.",
+     "type": "num",
+     "filled": 6405
+    },
+    {
+     "name": "wind_elec_per_capita",
+     "title": "Electricity generation from wind power per person",
+     "unit": "kilowatt-hours (kWh)",
+     "description": "Measured in kilowatt-hours per person.",
+     "type": "num",
+     "filled": 8405
+    },
+    {
+     "name": "wind_electricity",
+     "title": "Electricity generation from wind power",
+     "unit": "terawatt-hours (TWh)",
+     "description": "Measured in terawatt-hours.",
+     "type": "num",
+     "filled": 9507
+    },
+    {
+     "name": "wind_energy_per_capita",
+     "title": "Wind power consumption per capita",
+     "unit": "kilowatt-hours (kWh)",
+     "description": "Measured in kilowatt-hours per person.",
+     "type": "num",
+     "filled": 5145
+    },
+    {
+     "name": "wind_share_elec",
+     "title": "Share of electricity generated by wind power",
+     "unit": "%",
+     "description": "Measured as a percentage of total electricity produced in the country or region.",
+     "type": "num",
+     "filled": 7661
+    },
+    {
+     "name": "wind_share_energy",
+     "title": "Share of primary energy consumption that comes from wind power",
+     "unit": "%",
+     "description": "Measured as a percentage of the total primary energy, using the substitution method.",
+     "type": "num",
+     "filled": 6379
+    }
+   ],
+   "bytes": 9378028,
+   "built": "2026-11-23",
+   "default_vars": [
+    "primary_energy_consumption",
+    "renewables_share_elec"
+   ],
+   "default_entities": [
+    "USA",
+    "CHN",
+    "IND",
+    "WLD"
+   ],
+   "entities": 314
+  },
+  {
+   "id": "world-bank-development",
+   "title": "World development indicators",
+   "description": "Core economic, social and infrastructure indicators for every country and World Bank region, by year. Only population and GDP are loaded in this build; the full indicator set loads when the World Bank API is reachable.",
+   "region": "World",
+   "domain": "Economy and development",
+   "source": "World Bank, World Development Indicators",
+   "source_url": "https://data.worldbank.org",
+   "licence": "CC BY 4.0",
+   "file": "data/sets/world-bank-development.csv",
+   "keys": [
+    "code",
+    "year"
+   ],
+   "time": {
+    "col": "year",
+    "type": "year",
+    "min": "1960",
+    "max": "2025"
+   },
+   "entity": {
+    "col": "code",
+    "label_col": "country",
+    "label": "Country or region"
+   },
+   "rows": 17458,
+   "columns": [
+    {
+     "name": "population",
+     "title": "Population, total",
+     "unit": "people",
+     "description": "World Bank indicator SP.POP.TOTL.",
+     "type": "num",
+     "filled": 17394
+    },
+    {
+     "name": "gdp_current_usd",
+     "title": "GDP",
+     "unit": "current US$",
+     "description": "World Bank indicator NY.GDP.MKTP.CD.",
+     "type": "num",
+     "filled": 13979
+    }
+   ],
+   "bytes": 809300,
+   "built": "2026-11-23",
+   "default_vars": [
+    "population",
+    "gdp_current_usd"
+   ],
+   "default_entities": [
+    "USA",
+    "CHN",
+    "IND",
+    "WLD"
+   ],
+   "entities": 265
+  },
+  {
+   "id": "crude-oil-prices",
+   "title": "Crude oil spot prices, daily",
+   "description": "Daily WTI (Cushing, Oklahoma) and Brent (Europe) spot prices.",
+   "region": "US",
+   "domain": "Energy",
+   "source": "US Energy Information Administration, via DataHub",
+   "source_url": "https://github.com/datasets/oil-prices",
+   "licence": "Public domain (US federal data; PDDL packaging)",
+   "file": "data/sets/crude-oil-prices.csv",
+   "keys": [
+    "date"
+   ],
+   "time": {
+    "col": "date",
+    "type": "date",
+    "min": "1986-01-02",
+    "max": "2026-11-17"
+   },
+   "entity": null,
+   "rows": 10239,
+   "columns": [
+    {
+     "name": "wti_usd_per_barrel",
+     "title": "WTI spot price",
+     "unit": "US$ per barrel",
+     "description": "",
+     "type": "num",
+     "filled": 9547
+    },
+    {
+     "name": "brent_usd_per_barrel",
+     "title": "Brent spot price",
+     "unit": "US$ per barrel",
+     "description": "",
+     "type": "num",
+     "filled": 9132
+    }
+   ],
+   "bytes": 235846,
+   "built": "2026-11-23"
+  },
+  {
+   "id": "natural-gas-prices",
+   "title": "Natural gas spot price, daily",
+   "description": "Daily Henry Hub natural gas spot price, the US benchmark.",
+   "region": "US",
+   "domain": "Energy",
+   "source": "US Energy Information Administration, via DataHub",
+   "source_url": "https://github.com/datasets/natural-gas",
+   "licence": "Public domain (US federal data; PDDL packaging)",
+   "file": "data/sets/natural-gas-prices.csv",
+   "keys": [
+    "date"
+   ],
+   "time": {
+    "col": "date",
+    "type": "date",
+    "min": "1997-01-07",
+    "max": "2026-11-17"
+   },
+   "entity": null,
+   "rows": 5732,
+   "columns": [
+    {
+     "name": "henry_hub_usd_per_mmbtu",
+     "title": "Henry Hub spot price",
+     "unit": "US$ per million Btu",
+     "description": "",
+     "type": "num",
+     "filled": 5732
+    }
+   ],
+   "bytes": 96874,
+   "built": "2026-11-23"
+  },
+  {
+   "id": "pjm-summer-peak-forecasts",
+   "title": "PJM summer peak load: forecasts and actuals by zone",
+   "description": "Summer peak demand for each PJM transmission zone: the forecasts published in January 2025 and January 2026, with metered and weather-normalized actual peaks for 2024 and 2025.",
+   "region": "US",
+   "domain": "Energy",
+   "source": "PJM Load Forecast Reports, January 2025 and 2026",
+   "source_url": "https://www.pjm.com/planning/resource-adequacy-planning/load-forecast-dev-process",
+   "licence": "Public PJM report tables; check PJM's terms before commercial redistribution",
+   "file": "data/sets/pjm-summer-peak-forecasts.csv",
+   "keys": [
+    "zone",
+    "year"
+   ],
+   "time": {
+    "col": "year",
+    "type": "year",
+    "min": "2024",
+    "max": "2046"
+   },
+   "entity": {
+    "col": "zone",
+    "label_col": "zone",
+    "label": "Zone"
+   },
+   "rows": 621,
+   "columns": [
+    {
+     "name": "forecast_jan2025_mw",
+     "title": "Summer peak forecast, January 2025 report",
+     "unit": "MW",
+     "description": "",
+     "type": "num",
+     "filled": 567
+    },
+    {
+     "name": "forecast_jan2026_mw",
+     "title": "Summer peak forecast, January 2026 report",
+     "unit": "MW",
+     "description": "",
+     "type": "num",
+     "filled": 567
+    },
+    {
+     "name": "metered_peak_mw",
+     "title": "Metered summer peak",
+     "unit": "MW",
+     "description": "",
+     "type": "num",
+     "filled": 54
+    },
+    {
+     "name": "normalized_peak_mw",
+     "title": "Weather-normalized summer peak",
+     "unit": "MW",
+     "description": "",
+     "type": "num",
+     "filled": 50
+    }
+   ],
+   "bytes": 15231,
+   "built": "2026-11-23",
+   "default_entities": [
+    "DOM",
+    "AEP",
+    "PJM RTO"
+   ],
+   "entities": 27
+  }
+ ]
+}
