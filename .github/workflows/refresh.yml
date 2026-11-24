@@ -30,6 +30,7 @@ jobs:
           EIA_API_KEY: ${{ secrets.EIA_API_KEY }}
           DATA_GOV_API_KEY: ${{ secrets.DATA_GOV_API_KEY }}
           CENSUS_API_KEY: ${{ secrets.CENSUS_API_KEY }}
+          NASS_API_KEY: ${{ secrets.NASS_API_KEY }}
 
       - run: python scripts/build_catalog.py
       - run: python scripts/build_scorecard.py

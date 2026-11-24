@@ -38,10 +38,11 @@ jobs:
           EIA_API_KEY: ${{ secrets.EIA_API_KEY }}
           DATA_GOV_API_KEY: ${{ secrets.DATA_GOV_API_KEY }}
           CENSUS_API_KEY: ${{ secrets.CENSUS_API_KEY }}
+          NASS_API_KEY: ${{ secrets.NASS_API_KEY }}
           ONLY: ${{ inputs.only }}
           PROBE: ${{ inputs.probe }}
         run: |
-          if [ -n "$PROBE" ]; then python scripts/build_datasets.py --probe-owid "$PROBE"; fi
+          if [ "$PROBE" = "urls" ]; then python scripts/build_datasets.py --probe-urls; elif [ -n "$PROBE" ]; then python scripts/build_datasets.py --probe-owid "$PROBE"; fi
           if [ -n "$ONLY" ]; then python scripts/build_datasets.py --try --only "$ONLY"; fi
       - name: Whole refresh, saved to this branch
         if: inputs.full == 'yes' && github.ref_name != 'main'
@@ -49,6 +50,7 @@ jobs:
           EIA_API_KEY: ${{ secrets.EIA_API_KEY }}
           DATA_GOV_API_KEY: ${{ secrets.DATA_GOV_API_KEY }}
           CENSUS_API_KEY: ${{ secrets.CENSUS_API_KEY }}
+          NASS_API_KEY: ${{ secrets.NASS_API_KEY }}
         run: |
           python scripts/build_datasets.py
           python scripts/build_catalog.py

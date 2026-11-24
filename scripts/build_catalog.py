@@ -259,6 +259,13 @@ KEY_READY = {
     "Census County Business Patterns": (["us-states-census"], "CENSUS_API_KEY", "live", "Businesses, employees and payroll for every state."),
     "Congress.gov": (["us-congress-and-rulemaking"], "DATA_GOV_API_KEY", "live", "Bills introduced and laws enacted by each Congress."),
     "Regulations.gov": (["us-congress-and-rulemaking"], "DATA_GOV_API_KEY", "live", "Documents and public comments posted each year."),
+    "USDA NASS Quick Stats": (["us-crop-production"], "NASS_API_KEY", "live", "Production and yields of the main crops, by year."),
+    "FEC campaign finance": (["us-election-candidates"], "DATA_GOV_API_KEY", "live", "Candidates and committees registered in each election cycle."),
+    "FBI Crime Data Explorer": (["us-crime-monthly"], "DATA_GOV_API_KEY", "live", "Crimes reported to police, by month."),
+    "College Scorecard": (["us-colleges"], "DATA_GOV_API_KEY", "live", "The thousand largest colleges: cost, graduation and earnings."),
+    "NREL data (NSRDB, ATB)": (["us-ev-charging-stations"], "DATA_GOV_API_KEY", "live", "Electric vehicle charging stations, from the Alternative Fuels Data Center that NREL keeps. Its solar and cost models are not tables."),
+    "USDA FoodData Central": (["food-nutrients"], "DATA_GOV_API_KEY", "live", "Nutrients in a few hundred everyday foods."),
+    "data.gov": (["us-data-gov-catalog"], "DATA_GOV_API_KEY", "live", "How many datasets each publisher lists."),
     "ERCOT data": (["us-grid-demand-daily"], "EIA_API_KEY", "via", GRID_NOTE), "CAISO OASIS": (["us-grid-demand-daily"], "EIA_API_KEY", "via", GRID_NOTE), "MISO market data": (["us-grid-demand-daily"], "EIA_API_KEY", "via", GRID_NOTE),
     "NYISO market data": (["us-grid-demand-daily"], "EIA_API_KEY", "via", GRID_NOTE), "ISO New England data": (["us-grid-demand-daily"], "EIA_API_KEY", "via", GRID_NOTE), "SPP data": (["us-grid-demand-daily"], "EIA_API_KEY", "via", GRID_NOTE),
 }

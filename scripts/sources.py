@@ -1663,11 +1663,235 @@ def census_states():
 
 
 
+# ---------- more loaders that wait for a free key ----------
+def us_crops():
+    k = key("NASS_API_KEY")
+    want = [("CORN, GRAIN - PRODUCTION, MEASURED IN BU", "corn_production", "US corn production", "bushels"), ("CORN, GRAIN - YIELD, MEASURED IN BU / ACRE", "corn_yield", "US corn yield", "bushels per acre"),
+            ("SOYBEANS - PRODUCTION, MEASURED IN BU", "soybean_production", "US soybean production", "bushels"), ("SOYBEANS - YIELD, MEASURED IN BU / ACRE", "soybean_yield", "US soybean yield", "bushels per acre"),
+            ("WHEAT - PRODUCTION, MEASURED IN BU", "wheat_production", "US wheat production", "bushels"), ("WHEAT - YIELD, MEASURED IN BU / ACRE", "wheat_yield", "US wheat yield", "bushels per acre"),
+            ("COTTON - PRODUCTION, MEASURED IN 480 LB BALES", "cotton_production", "US cotton production", "bales of 480 pounds"), ("RICE - PRODUCTION, MEASURED IN CWT", "rice_production", "US rice production", "hundredweight (100 pounds)")]
+    cell, meta, cols = {}, {}, []
+    for sd, col, title, unit in want:
+        try:
+            q = urllib.parse.urlencode(dict(key=k, short_desc=sd, agg_level_desc="NATIONAL", source_desc="SURVEY", reference_period_desc="YEAR", format="JSON"))
+            rows = J("https://quickstats.nass.usda.gov/api/api_GET/?" + q, tries=2, timeout=200)["data"]
+            n = 0
+            for r in rows:
+                v = str(r.get("Value", "")).replace(",", "").strip()
+                if r.get("domain_desc", "TOTAL") == "TOTAL" and re.fullmatch(r"\d+(\.\d+)?", v) and int(r["year"]) < THIS_YEAR:
+                    cell.setdefault(f"{int(r['year'])}-01-01", {})[col] = float(v)
+                    n += 1
+            if n < 20:
+                raise ValueError(f"{n} years")
+            meta[col] = dict(title=title, unit=unit, description=f"USDA National Agricultural Statistics Service, survey estimate: {sd.title()}.")
+            cols.append(col)
+        except Exception as e:
+            print(f"  us_crops {col}: {str(e)[:80]}")
+        time.sleep(0.5)
+    assert len(cols) >= 3, f"us_crops: only {len(cols)} series loaded"
+    return series("us-crop-production", "US crop production and yields, year by year", "How much corn, soybeans, wheat, cotton and rice US farms grow each year, and how much they get from each acre.",
+                  "US", "Economy and development", "US Department of Agriculture, National Agricultural Statistics Service (Quick Stats)", "https://quickstats.nass.usda.gov", PD, cell, meta, cols, "year")
+
+
+def us_elections():
+    k = key("DATA_GOV_API_KEY")
+    kinds = dict(candidates_for_president="candidates/?office=P&", candidates_for_senate="candidates/?office=S&", candidates_for_house="candidates/?office=H&", political_committees="committees/?")
+    _, old = prior("us-election-candidates")
+    cell, last = {}, THIS_YEAR + THIS_YEAR % 2
+    for cyc in range(1980, last + 1, 2):
+        d = f"{cyc}-01-01"
+        if d in old and cyc < last - 2 and all(old[d].get(c, "") != "" for c in kinds):
+            cell[d] = {c: float(old[d][c]) for c in kinds}
+            continue
+        for col, path in kinds.items():
+            try:
+                n = J(f"https://api.open.fec.gov/v1/{path}cycle={cyc}&per_page=1&api_key={k}", tries=2)["pagination"]["count"]
+                if n:
+                    cell.setdefault(d, {})[col] = n
+            except Exception as e:
+                print(f"  us_elections {cyc} {col}: {str(e)[:50]}")
+            time.sleep(0.4)
+    meta = dict(candidates_for_president=dict(title="Candidates registered for US president in the two-year election cycle", unit="candidates", description="Federal Election Commission. A cycle is named for the year it ends; most presidential hopefuls never appear on a ballot."),
+                candidates_for_senate=dict(title="Candidates registered for the US Senate in the election cycle", unit="candidates"), candidates_for_house=dict(title="Candidates registered for the US House in the election cycle", unit="candidates"),
+                political_committees=dict(title="Political committees registered with the US election regulator in the cycle", unit="committees"))
+    out = series("us-election-candidates", "US federal elections: candidates and committees by cycle", "How many people register to run for president, the Senate and the House in each two-year election cycle, and how many political committees are active.",
+                 "US", "Government and finance", "US Federal Election Commission", "https://www.fec.gov/data/", PD, cell, meta, list(kinds), "year", min_rows=8)
+    out["partial"] = True
+    return out
+
+
+def dated(j, path=""):
+    """A dict of 'MM-YYYY' -> number found anywhere in a reply, preferring actual counts for the United States."""
+    best = None
+    if isinstance(j, dict):
+        keys = list(j)
+        if keys and sum(bool(re.fullmatch(r"\d{2}-\d{4}", str(x))) for x in keys) >= 0.8 * len(keys):
+            return (("actuals" in path.lower()) * 2 + ("united states" in path.lower() and "clearance" not in path.lower()), j)
+        for a, v in j.items():
+            r = dated(v, f"{path}/{a}")
+            if r and (best is None or r[0] > best[0]):
+                best = r
+    return best
+
+
+def us_crime():
+    k = key("DATA_GOV_API_KEY")
+    kinds = [("violent-crime", "violent_crimes", "US violent crimes reported to police in the month"), ("property-crime", "property_crimes", "US property crimes reported to police in the month"),
+             ("homicide", "homicides", "US homicides reported to police in the month"), ("motor-vehicle-theft", "motor_vehicle_thefts", "US motor vehicle thefts reported to police in the month")]
+    cell, meta, cols, this = {}, {}, [], date.today().strftime("%Y-%m")
+    for slug_, col, title in kinds:
+        try:
+            j = J(f"https://api.usa.gov/crime/fbi/cde/summarized/national/{slug_}?from=01-2015&to={date.today().strftime('%m-%Y')}&API_KEY={k}", tries=2)
+            hit = dated(j)
+            if not hit:
+                raise ValueError("no monthly counts: " + json.dumps(j)[:160])
+            n = 0
+            for mmyyyy, v in hit[1].items():
+                d = f"{mmyyyy[3:]}-{mmyyyy[:2]}"
+                if v is not None and d < this:
+                    cell.setdefault(d + "-01", {})[col] = float(v)
+                    n += 1
+            if n < 24:
+                raise ValueError(f"{n} months")
+            meta[col] = dict(title=title, unit="offences", description="FBI Crime Data Explorer, from the police agencies that report. Not every agency reports every month, so recent months rise as reports arrive.")
+            cols.append(col)
+        except Exception as e:
+            print(f"  us_crime {slug_}: {str(e)[:200]}")
+        time.sleep(0.5)
+    assert cols, "us_crime: nothing loaded"
+    return series("us-crime-monthly", "US crime reported to police, monthly", "Violent crime, property crime, homicides and vehicle thefts reported by US police agencies each month.",
+                  "US", "Government and finance", "US Federal Bureau of Investigation, Crime Data Explorer", "https://cde.ucr.cjis.gov", PD, cell, meta, cols, "month")
+
+
+def us_colleges():
+    k = key("DATA_GOV_API_KEY")
+    F = ["id", "school.name", "school.city", "school.state", "latest.student.size", "latest.admissions.admission_rate.overall", "latest.cost.tuition.in_state", "latest.cost.tuition.out_of_state",
+         "latest.completion.rate_suppressed.overall", "latest.earnings.10_yrs_after_entry.median"]
+    rows = []
+    for page in range(10):                                   # the 1,000 largest colleges that are open
+        j = J(f"https://api.data.gov/ed/collegescorecard/v1/schools.json?fields={','.join(F)}&per_page=100&page={page}&sort=latest.student.size:desc&school.operating=1", headers={"X-Api-Key": k}, tries=2)
+        if page == 0:
+            print("  us_colleges sample:", json.dumps(j.get("results", [{}])[:1])[:300])
+        pct = lambda x: "" if x is None else round(100 * x, 1)
+        for r in j.get("results") or []:
+            g = lambda f: r.get(f)
+            if g("id") and g("school.name"):
+                rows.append([g("id"), g("school.name"), THIS_YEAR, g("school.city") or "", g("school.state") or "", num(g("latest.student.size")), pct(g("latest.admissions.admission_rate.overall")),
+                             num(g("latest.cost.tuition.in_state")), num(g("latest.cost.tuition.out_of_state")), pct(g("latest.completion.rate_suppressed.overall")), num(g("latest.earnings.10_yrs_after_entry.median"))])
+        time.sleep(0.4)
+    S = "US Department of Education, College Scorecard, latest figures."
+    meta = dict(city=dict(title="City"), state=dict(title="State"), undergraduates=dict(title="Undergraduate students", unit="students", description=S), admission_rate=dict(title="Share of applicants admitted", unit="% of applicants", description=S),
+                tuition_in_state=dict(title="Tuition and fees for in-state students", unit="US$ a year", description=S), tuition_out_of_state=dict(title="Tuition and fees for out-of-state students", unit="US$ a year", description=S),
+                graduation_rate=dict(title="Share of students who complete their course", unit="% of students", description=S), median_earnings_after_10_years=dict(title="Median earnings ten years after starting", unit="US$ a year", description=S + " Former students who received federal aid."))
+    return table("us-colleges", "US colleges: size, cost, graduation and earnings", "The thousand largest US colleges and universities: how many students, how hard to get in, what it costs, how many finish and what they earn later.",
+                 "US", "People and society", "US Department of Education, College Scorecard", "https://collegescorecard.ed.gov/data/", PD, ["id", "year"], "year", "year", dict(col="id", label_col="college", label="College"),
+                 ["id", "college", "year", "city", "state", "undergraduates", "admission_rate", "tuition_in_state", "tuition_out_of_state", "graduation_rate", "median_earnings_after_10_years"], rows, meta, min_rows=200)
+
+
+def us_ev_charging():
+    k = key("DATA_GOV_API_KEY")
+    raw = text(f"https://developer.nrel.gov/api/alt-fuel-stations/v1.csv?api_key={k}&fuel_type=ELEC&status=E&access=public", tries=2, timeout=400)
+    rows = list(csv.DictReader(io.StringIO(raw)))
+    assert len(rows) > 5000, f"us_ev_charging: {len(rows)} stations: {raw[:150]}"
+    norm = {h: re.sub(r"[^a-z0-9]+", "_", h.lower()).strip("_") for h in rows[0]}
+    col = lambda *words: next((h for h, n in norm.items() if all(w in n for w in words)), None)
+    opened, l2, fast = col("open", "date"), col("level2"), col("dc", "fast")
+    assert opened, f"us_ev_charging: no opening date among {list(norm.values())[:40]}"
+    add = {}
+    for r in rows:
+        m = (r.get(opened) or "")[:7]
+        m = m if re.fullmatch(r"\d{4}-\d{2}", m) and m >= "2010-01" else "2010-01"       # stations with no date, or older ones, count from the start
+        a = add.setdefault(m, [0, 0, 0])
+        a[0] += 1
+        a[1] += int(float(r.get(l2) or 0)) + int(float(r.get(fast) or 0)) if l2 and fast else 0
+        a[2] += int(float(r.get(fast) or 0)) if fast else 0
+    cell, run, this = {}, [0, 0, 0], date.today().strftime("%Y-%m")
+    for m in sorted(add):
+        run = [run[i] + add[m][i] for i in range(3)]
+        if m < this:
+            cell[m + "-01"] = dict(charging_stations=run[0], charging_ports=run[1], fast_charging_ports=run[2])
+    D = "US Department of Energy, Alternative Fuels Data Center, kept by the National Renewable Energy Laboratory. Counts stations open to the public today by the month they opened, so stations that have since closed are not in earlier months."
+    meta = dict(charging_stations=dict(title="US public electric vehicle charging stations", unit="stations", description=D), charging_ports=dict(title="US public electric vehicle charging ports", unit="ports", description=D),
+                fast_charging_ports=dict(title="US public fast-charging ports", unit="ports", description=D))
+    return series("us-ev-charging-stations", "US electric vehicle charging stations, monthly", "How the public network for charging electric cars has grown in the United States.",
+                  "US", "Energy", "US Department of Energy and National Renewable Energy Laboratory, Alternative Fuels Data Center", "https://afdc.energy.gov/stations", PD, cell, meta, ["charging_stations", "charging_ports", "fast_charging_ports"], "month")
+
+
+def foods():
+    k = key("DATA_GOV_API_KEY")
+    N = {"208": "calories", "957": "calories", "958": "calories", "203": "protein", "204": "fat", "205": "carbohydrate", "291": "fibre", "269": "sugars", "307": "sodium", "301": "calcium", "303": "iron", "401": "vitamin_c"}
+    cols = ["calories", "protein", "fat", "carbohydrate", "fibre", "sugars", "sodium", "calcium", "iron", "vitamin_c"]
+    rows, seen = [], set()
+    for page in range(1, 6):
+        j = J(f"https://api.nal.usda.gov/fdc/v1/foods/list?dataType=Foundation&pageSize=200&pageNumber={page}", headers={"X-Api-Key": k}, tries=2)
+        if page == 1:
+            print("  foods sample:", json.dumps(j[:1] if isinstance(j, list) else j)[:300])
+        if not isinstance(j, list) or not j:
+            break
+        for f in j:
+            got = {}
+            for n in f.get("foodNutrients") or []:
+                c = N.get(str(n.get("number")))
+                if c and n.get("amount") is not None and c not in got:
+                    got[c] = n["amount"]
+            name = (f.get("description") or "").strip()
+            if f.get("fdcId") and name and name.lower() not in seen and len(got) >= 3:
+                seen.add(name.lower())
+                rows.append([f["fdcId"], name, THIS_YEAR] + [num(got.get(c)) for c in cols])
+        time.sleep(0.4)
+    U = dict(calories="kilocalories per 100 g", sodium="mg per 100 g", calcium="mg per 100 g", iron="mg per 100 g", vitamin_c="mg per 100 g")
+    meta = {c: dict(title=c.replace("_", " ").capitalize(), unit=U.get(c, "g per 100 g"), description="USDA FoodData Central, Foundation Foods: laboratory analysis of the food as described.") for c in cols}
+    return table("food-nutrients", "What is in common foods: calories, protein, fat and more", "Laboratory measurements of the nutrients in a few hundred everyday foods, per 100 grams.",
+                 "US", "Health", "US Department of Agriculture, FoodData Central", "https://fdc.nal.usda.gov", "Public domain (CC0)", ["food_id", "year"], "year", "year", dict(col="food_id", label_col="food", label="Food"),
+                 ["food_id", "food", "year"] + cols, rows, meta, min_rows=50)
+
+
+def datagov():
+    k = key("DATA_GOV_API_KEY")
+    j = J("https://api.gsa.gov/technology/datagov/v3/action/package_search?rows=0&facet.limit=80&facet.field=" + urllib.parse.quote('["organization"]'), headers={"x-api-key": k}, tries=2)
+    res = j["result"]
+    items = (res.get("search_facets") or {}).get("organization", {}).get("items") or []
+    assert res.get("count") and len(items) >= 10, "datagov: " + json.dumps(j)[:200]
+    rows = [["all", "All publishers", THIS_YEAR, res["count"], 100]] + [[i["name"], i.get("display_name") or i["name"], THIS_YEAR, i["count"], round(100 * i["count"] / res["count"], 2)] for i in sorted(items, key=lambda i: -i["count"])]
+    return table("us-data-gov-catalog", "data.gov: datasets listed by each publisher", "How many datasets each US government body lists in the national open data catalog today.",
+                 "US", "Government and finance", "US General Services Administration, data.gov", "https://catalog.data.gov", PD, ["publisher", "year"], "year", "year", dict(col="publisher", label_col="publisher_name", label="Publisher"),
+                 ["publisher", "publisher_name", "year", "datasets", "share_of_catalog"], rows, dict(datasets=dict(title="Datasets listed on data.gov", unit="datasets"), share_of_catalog=dict(title="Share of the whole catalog", unit="% of datasets")), min_rows=10)
+
+
+# ---------- addresses to look at before writing a loader; not part of a normal run ----------
+PROBES = ["https://www.fao.org/fileadmin/templates/worldfood/Reports_and_docs/Food_price_indices_data.csv",
+          "https://www.fao.org/media/docs/worldfoodsituationlibraries/default-document-library/food_price_indices_data.csv",
+          "https://data.baltimorecity.gov/api/search/v1/collections/dataset/items?q=part%201%20crime&limit=4",
+          "https://api.us.socrata.com/api/catalog/v1?domains=data.transportation.gov&q=monthly%20ridership&limit=5",
+          "https://api.us.socrata.com/api/catalog/v1?domains=data.cdc.gov&q=PLACES%20county%20data&limit=5",
+          "https://educationdata.urban.org/api/v1/college-university/ipeds/fall-enrollment/summaries?var=enrollment_fall&stat=sum&by=year",
+          "https://data.sec.gov/api/xbrl/frames/us-gaap/Revenues/USD/CY2024.json",
+          "https://crashviewer.nhtsa.dot.gov/CrashAPI/analytics/GetInjurySeverityCounts?fromCaseYear=2020&toCaseYear=2022&state=24&format=json",
+          "https://data.humdata.org/api/3/action/package_show?id=global-wfp-food-prices",
+          "https://data.cms.gov/data-api/v1/dataset?keyword=enrollment&size=3"]
+
+
+def probe_urls():
+    for u in PROBES:
+        try:
+            raw = fetch(u, headers={"User-Agent": "Open Data Company sahiljangra12@users.noreply.github.com"} if "sec.gov" in u else None, tries=1, timeout=60)
+            t = raw[:200000].decode("utf-8", "replace")
+            if "api.us.socrata.com" in u:
+                t = str([(r["resource"]["name"][:60], r["resource"]["id"], r["resource"].get("columns_field_name", [])[:12]) for r in json.loads(raw)["results"]])
+            elif "baltimorecity" in u:
+                t = str([(f["properties"].get("title", "")[:50], f["properties"].get("url", "")[:140]) for f in json.loads(raw).get("features", [])])
+            elif "humdata" in u:
+                t = str([(r.get("name", "")[:50], r.get("size"), r.get("url", "")[:120]) for r in json.loads(raw)["result"]["resources"]])
+            print(f"URL ok   {len(raw)} bytes {u[:90]}\n         {' '.join(t.split())[:700]}")
+        except Exception as e:
+            print(f"URL FAIL {u[:90]}: {str(e)[:80]}")
+
+
 BUILDERS = [(lambda s=s: wb_set(s[0], s[1], s[2], s[3], s[4], s[5], **s[6])) for s in WB_SETS] + [(lambda s=s: owid_charts(*s)) for s in OWID_SETS] + [
     imf, un_population, undp, who, pwt, us_monthly, us_quarterly, us_daily, us_debt, us_climate, wikipedia, research, gbif, github_activity,
     federal_register, fda, clinical_trials, fema, fdic, flu, chicago, nyc, us_spending, nih, eurostat, world_monthly, usgs_water, cdc_overdose, maryland, uk, climate_trace, hmda,
-    eia_grid, us_lawmaking, census_states,
+    eia_grid, us_lawmaking, census_states, us_crops, us_elections, us_crime, us_colleges, us_ev_charging, foods, datagov,
 ]
 NAMES = [s[0] for s in WB_SETS] + [s[0] for s in OWID_SETS] + ["imf", "un_population", "undp", "who", "pwt", "us_monthly", "us_quarterly", "us_daily", "us_debt", "us_climate", "wikipedia", "research", "gbif",
                                     "github_activity", "federal_register", "fda", "clinical_trials", "fema", "fdic", "flu", "chicago", "nyc", "us_spending", "nih", "eurostat", "world_monthly", "usgs_water", "cdc_overdose", "maryland", "uk", "climate_trace", "hmda",
-                                    "eia_grid", "us_lawmaking", "census_states"]
+                                    "eia_grid", "us_lawmaking", "census_states", "us_crops", "us_elections", "us_crime", "us_colleges", "us_ev_charging", "foods", "datagov"]
