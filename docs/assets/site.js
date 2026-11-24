@@ -57,20 +57,4 @@ async function scorecard() {
   draw();
 }
 
-async function home() {
-  const [d, c] = await Promise.all([fetch("data/datasets.json").then(r => r.json()), fetch("data/catalog.json").then(r => r.json())]);
-  $("#n-src").textContent = c.count;
-  const D = d.datasets, yr = t => String(t).slice(0, 4);
-  function draw() {
-    const q = $("#q").value.trim().toLowerCase(), r = $("#f-region").value;
-    const rows = D.filter(s => (!r || s.region === r) && (!q || (s.title + " " + s.description + " " + s.domain + " " + s.source + " " + s.columns.map(c => c.title + " " + c.name).join(" ")).toLowerCase().includes(q)));
-    $("#count").textContent = `${rows.length} of ${D.length} datasets`;
-    $("#sets").innerHTML = rows.map(s => `<a class="card ds" href="explore.html#d=${esc(s.id)}"><div><span class="tag plain">${esc(s.region)}</span> <span class="tag yes">${esc(s.domain)}</span></div>
-      <h3>${esc(s.title)}</h3><p>${esc(s.description)}</p>
-      <div class="facts">${s.columns.length} variable${s.columns.length === 1 ? "" : "s"}${s.entities ? ` · ${s.entities} ${esc(s.entity.label.toLowerCase())} entries` : ""} · ${yr(s.time.min)}–${yr(s.time.max)} · ${fmt(s.rows)} rows</div>
-      <div class="src">${esc(s.source)} · ${esc(s.licence.split("(")[0].split(";")[0].trim())}</div><div class="go">Explore and download →</div></a>`).join("") || "<p>No datasets match. Try a different search.</p>";
-  }
-  ["q", "f-region"].forEach(id => $("#" + id).addEventListener("input", draw));
-  draw();
-}
-({ catalog, scorecard, home })[document.body.dataset.page]?.().catch(e => { console.error(e); const m = $("#rows") || $("main"); m.insertAdjacentHTML("beforeend", "<p>Data failed to load.</p>"); });
+({ catalog, scorecard })[document.body.dataset.page]?.().catch(e => { console.error(e); const m = $("#rows") || $("main"); m.insertAdjacentHTML("beforeend", "<p>Data failed to load.</p>"); });

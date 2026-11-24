@@ -637,7 +637,8 @@
     }
    ],
    "bytes": 15462636,
-   "built": "2026-11-23",
+   "built": "2026-11-24",
+   "coverage": "1750 to 2025",
    "default_vars": [
     "co2",
     "co2_per_capita"
@@ -1695,7 +1696,8 @@
     }
    ],
    "bytes": 9378028,
-   "built": "2026-11-23",
+   "built": "2026-11-24",
+   "coverage": "1900 to 2025",
    "default_vars": [
     "primary_energy_consumption",
     "renewables_share_elec"
@@ -2022,7 +2024,8 @@
     }
    ],
    "bytes": 235846,
-   "built": "2026-11-23"
+   "built": "2026-11-24",
+   "coverage": "1986 to 2026"
   },
   {
    "id": "natural-gas-prices",
@@ -2056,7 +2059,8 @@
     }
    ],
    "bytes": 96874,
-   "built": "2026-11-23"
+   "built": "2026-11-24",
+   "coverage": "1997 to 2026"
   },
   {
    "id": "pjm-summer-peak-forecasts",
@@ -2119,7 +2123,8 @@
     }
    ],
    "bytes": 15231,
-   "built": "2026-11-23",
+   "built": "2026-11-24",
+   "coverage": "2024 to 2046",
    "default_entities": [
     "DOM",
     "AEP",

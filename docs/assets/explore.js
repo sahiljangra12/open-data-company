@@ -1,7 +1,13 @@
 /* Dataset explorer: pick variables, entities, time and filters; preview, compare, merge, download. */
 const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-const PAL = ["#0b6e63", "#c2552d", "#2a6fa8", "#8a5a00", "#7b3fa0", "#b0305a", "#4f7a1f", "#555f6b", "#d18b00", "#1f9aa8"];
+const PAL = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#6250d6", "#e34948"];   // fixed order, validated on white
+const slots = new Map();   // a series keeps its colour while it stays on the chart
+function colorOf(keys) {
+  for (const k of [...slots.keys()]) if (!keys.includes(k)) slots.delete(k);
+  keys.forEach(k => { if (!slots.has(k)) { const used = new Set(slots.values()); slots.set(k, PAL.findIndex((_, i) => !used.has(i))); } });
+  return k => PAL[slots.get(k)];
+}
 const OPS = { ">": (a, b) => a > b, ">=": (a, b) => a >= b, "<": (a, b) => a < b, "<=": (a, b) => a <= b, "=": (a, b) => a == b, "≠": (a, b) => a != b };
 let M = [], S = null, R = null, timer = 0;
 const cache = {};
@@ -71,7 +77,7 @@ function compute() {
   const B = [], MI = [];
   for (let i = 0; i < d.n; i++) {
     if (ents && !ents.has(E[i])) continue;
-    const t = T[i];
+    const t = yr ? T[i] : T[i].slice(0, 10);
     if (yr ? (t < from || t > to) : ((from && t < from) || (to && t > to))) continue;
     const mi = m ? (m.index.get(keyOf(d, ds.keys, i)) ?? -1) : -1;
     if (m && m.how === "inner" && mi < 0) continue;
@@ -118,14 +124,14 @@ function drawChart() {
   if (ds.entity) {
     const vc = nums.find(c => c.name === sel.value) || nums[0], lc = R.cols.find(c => c.col === ds.entity.label_col) || R.cols[0];
     for (let r = 0; r < R.n; r++) { const v = R.get(r, vc); if (isNaN(v)) continue; const k = R.get(r, lc); (series.get(k) || series.set(k, []).get(k)).push([x(r), v]); }
-    if (series.size > 10) {
-      const top = [...series].sort((a, b) => b[1][b[1].length - 1][1] - a[1][a[1].length - 1][1]).slice(0, 10);
-      note = `Showing the 10 largest of ${series.size} ${ds.entity.label.toLowerCase()} entries by latest value. Select specific ones on the left to compare them.`;
+    if (series.size > 8) {
+      const top = [...series].sort((a, b) => b[1][b[1].length - 1][1] - a[1][a[1].length - 1][1]).slice(0, 8);
+      note = `Showing the 8 largest of ${series.size} ${ds.entity.label.toLowerCase()} entries by latest value. Select up to 8 on the left to compare them.`;
       series.clear(); top.forEach(([k, v]) => series.set(k, v));
     }
     box.dataset.unit = vc.unit || "";
   } else {
-    nums.slice(0, 10).forEach(c => { const pts = []; for (let r = 0; r < R.n; r++) { const v = R.get(r, c); if (!isNaN(v)) pts.push([x(r), v]); } if (pts.length) series.set(c.title, pts); });
+    nums.slice(0, 8).forEach(c => { const pts = []; for (let r = 0; r < R.n; r++) { const v = R.get(r, c); if (!isNaN(v)) pts.push([x(r), v]); } if (pts.length) series.set(c.title, pts); });
     box.dataset.unit = nums.length === 1 ? nums[0].unit || "" : "";
   }
   const idx = $("#chart-index").checked;
@@ -146,22 +152,24 @@ function drawChart() {
   const short = v => Math.abs(v) >= 1e9 ? +(v / 1e9).toPrecision(3) + "B" : Math.abs(v) >= 1e6 ? +(v / 1e6).toPrecision(3) + "M" : Math.abs(v) >= 1e4 ? +(v / 1e3).toPrecision(3) + "k" : String(+v.toPrecision(4));
   const xl = v => S.ds.time.type === "year" ? String(Math.round(v)) : new Date(v).toISOString().slice(0, 10);
   let g = "";
-  for (let v = y0; v <= y1 + step / 2; v += step) g += `<line x1="${m.l}" x2="${W - m.r}" y1="${sy(v)}" y2="${sy(v)}" stroke="#ddd8cc"/><text x="${m.l - 8}" y="${sy(v) + 4}" text-anchor="end" font-size="12" fill="#5d6b78">${short(v)}</text>`;
+  for (let v = y0; v <= y1 + step / 2; v += step) g += `<line x1="${m.l}" x2="${W - m.r}" y1="${sy(v)}" y2="${sy(v)}" stroke="#e8e8ed"/><text x="${m.l - 8}" y="${sy(v) + 4}" text-anchor="end" font-size="12" fill="#6e6e73">${short(v)}</text>`;
   const yr = S.ds.time.type === "year", Y = v => yr ? v : new Date(v).getUTCFullYear() + (v - Date.UTC(new Date(v).getUTCFullYear(), 0, 1)) / 31557600000;
   const span = Y(x1) - Y(x0), ticks = [];
   if (span >= 3) {
     const st = [1, 2, 5, 10, 20, 25, 50, 100].find(s => span / s <= (W < 520 ? 5 : 9)) || 100;
     for (let y = Math.ceil(Y(x0) / st) * st; y <= Y(x1) + 1e-9; y += st) ticks.push([yr ? y : Date.UTC(y, 0, 1), String(y)]);
   } else for (let i = 0; i <= 4; i++) { const v = x0 + (x1 - x0) * i / 4; ticks.push([v, xl(v)]); }
-  ticks.forEach(([v, t]) => { g += `<line x1="${sx(v)}" x2="${sx(v)}" y1="${H - m.b}" y2="${H - m.b + 5}" stroke="#5d6b78"/><text x="${sx(v)}" y="${H - 8}" text-anchor="middle" font-size="12" fill="#5d6b78">${t}</text>`; });
-  let i = 0, leg = "";
+  ticks.forEach(([v, t]) => { g += `<line x1="${sx(v)}" x2="${sx(v)}" y1="${H - m.b}" y2="${H - m.b + 5}" stroke="#c7c7cc"/><text x="${sx(v)}" y="${H - 8}" text-anchor="middle" font-size="12" fill="#6e6e73">${t}</text>`; });
+  const paint = colorOf([...series.keys()]), dots = ds.chart === "points";
+  let leg = "";
   series.forEach((pts, k) => {
-    const col = PAL[i++ % PAL.length];
-    g += `<path d="${pts.map((p, j) => (j ? "L" : "M") + sx(p[0]).toFixed(1) + " " + sy(p[1]).toFixed(1)).join("")}" fill="none" stroke="${col}" stroke-width="2"/>`;
-    if (pts.length === 1) g += `<circle cx="${sx(pts[0][0])}" cy="${sy(pts[0][1])}" r="3.5" fill="${col}"/>`;
+    const col = paint(k);
+    if (dots) g += pts.map(p => `<circle cx="${sx(p[0]).toFixed(1)}" cy="${sy(p[1]).toFixed(1)}" r="2.6" fill="${col}" fill-opacity=".55"/>`).join("");
+    else g += `<path d="${pts.map((p, j) => (j ? "L" : "M") + sx(p[0]).toFixed(1) + " " + sy(p[1]).toFixed(1)).join("")}" fill="none" stroke="${col}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`;
+    if (!dots) { const e = pts[pts.length - 1]; g += `<circle cx="${sx(e[0]).toFixed(1)}" cy="${sy(e[1]).toFixed(1)}" r="4.5" fill="${col}" stroke="#fff" stroke-width="2"/>`; }
     leg += `<span><b style="background:${col}"></b>${esc(k)}</span>`;
   });
-  box.innerHTML = `<svg viewBox="0 0 ${W} ${H}" width="100%" height="${H}" role="img" aria-label="Line chart of the current selection">${g}<line id="rule" y1="${m.t}" y2="${H - m.b}" stroke="#15202b" stroke-dasharray="3 3" visibility="hidden"/></svg>
+  box.innerHTML = `<svg viewBox="0 0 ${W} ${H}" width="100%" height="${H}" role="img" aria-label="Line chart of the current selection">${g}<line id="rule" y1="${m.t}" y2="${H - m.b}" stroke="#86868b" visibility="hidden"/></svg>
     <div class="legend chartleg">${leg}</div><div class="legend">${idx ? "Indexed: first value = 100. " : box.dataset.unit ? "Unit: " + esc(box.dataset.unit) + ". " : ""}${esc(note)}</div><div id="tip" class="tip" hidden></div>`;
   const svg = $("svg", box), tip = $("#tip"), rule = $("#rule");
   svg.onmousemove = ev => {
@@ -169,9 +177,9 @@ function drawChart() {
     let best = null; series.forEach(pts => pts.forEach(p => { if (best === null || Math.abs(p[0] - xv) < Math.abs(best - xv)) best = p[0]; }));
     const rows = []; let j = 0;
     const tol = (x1 - x0) / 150;
-    series.forEach((pts, k) => { const col = PAL[j++ % PAL.length]; let p = pts[0]; for (const q of pts) if (Math.abs(q[0] - best) < Math.abs(p[0] - best)) p = q; if (Math.abs(p[0] - best) <= tol) rows.push([p[1], `<div><b style="background:${col}"></b>${esc(k)}: <strong>${short(p[1])}</strong></div>`]); });
+    series.forEach((pts, k) => { const col = paint(k); let p = pts[0]; for (const q of pts) if (Math.abs(q[0] - best) < Math.abs(p[0] - best)) p = q; if (Math.abs(p[0] - best) <= tol) rows.push([p[1], `<div class="row"><span class="key" style="background:${col}"></span><strong>${short(p[1])}</strong> <span class="nm">${esc(k)}</span></div>`]); });
     rule.setAttribute("x1", sx(best)); rule.setAttribute("x2", sx(best)); rule.setAttribute("visibility", "visible");
-    tip.innerHTML = `<div><strong>${xl(best)}</strong></div>` + rows.sort((a, b) => b[0] - a[0]).map(r => r[1]).join("");
+    tip.innerHTML = `<div class="nm">${xl(best)}</div>` + rows.sort((a, b) => b[0] - a[0]).map(r => r[1]).join("");
     tip.hidden = false; tip.style.left = Math.min(rc.width - 200, Math.max(0, ev.clientX - rc.left + 14)) + "px"; tip.style.top = (ev.clientY - rc.top + 10) + "px";
   };
   svg.onmouseleave = () => { tip.hidden = true; rule.setAttribute("visibility", "hidden"); };
@@ -181,7 +189,7 @@ function refresh() {
   clearTimeout(timer);
   timer = setTimeout(() => {
     R = compute();
-    $("#summary").innerHTML = `<strong>${R.n.toLocaleString()}</strong> rows × <strong>${R.cols.length}</strong> columns` + (S.merge && S.merge.data ? ` · merged with ${esc(S.merge.ds.title)}` : "");
+    $("#summary").innerHTML = `<strong>${R.n.toLocaleString()}</strong> rows, <strong>${R.cols.length}</strong> columns` + (S.merge && S.merge.data ? `, merged with ${esc(S.merge.ds.title)}` : "");
     $("#dl").disabled = !R.n;
     const cells = R.n * R.cols.length;
     $("#dl-note").textContent = $("#fmt").value === "xlsx" && cells > 2e6 ? "This selection is too large for Excel export here. Use CSV, or narrow the selection." : "";
@@ -261,7 +269,10 @@ async function openSet(id, st = {}) {
   const ds = M.find(d => d.id === id) || M[0];
   $("#ds").value = ds.id; document.title = `${ds.title} | Open Data Company`;
   $("#title").textContent = ds.title; $("#desc").textContent = ds.description;
-  $("#meta").innerHTML = `Source: <a href="${esc(ds.source_url)}" target="_blank" rel="noopener">${esc(ds.source)}</a> · Licence: ${esc(ds.licence)} · ${ds.rows.toLocaleString()} rows · ${ds.columns.length} variables · ${esc(ds.time.min)} to ${esc(ds.time.max)} · built ${esc(ds.built)} · <a href="${esc(ds.file)}" download>Download the full file (CSV, ${(ds.bytes / 1e6).toFixed(1)} MB)</a>`;
+  const day = t => String(t).slice(0, 10);
+  $("#meta").innerHTML = [`Source: <a href="${esc(ds.source_url)}" target="_blank" rel="noopener">${esc(ds.source)}</a>`, `Licence: ${esc(ds.licence)}`,
+    `${ds.rows.toLocaleString()} rows, ${ds.columns.length} variables`, `${esc(day(ds.time.min))} to ${esc(day(ds.time.max))}`, `Built ${esc(ds.built)}`,
+    `<a href="${esc(ds.file)}" download>Download the full file (CSV, ${(ds.bytes / 1e6).toFixed(1)} MB)</a>`].map(x => `<span>${x}</span>`).join("");
   $("#work").hidden = true; $("#loading").hidden = false; $("#loading").textContent = `Loading ${(ds.bytes / 1e6).toFixed(1)} MB of data…`;
   const data = await load(ds), has = v => ds.columns.some(c => c.name === v);
   const dv = (st.v ?? (ds.default_vars || ds.columns.slice(0, 4).map(c => c.name))).filter(has);
@@ -285,8 +296,8 @@ async function openSet(id, st = {}) {
     count("e-count", S.ents, items.length, `All ${items.length} included`);
   }
   const yr = ds.time.type === "year";
-  ["from", "to"].forEach(k => { const el = $("#t-" + k); el.type = yr ? "number" : "date"; el.min = ds.time.min; el.max = ds.time.max; el.value = S[k]; el.placeholder = k === "from" ? ds.time.min : ds.time.max; el.oninput = () => { S[k] = el.value; refresh(); }; });
-  $("#t-note").textContent = `Available: ${ds.time.min} to ${ds.time.max}. Leave blank for everything.`;
+  ["from", "to"].forEach(k => { const el = $("#t-" + k); el.type = yr ? "number" : "date"; el.min = day(ds.time.min); el.max = day(ds.time.max); el.value = S[k]; el.placeholder = k === "from" ? day(ds.time.min) : day(ds.time.max); el.oninput = () => { S[k] = el.value; refresh(); }; });
+  $("#t-note").textContent = `Available: ${day(ds.time.min)} to ${day(ds.time.max)}. Leave blank for everything.`;
   const mates = M.filter(d => d.id !== ds.id && sig(d) === sig(ds));
   $("#merge").innerHTML = `<option value="">${mates.length ? "No merge" : "No compatible dataset yet"}</option>` + mates.map(d => `<option value="${esc(d.id)}">${esc(d.title)}</option>`).join("");
   $("#merge").disabled = !mates.length; $("#merge").onchange = e => setMerge(e.target.value);
