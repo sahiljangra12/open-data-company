@@ -51,25 +51,30 @@ Two datasets can be merged when they share the same key columns (for example `co
 
 ## Data AI
 
-`docs/ask.html` answers questions typed or spoken (the microphone uses the browser's speech recognition). Two engines
-share the page:
+`docs/ask.html` is a chat window: messages on the right and left, a composer with a microphone at the foot (the browser's
+speech recognition), and charts drawn inside the replies. Two engines share the page:
 
 - **The built-in lookup** matches the words of a question to a variable (a fixed list of synonyms in
   `docs/assets/concepts.js`, then a word search over every variable title) and to places, then reads the value from the
   data. It handles one number ("India life expectancy"), comparisons, rankings, a year, world series (oil price, global
-  temperature, CO2 in the air) and recent earthquakes. It is instant and involves no AI.
+  temperature, CO2 in the air) and recent earthquakes. It also draws: "chart India's CO2 emissions since 1990" gives a
+  line chart, "map of life expectancy" a world map, "plot life expectancy against GDP per capita" a scatter, "top 5 wind
+  power chart" bars. It is instant and involves no AI.
 - **The AI** takes everything else: why and how questions, follow-ups, unclear wording, topics outside the data. It is a
   Claude model behind one small serverless function in `ai/` (hosted on Netlify, credentials supplied by Netlify AI
   Gateway, so no key is stored anywhere). The model never holds the data. When it needs a figure it asks for a tool
-  (`find_variables`, `get_values`, `rank`, `get_series`, `recent_earthquakes`); the visitor's browser runs the tool
-  against the same files the rest of the site uses and sends the result back. The answer cards under an AI reply show
-  what was read.
+  (`find_variables`, `get_values`, `rank`, `get_series`, `show_chart`, `recent_earthquakes`); the visitor's browser runs
+  the tool against the same files the rest of the site uses and sends the result back. `show_chart` draws a line, bar,
+  scatter or map straight into the reply. "Data behind this answer" under an AI reply opens what was read.
+
+One function, `visual()` in `docs/assets/ask.js`, draws every chart for both engines; each chart can be saved as a PNG
+with its title and source, and its numbers downloaded as CSV.
 
 If the service is unreachable or its allowance is used up, the built-in lookup answers alone and offers the closest
 variables, so a question always gets a way forward. Text the AI writes from general knowledge is labelled as such.
 
 **Cost guard.** On Netlify's credit-based plans every project pauses when the monthly credits run out, so the function
-limits its own spending four ways: a per-visitor rate limit (20 requests a minute), a cap on model calls a minute across
+limits its own spending four ways: a per-visitor rate limit (30 requests a minute), a cap on model calls a minute across
 all visitors (40), a cap on reply length, and a daily and monthly budget kept as an append-only log in Netlify Blobs. A
 call's cost is set aside before the model is called and corrected afterwards, so requests arriving together cannot run
 past the budget. Defaults: 0.04 USD a day and 0.30 USD a month, which is 54 Netlify credits at most. In the live check an

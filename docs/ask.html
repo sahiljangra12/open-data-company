@@ -1,37 +1,42 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Data AI: ask the data anything | Open Data Company</title><meta name="description" content="Ask a question by typing or by voice. Data AI answers with figures read from open datasets, each with its year and source, and explains them in plain words."><!--seo--><link rel="canonical" href="https://sahiljangra12.github.io/open-data-company/ask.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Open Data Company"><meta property="og:title" content="Data AI: ask the data anything | Open Data Company"><meta property="og:description" content="Ask a question by typing or by voice. Data AI answers with figures read from open datasets, each with its year and source, and explains them in plain words."><meta property="og:url" content="https://sahiljangra12.github.io/open-data-company/ask.html"><meta property="og:image" content="https://sahiljangra12.github.io/open-data-company/img/share.jpg"><meta name="twitter:card" content="summary_large_image"><link rel="alternate" type="text/plain" href="https://sahiljangra12.github.io/open-data-company/llms.txt" title="Plain-text index of the data"><!--/seo--><script>try{document.documentElement.dataset.theme=localStorage.getItem("theme")==="dark"?"dark":"light"}catch(e){document.documentElement.dataset.theme="light"}</script>
+<title>Data AI: ask the data anything | Open Data Company</title><meta name="description" content="Chat with Data AI by typing or by voice. It answers with figures read from open datasets, each with its year and source, draws charts and maps on request, and explains in plain words."><!--seo--><link rel="canonical" href="https://sahiljangra12.github.io/open-data-company/ask.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Open Data Company"><meta property="og:title" content="Data AI: ask the data anything | Open Data Company"><meta property="og:description" content="Chat with Data AI by typing or by voice. It answers with figures read from open datasets, each with its year and source, draws charts and maps on request, and explains in plain words."><meta property="og:url" content="https://sahiljangra12.github.io/open-data-company/ask.html"><meta property="og:image" content="https://sahiljangra12.github.io/open-data-company/img/share.jpg"><meta name="twitter:card" content="summary_large_image"><link rel="alternate" type="text/plain" href="https://sahiljangra12.github.io/open-data-company/llms.txt" title="Plain-text index of the data"><!--/seo--><script>try{document.documentElement.dataset.theme=localStorage.getItem("theme")==="dark"?"dark":"light"}catch(e){document.documentElement.dataset.theme="light"}</script>
 <link rel="preload" href="fonts/barlow-condensed-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="assets/site.css"></head>
 <body data-page="ask"><header class="top"><div class="wrap"><a class="brand" href="index.html">Open Data<span class="wide"> Company</span></a><button class="menu-btn" id="menu" type="button" aria-expanded="false" aria-controls="nav">Menu</button><nav id="nav" aria-label="Main"><a href="ask.html" class="on" aria-current="page">Data AI</a><a href="datasets.html">Datasets</a><a href="explore.html">Explorer</a><a href="research.html">Research</a><a href="mydata.html">Your data</a><a href="updates.html">Updates</a><a href="guide.html">Guide</a></nav><button class="theme" id="theme" type="button">Dark</button></div></header><main>
 <div class="wrap ai">
-<div class="xhead"><h1>Data AI</h1>
-<p>Ask anything, by typing or by voice. Figures come from the open datasets on this site, each with its year and its source. Explanations around them are written by an AI model and are marked as such.</p>
-<p class="ai-state" id="ai-state" role="status">Checking the AI service.</p></div>
-<div id="thread" aria-live="polite"></div>
-<p class="barfoot"><button class="link" id="fresh-chat" type="button" hidden>Start a new conversation</button></p>
-<div class="askbar" id="askbar">
-<form class="hyp" id="askform" role="search"><input id="q" name="q" type="search" autocomplete="off" enterkeyhint="send" maxlength="600" placeholder="Ask anything, for example: Why is India's life expectancy rising?" aria-label="Your question">
-<button class="mic" id="mic" type="button" aria-label="Ask by voice" aria-pressed="false"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3M8.5 21h7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
-<button class="btn solid" id="ask-go" type="submit">Ask</button></form>
-<p class="voice-note" id="voice-note" role="alert" hidden></p>
-<div class="quick" id="examples"><span class="up">Try</span></div>
+<section class="chat" id="chat" aria-label="Chat with Data AI">
+<header class="chatbar"><span class="avatar" aria-hidden="true">AI</span>
+<div class="chatwho"><h1>Data AI</h1><p class="ai-state" id="ai-state" role="status">Checking the AI service.</p></div>
+<button class="link" id="fresh-chat" type="button" hidden>New chat</button></header>
+<div class="msgs" id="thread" role="log" aria-live="polite" aria-label="Conversation" tabindex="0">
+<div class="msg ai" id="welcome"><span class="avatar" aria-hidden="true">AI</span><div class="col"><div class="bubble">
+<p>Hi, I'm Data AI. Ask me anything, by typing or with the microphone. I answer with figures from the open datasets on this site, each with its year and its source, and I can draw a chart or a map when you ask for one.</p>
+<div class="quick" id="examples"></div></div></div></div>
 </div>
+<div class="askbar" id="askbar">
+<p class="voice-note" id="voice-note" role="alert" hidden></p>
+<form class="composer" id="askform"><textarea id="q" name="q" rows="1" autocomplete="off" enterkeyhint="send" maxlength="600" placeholder="Message Data AI" aria-label="Your message"></textarea>
+<button class="mic" id="mic" type="button" aria-label="Ask by voice" aria-pressed="false"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3M8.5 21h7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+<button class="btn solid" id="ask-go" type="submit">Send</button></form>
+<p class="composer-note">Figures are read from the datasets. Explanations are written by an AI model and can be wrong, so check what matters.<span class="keys"> Enter sends, Shift and Enter starts a new line.</span></p>
+</div>
+</section>
 <section class="askhelp" id="help">
 <h2>What you can ask</h2>
 <div class="grid five">
 <div class="card"><h3>One number</h3><p>A measure and a place: <em>Kenya internet users</em>, <em>Japan population 1990</em>. You get the value, how it ranks, how it moved in ten years and the full history.</p></div>
-<div class="card"><h3>A comparison</h3><p>A measure and several places: <em>Germany vs France vs Spain renewable electricity</em>. Values side by side and one chart with a line for each.</p></div>
-<div class="card"><h3>A ranking</h3><p>Words like top, highest or lowest: <em>lowest child mortality</em>, <em>top 5 wind power</em>. You get the list, and each name leads to that country's own answer.</p></div>
+<div class="card"><h3>A comparison or a ranking</h3><p><em>Germany vs France vs Spain renewable electricity</em>, <em>lowest child mortality</em>, <em>top 5 wind power</em>. Values side by side, or the list of leaders.</p></div>
+<div class="card"><h3>A chart or a map</h3><p><em>Chart India's CO2 emissions since 1990</em>, <em>map of life expectancy</em>, <em>plot life expectancy against GDP per capita</em>. Drawn in the chat, with a picture and the numbers to download.</p></div>
 <div class="card"><h3>Why and how</h3><p><em>Why did oil prices jump in 2022?</em> <em>Is Africa getting more electricity?</em> The AI reads the figures first, then explains them in plain words.</p></div>
 <div class="card"><h3>Anything else</h3><p>Follow-up questions, definitions, or a topic outside the data. You still get an answer, with a clear label when it comes from general knowledge.</p></div>
 </div>
 <div class="howai">
 <h2>How it answers</h2>
 <ol>
-<li><b>Plain lookups are instant.</b> A question such as <em>India life expectancy</em> is matched to a variable and read straight from the data. No AI is involved, so the number cannot be invented.</li>
-<li><b>Everything else goes to an AI model.</b> When it needs a figure it asks this page for it, and the page reads the value from the same datasets. The cards under an AI answer show exactly what was read.</li>
+<li><b>Plain lookups and charts are instant.</b> A request such as <em>India life expectancy</em> or <em>chart oil price since 2020</em> is matched to a variable and read straight from the data. No AI is involved, so the numbers cannot be invented.</li>
+<li><b>Everything else goes to an AI model.</b> When it needs a figure or a chart it asks this page for it, and the page reads the values from the same datasets. "Data behind this answer" under a reply opens exactly what was read.</li>
 <li><b>General knowledge is labelled.</b> If the datasets hold nothing on a topic, the AI answers from what it knows and says so. Like any AI it can be wrong or out of date there, so check anything that matters.</li>
 </ol>
-<p class="hint">Questions for the AI are sent to a Claude model through this site's small service and are not stored with your name. Voice input uses your browser's speech recognition, which in some browsers sends the audio to the browser's maker. Please do not include personal details. The AI has a daily allowance; when it is used up, answers come straight from the datasets until the next day.</p>
+<p class="hint">Data AI is free to use. Questions for the AI are sent to a Claude model through this site's small service and are not stored with your name. Voice input uses your browser's speech recognition, which in some browsers sends the audio to the browser's maker. Please do not include personal details. The AI has a daily allowance; when it is used up, answers and charts come straight from the datasets until the next day.</p>
 </div>
 </section>
 </div>

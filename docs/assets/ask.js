@@ -311,6 +311,13 @@ const TOOLS = {
   },
 };
 
+TOOLS.show_chart = async (input, used) => {                            // draws straight into the reply that is being written
+  if (!used.box) return { error: "A chart cannot be drawn here." };
+  const out = await visual(input || {}, used.box);
+  if (!out.error) used.push({ kind: "viz", v: V.get(input.variable), places: [].concat(input.places || []).map(codeOf).filter(Boolean) });
+  return out;
+};
+
 /* ---------- the AI: a Claude model behind a small service; it asks for tools, the browser runs them ---------- */
 const AI = { url: typeof DATA_AI_URL === "string" ? DATA_AI_URL : "", state: null, memory: [] };
 function aiReady() {
@@ -318,9 +325,10 @@ function aiReady() {
   return AI.state || (AI.state = (async () => { try { const c = new AbortController(), t = setTimeout(() => c.abort(), 5000), r = await fetch(AI.url, { signal: c.signal }); clearTimeout(t); const j = await r.json(); return !!(j && j.ok && j.ai); } catch (e) { return false; } })());
 }
 const TOOL_SAYS = { find_variables: i => `Searching the variables for "${i.query || ""}"`, get_values: i => `Reading ${(V.get(i.variable) || { c: { title: "the data" } }).c.title.toLowerCase()} for ${[].concat(i.places || []).join(", ")}`, rank: i => `Ranking countries by ${(V.get(i.variable) || { c: { title: "that measure" } }).c.title.toLowerCase()}`,
-  get_series: i => `Reading the history of ${(V.get(i.variable) || { c: { title: "that measure" } }).c.title.toLowerCase()}${i.place ? " for " + i.place : ""}`, recent_earthquakes: () => "Reading the latest earthquakes" };
-async function aiTurn(question, say) {
-  const messages = [...AI.memory, { role: "user", content: question }], used = [], cost = { usd: 0, rounds: 0, cached: 0 };
+  get_series: i => `Reading the history of ${(V.get(i.variable) || { c: { title: "that measure" } }).c.title.toLowerCase()}${i.place ? " for " + i.place : ""}`, recent_earthquakes: () => "Reading the latest earthquakes",
+  show_chart: i => `Drawing a ${i.kind === "map" ? "world map" : i.kind === "scatter" ? "scatter chart" : i.kind === "bar" ? "bar chart" : "line chart"} of ${(V.get(i.variable) || { c: { title: "the data" } }).c.title.toLowerCase()}` };
+async function aiTurn(question, say, box) {
+  const messages = [...AI.memory, { role: "user", content: question }], used = [], cost = { usd: 0, rounds: 0, cached: 0 }; used.box = box;
   for (let round = 0; round < 4; round++) {                             // 4 rounds is 13 messages at most, inside the service's limit
     const c = new AbortController(), t = setTimeout(() => c.abort(), 60000);
     let body = JSON.stringify({ messages });
@@ -360,28 +368,192 @@ function speak(btn, text) {
   const u = new SpeechSynthesisUtterance(text.replace(/\*\*/g, "")); u.lang = document.documentElement.lang || "en"; u.onend = u.onerror = () => { btn.textContent = "Read it aloud"; }; btn.textContent = "Stop reading"; s.speak(u);
 }
 
+/* ---------- visuals: one function draws for the AI's show_chart tool and for plain "chart ..." requests ---------- */
+let SHAPE = null;
+const isCountry = v => !!(v && v.d.entity && v.d.keys.join("+") === "code+year");
+const yearOf = x => +String(x).slice(0, 4);
+async function valuesAt(v, yr) {                                       // code -> { v, y } for every place: one year, or each place's newest
+  const out = new Map();
+  if (yr) { const T = await load(v.d), col = T.c[v.c.name]; for (let i = 0; i < T.n; i++) if (T.c.year[i] === yr && !isNaN(col[i])) out.set(T.c.code[i], { v: col[i], y: yr }); }
+  else { const L = await latest(v.d.id), rec = L.vars[v.c.name]; if (rec) L.codes.forEach((c, i) => { if (rec.v[i] !== null) out.set(c, { v: rec.v[i], y: rec.y[i] }); }); }
+  return out;
+}
+/* save a chart as a picture. The SVG takes its colours from the style sheet, so they are written into a copy first; the title and source are added around it */
+function savePNG(svg, name, title, foot) {
+  const copy = svg.cloneNode(true), src = [svg, ...svg.querySelectorAll("*")], dst = [copy, ...copy.querySelectorAll("*")], rc = svg.getBoundingClientRect(), k = 2, top = 46, bottom = 34, pad = 16;
+  const props = ["fill", "fill-opacity", "stroke", "stroke-width", "stroke-opacity", "stroke-dasharray", "stroke-linecap", "stroke-linejoin", "opacity", "font-family", "font-size", "font-weight", "text-anchor", "visibility"];
+  src.forEach((n, i) => { const cs = getComputedStyle(n); dst[i].setAttribute("style", props.map(q => `${q}:${cs.getPropertyValue(q)}`).join(";")); });
+  copy.setAttribute("xmlns", "http://www.w3.org/2000/svg"); copy.setAttribute("width", rc.width); copy.setAttribute("height", rc.height);
+  const root = getComputedStyle(document.documentElement), bg = root.getPropertyValue("--bg").trim() || "#fff", ink = root.getPropertyValue("--ink").trim() || "#000", soft = root.getPropertyValue("--ink3").trim() || "#666";
+  return new Promise((done, fail) => {
+    const img = new Image();
+    img.onerror = () => fail(new Error("The picture could not be made."));
+    img.onload = () => {
+      const c = document.createElement("canvas"); c.width = (rc.width + pad * 2) * k; c.height = (rc.height + top + bottom) * k;
+      const g = c.getContext("2d"); g.scale(k, k); g.fillStyle = bg; g.fillRect(0, 0, c.width, c.height);
+      g.fillStyle = ink; g.font = "600 17px Arial, sans-serif"; g.textBaseline = "middle"; g.fillText(title.length > 90 ? title.slice(0, 88) + "…" : title, pad, top / 2 + 2, rc.width);
+      g.drawImage(img, pad, top, rc.width, rc.height);
+      g.fillStyle = soft; g.font = "12px Arial, sans-serif"; g.fillText(foot, pad, top + rc.height + bottom / 2, rc.width);
+      c.toBlob(b => { if (!b) return fail(new Error("The picture could not be made.")); const a = el("a"); a.href = URL.createObjectURL(b); a.download = name; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); done(b.size); }, "image/png");
+    };
+    img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(new XMLSerializer().serializeToString(copy));
+  });
+}
+/* spec: { kind: line | bar | scatter | map, variable, variable_x, places, from, to, year, order, n }.  Draws into box and returns a short account of what was drawn. */
+async function visual(spec, box) {
+  const v = V.get(spec.variable); if (!v) return { error: "Unknown variable id. Call find_variables to get the right one." };
+  const kind = ["line", "bar", "scatter", "map"].includes(spec.kind) ? spec.kind : "line";
+  const unit = v.c.unit || "", u = say(1, unit), mt = /^million tonnes/.test(unit) ? 1e6 : 1, pct = unit.startsWith("%");
+  const fmt = x => (u.money ? "$" : "") + Charts.short(x) + (pct ? "%" : ""), int = x => (Number.isInteger(x) && x > 1500 && x < 2200 ? x : null), yr = int(spec.year), from = int(spec.from), to = int(spec.to);
+  const asked = [].concat(spec.places || []).filter(Boolean), codes = [...new Set(asked.map(codeOf).filter(Boolean))], unknown = asked.filter(n => !codeOf(n));
+  if (asked.length && !codes.length) return { error: `None of these places is in the data: ${asked.join(", ")}.` };
+  const fig = el("figure", "viz"), title = el("h4"), host = el("div", "fig"), cap = el("p", "cap"), tools = el("div", "vizacts");
+  const mount = t => { title.textContent = t; fig.append(title, host, cap, tools); box.append(fig); const b = box.closest(".bubble"); if (b) b.classList.add("roomy"); };
+  const finish = (text, explore, csv) => {
+    cap.textContent = `${text} Source: ${v.d.source}.`;
+    tools.append(linkBtn("Open in the explorer", explore, "link"));
+    if (csv) { const b = el("button", "link", "Download the numbers"); b.type = "button"; b.onclick = () => saveCSV(csv.name, csv.header, csv.rows); tools.append(b); }
+    const svg = $("svg", host); if (svg) { const b = el("button", "link", "Save as picture"); b.type = "button"; b.onclick = () => savePNG($("svg", host), `${v.c.name}_${kind}.png`, title.textContent, `Source: ${v.d.source}. Open Data Company, Data AI.`).then(() => { b.textContent = "Saved"; setTimeout(() => { b.textContent = "Save as picture"; }, 1600); }, () => { b.textContent = "Could not save"; }); tools.append(b); }
+    const t = $("#thread"); if (t) t.scrollTop = t.scrollHeight;
+  };
+  const unitText = u.tail ? `Measured in ${u.money ? "dollars, " : ""}${u.tail}.` : u.money ? "Measured in US dollars." : pct ? "Measured in percent." : "";
+
+  if (kind === "line") {
+    let series, explore = `explore.html#d=${v.d.id}&v=${v.c.name}`;
+    if (isCountry(v)) {
+      const L = await latest(v.d.id), use = (codes.length ? codes : L.pos.has("WLD") ? ["WLD"] : []).filter(c => L.pos.has(c)).slice(0, 6);
+      if (!use.length) return { error: codes.length ? "None of those places is in this dataset." : "Name at least one place for this variable." };
+      const S = await seriesOf(v, use);
+      series = use.map(c => ({ name: placeName(c), code: c, pts: (S.get(c) || []).filter(p => (!from || p[0] >= from) && (!to || p[0] <= to)) })).filter(x => x.pts.length);
+      explore = exploreUrl(v.d, v.c.name, use, from, to);
+    } else if (!v.d.entity) {
+      const T = await load(v.d), t = T.c[v.d.time.col], col = T.c[v.c.name], pts = [];
+      for (let i = 0; i < T.n; i++) if (!isNaN(col[i]) && (!from || yearOf(t[i]) >= from) && (!to || yearOf(t[i]) <= to)) pts.push([t[i], col[i]]);
+      series = pts.length ? [{ name: v.c.title, pts }] : [];
+    } else return { error: "This variable cannot be drawn as a line here. It can be opened in the explorer." };
+    if (!series.length) return { error: "There are no values in that period." };
+    const dated = v.d.time.type === "date", span = `${yearOf(series[0].pts[0][0])} to ${yearOf(series[0].pts[series[0].pts.length - 1][0])}`;
+    mount(isCountry(v) ? `${v.c.title}: ${series.map(x => x.name).join(", ")}` : `${v.c.title}, ${span}`);
+    Charts.line(host, { series: series.map(x => ({ name: x.name, pts: x.pts.map(p => [p[0], p[1] * mt]) })), x: dated ? "date" : "year", fmt, unit: u.tail, zero: pct || series.length > 1, label: `${v.c.title} over time${isCountry(v) ? " for " + series.map(x => x.name).join(", ") : ""}` });
+    finish(`${unitText} Hover the chart to read any point.`.trim(), explore, { name: `${v.c.name}.csv`, header: ["place", dated ? "date" : "year", v.c.name], rows: series.flatMap(x => x.pts.map(p => [x.name, p[0], p[1]])) });
+    const end = p => ({ when: p[0], value: r6(p[1]) });
+    return { drawn: "line chart", title: title.textContent, unit, source: v.d.source, ...(unknown.length ? { places_not_found: unknown } : {}), series: series.map(x => ({ place: x.name, points: x.pts.length, first: end(x.pts[0]), last: end(x.pts[x.pts.length - 1]), lowest: end(x.pts.reduce((a, b) => (b[1] < a[1] ? b : a))), highest: end(x.pts.reduce((a, b) => (b[1] > a[1] ? b : a))) })) };
+  }
+  if (!isCountry(v)) return { error: `A ${kind} chart needs a variable measured by country. For a world series such as a price, use kind "line".` };
+
+  if (kind === "bar") {
+    const all = await valuesAt(v, yr); let rows, head;
+    if (codes.length) { rows = codes.filter(c => all.has(c)).map(c => ({ c, ...all.get(c) })).sort((a, b) => b.v - a.v); head = `${v.c.title}${yr ? ", " + yr : ""}`; if (!rows.length) return { error: `There are no values for those places${yr ? " in " + yr : ""}.` }; }
+    else {
+      const n = Math.max(3, Math.min(20, spec.n || 10)), bottom = spec.order === "bottom"; let t = [...all].filter(([c]) => isReal(c)).map(([c, r]) => ({ c, ...r }));
+      if (!t.length) return { error: `No country has a value${yr ? " for " + yr : ""}.` };
+      const newest = Math.max(...t.map(r => r.y)); t = t.filter(r => r.y >= newest - 6).sort((a, b) => (bottom ? a.v - b.v : b.v - a.v)); rows = t.slice(0, n); head = `${v.c.title}: the ${rows.length} ${bottom ? "lowest" : "highest"} countries${yr ? ", " + yr : ""}`;
+    }
+    mount(head);
+    Charts.bars(host, { rows: rows.map(r => ({ label: placeName(r.c), value: r.v * mt, sub: yr ? "" : String(r.y) })), fmt: x => say(x / mt, unit).n, unit: u.tail });
+    finish(yr ? `Values for ${yr}.` : "Each place at its most recent year, shown beside its name.", exploreUrl(v.d, v.c.name, rows.map(r => r.c).slice(0, 12)), { name: `${v.c.name}_bars.csv`, header: ["code", "place", "year", v.c.name], rows: rows.map(r => [r.c, placeName(r.c), r.y, r.v]) });
+    return { drawn: "bar chart", title: head, unit, source: v.d.source, ...(unknown.length ? { places_not_found: unknown } : {}), rows: rows.map(r => ({ place: placeName(r.c), year: r.y, value: r6(r.v) })) };
+  }
+
+  if (kind === "scatter") {
+    const vx = V.get(spec.variable_x); if (!vx) return { error: "A scatter needs variable_x too: the id of the variable for the horizontal axis." };
+    if (!isCountry(vx)) return { error: "A scatter needs two variables measured by country." };
+    const [Y, X] = await Promise.all([valuesAt(v, yr), valuesAt(vx, yr)]); let pts = [];
+    Y.forEach((r, c) => { const x = X.get(c); if (x && isReal(c)) pts.push({ c, x: x.v, y: r.v, when: Math.min(x.y, r.y), label: placeName(c) }); });
+    if (!yr && pts.length) { const newest = Math.max(...pts.map(p => p.when)); pts = pts.filter(p => p.when >= newest - 8); }
+    if (pts.length < 5) return { error: "Too few countries have both values to draw a scatter." };
+    const wide = a => a.every(x => x > 0) && Math.max(...a) / Math.min(...a) > 60, logX = wide(pts.map(p => p.x)), logY = wide(pts.map(p => p.y));
+    const tx = x => (logX ? Math.log10(x) : x), ty = y => (logY ? Math.log10(y) : y), n = pts.length, mx = pts.reduce((a, p) => a + tx(p.x), 0) / n, my = pts.reduce((a, p) => a + ty(p.y), 0) / n;
+    let sxy = 0, sxx = 0, syy = 0; pts.forEach(p => { const a = tx(p.x) - mx, b = ty(p.y) - my; sxy += a * b; sxx += a * a; syy += b * b; });
+    const r = sxx && syy ? sxy / Math.sqrt(sxx * syy) : 0, head = `${v.c.title} against ${vx.c.title}`, axis = w => `${w.c.title}${w.c.unit ? ", " + w.c.unit : ""}`;
+    mount(head);
+    Charts.scatter(host, { pts, logX, logY, xLabel: axis(vx), yLabel: axis(v), label: `${head}: one dot for each of ${n} countries` });
+    finish(`Each dot is a country${yr ? " in " + yr : " at its most recent year"}; hover a dot to see which. Correlation ${r.toFixed(2)}${logX || logY ? ", measured on the logarithmic scale the chart uses" : ""}. Two measures moving together does not show that one causes the other.`,
+      exploreUrl(v.d, v.c.name), { name: `${v.c.name}_vs_${vx.c.name}.csv`, header: ["code", "place", vx.c.name, v.c.name], rows: pts.map(p => [p.c, p.label, p.x, p.y]) });
+    const byY = [...pts].sort((a, b) => b.y - a.y), named = codes.map(c => pts.find(p => p.c === c)).filter(Boolean).map(p => ({ place: p.label, x: r6(p.x), y: r6(p.y) }));
+    return { drawn: "scatter chart", title: head, vertical: axis(v), horizontal: axis(vx), countries: n, correlation: +r.toFixed(2), correlation_note: logX || logY ? "Pearson r on the log scales used by the chart" : "Pearson r", highest_vertical: byY.slice(0, 3).map(p => p.label), lowest_vertical: byY.slice(-3).map(p => p.label), ...(named.length ? { places_asked_about: named } : {}), source: v.d.source === vx.d.source ? v.d.source : `${v.d.source}; ${vx.d.source}` };
+  }
+
+  /* map: countries shaded in six equal-sized groups (the ramp runs light to dark on a light page and the other way on a dark one) */
+  const all = await valuesAt(v, yr), shape = await (SHAPE || (SHAPE = getJSON("data/worldmap.json")));
+  let t = [...all].filter(([c]) => isReal(c)).map(([c, r]) => ({ c, ...r })); if (!t.length) return { error: `No country has a value${yr ? " for " + yr : ""}.` };
+  const newest = Math.max(...t.map(r => r.y)); t = t.filter(r => r.y >= newest - 6).sort((a, b) => a.v - b.v);
+  const val = new Map(t.map(r => [r.c, r])), cut = [1, 2, 3, 4, 5].map(i => t[Math.floor(t.length * i / 6)].v), cls = x => cut.findIndex(c => x < c) + 1 || 6, head = `${v.c.title}, ${yr || "latest year for each country"}`;
+  mount(head); host.classList.add("mapbox");
+  const root = svgEl("svg", { viewBox: `0 0 ${shape.w} ${shape.h}`, role: "img", "aria-label": `World map of ${v.c.title}. Lowest ${placeName(t[0].c)}, highest ${placeName(t[t.length - 1].c)}.` }), tip = el("div", "tip"); tip.hidden = true;
+  root.append(svgEl("path", { d: shape.sphere, class: "sphere" }));
+  shape.countries.forEach(c => { const p = svgEl("path", { d: c.d }), r = val.get(c.code); p.dataset.name = LABEL.get(c.code) || c.name; if (r) { p.style.fill = `var(--q${cls(r.v)})`; p.dataset.v = `${full(r.v, unit)} (${r.y})`; } else p.setAttribute("class", "none"); root.append(p); });
+  host.append(root, tip);
+  const point = e => { const p = e.target.closest("path[data-name]"); if (!p) { tip.hidden = true; return; } const rc = host.getBoundingClientRect(); tip.replaceChildren(el("strong", "", p.dataset.name), el("div", "nm", p.dataset.v || "No data")); tip.hidden = false; tip.style.left = Math.min(rc.width - 190, Math.max(0, e.clientX - rc.left + 14)) + "px"; tip.style.top = (e.clientY - rc.top + 14) + "px"; };
+  root.addEventListener("pointermove", point); root.addEventListener("pointerdown", point);                              // a tap works as well as a hover
+  root.addEventListener("pointerleave", e => { if (e.pointerType === "mouse") tip.hidden = true; });
+  const lg = el("div", "maplegend"), edges = [t[0].v, ...cut, t[t.length - 1].v];
+  for (let i = 0; i < 6; i++) { const sp = el("span"), sw = el("i"); sw.style.background = `var(--q${i + 1})`; sp.append(sw, document.createTextNode(`${say(edges[i], unit).n} to ${say(edges[i + 1], unit).n}`)); lg.append(sp); }
+  const nd = el("span"), sw = el("i"); sw.style.background = "var(--nodata)"; nd.append(sw, document.createTextNode("No data")); lg.append(nd); host.after(lg);
+  finish(`${unitText} ${t.length} countries have data, split into six equal-sized groups; the key under the map gives the range of each shade. Hover or tap a country to read its value.`.trim(), exploreUrl(v.d, v.c.name), { name: `${v.c.name}_map.csv`, header: ["code", "place", "year", v.c.name], rows: t.map(r => [r.c, placeName(r.c), r.y, r.v]) });
+  const one = r => ({ place: placeName(r.c), year: r.y, value: r6(r.v) });
+  return { drawn: "world map", title: head, unit, source: v.d.source, countries_with_data: t.length, lowest: t.slice(0, 3).map(one), median: one(t[t.length >> 1]), highest: t.slice(-3).reverse().map(one) };
+}
+/* a plain-words reading of a drawn chart, for requests answered without the AI */
+function describe(out, v) {
+  const unit = v.c.unit || "", when = w => (typeof w === "number" ? w : String(w).slice(0, 10));
+  if (out.series) return out.series.slice(0, 4).map(x => `${out.series.length > 1 || isCountry(v) ? x.place : v.c.title} went from ${full(x.first.value, unit)} in ${when(x.first.when)} to ${full(x.last.value, unit)} in ${when(x.last.when)}${x.highest.when !== x.last.when && x.highest.when !== x.first.when ? `, with a peak of ${full(x.highest.value, unit)} in ${when(x.highest.when)}` : ""}.`).join(" ");
+  if (out.rows) { const a = out.rows[0], z = out.rows[out.rows.length - 1]; return out.rows.length > 1 ? `${a.place} is first at ${full(a.value, unit)} (${a.year}); ${z.place} is last of those shown at ${full(z.value, unit)} (${z.year}).` : `${a.place}: ${full(a.value, unit)} (${a.year}).`; }
+  if ("correlation" in out) { const r = out.correlation, size = Math.abs(r) >= 0.7 ? "strongly" : Math.abs(r) >= 0.4 ? "moderately" : Math.abs(r) >= 0.2 ? "weakly" : "hardly"; return `Across ${out.countries} countries the two measures ${size === "hardly" ? "hardly move together" : r > 0 ? `rise together ${size}` : `move in opposite directions ${size}`} (correlation ${r.toFixed(2)}). That alone does not show that one causes the other.`; }
+  if (out.highest) return `Highest: ${out.highest.map(x => `${x.place} (${full(x.value, unit)})`).join(", ")}. Lowest: ${out.lowest.map(x => `${x.place} (${full(x.value, unit)})`).join(", ")}.`;
+  return "";
+}
+const VIS = /\b(charts?|graphs?|plots?|plotted|plotting|visuali[sz]\w*|visuals?|draw|drawn|diagram|pictures?|maps?|mapped|scatter\w*|bar ?charts?|line ?charts?|histogram|pie)\b/i;
+const VISFILL = new Set("chart charts graph graphs plot plots plotted plotting visual visuals visualize visualise visualization visualisation draw drawn diagram picture pictures map maps mapped scatter scatterplot bar bars barchart line lines linechart pie histogram show showing display see view trend trends change changed changing changes history historical evolution over time since from between until till through after before last past year years decade decades across against relationship correlation correlate it that this them these those same please can you could".split(" "));
+const WHY = /\b(why|how come|explain|reasons?|causes?|caused|because|should|would|will|predict\w*|forecast\w*|future|means?|meaning|define|definition|impact|effects?|affects?|opinion|recommend\w*|advice|summar\w*|describe|tell me about|think|better|worse|good|bad|surpris\w*)\b/i;
+function rangeOf(q) {                                                  // "since 1990", "from 2000 to 2020", "last 20 years"
+  const s = q.toLowerCase(), Y = "(1[789]\\d\\d|20\\d\\d)", now = new Date().getFullYear(); let m;
+  if ((m = s.match(new RegExp(`\\b(?:from|between)\\s+${Y}\\s*(?:to|and|until|till|through|-|–)\\s*${Y}\\b`))) || (m = s.match(new RegExp(`\\b${Y}\\s*(?:-|–|to)\\s*${Y}\\b`)))) return { from: Math.min(+m[1], +m[2]), to: Math.max(+m[1], +m[2]) };
+  if ((m = s.match(new RegExp(`\\b(?:since|after|from)\\s+${Y}\\b`)))) return { from: +m[1] };
+  if ((m = s.match(new RegExp(`\\b(?:until|till|before|up to|through)\\s+${Y}\\b`)))) return { to: +m[1] };
+  if ((m = s.match(/\b(?:last|past)\s+(\d{1,3})\s+years\b/))) return { from: now - +m[1] };
+  if (/\b(?:last|past) decade\b/.test(s)) return { from: now - 10 };
+  return {};
+}
+function visualPlan(q, P) {                                            // which charts a "chart ..." request means, when its words match the data
+  if (!P.vars.length) return null;
+  const s = q.toLowerCase(), r = rangeOf(q), ranged = "from" in r || "to" in r, year = ranged ? null : P.year, vs = P.vars.map(id => V.get(id)), real = P.places.filter(c => c !== "WLD");
+  if (vs.length === 2 && vs.every(isCountry) && !real.length && /scatter|versus|\bvs\b|against|relationship|correlat|plot/.test(s)) return [{ kind: "scatter", variable: vs[0].id, variable_x: vs[1].id, year }];
+  return vs.map(v => {
+    if (!isCountry(v)) return { kind: "line", variable: v.id, ...r };
+    if (/\bmaps?\b|mapped/.test(s) && !real.length) return { kind: "map", variable: v.id, year };
+    if (P.rank && !real.length) return { kind: "bar", variable: v.id, order: P.rank, n: P.n, year };
+    if (real.length >= 2 && (year || /\bbars?\b|bar ?chart|histogram|\bpie\b/.test(s))) return { kind: "bar", variable: v.id, places: P.places, year };
+    return { kind: "line", variable: v.id, places: P.places, ...r };
+  });
+}
+
 /* ---------- the conversation ---------- */
 const EXPLAIN = /\b(why|how come|explain|reasons?|causes?|caused|because|should|could|would|will|predict\w*|forecast\w*|future|means?|meaning|define|definition|impact|effects?|affects?|relationship|correlat\w*|better|worse|good|bad|summar\w*|describe|tell me about|think|opinion|recommend\w*|advice|trend|changed?|changing|grow\w*|increas\w*|decreas\w*|fall\w*|ris\w+)\b/i;
 /* questions the datasets cannot hold an answer to: these need the AI, never a lucky word match */
 const GENERAL = /^(who|whom|whose|when|where)\b|\b(capital( city)? of|president|prime minister|king|queen|currency|languages?|invented|inventor|founded|founder|born|died|weather|recipe|joke|poem|story|translate|wrote|written by|author|meaning of|stands? for)\b/i;
 const last = { v: null, places: [], ai: false };
 let busy = false;
+const toEnd = () => { const t = $("#thread"); t.scrollTop = t.scrollHeight; };
 function newTurn(q) {
-  const root = el("article", "turn"), you = el("p", "you"), reply = el("div", "reply"), status = el("p", "thinking", "Thinking");
-  you.append(el("span", "up", "You"), document.createTextNode(q)); reply.append(el("span", "up", "Data AI"), status); root.append(you, reply); $("#thread").append(root);
-  $("#askbar").classList.add("docked"); $("#examples").hidden = true; $("#help").hidden = true; $("#fresh-chat").hidden = false;
-  root.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
-  return { root, box: reply, say: t => { status.textContent = t; }, done: () => status.remove() };
+  const root = el("article", "turn"), mine = el("div", "msg user"), theirs = el("div", "msg ai"), ucol = el("div", "col"), acol = el("div", "col"), ub = el("div", "bubble"), reply = el("div", "bubble reply"), viz = el("div", "vizzes");
+  const status = el("p", "thinking"), dots = el("span", "dots"), words = el("span", "", "Thinking"), at = new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }), meta = el("p", "stamp", `Data AI, ${at}`), face = el("span", "avatar", "AI");
+  dots.append(el("i"), el("i"), el("i")); dots.setAttribute("aria-hidden", "true"); status.append(dots, words); face.setAttribute("aria-hidden", "true");
+  ub.append(el("p", "you", q)); ucol.append(ub, el("p", "stamp", `You, ${at}`)); mine.append(ucol);
+  reply.append(viz, status); acol.append(reply, meta); theirs.append(face, acol); root.append(mine, theirs); $("#thread").append(root);
+  $("#fresh-chat").hidden = false; toEnd();
+  return { root, box: reply, viz, say: t => { words.textContent = t; toEnd(); }, done: () => status.remove(), label: t => { meta.textContent = `Data AI, ${at}. ${t}`; },
+    settle: () => { const t = $("#thread"); t.scrollTop = Math.max(0, root.offsetTop - 14); } };          // show the question at the top with its answer under it
 }
-const SMALL = [[/^(hi|hello|hey|hola|namaste|good (morning|afternoon|evening))\b/i, "Hello. I'm Data AI. Ask me for a number, a comparison or a ranking, for example \"India life expectancy\" or \"top 10 CO2 emitters\", and I'll answer with the year and the source."],
-  [/\b(who are you|what are you|what can you do|what do you do|help me|how do (you|i) (work|use))\b/i, "I'm Data AI, the assistant for this site's open data. I can give you a single figure, compare countries, rank them, show how something changed over time, and report today's earthquakes, oil prices, global temperature and CO2 in the air. Every figure comes with its year and source."],
+const SMALL = [[/^(hi|hello|hey|hola|namaste|good (morning|afternoon|evening))\b/i, "Hello. Ask me for a number, a comparison, a ranking or a chart, for example \"India life expectancy\", \"top 10 CO2 emitters\" or \"chart oil price since 2020\". I'll answer with the year and the source."],
+  [/\b(who are you|what are you|what can you do|what do you do|help me|how do (you|i) (work|use))\b/i, "I'm Data AI, the assistant for this site's open data. I can give you a single figure, compare countries, rank them, draw a line chart, a bar chart, a scatter or a world map, and report today's earthquakes, oil prices, global temperature and CO2 in the air. Every figure comes with its year and source."],
   [/^(thanks|thank you|thx|great|nice|ok|okay|cool)\b/i, "You're welcome. Ask me anything else about the data."]];
 
 async function lookup(q, P, turn) {                                    // the built-in engine: exact, instant, no AI needed
   const box = turn.box, vs = P.vars.map(id => V.get(id));
-  if (P.quake) { box.append(el("p", "readas", "Read as: recent earthquakes worldwide.")); await answerQuakes(q, box); return true; }
+  if (P.quake) { box.classList.add("roomy"); box.append(el("p", "readas", "Read as: recent earthquakes worldwide.")); await answerQuakes(q, box); return true; }
   if (!vs.length) return false;
-  const byPlace = vs.some(v => v.d.entity), read = el("p", "readas");
+  const byPlace = vs.some(v => v.d.entity), read = el("p", "readas"); box.classList.add("roomy");
   read.append(document.createTextNode(`Read as: ${vs.map(v => `"${v.c.title}" from ${v.d.source}`).join(" and ")}${!byPlace ? "" : P.places.length ? `, for ${P.places.map(placeName).join(", ")}` : P.rank ? ", ranked by country" : ""}${P.year ? `, in ${P.year}` : ""}. `));
   if (P.others.length) { read.append("Not what you meant? Try "); P.others.slice(0, 4).forEach((id, i) => { const o = V.get(id), b = el("button", "link plain", o.c.title); b.type = "button"; b.onclick = () => respond(o.c.title + (P.places.length ? " " + P.places.map(placeName).join(" ") : "")); read.append(i ? ", " : "", b); }); read.append("."); }
   box.append(read);
@@ -397,69 +569,96 @@ async function lookup(q, P, turn) {                                    // the bu
   last.v = vs[0].id; if (P.places.length) last.places = P.places;
   return true;
 }
+/* the data an AI answer was built on, folded away until asked for */
+function evidence(u, q, box) {
+  const d = el("details", "evidence"), s = el("summary"), body = el("div");
+  s.textContent = "Data behind this answer: " + (u.kind === "quakes" ? "recent earthquakes, US Geological Survey" : `${u.v.c.title}${u.kind === "places" ? " for " + u.places.map(placeName).join(", ") : u.kind === "rank" ? ", countries ranked" : ""} (${u.v.d.source})`);
+  d.append(s, body); box.append(d);
+  d.addEventListener("toggle", async () => {
+    if (!d.open || d.dataset.done) return; d.dataset.done = "1"; box.classList.add("roomy");
+    try { if (u.kind === "places") await answerPlaces(q, u.v, { places: u.places, year: u.year, rank: null, n: 10 }, body); else if (u.kind === "rank") await answerRank(q, u.v, { places: [], year: u.year, rank: u.order, n: Math.min(u.n, 15) }, body); else if (u.kind === "series") await answerSeries(q, u.v, { year: null }, body); else await answerQuakes(q, body); }
+    catch (e) { console.warn(e); body.append(note("That data could not be loaded just now.")); }
+  });
+}
 function closest(words) {                                              // when nothing matches exactly: the nearest variables, so there is always a way forward
-  const hits = []; V.forEach(v => { if (v.c.type !== "num" || v.d.id === "earthquakes-past-30-days") return; const n = words.filter(w => w.length > 2 && v.q.includes(w.replace(/(ies|es|s)$/, ""))).length; if (n) hits.push([n - v.c.title.length / 500, v]); });
+  const hits = []; V.forEach(v => { if (v.c.type !== "num" || v.d.id === "earthquakes-past-30-days") return; const n = words.filter(w => w.length > 2 && !VISFILL.has(w) && v.q.includes(w.replace(/(ies|es|s)$/, ""))).length; if (n) hits.push([n - v.c.title.length / 500, v]); });
   return hits.sort((a, b) => b[0] - a[0]).slice(0, 5).map(h => h[1]);
 }
 async function respond(text, opt = {}) {
   const q = String(text).trim(); if (!q || busy) return;
-  busy = true; $("#q").value = ""; $("#ask-go").disabled = true;
+  const input = $("#q"); busy = true; input.value = ""; input.style.height = ""; $("#ask-go").disabled = true;
   const turn = newTurn(q), box = turn.box;
   history.replaceState(null, "", `ask.html?q=${encodeURIComponent(q).replace(/%20/g, "+")}`); document.title = `${q} | Data AI`;
   try {
-    const P = parse(q), short = q.split(/\s+/).length <= 4, follow = /^(and|what about|how about|same for|for|in|versus|vs|compared (to|with))\b/i.test(q);
-    if (!P.vars.length && !P.quake && P.places.length && last.v && (short || follow)) P.vars = [last.v];              // "and China?" keeps the measure
+    const P = parse(q), count = q.split(/\s+/).length, follow = /^(and|what about|how about|same for|for|in|versus|vs|compared (to|with))\b/i.test(q), wantsVis = VIS.test(q);
+    const bare = P.left.every(w => VISFILL.has(w));                                                                    // nothing in the words but "chart", "it", "since 2000" and the like
+    if (!P.vars.length && !P.quake && last.v && ((wantsVis && bare) || (P.places.length && (count <= 4 || follow)))) { P.vars = [last.v]; if (!P.places.length && wantsVis) P.places = last.places; }   // "and China?" or "chart it" keeps the measure
     if (P.vars.length && !P.places.length && !P.rank && last.places.length && follow && V.get(P.vars[0]).d.entity) P.places = last.places;   // "and its population?" keeps the places
-    const wordy = q.split(/\s+/).length, small = wordy <= 6 && !P.vars.length && !P.places.length && !P.quake && SMALL.find(([re]) => re.test(q));
+    const small = count <= 6 && !P.vars.length && !P.places.length && !P.quake && SMALL.find(([re]) => re.test(q));
     if (small && !opt.force) { turn.done(); box.append(el("p", "aitext", small[1])); return; }                       // a greeting needs no model
-    const general = GENERAL.test(q), ai = await aiReady(), simple = (P.quake || P.vars.length > 0) && !EXPLAIN.test(q) && !general && !P.weak && P.left.length === 0 && !(follow && last.ai);   // a follow-up to an AI answer stays with the AI
+    const general = GENERAL.test(q), plan = wantsVis && !general ? visualPlan(q, P) : null, ai = await aiReady();
+    const drawable = plan && !WHY.test(q) && !P.weak && P.left.every(w => VISFILL.has(w));                                  // the words name data we hold and nothing more: draw it without the AI
+    const simple = drawable || (!wantsVis && (P.quake || P.vars.length > 0) && !EXPLAIN.test(q) && !general && !P.weak && P.left.length === 0 && !(follow && last.ai));   // a follow-up to an AI answer stays with the AI
     if (ai && (opt.force || !simple)) {
       try {
-        const a = await aiTurn(opt.prompt || q, turn.say); turn.done(); last.ai = true;
+        const a = await aiTurn(opt.prompt || q, turn.say, turn.viz); turn.done(); last.ai = true; turn.label("Written by AI");
         turn.root.dataset.rounds = a.cost.rounds; turn.root.dataset.usd = a.cost.usd.toFixed(6); turn.root.dataset.cached = a.cost.cached;
         const ans = el("div", "aitext"); ans.append(mdLite(a.text)); box.append(ans);
+        const seen = new Set(), drawn = new Set(a.used.filter(u => u.kind === "viz" && u.v).map(u => u.v.id)); let shown = 0;
+        for (const u of a.used) {
+          if (u.v) { last.v = u.v.id; if (u.places && u.places.length) last.places = u.places; }
+          const key = u.kind + (u.v ? u.v.id : "") + (u.places || []).join() + (u.order || ""); if (u.kind === "viz" || seen.has(key) || shown >= 3 || (u.v && drawn.has(u.v.id))) continue; seen.add(key); shown++;
+          evidence(u, q, box);
+        }
+        box.append(el("p", "ainote", a.used.length ? "Written by an AI model. The figures were read from the datasets named here; any explanation around them is general knowledge and can be wrong." : "Written by an AI model from general knowledge, not from this site's data. It can be wrong or out of date, so check anything that matters."));
         const tools = el("div", "acts small"), cp = el("button", "link", "Copy the answer"), rd = el("button", "link", "Read it aloud"); cp.type = rd.type = "button";
         cp.onclick = () => copy(cp, `${a.text.replace(/\*\*/g, "")}\n\nFrom Data AI, Open Data Company: ${SITE}ask.html?q=${encodeURIComponent(q).replace(/%20/g, "+")}`); rd.onclick = () => speak(rd, a.text);
         tools.append(cp); if ("speechSynthesis" in window) tools.append(rd); box.append(tools);
-        box.append(el("p", "ainote", a.used.length ? "Written by an AI model. The figures were read from the datasets shown below; any explanation around them is general knowledge and can be wrong." : "Written by an AI model from general knowledge, not from this site's data. It can be wrong or out of date, so check anything that matters."));
-        const seen = new Set(); let cards = 0;
-        for (const u of a.used) {
-          const key = u.kind + (u.v ? u.v.id : "") + (u.places || []).join() + (u.order || ""); if (seen.has(key) || cards >= 2) continue; seen.add(key); cards++;
-          try { if (u.kind === "places") await answerPlaces(q, u.v, { places: u.places, year: u.year, rank: null, n: 10 }, box); else if (u.kind === "rank") await answerRank(q, u.v, { places: [], year: u.year, rank: u.order, n: Math.min(u.n, 15) }, box); else if (u.kind === "series") await answerSeries(q, u.v, { year: null }, box); else if (u.kind === "quakes") await answerQuakes(q, box); } catch (e) { console.warn(e); }
-          if (u.v) { last.v = u.v.id; if (u.places && u.places.length) last.places = u.places; }
-        }
         return;
       } catch (e) {
         console.warn("AI unavailable, using the built-in lookup", e); if (e.reason === "budget" || e.reason === "off") AI.state = Promise.resolve(false); aiBadge();
+        turn.viz.replaceChildren();
         box.append(el("p", "ainote", e.reason === "budget" ? "The AI's allowance for now is used up, so this answer comes straight from the data." : e.reason === "busy" ? "The AI is busy right now, so this answer comes straight from the data." : "The AI could not be reached just now, so this answer comes straight from the data."));
       }
     }
-    turn.done(); last.ai = false;
+    turn.done(); last.ai = false; turn.label("Read straight from the data");
     if (general || P.weak) { P.vars = []; P.quake = false; }                                                            // without the AI, say so instead of answering a different question
-    if (await lookup(q, P, turn)) { if (ai && !opt.force) { const b = el("button", "link", "Ask Data AI to explain this"); b.type = "button"; b.onclick = () => respond(q, { force: true, prompt: `${q}\n\nGive the figures, then explain briefly what is behind them.` }); const w = el("p", "more-ai"); w.append(b); box.append(w); } return; }
+    const explain = () => { if (!ai || opt.force) return; const b = el("button", "link", "Ask Data AI to explain this"); b.type = "button"; b.onclick = () => respond(q, { force: true, prompt: `${q}\n\nGive the figures, then explain briefly what is behind them.` }); const w = el("p", "more-ai"); w.append(b); box.append(w); };
+    if (plan && P.vars.length) {                                                                                         // a chart was asked for and the data is here
+      const said = [];
+      for (const spec of plan) { try { const out = await visual(spec, turn.viz); if (out.error) box.append(note(out.error)); else said.push(describe(out, V.get(spec.variable))); } catch (e) { console.error(e); box.append(note("That chart could not be drawn just now. Check the connection and ask again.")); } }
+      if (said.length) {
+        if (/\bpie\b/i.test(q)) said.push("Shown as bars, which compare sizes more clearly than a pie.");
+        box.append(el("p", "aitext", said.filter(Boolean).join(" ")));
+        last.v = P.vars[0]; if (P.places.length) last.places = P.places; explain(); return;
+      }
+    }
+    if (await lookup(q, P, turn)) { explain(); return; }
     const hello = SMALL.find(([re]) => re.test(q)); if (hello) { box.append(el("p", "aitext", hello[1])); return; }
     /* nothing matched and no AI to hand it to: say what was understood and offer the nearest things that can be answered */
-    const near = general ? [] : closest(P.words), p = el("div", "aitext");
+    const near = general ? [] : closest(P.words), p = el("div", "aitext"); turn.label("");
     p.append(el("p", "", general ? "That is a general question rather than one the datasets hold, so it needs the AI part, which is resting right now. I can still answer from the data straight away, for example:" : P.places.length ? `I found ${P.places.map(placeName).join(", ")} in your question, but not which measure you want. Pick one below, or add it to the question, for example "${placeName(P.places[0])} life expectancy".`
       : near.length ? "I could not match that to one measure in the data, but these are close. Pick one, or say it another way." : "That is outside the datasets I can read right now. I answer from open data on climate, energy, economy, development and natural hazards. Here are things I can answer straight away."));
-    const picks = el("div", "quick"); (near.length ? near.map(v => [v.c.title, v.c.title + (P.places.length ? " " + P.places.map(placeName).join(" ") : "")]) : ["World population", "Top 10 CO2 emitters", "Oil price", "Global temperature", "Earthquakes today"].map(t => [t, t]))
+    const picks = el("div", "quick"); (near.length ? near.map(v => [v.c.title, (wantsVis ? "Chart " : "") + v.c.title + (P.places.length ? " " + P.places.map(placeName).join(" ") : "")]) : ["World population", "Top 10 CO2 emitters", "Oil price", "Map of life expectancy", "Earthquakes today"].map(t => [t, t]))
       .forEach(([label, ask]) => { const b = el("button", "", label); b.type = "button"; b.onclick = () => respond(ask); picks.append(b); });
-    p.append(picks); const more = el("p", "hint"); more.append("Or ", Object.assign(el("a", "", "search the list of every variable"), { href: `datasets.html?q=${encodeURIComponent(P.words.join(" "))}` }), "."); p.append(more); box.append(p);
+    p.append(picks); const more = el("p", "hint"); more.append("Or ", Object.assign(el("a", "", "search the list of every variable"), { href: `datasets.html?q=${encodeURIComponent(P.words.filter(w => !VISFILL.has(w)).join(" "))}` }), "."); p.append(more); box.append(p);
   } catch (e) { console.error(e); turn.done(); box.append(note("Something went wrong while answering. Please ask again.")); }
-  finally { busy = false; $("#ask-go").disabled = false; if (matchMedia("(pointer:fine)").matches) $("#q").focus({ preventScroll: true }); }
+  finally { busy = false; $("#ask-go").disabled = false; turn.settle(); if (matchMedia("(pointer:fine)").matches) input.focus({ preventScroll: true }); }
 }
-async function aiBadge() { const on = await aiReady(), b = $("#ai-state"); b.textContent = on ? "AI answers are on. Figures come from the datasets, with their sources." : "Answers come straight from the datasets right now. The AI part is resting."; b.classList.toggle("on", on); }
+async function aiBadge() { const on = await aiReady(), b = $("#ai-state"); b.textContent = on ? "AI answers are on. Figures come from the datasets." : "Answering straight from the datasets. The AI part is resting."; b.classList.toggle("on", on); }
 
 (async () => {
   const [man, countries, pulse] = await Promise.all([getJSON("data/datasets.json"), getJSON("data/countries.json").catch(() => ({ countries: {} })), getJSON("data/pulse.json").catch(() => ({}))]);
   M = man.datasets; M.checked = man.checked; C = countries.countries || {}; PULSE = pulse;
   M.forEach(d => d.columns.forEach(c => V.set(`${d.id}::${c.name}`, { id: `${d.id}::${c.name}`, d, c, q: norm(`${c.title} ${c.name.replace(/_/g, " ")} ${c.unit || ""}`) })));
   buildPlaces(); PLACE = new Map(NAMES);
-  const input = $("#q"), form = $("#askform");
+  const input = $("#q"), form = $("#askform"), grow = () => { input.style.height = "auto"; input.style.height = Math.min(168, input.scrollHeight + 4) + "px"; };
   form.addEventListener("submit", e => { e.preventDefault(); respond(input.value); });
-  ["India life expectancy", "Top 10 CO2 emitters", "China vs India vs United States solar power", "Why is the world getting warmer?", "Which country is richest?", "Brazil forest area 1995", "Oil price", "Earthquakes today"]
+  input.addEventListener("input", grow);
+  input.addEventListener("keydown", e => { if (e.key === "Enter" && !e.shiftKey && !e.isComposing) { e.preventDefault(); respond(input.value); } });   // Enter sends, Shift+Enter starts a new line
+  ["India life expectancy", "Top 10 CO2 emitters", "Chart India's CO2 emissions since 1990", "Map of life expectancy", "Why is the world getting warmer?", "Plot life expectancy against GDP per capita", "Oil price", "Earthquakes today"]
     .forEach(t => { const b = el("button", "", t); b.type = "button"; b.onclick = () => respond(t); $("#examples").append(b); });
-  $("#fresh-chat").onclick = () => { $("#thread").replaceChildren(); AI.memory = []; last.v = null; last.places = []; last.ai = false; $("#askbar").classList.remove("docked"); $("#examples").hidden = false; $("#help").hidden = false; $("#fresh-chat").hidden = true; history.replaceState(null, "", "ask.html"); document.title = "Data AI | Open Data Company"; if ("speechSynthesis" in window) speechSynthesis.cancel(); input.focus(); };
+  $("#fresh-chat").onclick = () => { $$(".turn", $("#thread")).forEach(t => t.remove()); AI.memory = []; last.v = null; last.places = []; last.ai = false; $("#fresh-chat").hidden = true; history.replaceState(null, "", "ask.html"); document.title = "Data AI | Open Data Company"; if ("speechSynthesis" in window) speechSynthesis.cancel(); $("#thread").scrollTop = 0; input.focus(); };
   voiceInput($("#mic"), input, $("#voice-note"), t => respond(t));
   $("#thread").addEventListener("click", e => { const a = e.target.closest('a[href^="ask.html?q="]'); if (!a || e.metaKey || e.ctrlKey || e.shiftKey) return; e.preventDefault(); respond(new URL(a.href).searchParams.get("q") || ""); });
   aiBadge();

@@ -32,7 +32,7 @@ r = await call("POST", { messages: [{ role: "user", content: "What is India's li
 r = await call("POST", { messages: [{ role: "user", content: "What is India's life expectancy?" }] });
 check("first round asks for a tool", r.json.ok && r.json.stop_reason === "tool_use" && r.json.content[1].name === "get_values", JSON.stringify(r.json.content[1]));
 check("thinking is switched off to keep replies cheap and within the limit", seen[0].thinking && seen[0].thinking.type === "disabled");
-check("request to the model is well formed", seen[0].url === "/v1/messages" && seen[0].model === "claude-haiku-5-5" && seen[0].max === 700 && seen[0].tools.length === 5 && seen[0].key === "sent", `system prompt ${seen[0].system} chars, tools ${seen[0].tools.join(",")}`);
+check("request to the model is well formed", seen[0].url === "/v1/messages" && seen[0].model === "claude-haiku-5-5" && seen[0].max === 700 && seen[0].tools.length === 6 && seen[0].tools.includes("show_chart") && seen[0].key === "sent", `system prompt ${seen[0].system} chars, tools ${seen[0].tools.join(",")}`);
 const convo = [{ role: "user", content: "What is India's life expectancy?" }, { role: "assistant", content: r.json.content }, { role: "user", content: [{ type: "tool_result", tool_use_id: "toolu_1", content: JSON.stringify({ values: [{ place: "India", year: 2024, value: 72.23, unit: "years" }], source: "World Bank" }) }] }];
 r = await call("POST", { messages: convo }); check("second round gives the answer", r.json.ok && r.json.stop_reason === "end_turn" && /72\.2 years/.test(r.json.content[0].text), r.json.content[0].text);
 check("tool result reached the model", seen[1].n === 3 && seen[1].last.content[0].type === "tool_result");
