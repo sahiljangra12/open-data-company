@@ -68,11 +68,15 @@ share the page:
 If the service is unreachable or its allowance is used up, the built-in lookup answers alone and offers the closest
 variables, so a question always gets a way forward. Text the AI writes from general knowledge is labelled as such.
 
-**Cost guard.** The function has a per-visitor rate limit, a cap on reply length, and a daily and monthly budget kept as
-an append-only log in Netlify Blobs. Defaults: 0.03 USD a day and 0.25 USD a month (45 Netlify credits). Change them with
-the environment variables `DATA_AI_DAILY_USD` and `DATA_AI_MONTHLY_USD` on the Netlify project; `DATA_AI_MODEL`,
-`DATA_AI_PRICE_IN` and `DATA_AI_PRICE_OUT` switch the model. Setting `DATA_AI_URL` to an empty string in
-`docs/assets/core.js` turns AI answers off.
+**Cost guard.** On Netlify's credit-based plans every project pauses when the monthly credits run out, so the function
+limits its own spending four ways: a per-visitor rate limit (20 requests a minute), a cap on model calls a minute across
+all visitors (40), a cap on reply length, and a daily and monthly budget kept as an append-only log in Netlify Blobs. A
+call's cost is set aside before the model is called and corrected afterwards, so requests arriving together cannot run
+past the budget. Defaults: 0.04 USD a day and 0.30 USD a month, which is 54 Netlify credits at most. In the live check an
+AI answer cost about 0.00035 USD, so that is roughly 110 AI answers a day; plain lookups never touch the AI and cost
+nothing. Change the limits with the environment variables `DATA_AI_DAILY_USD`, `DATA_AI_MONTHLY_USD` and
+`DATA_AI_PER_MINUTE` on the Netlify project and redeploy; `DATA_AI_MODEL`, `DATA_AI_PRICE_IN` and `DATA_AI_PRICE_OUT`
+switch the model. Setting `DATA_AI_URL` to an empty string in `docs/assets/core.js` turns AI answers off.
 
 **Deploying the service.** Everything Netlify needs is in `ai/` (`netlify.toml`, the function, a one-line landing page).
 The workflow `.github/workflows/deploy-ai.yml` checks the function, uploads `ai/` to the Netlify project `open-data-ai`
