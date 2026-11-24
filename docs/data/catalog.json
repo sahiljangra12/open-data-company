@@ -1,9 +1,9 @@
 {
  "count": 136,
  "tally": {
-  "live": 43,
+  "live": 45,
   "via": 35,
-  "key": 20,
+  "key": 18,
   "images": 7,
   "bulk": 11,
   "terms": 2,
@@ -296,10 +296,15 @@
    "update": "annual",
    "api": true,
    "buyers": "Landlords, housing nonprofits",
-   "status": "key",
-   "status_label": "Needs a free key",
-   "datasets": [],
-   "note": "Free, but the source asks for a key or account that only the site's owner can create."
+   "status": "live",
+   "status_label": "On the site",
+   "datasets": [
+    {
+     "id": "us-states-rents",
+     "title": "US rents by state: fair market rents"
+    }
+   ],
+   "note": "Fair market rents for every state."
   },
   {
    "name": "FHFA House Price Index",
@@ -660,7 +665,7 @@
    "status": "key",
    "status_label": "Needs a free key",
    "datasets": [],
-   "note": "Free, but the source asks for a key or account that only the site's owner can create."
+   "note": "Its loader is written and waits only for a free key, added as the GitHub secret AQS_KEY."
   },
   {
    "name": "EPA Toxics Release Inventory",
@@ -1287,7 +1292,7 @@
    "status": "key",
    "status_label": "Needs a free key",
    "datasets": [],
-   "note": "Free, but the source asks for a key or account that only the site's owner can create."
+   "note": "Its loader is written and waits only for a free key, added as the GitHub secret COURTLISTENER_API_TOKEN."
   },
   {
    "name": "World Bank Open Data",
@@ -1584,7 +1589,7 @@
    "status": "key",
    "status_label": "Needs a free key",
    "datasets": [],
-   "note": "Needs a key. Trade totals are on the site through the World Bank."
+   "note": "Its API portal is not accepting new registrations. Trade totals are on the site through UN Comtrade and the World Bank."
   },
   {
    "name": "BIS statistics",
@@ -2328,10 +2333,15 @@
    "update": "monthly",
    "api": true,
    "buyers": "Researchers",
-   "status": "key",
-   "status_label": "Needs a free key",
-   "datasets": [],
-   "note": "Free, but the source asks for a key or account that only the site's owner can create."
+   "status": "live",
+   "status_label": "On the site",
+   "datasets": [
+    {
+     "id": "bird-observations-daily",
+     "title": "Birds seen each day: eBird checklists and species"
+    }
+   ],
+   "note": "Daily checklists and species counts for three countries."
   },
   {
    "name": "FAO AQUASTAT",

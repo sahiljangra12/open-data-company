@@ -11,7 +11,7 @@ When you answer a question with these numbers, give the value, its year and the 
 - Newest value of every variable for every country (JSON, country-and-year datasets): https://sahiljangra12.github.io/open-data-company/data/latest/<dataset id>.json
 - Country list with World Bank region and income group (JSON): https://sahiljangra12.github.io/open-data-company/data/countries.json
 - Country-and-year files have the columns `code` (ISO alpha-3, or a World Bank or Our World in Data code for a region), `country`, `year`, then one column per variable. Empty cells mean no data.
-- Last checked: 2026-11-24T14:59:24Z. Checked daily at about 05:23 UTC.
+- Last checked: 2026-11-24T16:10:10Z. Checked daily at about 05:23 UTC.
 
 ## Datasets
 
@@ -64,7 +64,7 @@ The concentration of carbon dioxide in the air, measured at Mauna Loa since 1958
 
 Every earthquake of magnitude 2.5 or greater recorded worldwide in the past 30 days, with location, depth and magnitude.
 
-- File: https://sahiljangra12.github.io/open-data-company/data/sets/earthquakes-past-30-days.csv (1,804 rows, 315 KB)
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/earthquakes-past-30-days.csv (1,811 rows, 317 KB)
 - Keys: id, time. Covers Rolling 30 days.
 - Source: US Geological Survey, Earthquake Hazards Program (https://earthquake.usgs.gov/earthquakes/feed/). Licence: Public domain (US federal data).
 - Variables: `magnitude` Magnitude; `place` Nearest place; `latitude` Latitude (degrees); `longitude` Longitude (degrees); `depth_km` Depth (km); `magnitude_type` Magnitude type; `event_type` Event type; `significance` Significance score (0-1000); `tsunami_flag` Tsunami flag; `felt_reports` Felt reports (reports); `url` USGS event page
@@ -375,6 +375,15 @@ How many records of animals, plants and fungi GBIF holds for each country. More 
 - Source: Global Biodiversity Information Facility (GBIF) (https://www.gbif.org). Licence: CC BY 4.0 (GBIF; individual datasets CC0, CC BY or CC BY-NC).
 - Variables: `all_records` Records of living things located in the country (GBIF) (records); `animal_records` Animal records located in the country (GBIF) (records); `plant_records` Plant records located in the country (GBIF) (records); `fungus_records` Fungus records located in the country (GBIF) (records)
 
+### Birds seen each day: eBird checklists and species
+
+How many birdwatching lists are sent in each day, and how many kinds of bird they report, for the United States, India and the United Kingdom.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/bird-observations-daily.csv (31 rows, 1 KB)
+- Keys: date. Covers 2026.
+- Source: eBird, Cornell Lab of Ornithology (https://ebird.org). Licence: eBird API terms: free for non-commercial use with the source named.
+- Variables: `checklists_us` Bird checklists sent in from the United States that day (checklists); `species_us` Bird species reported in the United States that day (species); `checklists_india` Bird checklists sent in from India that day (checklists); `species_india` Bird species reported in India that day (species); `checklists_uk` Bird checklists sent in from the United Kingdom that day (checklists); `species_uk` Bird species reported in the United Kingdom that day (species)
+
 ### Clinical trials started each year
 
 How many medical studies begin each year, from the world's largest trial registry.
@@ -492,6 +501,15 @@ How much electricity the main US power grids deliver each day, from the grid ope
 - Source: US Energy Information Administration, Hourly Electric Grid Monitor (data from PJM, MISO, ERCOT, CAISO, SPP, NYISO and ISO New England) (https://www.eia.gov/electricity/gridmonitor/). Licence: Public domain (US federal data).
 - Variables: `demand_us48` Electricity demand in the lower 48 states, daily (megawatt-hours in the day); `demand_pjm` Electricity demand in PJM (mid-Atlantic and Midwest), daily (megawatt-hours in the day); `demand_miso` Electricity demand in MISO (Midwest and South), daily (megawatt-hours in the day); `demand_erco` Electricity demand in ERCOT (Texas), daily (megawatt-hours in the day); `demand_ciso` Electricity demand in California ISO, daily (megawatt-hours in the day); `demand_swpp` Electricity demand in Southwest Power Pool, daily (megawatt-hours in the day); `demand_nyis` Electricity demand in New York ISO, daily (megawatt-hours in the day); `demand_isne` Electricity demand in ISO New England, daily (megawatt-hours in the day)
 
+### US rents by state: fair market rents
+
+What a modest home rents for in each US state, from the federal government's yearly fair market rents.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-states-rents.csv (392 rows, 18 KB)
+- Keys: state, year. Covers 2021 to 2027.
+- Source: US Department of Housing and Urban Development, Fair Market Rents (https://www.huduser.gov/portal/datasets/fmr.html). Licence: Public domain (US federal data).
+- Variables: `one_bedroom_rent` Typical fair market rent, one bedroom (US$ a month); `two_bedroom_rent` Typical fair market rent, two bedrooms (US$ a month); `three_bedroom_rent` Typical fair market rent, three bedrooms (US$ a month); `lowest_two_bedroom_rent` Lowest two-bedroom fair market rent in the state (US$ a month); `highest_two_bedroom_rent` Highest two-bedroom fair market rent in the state (US$ a month); `areas` Counties and metropolitan areas counted (areas)
+
 ### US crop production and yields, year by year
 
 How much corn, soybeans, wheat, cotton and rice US farms grow each year, and how much they get from each acre.
@@ -577,10 +595,10 @@ How many research projects the US National Institutes of Health pays for in each
 
 How much water eight major US rivers carry, month by month, from stream gauges that have run for decades.
 
-- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-river-flow-monthly.csv (922 rows, 56 KB)
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-river-flow-monthly.csv (922 rows, 51 KB)
 - Keys: date. Covers 1950 to 2026.
 - Source: US Geological Survey, National Water Information System (https://waterdata.usgs.gov). Licence: Public domain (US federal data).
-- Variables: `mississippi_at_st_louis` Flow of the Mississippi River at St. Louis, monthly average (cubic feet per second); `missouri_at_hermann` Flow of the Missouri River at Hermann, monthly average (cubic feet per second); `ohio_at_louisville` Flow of the Ohio River at Louisville, monthly average (cubic feet per second); `columbia_at_the_dalles` Flow of the Columbia River at The Dalles, monthly average (cubic feet per second); `colorado_at_lees_ferry` Flow of the Colorado River at Lees Ferry, monthly average (cubic feet per second); `potomac_near_washington` Flow of the Potomac River near Washington, DC, monthly average (cubic feet per second); `hudson_at_green_island` Flow of the Hudson River at Green Island, monthly average (cubic feet per second); `sacramento_at_freeport` Flow of the Sacramento River at Freeport, monthly average (cubic feet per second)
+- Variables: `mississippi_at_st_louis` Flow of the Mississippi River at St. Louis, monthly average (cubic feet per second); `missouri_at_hermann` Flow of the Missouri River at Hermann, monthly average (cubic feet per second); `ohio_at_louisville` Flow of the Ohio River at Louisville, monthly average (cubic feet per second); `columbia_at_the_dalles` Flow of the Columbia River at The Dalles, monthly average (cubic feet per second); `colorado_at_lees_ferry` Flow of the Colorado River at Lees Ferry, monthly average (cubic feet per second); `potomac_near_washington` Flow of the Potomac River near Washington, DC, monthly average (cubic feet per second); `hudson_at_green_island` Flow of the Hudson River at Green Island, monthly average (cubic feet per second)
 
 ### US drug and device safety reports and recalls, monthly
 

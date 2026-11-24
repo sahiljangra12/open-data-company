@@ -1,5 +1,5 @@
 {
- "checked": "2026-11-24T14:59:24Z",
+ "checked": "2026-11-24T16:10:10Z",
  "cron": "23 5 * * *",
  "datasets": [
   {
@@ -5693,10 +5693,10 @@
     "col": "time",
     "type": "date",
     "min": "2026-10-25T16:10:40Z",
-    "max": "2026-11-24T14:11:53Z"
+    "max": "2026-11-24T14:11:54Z"
    },
    "entity": null,
-   "rows": 1804,
+   "rows": 1811,
    "columns": [
     {
      "name": "magnitude",
@@ -5704,7 +5704,7 @@
      "unit": "",
      "description": "",
      "type": "num",
-     "filled": 1804
+     "filled": 1811
     },
     {
      "name": "place",
@@ -5712,7 +5712,7 @@
      "unit": "",
      "description": "",
      "type": "str",
-     "filled": 1804
+     "filled": 1811
     },
     {
      "name": "latitude",
@@ -5720,7 +5720,7 @@
      "unit": "degrees",
      "description": "",
      "type": "num",
-     "filled": 1804
+     "filled": 1811
     },
     {
      "name": "longitude",
@@ -5728,7 +5728,7 @@
      "unit": "degrees",
      "description": "",
      "type": "num",
-     "filled": 1804
+     "filled": 1811
     },
     {
      "name": "depth_km",
@@ -5736,7 +5736,7 @@
      "unit": "km",
      "description": "",
      "type": "num",
-     "filled": 1804
+     "filled": 1811
     },
     {
      "name": "magnitude_type",
@@ -5744,7 +5744,7 @@
      "unit": "",
      "description": "",
      "type": "str",
-     "filled": 1804
+     "filled": 1811
     },
     {
      "name": "event_type",
@@ -5752,7 +5752,7 @@
      "unit": "",
      "description": "",
      "type": "str",
-     "filled": 1804
+     "filled": 1811
     },
     {
      "name": "significance",
@@ -5760,7 +5760,7 @@
      "unit": "0-1000",
      "description": "USGS score combining magnitude, felt reports and estimated impact.",
      "type": "num",
-     "filled": 1804
+     "filled": 1811
     },
     {
      "name": "tsunami_flag",
@@ -5768,7 +5768,7 @@
      "unit": "",
      "description": "1 if the event was in an oceanic region and may warrant tsunami information; not a warning.",
      "type": "num",
-     "filled": 1804
+     "filled": 1811
     },
     {
      "name": "felt_reports",
@@ -5784,10 +5784,10 @@
      "unit": "",
      "description": "",
      "type": "str",
-     "filled": 1804
+     "filled": 1811
     }
    ],
-   "bytes": 315497,
+   "bytes": 316690,
    "built": "2026-11-24",
    "coverage": "Rolling 30 days",
    "default_vars": [
@@ -35643,7 +35643,7 @@
      "filled": 35
     }
    ],
-   "bytes": 3061,
+   "bytes": 3066,
    "built": "2026-11-24",
    "coverage": "1950 to 2025",
    "step": "year",
@@ -35685,7 +35685,7 @@
      "filled": 5200
     }
    ],
-   "bytes": 124165,
+   "bytes": 124164,
    "built": "2026-11-24",
    "coverage": "2000 to 2025",
    "entities": 220,
@@ -38844,6 +38844,83 @@
    ]
   },
   {
+   "id": "bird-observations-daily",
+   "title": "Birds seen each day: eBird checklists and species",
+   "description": "How many birdwatching lists are sent in each day, and how many kinds of bird they report, for the United States, India and the United Kingdom.",
+   "region": "World",
+   "domain": "Climate and environment",
+   "source": "eBird, Cornell Lab of Ornithology",
+   "source_url": "https://ebird.org",
+   "licence": "eBird API terms: free for non-commercial use with the source named",
+   "file": "data/sets/bird-observations-daily.csv",
+   "keys": [
+    "date"
+   ],
+   "time": {
+    "col": "date",
+    "type": "date",
+    "min": "2026-10-22",
+    "max": "2026-11-21"
+   },
+   "entity": null,
+   "rows": 31,
+   "columns": [
+    {
+     "name": "checklists_us",
+     "title": "Bird checklists sent in from the United States that day",
+     "unit": "checklists",
+     "description": "eBird, Cornell Lab of Ornithology: lists of birds seen, sent in by birdwatchers. The newest three days are left out because lists are still arriving.",
+     "type": "num",
+     "filled": 31
+    },
+    {
+     "name": "species_us",
+     "title": "Bird species reported in the United States that day",
+     "unit": "species",
+     "description": "eBird, Cornell Lab of Ornithology.",
+     "type": "num",
+     "filled": 31
+    },
+    {
+     "name": "checklists_india",
+     "title": "Bird checklists sent in from India that day",
+     "unit": "checklists",
+     "description": "eBird, Cornell Lab of Ornithology: lists of birds seen, sent in by birdwatchers. The newest three days are left out because lists are still arriving.",
+     "type": "num",
+     "filled": 31
+    },
+    {
+     "name": "species_india",
+     "title": "Bird species reported in India that day",
+     "unit": "species",
+     "description": "eBird, Cornell Lab of Ornithology.",
+     "type": "num",
+     "filled": 31
+    },
+    {
+     "name": "checklists_uk",
+     "title": "Bird checklists sent in from the United Kingdom that day",
+     "unit": "checklists",
+     "description": "eBird, Cornell Lab of Ornithology: lists of birds seen, sent in by birdwatchers. The newest three days are left out because lists are still arriving.",
+     "type": "num",
+     "filled": 31
+    },
+    {
+     "name": "species_uk",
+     "title": "Bird species reported in the United Kingdom that day",
+     "unit": "species",
+     "description": "eBird, Cornell Lab of Ornithology.",
+     "type": "num",
+     "filled": 31
+    }
+   ],
+   "bytes": 1318,
+   "built": "2026-11-24",
+   "coverage": "2026",
+   "step": "day",
+   "cadence": "Every day"
+  },
+  {
    "id": "clinical-trials-started",
    "title": "Clinical trials started each year",
    "description": "How many medical studies begin each year, from the world's largest trial registry.",
@@ -41603,10 +41680,10 @@
      "unit": "index, January 1991 = 100",
      "description": "Published by FHFA; FRED series HPIPONM226S.",
      "type": "num",
-     "filled": 428
+     "filled": 429
     }
    ],
-   "bytes": 189701,
+   "bytes": 189724,
    "built": "2026-11-24",
    "coverage": "1913 to 2026",
    "step": "month",
@@ -41680,7 +41757,7 @@
      "unit": "index, 1980 Q1 = 100",
      "description": "Published by FHFA; FRED series USSTHPI.",
      "type": "num",
-     "filled": 206
+     "filled": 207
     },
     {
      "name": "corporate_profits_after_tax",
@@ -42012,6 +42089,314 @@
    "coverage": "2019 to 2026",
    "step": "day",
    "cadence": "Every day"
+  },
+  {
+   "id": "us-states-rents",
+   "title": "US rents by state: fair market rents",
+   "description": "What a modest home rents for in each US state, from the federal government's yearly fair market rents.",
+   "region": "US",
+   "domain": "People and society",
+   "source": "US Department of Housing and Urban Development, Fair Market Rents",
+   "source_url": "https://www.huduser.gov/portal/datasets/fmr.html",
+   "licence": "Public domain (US federal data)",
+   "file": "data/sets/us-states-rents.csv",
+   "keys": [
+    "state",
+    "year"
+   ],
+   "time": {
+    "col": "year",
+    "type": "year",
+    "min": "2021",
+    "max": "2027"
+   },
+   "entity": {
+    "col": "state",
+    "label_col": "state_name",
+    "label": "State"
+   },
+   "rows": 392,
+   "columns": [
+    {
+     "name": "one_bedroom_rent",
+     "title": "Typical fair market rent, one bedroom",
+     "unit": "US$ a month",
+     "description": "US Department of Housing and Urban Development, Fair Market Rents: the rent, with utilities, that 40% of typical homes in an area fall under. Here, the middle value across the state's counties and metropolitan areas, each counted once.",
+     "type": "num",
+     "filled": 392
+    },
+    {
+     "name": "two_bedroom_rent",
+     "title": "Typical fair market rent, two bedrooms",
+     "unit": "US$ a month",
+     "description": "US Department of Housing and Urban Development, Fair Market Rents: the rent, with utilities, that 40% of typical homes in an area fall under. Here, the middle value across the state's counties and metropolitan areas, each counted once.",
+     "type": "num",
+     "filled": 392
+    },
+    {
+     "name": "three_bedroom_rent",
+     "title": "Typical fair market rent, three bedrooms",
+     "unit": "US$ a month",
+     "description": "US Department of Housing and Urban Development, Fair Market Rents: the rent, with utilities, that 40% of typical homes in an area fall under. Here, the middle value across the state's counties and metropolitan areas, each counted once.",
+     "type": "num",
+     "filled": 392
+    },
+    {
+     "name": "lowest_two_bedroom_rent",
+     "title": "Lowest two-bedroom fair market rent in the state",
+     "unit": "US$ a month",
+     "description": "",
+     "type": "num",
+     "filled": 392
+    },
+    {
+     "name": "highest_two_bedroom_rent",
+     "title": "Highest two-bedroom fair market rent in the state",
+     "unit": "US$ a month",
+     "description": "",
+     "type": "num",
+     "filled": 392
+    },
+    {
+     "name": "areas",
+     "title": "Counties and metropolitan areas counted",
+     "unit": "areas",
+     "description": "",
+     "type": "num",
+     "filled": 392
+    }
+   ],
+   "bytes": 18098,
+   "built": "2026-11-24",
+   "coverage": "2021 to 2027",
+   "entities": 56,
+   "cadence": "Once a year, in the autumn",
+   "places": [
+    [
+     "AL",
+     "Alabama"
+    ],
+    [
+     "AK",
+     "Alaska"
+    ],
+    [
+     "AS",
+     "American Samoa"
+    ],
+    [
+     "AZ",
+     "Arizona"
+    ],
+    [
+     "AR",
+     "Arkansas"
+    ],
+    [
+     "CA",
+     "California"
+    ],
+    [
+     "CO",
+     "Colorado"
+    ],
+    [
+     "CT",
+     "Connecticut"
+    ],
+    [
+     "DE",
+     "Delaware"
+    ],
+    [
+     "DC",
+     "District of Columbia"
+    ],
+    [
+     "FL",
+     "Florida"
+    ],
+    [
+     "GA",
+     "Georgia"
+    ],
+    [
+     "GU",
+     "Guam"
+    ],
+    [
+     "HI",
+     "Hawaii"
+    ],
+    [
+     "ID",
+     "Idaho"
+    ],
+    [
+     "IL",
+     "Illinois"
+    ],
+    [
+     "IN",
+     "Indiana"
+    ],
+    [
+     "IA",
+     "Iowa"
+    ],
+    [
+     "KS",
+     "Kansas"
+    ],
+    [
+     "KY",
+     "Kentucky"
+    ],
+    [
+     "LA",
+     "Louisiana"
+    ],
+    [
+     "ME",
+     "Maine"
+    ],
+    [
+     "MD",
+     "Maryland"
+    ],
+    [
+     "MA",
+     "Massachusetts"
+    ],
+    [
+     "MI",
+     "Michigan"
+    ],
+    [
+     "MN",
+     "Minnesota"
+    ],
+    [
+     "MS",
+     "Mississippi"
+    ],
+    [
+     "MO",
+     "Missouri"
+    ],
+    [
+     "MT",
+     "Montana"
+    ],
+    [
+     "NE",
+     "Nebraska"
+    ],
+    [
+     "NV",
+     "Nevada"
+    ],
+    [
+     "NH",
+     "New Hampshire"
+    ],
+    [
+     "NJ",
+     "New Jersey"
+    ],
+    [
+     "NM",
+     "New Mexico"
+    ],
+    [
+     "NY",
+     "New York"
+    ],
+    [
+     "NC",
+     "North Carolina"
+    ],
+    [
+     "ND",
+     "North Dakota"
+    ],
+    [
+     "MP",
+     "Northern Mariana Isl"
+    ],
+    [
+     "OH",
+     "Ohio"
+    ],
+    [
+     "OK",
+     "Oklahoma"
+    ],
+    [
+     "OR",
+     "Oregon"
+    ],
+    [
+     "PA",
+     "Pennsylvania"
+    ],
+    [
+     "PR",
+     "Puerto Rico"
+    ],
+    [
+     "RI",
+     "Rhode Island"
+    ],
+    [
+     "SC",
+     "South Carolina"
+    ],
+    [
+     "SD",
+     "South Dakota"
+    ],
+    [
+     "TN",
+     "Tennessee"
+    ],
+    [
+     "TX",
+     "Texas"
+    ],
+    [
+     "UT",
+     "Utah"
+    ],
+    [
+     "VT",
+     "Vermont"
+    ],
+    [
+     "VI",
+     "Virgin Islands"
+    ],
+    [
+     "VA",
+     "Virginia"
+    ],
+    [
+     "WA",
+     "Washington"
+    ],
+    [
+     "WV",
+     "West Virginia"
+    ],
+    [
+     "WI",
+     "Wisconsin"
+    ],
+    [
+     "WY",
+     "Wyoming"
+    ]
+   ]
   },
   {
    "id": "us-crop-production",
@@ -49061,17 +49446,9 @@
      "description": "US Geological Survey stream gauge 01358000: the average of the daily mean flow in each month with at least 25 days recorded.",
      "type": "num",
      "filled": 887
-    },
-    {
-     "name": "sacramento_at_freeport",
-     "title": "Flow of the Sacramento River at Freeport, monthly average",
-     "unit": "cubic feet per second",
-     "description": "US Geological Survey stream gauge 11447650: the average of the daily mean flow in each month with at least 25 days recorded.",
-     "type": "num",
-     "filled": 789
     }
    ],
-   "bytes": 55712,
+   "bytes": 50926,
    "built": "2026-11-24",
    "coverage": "1950 to 2026",
    "step": "month",
@@ -50425,7 +50802,7 @@
      "filled": 172
     }
    ],
-   "bytes": 5260,
+   "bytes": 5261,
    "built": "2026-11-24",
    "coverage": "2012 to 2026",
    "step": "month",
