@@ -33,11 +33,6 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install --quiet openpyxl
-      - name: Which keys are saved (names only, never values)
-        env:
-          ALL: ${{ toJSON(secrets) }}
-        run: |
-          echo "$ALL" | jq -r 'keys[]' | grep -v -i '^github_token$' | sed 's/^/saved secret named /' || echo "no repository secrets are saved"
       - name: Try
         env:
           EIA_API_KEY: ${{ secrets.EIA_API_KEY }}
