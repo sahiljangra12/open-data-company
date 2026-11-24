@@ -1,7 +1,4 @@
 id,time,magnitude,place,latitude,longitude,depth_km,magnitude_type,event_type,significance,tsunami_flag,felt_reports,url
-us7000tvzf,2026-10-25T05:33:21Z,4.6,"179 km NW of Port-Olry, Vanuatu",-14.0347,165.7671,10,mb,earthquake,326,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us7000tvzf
-us7000tvzg,2026-10-25T05:43:46Z,4.5,"188 km NW of Port-Olry, Vanuatu",-13.9939,165.6946,10,mb,earthquake,312,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us7000tvzg
-us7000tvzh,2026-10-25T05:45:54Z,4.5,"162 km NW of Port-Olry, Vanuatu",-14.1091,165.9054,10,mb,earthquake,312,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us7000tvzh
 us6000u4sv,2026-10-25T06:04:22Z,4.6,"75 km SSE of Onagawa Chō, Japan",37.8335,141.8211,53.024,mb,earthquake,326,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us6000u4sv
 us7000tvzj,2026-10-25T06:31:37Z,4.6,"Volcano Islands, Japan region",24.203,142.7094,48.104,mb,earthquake,326,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us7000tvzj
 us7000tvzk,2026-10-25T06:40:37Z,4.1,"121 km SW of Pelabuhanratu, Indonesia",-7.7588,105.7641,25.29,mb,earthquake,259,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us7000tvzk
@@ -1683,7 +1680,7 @@ nc75469622,2026-11-21T05:36:48Z,2.64,"31 km WSW of Petrolia, CA",40.2203,-124.62
 us6000uchp,2026-11-21T06:09:36Z,2.8,"36 km N of Dawson City, Canada",64.3909,-139.382,7.374,ml,earthquake,121,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us6000uchp
 pr71539648,2026-11-21T06:23:13Z,2.7,"8 km W of Orocovis, Puerto Rico",18.2418,-66.472,88.68,md,earthquake,112,0,,https://earthquake.usgs.gov/earthquakes/eventpage/pr71539648
 us6000uchv,2026-11-21T06:51:20Z,4.1,"17 km S of Iztapa, Guatemala",13.7792,-90.7058,58.499,mb,earthquake,259,0,1,https://earthquake.usgs.gov/earthquakes/eventpage/us6000uchv
-uw714140682,2026-11-21T07:13:12Z,3.41,"0 km WSW of Lea Hill, Washington",47.324,-122.1877,56.78,ml,earthquake,489,0,2071,https://earthquake.usgs.gov/earthquakes/eventpage/uw714140682
+uw714140682,2026-11-21T07:13:12Z,3.41,"0 km WSW of Lea Hill, Washington",47.324,-122.1877,56.78,ml,earthquake,489,0,2072,https://earthquake.usgs.gov/earthquakes/eventpage/uw714140682
 us6000uci2,2026-11-21T07:20:44Z,4.9,"65 km NNW of Port-Vila, Vanuatu",-17.1789,168.0998,43.228,mb,earthquake,369,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us6000uci2
 aka2026xbastm,2026-11-21T07:48:46Z,3,"66 km S of Ugashik, Alaska",56.92,-157.491,107.3,ml,earthquake,138,0,,https://earthquake.usgs.gov/earthquakes/eventpage/aka2026xbastm
 pr71539668,2026-11-21T08:53:33Z,3.22,"48 km NE of Christiansted, U.S. Virgin Islands",18.0755,-64.3988,8.89,md,earthquake,160,0,,https://earthquake.usgs.gov/earthquakes/eventpage/pr71539668
@@ -1784,7 +1781,7 @@ mb90213598,2026-11-23T11:47:20Z,2.64,"2 km SSE of Lima, Montana",44.6128,-112.58
 aka2026xfauve,2026-11-23T11:50:13Z,3.3,"52 km ENE of Shaktoolik, Alaska",64.578,-160.244,13,ml,earthquake,168,0,,https://earthquake.usgs.gov/earthquakes/eventpage/aka2026xfauve
 ci41365335,2026-11-23T11:57:48Z,3.43,"14 km SW of Newport Beach, CA",33.5352,-118.0408,13.1,ml,earthquake,351,0,500,https://earthquake.usgs.gov/earthquakes/eventpage/ci41365335
 tx2026xbjoyj,2026-11-23T12:32:02Z,2.6,"20 km NNW of Midland, Texas",32.16,-102.175,8.8135,ml,earthquake,104,0,,https://earthquake.usgs.gov/earthquakes/eventpage/tx2026xbjoyj
-aka2026xfcmdo,2026-11-23T12:39:52Z,3.5,"101 km S of Sand Point, Alaska",54.442,-160.799,5.6,ml,earthquake,188,0,,https://earthquake.usgs.gov/earthquakes/eventpage/aka2026xfcmdo
+us6000ud2g,2026-11-23T12:39:53Z,3.3,"99 km SSW of Sand Point, Alaska",54.4662,-160.8592,10.346,ml,earthquake,168,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us6000ud2g
 us6000ud2j,2026-11-23T12:41:02Z,3.6,"185 km SE of Attu Station, Alaska",51.7382,175.2081,35,ml,earthquake,199,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us6000ud2j
 aka2026xfcnfy,2026-11-23T12:42:06Z,2.6,"53 km SSE of Kokhanok, Alaska",58.989,-154.444,134.5,ml,earthquake,104,0,,https://earthquake.usgs.gov/earthquakes/eventpage/aka2026xfcnfy
 us6000ucz2,2026-11-23T15:10:57Z,4.7,South Sandwich Islands region,-57.3058,-25.881,103.295,mb,earthquake,340,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us6000ucz2
@@ -1800,7 +1797,7 @@ aka2026xfwtiz,2026-11-23T22:47:54Z,3.2,"109 km NNE of Arctic Village, Alaska",69
 hv75075542,2026-11-23T23:02:25Z,2.55,"13 km SSW of Kapaau, Hawaii",20.1227,-155.8418,27.8,ml,earthquake,100,0,,https://earthquake.usgs.gov/earthquakes/eventpage/hv75075542
 us6000ud34,2026-11-24T00:09:57Z,3.9,"4 km SSE of Hoback, Wyoming",43.2472,-110.7547,10.484,mwr,earthquake,306,0,172,https://earthquake.usgs.gov/earthquakes/eventpage/us6000ud34
 pr71539818,2026-11-24T00:38:43Z,2.81,"4 km W of Fuig, Puerto Rico",17.9863,-66.9575,11.79,md,earthquake,121,0,,https://earthquake.usgs.gov/earthquakes/eventpage/pr71539818
-us6000ud3i,2026-11-24T01:32:42Z,5.3,"67 km WNW of Mangan, India",27.8328,87.9467,10,mb,earthquake,452,0,45,https://earthquake.usgs.gov/earthquakes/eventpage/us6000ud3i
+us6000ud3i,2026-11-24T01:32:42Z,5.3,"67 km WNW of Mangan, India",27.8328,87.9467,10,mb,earthquake,452,0,46,https://earthquake.usgs.gov/earthquakes/eventpage/us6000ud3i
 us6000ud3m,2026-11-24T01:55:57Z,4.5,"9 km NNW of La Tronosa, Panama",7.5171,-80.6224,15.655,mb,earthquake,312,0,1,https://earthquake.usgs.gov/earthquakes/eventpage/us6000ud3m
 pr71539833,2026-11-24T02:00:56Z,3.26,"104 km NNE of Cruz Bay, U.S. Virgin Islands",19.217,-64.449,13.51,md,earthquake,164,0,,https://earthquake.usgs.gov/earthquakes/eventpage/pr71539833
 aka2026xgdfty,2026-11-24T02:02:09Z,2.7,"111 km E of Chignik, Alaska",56.234,-156.607,5,ml,earthquake,112,0,,https://earthquake.usgs.gov/earthquakes/eventpage/aka2026xgdfty

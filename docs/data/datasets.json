@@ -4268,17 +4268,241 @@
      "description": "World Bank indicator AG.LND.FRST.ZS.",
      "type": "num",
      "filled": 8748
+    },
+    {
+     "name": "population_under_15_share",
+     "title": "Population ages 0 to 14",
+     "unit": "% of total",
+     "description": "World Bank indicator SP.POP.0014.TO.ZS.",
+     "type": "num",
+     "filled": 17226
+    },
+    {
+     "name": "population_65_plus_share",
+     "title": "Population ages 65 and above",
+     "unit": "% of total",
+     "description": "World Bank indicator SP.POP.65UP.TO.ZS.",
+     "type": "num",
+     "filled": 17226
+    },
+    {
+     "name": "population_density",
+     "title": "Population density",
+     "unit": "people per sq. km",
+     "description": "World Bank indicator EN.POP.DNST.",
+     "type": "num",
+     "filled": 15306
+    },
+    {
+     "name": "net_migration",
+     "title": "Net migration",
+     "unit": "people",
+     "description": "World Bank indicator SM.POP.NETM.",
+     "type": "num",
+     "filled": 17226
+    },
+    {
+     "name": "gni_per_capita",
+     "title": "GNI per capita, Atlas method",
+     "unit": "current US$",
+     "description": "World Bank indicator NY.GNP.PCAP.CD.",
+     "type": "num",
+     "filled": 12997
+    },
+    {
+     "name": "investment_share_gdp",
+     "title": "Gross capital formation",
+     "unit": "% of GDP",
+     "description": "World Bank indicator NE.GDI.TOTL.ZS.",
+     "type": "num",
+     "filled": 10717
+    },
+    {
+     "name": "savings_share_gdp",
+     "title": "Gross savings",
+     "unit": "% of GDP",
+     "description": "World Bank indicator NY.GNS.ICTR.ZS.",
+     "type": "num",
+     "filled": 7909
+    },
+    {
+     "name": "tax_revenue_share_gdp",
+     "title": "Tax revenue",
+     "unit": "% of GDP",
+     "description": "World Bank indicator GC.TAX.TOTL.GD.ZS.",
+     "type": "num",
+     "filled": 5601
+    },
+    {
+     "name": "military_spending_share_gdp",
+     "title": "Military expenditure",
+     "unit": "% of GDP",
+     "description": "World Bank indicator MS.MIL.XPND.GD.ZS.",
+     "type": "num",
+     "filled": 10679
+    },
+    {
+     "name": "current_account_share_gdp",
+     "title": "Current account balance",
+     "unit": "% of GDP",
+     "description": "World Bank indicator BN.CAB.XOKA.GD.ZS.",
+     "type": "num",
+     "filled": 7773
+    },
+    {
+     "name": "exchange_rate",
+     "title": "Official exchange rate",
+     "unit": "local currency per US$",
+     "description": "World Bank indicator PA.NUS.FCRF.",
+     "type": "num",
+     "filled": 12640
+    },
+    {
+     "name": "research_spending_share_gdp",
+     "title": "Research and development expenditure",
+     "unit": "% of GDP",
+     "description": "World Bank indicator GB.XPD.RSDV.GD.ZS.",
+     "type": "num",
+     "filled": 3140
+    },
+    {
+     "name": "high_tech_exports_share",
+     "title": "High-technology exports",
+     "unit": "% of manufactured exports",
+     "description": "World Bank indicator TX.VAL.TECH.MF.ZS.",
+     "type": "num",
+     "filled": 3300
+    },
+    {
+     "name": "tourist_arrivals",
+     "title": "International tourism, arrivals",
+     "unit": "people",
+     "description": "World Bank indicator ST.INT.ARVL.",
+     "type": "num",
+     "filled": 5712
+    },
+    {
+     "name": "primary_enrollment",
+     "title": "School enrollment, primary",
+     "unit": "% gross",
+     "description": "World Bank indicator SE.PRM.ENRR.",
+     "type": "num",
+     "filled": 9351
+    },
+    {
+     "name": "secondary_enrollment",
+     "title": "School enrollment, secondary",
+     "unit": "% gross",
+     "description": "World Bank indicator SE.SEC.ENRR.",
+     "type": "num",
+     "filled": 8120
+    },
+    {
+     "name": "tertiary_enrollment",
+     "title": "School enrollment, tertiary",
+     "unit": "% gross",
+     "description": "World Bank indicator SE.TER.ENRR.",
+     "type": "num",
+     "filled": 7167
+    },
+    {
+     "name": "under_5_mortality",
+     "title": "Mortality rate, under 5",
+     "unit": "per 1,000 live births",
+     "description": "World Bank indicator SH.DYN.MORT.",
+     "type": "num",
+     "filled": 13401
+    },
+    {
+     "name": "maternal_mortality",
+     "title": "Maternal mortality ratio",
+     "unit": "per 100,000 live births",
+     "description": "World Bank indicator SH.STA.MMRT.",
+     "type": "num",
+     "filled": 9282
+    },
+    {
+     "name": "physicians",
+     "title": "Physicians",
+     "unit": "per 1,000 people",
+     "description": "World Bank indicator SH.MED.PHYS.ZS.",
+     "type": "num",
+     "filled": 5520
+    },
+    {
+     "name": "measles_immunization",
+     "title": "Immunization, measles",
+     "unit": "% of children 12 to 23 months",
+     "description": "World Bank indicator SH.IMM.MEAS.",
+     "type": "num",
+     "filled": 9866
+    },
+    {
+     "name": "undernourishment",
+     "title": "Prevalence of undernourishment",
+     "unit": "% of population",
+     "description": "World Bank indicator SN.ITK.DEFC.ZS.",
+     "type": "num",
+     "filled": 5046
+    },
+    {
+     "name": "basic_sanitation_access",
+     "title": "People using at least basic sanitation services",
+     "unit": "% of population",
+     "description": "World Bank indicator SH.STA.BASS.ZS.",
+     "type": "num",
+     "filled": 6263
+    },
+    {
+     "name": "electricity_use_per_capita",
+     "title": "Electric power consumption",
+     "unit": "kWh per person",
+     "description": "World Bank indicator EG.USE.ELEC.KH.PC.",
+     "type": "num",
+     "filled": 6654
+    },
+    {
+     "name": "pm25_air_pollution",
+     "title": "PM2.5 air pollution, mean annual exposure",
+     "unit": "micrograms per cubic meter",
+     "description": "World Bank indicator EN.ATM.PM25.MC.M3.",
+     "type": "num",
+     "filled": 8296
+    },
+    {
+     "name": "agricultural_land_share",
+     "title": "Agricultural land",
+     "unit": "% of land area",
+     "description": "World Bank indicator AG.LND.AGRI.ZS.",
+     "type": "num",
+     "filled": 15101
+    },
+    {
+     "name": "mobile_subscriptions",
+     "title": "Mobile cellular subscriptions",
+     "unit": "per 100 people",
+     "description": "World Bank indicator IT.CEL.SETS.P2.",
+     "type": "num",
+     "filled": 12912
+    },
+    {
+     "name": "women_in_parliament",
+     "title": "Seats held by women in national parliaments",
+     "unit": "%",
+     "description": "World Bank indicator SG.GEN.PARL.ZS.",
+     "type": "num",
+     "filled": 6485
     }
    ],
-   "bytes": 4711854,
+   "bytes": 8451599,
    "built": "2026-11-24",
    "coverage": "1960 to 2025",
+   "entities": 261,
    "default_vars": [
     "population",
     "gdp_per_capita",
     "life_expectancy"
    ],
-   "entities": 261,
    "chart_entities": [
     "WLD",
     "CHN",
@@ -5453,11 +5677,11 @@
    "time": {
     "col": "time",
     "type": "date",
-    "min": "2026-10-25T05:33:21Z",
+    "min": "2026-10-25T06:04:22Z",
     "max": "2026-11-24T04:57:59Z"
    },
    "entity": null,
-   "rows": 1817,
+   "rows": 1814,
    "columns": [
     {
      "name": "magnitude",
@@ -5465,7 +5689,7 @@
      "unit": "",
      "description": "",
      "type": "num",
-     "filled": 1817
+     "filled": 1814
     },
     {
      "name": "place",
@@ -5473,7 +5697,7 @@
      "unit": "",
      "description": "",
      "type": "str",
-     "filled": 1817
+     "filled": 1814
     },
     {
      "name": "latitude",
@@ -5481,7 +5705,7 @@
      "unit": "degrees",
      "description": "",
      "type": "num",
-     "filled": 1817
+     "filled": 1814
     },
     {
      "name": "longitude",
@@ -5489,7 +5713,7 @@
      "unit": "degrees",
      "description": "",
      "type": "num",
-     "filled": 1817
+     "filled": 1814
     },
     {
      "name": "depth_km",
@@ -5497,7 +5721,7 @@
      "unit": "km",
      "description": "",
      "type": "num",
-     "filled": 1817
+     "filled": 1814
     },
     {
      "name": "magnitude_type",
@@ -5505,7 +5729,7 @@
      "unit": "",
      "description": "",
      "type": "str",
-     "filled": 1817
+     "filled": 1814
     },
     {
      "name": "event_type",
@@ -5513,7 +5737,7 @@
      "unit": "",
      "description": "",
      "type": "str",
-     "filled": 1817
+     "filled": 1814
     },
     {
      "name": "significance",
@@ -5521,7 +5745,7 @@
      "unit": "0-1000",
      "description": "USGS score combining magnitude, felt reports and estimated impact.",
      "type": "num",
-     "filled": 1817
+     "filled": 1814
     },
     {
      "name": "tsunami_flag",
@@ -5529,7 +5753,7 @@
      "unit": "",
      "description": "1 if the event was in an oceanic region and may warrant tsunami information; not a warning.",
      "type": "num",
-     "filled": 1817
+     "filled": 1814
     },
     {
      "name": "felt_reports",
@@ -5545,10 +5769,10 @@
      "unit": "",
      "description": "",
      "type": "str",
-     "filled": 1817
+     "filled": 1814
     }
    ],
-   "bytes": 317752,
+   "bytes": 317230,
    "built": "2026-11-24",
    "coverage": "Rolling 30 days",
    "default_vars": [
