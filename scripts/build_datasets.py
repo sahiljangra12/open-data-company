@@ -907,6 +907,9 @@ def main():
                 if trying:
                     describe(d)
         except Exception as e:
+            if type(e).__name__ == "NeedsKey":            # a free key the owner has not added yet: not a failure
+                print(f"wait {name}: no key named {e} yet", flush=True)
+                continue
             failed.append(f"{name}: {str(e)[:180]}")
             print(f"FAIL {name}: {str(e)[:200]} ({time.time() - started:.0f}s)", flush=True)
     if trying:

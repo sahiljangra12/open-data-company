@@ -26,6 +26,11 @@ jobs:
           python-version: "3.12"
       - run: pip install openpyxl
       - run: python scripts/build_datasets.py     # datasets, latest values, change log
+        env:                                       # free keys for the sources that ask for one; a missing key only skips its loader
+          EIA_API_KEY: ${{ secrets.EIA_API_KEY }}
+          DATA_GOV_API_KEY: ${{ secrets.DATA_GOV_API_KEY }}
+          CENSUS_API_KEY: ${{ secrets.CENSUS_API_KEY }}
+
       - run: python scripts/build_catalog.py
       - run: python scripts/build_scorecard.py
       - run: python scripts/build_site.py         # dataset list page, sitemap, plain-text index

@@ -11,7 +11,7 @@ A builder that fails keeps the files from the last good run, so one source being
 Fetching is polite: one request at a time, a pause between requests to the same host, and for sources that are asked
 year by year only the recent years are fetched again; older years are read back from the file already on disk.
 """
-import csv, gzip, io, json, re, sys, time, urllib.parse, urllib.request
+import csv, gzip, io, json, os, re, sys, time, urllib.parse, urllib.request
 from datetime import date, datetime, timezone
 
 bd = sys.modules["__main__"] if hasattr(sys.modules.get("__main__"), "spec") else __import__("build_datasets")
@@ -1232,9 +1232,476 @@ def nih():
     return out
 
 
+# ---------- keys: a few sources ask for a free key, which the site's owner adds as a GitHub secret ----------
+class NeedsKey(Exception):
+    """Raised by a builder whose key has not been added yet: the builder is skipped, not counted as a failure."""
+
+
+def key(name):
+    v = os.environ.get(name, "").strip()
+    if not v:
+        raise NeedsKey(name)
+    return v
+
+
+# ---------- Eurostat: the European Union's statistics office ----------
+EUROSTAT = [  # (table, filters that leave one figure for a country and a year, column, title, unit)
+    ("une_rt_a", "age=Y15-74&unit=PC_ACT&sex=T", "unemployment_rate", "Unemployment rate (Eurostat)", "% of the labour force"),
+    ("lfsi_emp_a", "indic_em=EMP_LFS&sex=T&age=Y20-64&unit=PC_POP", "employment_rate", "Employment rate, ages 20 to 64 (Eurostat)", "% of people aged 20 to 64"),
+    ("prc_hicp_aind", "unit=RCH_A_AVG&coicop=CP00", "inflation", "Inflation, harmonised consumer prices (Eurostat)", "% a year"),
+    ("nama_10_pc", "unit=CP_EUR_HAB&na_item=B1GQ", "gdp_per_person", "GDP per person (Eurostat)", "euros, current prices"),
+    ("nama_10_gdp", "unit=CLV_PCH_PRE&na_item=B1GQ", "real_gdp_growth", "Real GDP growth (Eurostat)", "% a year"),
+    ("gov_10dd_edpt1", "unit=PC_GDP&sector=S13&na_item=GD", "government_debt", "Government debt (Eurostat)", "% of GDP"),
+    ("nrg_ind_ren", "nrg_bal=REN&unit=PC", "renewable_energy_share", "Renewable energy in final energy use (Eurostat)", "% of energy use"),
+    ("demo_mlexpec", "sex=T&age=Y_LT1", "life_expectancy", "Life expectancy at birth (Eurostat)", "years"),
+    ("demo_pjan", "sex=T&age=TOTAL", "population", "Population on 1 January (Eurostat)", "people"),
+    ("ilc_peps01n", "unit=PC&sex=T&age=TOTAL", "at_risk_of_poverty", "People at risk of poverty or social exclusion (Eurostat)", "% of people"),
+    ("ilc_di12", "", "gini_coefficient", "Gini coefficient of disposable income (Eurostat)", "0 (equal) to 100"),
+    ("isoc_ci_ifp_iu", "indic_is=I_IU3&unit=PC_IND&ind_type=IND_TOTAL", "internet_users", "People who used the internet in the past three months (Eurostat)", "% of people aged 16 to 74"),
+]
+
+
+def eurostat_table(table, filt):
+    j = J(f"https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/{table}?format=JSON&lang=EN&freq=A{'&' + filt if filt else ''}", tries=2, timeout=240)
+    ids, size = j["id"], j["size"]
+    index = {}
+    for d in ids:
+        ix = j["dimension"][d]["category"]["index"]
+        index[d] = {c: i for i, c in enumerate(ix)} if isinstance(ix, list) else ix
+    gi, ti = ids.index("geo"), ids.index("time")
+    assert all(size[k] == 1 for k in range(len(ids)) if k not in (gi, ti)), f"breakdowns left: {dict(zip(ids, size))}"
+    mult = [1] * len(ids)
+    for k in range(len(ids) - 2, -1, -1):
+        mult[k] = mult[k + 1] * size[k + 1]
+    geo, when, out = {v: g for g, v in index["geo"].items()}, {v: t for t, v in index["time"].items()}, {}
+    values = j["value"].items() if isinstance(j["value"], dict) else enumerate(j["value"])
+    for k, v in values:
+        k = int(k)
+        g, t = geo[(k // mult[gi]) % size[gi]], str(when[(k // mult[ti]) % size[ti]])
+        if v is not None and t[:4].isdigit():
+            out[(g, int(t[:4]))] = v
+    return out
+
+
+def eurostat():
+    a2, name = iso()["a2"], iso()["name"]
+    cell, names, meta, cols = {}, {}, {}, []
+    for table, filt, col, title, unit in EUROSTAT:
+        try:
+            got = eurostat_table(table, filt)
+            n = 0
+            for (g, y), v in got.items():
+                code = "EUU" if g == "EU27_2020" else a2.get({"EL": "GR", "UK": "GB"}.get(g, g))
+                if code and y <= THIS_YEAR:
+                    cell.setdefault((code, y), {})[col] = v
+                    names[code] = "European Union" if code == "EUU" else name.get(code, code)
+                    n += 1
+            if n < 100:
+                raise ValueError(f"{n} values")
+            meta[col] = dict(title=title, unit=unit, description=f"Eurostat table {table}.")
+            cols.append(col)
+        except Exception as e:
+            print(f"  eurostat {table}: {str(e)[:110]}")
+        time.sleep(0.5)
+    assert len(cols) >= 4, f"eurostat: only {len(cols)} tables loaded"
+    return country_year("europe-eurostat", "Europe: jobs, prices, income, energy and population", "Official statistics for the countries of Europe, harmonised so that they compare like with like, with the European Union as a whole.",
+                        "Economy and development", "Eurostat", "https://ec.europa.eu/eurostat/data/database", "Eurostat: free reuse with the source named", cell, names, meta, cols)
+
+
+# ---------- OECD and BIS series, through FRED ----------
+def world_monthly():
+    places = [("USA", "the United States"), ("CHN", "China"), ("JPN", "Japan"), ("DEU", "Germany"), ("GBR", "the United Kingdom"), ("FRA", "France"), ("IND", "India"), ("BRA", "Brazil")]
+    bis = [("US", "the United States"), ("CN", "China"), ("JP", "Japan"), ("XM", "the euro area"), ("GB", "the United Kingdom"), ("IN", "India"), ("BR", "Brazil"), ("MX", "Mexico")]
+    cell, meta, cols = {}, {}, []
+    def add(sid, col, title, unit, who):
+        try:
+            for d, v in fred(sid).items():
+                cell.setdefault(d, {})[col] = v
+            meta[col] = dict(title=title, unit=unit, description=f"Published by {who}; FRED series {sid}.")
+            cols.append(col)
+        except Exception as e:
+            print(f"  world_monthly {sid}: {str(e)[:60]}")
+    for c3, label in places:
+        add(f"{c3}LOLITONOSTSAM", f"leading_indicator_{c3.lower()}", f"OECD leading indicator for {label}", "index, long-run trend = 100", "the OECD")
+    for c2, label in bis:
+        add(f"RB{c2}BIS", f"real_exchange_rate_{slug(label.replace('the ', ''))}", f"Real exchange rate of {label}, against a broad basket of currencies", "index, 2020 = 100", "the Bank for International Settlements")
+    assert len(cols) >= 6, f"world_monthly: only {len(cols)} series loaded"
+    return series("world-leading-indicators-and-exchange-rates", "Leading indicators and real exchange rates, monthly", "The OECD's early signals of turning points in eight large economies, and how strong each currency is after allowing for prices.",
+                  "World", "Economy and development", "OECD and Bank for International Settlements, via FRED", "https://fred.stlouisfed.org", "Free reuse with the source named (OECD and BIS terms), retrieved from FRED", cell, meta, cols, "month")
+
+
+# ---------- US Consumer Financial Protection Bureau: complaints ----------
+def buckets(j):
+    """The first list of dated counts anywhere inside a search reply."""
+    if isinstance(j, dict):
+        b = j.get("buckets")
+        if isinstance(b, list) and b and isinstance(b[0], dict) and "key_as_string" in b[0] and "doc_count" in b[0]:
+            return b
+        for v in j.values():
+            r = buckets(v)
+            if r:
+                return r
+    elif isinstance(j, list):
+        for v in j:
+            r = buckets(v)
+            if r:
+                return r
+    return None
+
+
+def cfpb():
+    j = J("https://www.consumerfinance.gov/data-research/consumer-complaints/search/api/v1/trends?lens=overview&trend_interval=month&trend_depth=5&date_received_min=2011-12-01", tries=2)
+    b = buckets(j)
+    assert b, "no monthly counts in the reply: " + json.dumps(j)[:200]
+    this = date.today().strftime("%Y-%m")
+    cell = {x["key_as_string"][:7] + "-01": {"complaints": x["doc_count"]} for x in b if x["key_as_string"][:7] < this}
+    meta = dict(complaints=dict(title="US consumer complaints about financial companies received in the month", unit="complaints",
+                                description="Complaints sent to the Consumer Financial Protection Bureau about banks, lenders, credit reporting and debt collection. Counts for recent months still rise as complaints are published."))
+    return series("us-consumer-finance-complaints", "US consumer complaints about financial companies, monthly", "How many complaints about banks, lenders, credit bureaus and debt collectors reach the US consumer watchdog each month.",
+                  "US", "Government and finance", "US Consumer Financial Protection Bureau, Consumer Complaint Database", "https://www.consumerfinance.gov/data-research/consumer-complaints/", PD, cell, meta, ["complaints"], "month")
+
+
+# ---------- US Geological Survey: river flow ----------
+RIVERS = [("07010000", "mississippi_at_st_louis", "Mississippi River at St. Louis"), ("06934500", "missouri_at_hermann", "Missouri River at Hermann"), ("03294500", "ohio_at_louisville", "Ohio River at Louisville"),
+          ("14105700", "columbia_at_the_dalles", "Columbia River at The Dalles"), ("09380000", "colorado_at_lees_ferry", "Colorado River at Lees Ferry"), ("01646500", "potomac_near_washington", "Potomac River near Washington, DC"),
+          ("01358000", "hudson_at_green_island", "Hudson River at Green Island"), ("11447650", "sacramento_at_freeport", "Sacramento River at Freeport")]
+
+
+def usgs_water():
+    cell, meta, cols = {}, {}, []
+    this = date.today().strftime("%Y-%m")
+    for site, col, label in RIVERS:
+        try:
+            j = J(f"https://waterservices.usgs.gov/nwis/dv/?format=json&sites={site}&parameterCd=00060&statCd=00003&startDT=1950-01-01", tries=2, timeout=300)
+            months = {}
+            for x in j["value"]["timeSeries"][0]["values"][0]["value"]:
+                v = float(x["value"])
+                if v >= 0:
+                    months.setdefault(x["dateTime"][:7], []).append(v)
+            good = {m: sum(v) / len(v) for m, v in months.items() if len(v) >= 25 and m < this}
+            if len(good) < 60:
+                raise ValueError(f"{len(good)} months")
+            for m, v in good.items():
+                cell.setdefault(m + "-01", {})[col] = round(v)
+            meta[col] = dict(title=f"Flow of the {label}, monthly average", unit="cubic feet per second", description=f"US Geological Survey stream gauge {site}: the average of the daily mean flow in each month with at least 25 days recorded.")
+            cols.append(col)
+        except Exception as e:
+            print(f"  usgs_water {site}: {str(e)[:90]}")
+        time.sleep(0.5)
+    assert len(cols) >= 3, f"usgs_water: only {len(cols)} rivers loaded"
+    return series("us-river-flow-monthly", "Flow of major US rivers, monthly", "How much water eight major US rivers carry, month by month, from stream gauges that have run for decades.",
+                  "US", "Climate and environment", "US Geological Survey, National Water Information System", "https://waterdata.usgs.gov", PD, cell, meta, cols, "month")
+
+
+# ---------- US Centers for Disease Control and Prevention: deaths from drug overdoses ----------
+OVERDOSE = {"Number of Drug Overdose Deaths": ("all_drug_overdose_deaths", "US deaths from drug overdoses"), "Opioids (T40.0-T40.4,T40.6)": ("opioid_deaths", "US overdose deaths involving opioids"),
+            "Synthetic opioids, excl. methadone (T40.4)": ("synthetic_opioid_deaths", "US overdose deaths involving synthetic opioids such as fentanyl"), "Heroin (T40.1)": ("heroin_deaths", "US overdose deaths involving heroin"),
+            "Cocaine (T40.5)": ("cocaine_deaths", "US overdose deaths involving cocaine"), "Psychostimulants with abuse potential (T43.6)": ("stimulant_deaths", "US overdose deaths involving methamphetamine and similar stimulants")}
+MONTHS = {m: i + 1 for i, m in enumerate("January February March April May June July August September October November December".split())}
+
+
+def cdc_overdose():
+    q = urllib.parse.quote("state='US' AND period='12 month-ending'")
+    rows = J(f"https://data.cdc.gov/resource/xkb8-kh2a.json?$select=year,month,indicator,data_value,predicted_value&$where={q}&$limit=50000", tries=2)
+    assert isinstance(rows, list) and rows, "no rows: " + json.dumps(rows)[:200]
+    cell, meta = {}, {}
+    for r in rows:
+        hit = OVERDOSE.get(r.get("indicator"))
+        raw = r.get("predicted_value") if r.get("indicator") == "Number of Drug Overdose Deaths" and r.get("predicted_value") else r.get("data_value")
+        if hit and raw and r.get("month") in MONTHS:
+            try:
+                cell.setdefault(f"{int(r['year'])}-{MONTHS[r['month']]:02d}-01", {})[hit[0]] = float(str(raw).replace(",", ""))
+            except ValueError:
+                pass
+    for col, title in OVERDOSE.values():
+        meta[col] = dict(title=title + ", past 12 months", unit="deaths in the 12 months ending that month", description="Provisional counts from death certificates, CDC National Center for Health Statistics. A death can involve more than one drug, so the drug columns overlap. "
+                         + ("This column uses CDC's figure adjusted for reports still to arrive." if col == "all_drug_overdose_deaths" else "Recent months are incomplete."))
+    return series("us-drug-overdose-deaths", "US deaths from drug overdoses, 12-month running count", "How many people in the United States died of a drug overdose in the 12 months ending each month, in total and for the main drugs involved.",
+                  "US", "Health", "US Centers for Disease Control and Prevention, National Center for Health Statistics", "https://www.cdc.gov/nchs/nvss/vsrr/drug-overdose-data.htm", PD, cell, meta, [c for c, _ in OVERDOSE.values()], "month")
+
+
+# ---------- Maryland Open Data: crime in the state, year by year ----------
+def maryland():
+    rows = J("https://opendata.maryland.gov/resource/hyg2-hy98.json?$limit=500", tries=2)
+    assert isinstance(rows, list) and len(rows) >= 20 and "year" in rows[0], "unexpected reply: " + json.dumps(rows)[:300]
+    print("  maryland fields:", sorted(rows[0])[:40])
+    want = [("population", "Maryland population", "people"), ("murder", "Maryland: murders", "offences"), ("rape", "Maryland: rapes", "offences"), ("robbery", "Maryland: robberies", "offences"),
+            ("agg_assault", "Maryland: aggravated assaults", "offences"), ("b_e", "Maryland: breaking and entering", "offences"), ("larceny_theft", "Maryland: larceny and theft", "offences"),
+            ("m_v_theft", "Maryland: motor vehicle thefts", "offences"), ("grand_total", "Maryland: all serious crimes reported", "offences"), ("violent_crime_total", "Maryland: violent crimes", "offences"),
+            ("property_crime_totals", "Maryland: property crimes", "offences"), ("violent_crime_rate_per_100_000_people", "Maryland: violent crime rate", "per 100,000 people"),
+            ("property_crime_rate_per_100_000_people", "Maryland: property crime rate", "per 100,000 people"), ("murder_per_100_000_people", "Maryland: murder rate", "per 100,000 people")]
+    names = {"b_e": "breaking_and_entering", "agg_assault": "aggravated_assaults", "m_v_theft": "motor_vehicle_thefts", "grand_total": "all_serious_crimes", "violent_crime_total": "violent_crimes", "property_crime_totals": "property_crimes",
+             "violent_crime_rate_per_100_000_people": "violent_crime_rate", "property_crime_rate_per_100_000_people": "property_crime_rate", "murder_per_100_000_people": "murder_rate", "murder": "murders", "rape": "rapes", "robbery": "robberies"}
+    cell, meta, cols = {}, {}, []
+    for f, title, unit in want:
+        col = names.get(f, f)
+        for r in rows:
+            try:
+                cell.setdefault(f"{int(float(r['year']))}-01-01", {})[col] = float(r[f])
+            except (KeyError, TypeError, ValueError):
+                pass
+        if any(col in v for v in cell.values()):
+            meta[col] = dict(title=title, unit=unit, description="Maryland Statistical Analysis Center, Uniform Crime Reports, statewide totals.")
+            cols.append(col)
+    return series("maryland-crime", "Maryland: reported crime, year by year", "Serious crimes reported to police across the state of Maryland each year since 1975, as counts and as rates.",
+                  "US", "Government and finance", "State of Maryland, Open Data Portal", "https://opendata.maryland.gov", "Open data, State of Maryland", cell, meta, cols, "year")
+
+
+# ---------- United Kingdom: Office for National Statistics ----------
+def uk():
+    want = [("economy/inflationandpriceindices/timeseries/d7g7/mm23", "inflation", "UK inflation (consumer prices, change over a year)", "% a year"),
+            ("economy/inflationandpriceindices/timeseries/l55o/mm23", "inflation_with_housing", "UK inflation including owner-occupiers' housing costs", "% a year"),
+            ("employmentandlabourmarket/peoplenotinwork/unemployment/timeseries/mgsx/lms", "unemployment_rate", "UK unemployment rate", "% of people 16 and over in the labour force"),
+            ("employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/lf24/lms", "employment_rate", "UK employment rate, ages 16 to 64", "% of people aged 16 to 64"),
+            ("economy/grossdomesticproductgdp/timeseries/ecy2/mgdp", "monthly_gdp_index", "UK monthly GDP", "index")]
+    mon = {m: i + 1 for i, m in enumerate("JAN FEB MAR APR MAY JUN JUL AUG SEP OCT NOV DEC".split())}
+    cell, meta, cols = {}, {}, []
+    for uri, col, title, unit in want:
+        try:
+            n = 0
+            for r in csv.reader(io.StringIO(text(f"https://www.ons.gov.uk/generator?format=csv&uri=/{uri}", tries=2))):
+                m = re.fullmatch(r"(\d{4}) ([A-Z]{3})", r[0].strip()) if r else None
+                if m and len(r) > 1 and r[1].strip() not in ("", ".."):
+                    cell.setdefault(f"{m.group(1)}-{mon[m.group(2)]:02d}-01", {})[col] = float(r[1])
+                    n += 1
+            if n < 24:
+                raise ValueError(f"{n} months")
+            meta[col] = dict(title=title, unit=unit, description=f"UK Office for National Statistics series {uri.split('/')[-2].upper()}.")
+            cols.append(col)
+        except Exception as e:
+            print(f"  uk {uri.split('/')[-2]}: {str(e)[:80]}")
+        time.sleep(1)
+    assert len(cols) >= 2, f"uk: only {len(cols)} series loaded"
+    return series("uk-economy-monthly", "United Kingdom economy, monthly", "Prices, jobs and output in the United Kingdom, month by month, from its national statistics office.",
+                  "World", "Economy and development", "UK Office for National Statistics", "https://www.ons.gov.uk", "Open Government Licence v3.0", cell, meta, cols, "month")
+
+
+# ---------- Climate TRACE: emissions counted from satellites and sensors ----------
+def climate_trace():
+    cell, names = {}, {}
+    known = iso()["name"]
+    for y in range(2015, THIS_YEAR):
+        try:
+            j = J(f"https://api.climatetrace.org/v6/country/emissions?since={y}&to={y}", tries=2)
+            rows = j if isinstance(j, list) else j.get("countries") or j.get("data") or []
+            if y == 2015 or not rows:
+                print(f"  climate_trace {y}: {json.dumps(j)[:260]}")
+            for r in rows:
+                c, e = r.get("country"), r.get("emissions") or {}
+                v = e.get("co2e_100yr")
+                if c and len(c) == 3 and v:
+                    cell.setdefault((c, y), {})["greenhouse_gas_emissions"] = v
+                    names[c] = known.get(c, c)
+                    for g in ("co2", "ch4", "n2o"):
+                        if e.get(g):
+                            cell[(c, y)][g] = e[g]
+        except Exception as e:
+            print(f"  climate_trace {y}: {str(e)[:80]}")
+        time.sleep(0.4)
+    meta = dict(greenhouse_gas_emissions=dict(title="Greenhouse gas emissions (Climate TRACE)", unit="tonnes of CO2 equivalent", description="All greenhouse gases over 100 years, estimated independently from satellites and other sensors rather than from what countries report."),
+                co2=dict(title="Carbon dioxide emissions (Climate TRACE)", unit="tonnes"), ch4=dict(title="Methane emissions (Climate TRACE)", unit="tonnes of methane"), n2o=dict(title="Nitrous oxide emissions (Climate TRACE)", unit="tonnes of nitrous oxide"))
+    return country_year("climate-trace-emissions", "Emissions measured independently (Climate TRACE)", "Greenhouse gas emissions for every country, estimated from satellites and sensors rather than from national reports.",
+                        "Climate and environment", "Climate TRACE", "https://climatetrace.org", "CC BY 4.0", cell, names, meta, ["greenhouse_gas_emissions", "co2", "ch4", "n2o"])
+
+
+# ---------- US mortgages: yearly totals from the Home Mortgage Disclosure Act records ----------
+def hmda():
+    kinds = dict(mortgages_made="1", applications_denied="3")
+    cell = {}
+    for y in range(2018, THIS_YEAR):
+        for col, action in kinds.items():
+            try:
+                j = J(f"https://ffiec.cfpb.gov/v2/data-browser-api/view/nationwide/aggregations?years={y}&actions_taken={action}", tries=2)
+                a = (j.get("aggregations") or [{}])[0]
+                if y == 2018 and col == "mortgages_made":
+                    print(f"  hmda {y}: {json.dumps(j)[:220]}")
+                if a.get("count"):
+                    cell.setdefault(f"{y}-01-01", {})[col] = a["count"]
+                    if col == "mortgages_made" and a.get("sum"):
+                        cell[f"{y}-01-01"]["amount_lent"] = a["sum"]
+            except Exception as e:
+                print(f"  hmda {y} {col}: {str(e)[:60]}")
+            time.sleep(0.4)
+    meta = dict(mortgages_made=dict(title="US mortgages made in the year", unit="loans", description="Home loans originated, from the records lenders file under the Home Mortgage Disclosure Act."),
+                amount_lent=dict(title="Amount lent in US mortgages made in the year", unit="current US$"), applications_denied=dict(title="US mortgage applications denied in the year", unit="applications"))
+    return series("us-mortgage-lending", "US mortgage lending, year by year", "How many home loans US lenders made each year, how much they lent, and how many applications they turned down.",
+                  "US", "Economy and development", "US Federal Financial Institutions Examination Council, HMDA Data Browser", "https://ffiec.cfpb.gov/data-browser/", PD, cell, meta, ["mortgages_made", "amount_lent", "applications_denied"], "year", min_rows=4)
+
+
+# ---------- Stack Overflow: questions and answers each year ----------
+def stackoverflow():
+    def count(y, c):
+        a, b = int(datetime(y, 1, 1, tzinfo=timezone.utc).timestamp()), int(datetime(y + 1, 1, 1, tzinfo=timezone.utc).timestamp())
+        return J(f"https://api.stackexchange.com/2.3/{'questions' if c == 'questions_asked' else 'answers'}?fromdate={a}&todate={b}&site=stackoverflow&filter=total", tries=2)["total"]
+    cell = yearly("stack-overflow-activity", 2008, count, ["questions_asked", "answers_posted"], recent=2)
+    meta = dict(questions_asked=dict(title="Questions asked on Stack Overflow in the year", unit="questions", description="Questions still on the site, by the year they were asked. The current year is not complete."),
+                answers_posted=dict(title="Answers posted on Stack Overflow in the year", unit="answers"))
+    out = series("stack-overflow-activity", "Stack Overflow: questions and answers each year", "How much programmers ask and answer on the largest question-and-answer site for code.",
+                 "World", "Science and technology", "Stack Exchange API", "https://api.stackexchange.com", "CC BY-SA 4.0", cell, meta, ["questions_asked", "answers_posted"], "year", min_rows=8)
+    out["partial"] = True
+    return out
+
+
+# ---------- loaders that wait for a free key ----------
+GRID = [("US48", "the lower 48 states"), ("PJM", "PJM (mid-Atlantic and Midwest)"), ("MISO", "MISO (Midwest and South)"), ("ERCO", "ERCOT (Texas)"), ("CISO", "California ISO"), ("SWPP", "Southwest Power Pool"), ("NYIS", "New York ISO"), ("ISNE", "ISO New England")]
+
+
+def eia_grid():
+    k = key("EIA_API_KEY")
+    cell, meta, cols = {}, {}, []
+    today = date.today().isoformat()
+    for code, label in GRID:
+        col, got, offset = f"demand_{code.lower()}", 0, 0
+        try:
+            while True:
+                j = J("https://api.eia.gov/v2/electricity/rto/daily-region-data/data/?frequency=daily&data[0]=value&facets[type][]=D&facets[timezone][]=Eastern"
+                      f"&facets[respondent][]={code}&start=2019-01-01&sort[0][column]=period&sort[0][direction]=asc&length=5000&offset={offset}&api_key={k}", tries=2)
+                rows = j["response"]["data"]
+                for r in rows:
+                    if r.get("value") is not None and r["period"] < today:
+                        cell.setdefault(r["period"][:10], {})[col] = float(r["value"])
+                        got += 1
+                offset += len(rows)
+                if len(rows) < 5000:
+                    break
+            if got < 100:
+                raise ValueError(f"{got} days")
+            meta[col] = dict(title=f"Electricity demand in {label}, daily", unit="megawatt-hours in the day", description=f"US Energy Information Administration, Hourly Electric Grid Monitor, balancing authority {code}.")
+            cols.append(col)
+        except Exception as e:
+            print(f"  eia_grid {code}: {str(e)[:60]}")
+    assert len(cols) >= 4, f"eia_grid: only {len(cols)} regions loaded"
+    return series("us-grid-demand-daily", "US electricity demand by grid operator, daily", "How much electricity the main US power grids deliver each day, from the grid operators' own reports.",
+                  "US", "Energy", "US Energy Information Administration, Hourly Electric Grid Monitor (data from PJM, MISO, ERCOT, CAISO, SPP, NYISO and ISO New England)", "https://www.eia.gov/electricity/gridmonitor/", PD, cell, meta, cols, "day")
+
+
+def us_lawmaking():
+    k = key("DATA_GOV_API_KEY")
+    h = {"X-Api-Key": k}
+    cell = {}
+    for n in range(93, 1 + (THIS_YEAR - 1789) // 2 + 1):          # the 93rd Congress sat from 1973
+        d = f"{1789 + 2 * (n - 1)}-01-01"
+        for col, path in (("bills_introduced", "bill"), ("laws_enacted", "law")):
+            try:
+                cell.setdefault(d, {})[col] = J(f"https://api.congress.gov/v3/{path}/{n}?format=json&limit=1", headers=h, tries=2)["pagination"]["count"]
+            except Exception as e:
+                print(f"  congress {n} {col}: {str(e)[:50]}")
+            time.sleep(0.3)
+    for y in range(2006, THIS_YEAR + 1):
+        d = f"{y}-01-01"
+        for col, path in (("regulatory_documents_posted", "documents"), ("public_comments_posted", "comments")):
+            try:
+                cell.setdefault(d, {})[col] = J(f"https://api.regulations.gov/v4/{path}?filter[postedDate][ge]={y}-01-01&filter[postedDate][le]={y}-12-31&page[size]=5", headers=h, tries=2)["meta"]["totalElements"]
+            except Exception as e:
+                print(f"  regulations {y} {col}: {str(e)[:50]}")
+            time.sleep(0.3)
+    cell = {d: v for d, v in cell.items() if v}
+    meta = dict(bills_introduced=dict(title="Bills introduced in the US Congress that began that year", unit="bills", description="Congress.gov. Each Congress lasts two years, so there is one figure every second year; the current Congress is not finished."),
+                laws_enacted=dict(title="Laws enacted by the US Congress that began that year", unit="laws", description="Congress.gov."),
+                regulatory_documents_posted=dict(title="Documents posted on Regulations.gov in the year", unit="documents", description="Rules, proposed rules, notices and supporting papers posted by US federal agencies."),
+                public_comments_posted=dict(title="Public comments posted on Regulations.gov in the year", unit="comments"))
+    out = series("us-congress-and-rulemaking", "US Congress and federal rulemaking, by year", "How many bills Congress takes up and passes, and how much federal agencies post and the public comments on.",
+                 "US", "Government and finance", "Library of Congress (Congress.gov) and US General Services Administration (Regulations.gov)", "https://api.data.gov", PD, cell, meta,
+                 ["bills_introduced", "laws_enacted", "regulatory_documents_posted", "public_comments_posted"], "year", min_rows=8)
+    out["partial"] = True
+    return out
+
+
+# ---------- US Census Bureau: every state, year by year ----------
+USPS = dict(zip("01 02 04 05 06 08 09 10 11 12 13 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 44 45 46 47 48 49 50 51 53 54 55 56 72".split(),
+                "AL AK AZ AR CA CO CT DE DC FL GA HI ID IL IN IA KS KY LA ME MD MA MI MN MS MO MT NE NV NH NJ NM NY NC ND OH OK OR PA RI SC SD TN TX UT VT VA WA WV WI WY PR".split()))
+ACS = [("B01003_001E", "population"), ("B19013_001E", "median_household_income"), ("B01002_001E", "median_age"), ("B25077_001E", "median_home_value"), ("B25064_001E", "median_rent")]
+ACS_SHARES = [  # (codes, column, how to turn the counts into a percentage)
+    ("B17001_002E,B17001_001E", "poverty_rate", lambda v: 100 * v[0] / v[1]),
+    ("B15003_022E,B15003_023E,B15003_024E,B15003_025E,B15003_001E", "adults_with_a_degree", lambda v: 100 * sum(v[:4]) / v[4]),
+    ("B23025_005E,B23025_003E", "unemployment_rate", lambda v: 100 * v[0] / v[1]),
+]
+
+
+def census_states():
+    k = key("CENSUS_API_KEY")
+    id, cell, names = "us-states-census", {}, {}
+    path = SETS / f"{id}.csv"
+    if path.exists():                                       # earlier years do not change: keep them and ask only for the recent ones
+        with open(path, encoding="utf-8") as f:
+            for r in csv.DictReader(f):
+                names[r["state"]] = r["state_name"]
+                cell[(r["state"], int(r["year"]))] = {c: float(v) for c, v in r.items() if c not in ("state", "state_name", "year") and v != ""}
+    have = {y for _, y in cell}
+
+    def grab(url):
+        rows = J(url, tries=2)
+        return [dict(zip(rows[0], r)) for r in rows[1:]]
+
+    def val(x):
+        try:
+            v = float(x)
+            return v if v >= 0 else None                    # the Census Bureau writes large negative numbers for "not available"
+        except (TypeError, ValueError):
+            return None
+    for y in range(2010, THIS_YEAR):
+        if y in have and y < THIS_YEAR - 3:
+            continue
+        base = f"https://api.census.gov/data/{y}/acs/acs1?key={k}&for=state:*&get=NAME,"
+        try:
+            for r in grab(base + ",".join(c for c, _ in ACS)):
+                st = USPS.get(r["state"])
+                if not st:
+                    continue
+                names[st] = r["NAME"]
+                for code, col in ACS:
+                    if val(r[code]) is not None:
+                        cell.setdefault((st, y), {})[col] = val(r[code])
+        except Exception as e:
+            print(f"  census acs {y}: {str(e)[:70]}")
+            continue
+        for codes, col, share in ACS_SHARES:
+            try:
+                for r in grab(base + codes):
+                    v = [val(r[c]) for c in codes.split(",")]
+                    if USPS.get(r["state"]) and None not in v and v[-1]:
+                        cell.setdefault((USPS[r["state"]], y), {})[col] = round(share(v), 2)
+            except Exception as e:
+                print(f"  census acs {y} {col}: {str(e)[:60]}")
+            time.sleep(0.3)
+        for vintage in ("NAICS2022", "NAICS2017", "NAICS2012"):   # businesses, from County Business Patterns; the industry list is renamed every five years
+            try:
+                for r in grab(f"https://api.census.gov/data/{y}/cbp?key={k}&get=ESTAB,EMP,PAYANN&for=state:*&{vintage}=00"):
+                    st = USPS.get(r["state"])
+                    if st and val(r["ESTAB"]):
+                        cell.setdefault((st, y), {}).update({k: v for k, v in (("business_establishments", val(r["ESTAB"])), ("employees_at_businesses", val(r["EMP"])),
+                                                                             ("annual_payroll", val(r["PAYANN"]) * 1000 if val(r["PAYANN"]) is not None else None)) if v is not None})
+                break
+            except Exception:
+                time.sleep(0.2)
+        time.sleep(0.3)
+    cols = [c for _, c in ACS] + [c for _, c, _ in ACS_SHARES] + ["business_establishments", "employees_at_businesses", "annual_payroll"]
+    cols = [c for c in cols if any(c in v for v in cell.values())]
+    S = "US Census Bureau, American Community Survey, 1-year estimates"
+    meta = dict(population=dict(title="Population of the state", unit="people", description=S + ", table B01003."),
+                median_household_income=dict(title="Median household income", unit="US$ a year, in that year's dollars", description=S + ", table B19013. Not adjusted for inflation."),
+                median_age=dict(title="Median age", unit="years", description=S + ", table B01002."),
+                median_home_value=dict(title="Median value of owner-occupied homes", unit="US$", description=S + ", table B25077."),
+                median_rent=dict(title="Median monthly rent, with utilities", unit="US$ a month", description=S + ", table B25064 (gross rent)."),
+                poverty_rate=dict(title="People living below the poverty line", unit="% of people", description=S + ", table B17001."),
+                adults_with_a_degree=dict(title="Adults aged 25 and over with a bachelor's degree or higher", unit="% of adults 25 and over", description=S + ", table B15003."),
+                unemployment_rate=dict(title="Unemployment rate (survey-based)", unit="% of the civilian labour force", description=S + ", table B23025. This differs slightly from the official monthly rate."),
+                business_establishments=dict(title="Business establishments", unit="establishments", description="US Census Bureau, County Business Patterns: places of business with paid employees."),
+                employees_at_businesses=dict(title="Employees at those businesses", unit="people", description="US Census Bureau, County Business Patterns: employees in the pay period including March 12."),
+                annual_payroll=dict(title="Annual payroll of those businesses", unit="US$", description="US Census Bureau, County Business Patterns."))
+    rows = [[st, names.get(st, st), y] + [num(v.get(c)) for c in cols] for (st, y), v in sorted(cell.items())]
+    assert len(rows) >= 200 and len({r[2] for r in rows}) >= 5, f"{id}: only {len(rows)} rows"
+    return table(id, "US states: people, income, housing and business", "Every US state, the District of Columbia and Puerto Rico, year by year: population, income, age, home values, rent, poverty, education, unemployment and businesses.",
+                 "US", "People and society", "US Census Bureau, American Community Survey and County Business Patterns", "https://www.census.gov/data/developers/data-sets.html", PD,
+                 ["state", "year"], "year", "year", dict(col="state", label_col="state_name", label="State"), ["state", "state_name", "year"] + cols, rows, meta)
+
+
+
 BUILDERS = [(lambda s=s: wb_set(s[0], s[1], s[2], s[3], s[4], s[5], **s[6])) for s in WB_SETS] + [(lambda s=s: owid_charts(*s)) for s in OWID_SETS] + [
     imf, un_population, undp, who, pwt, us_monthly, us_quarterly, us_daily, us_debt, us_climate, wikipedia, research, gbif, github_activity,
-    federal_register, fda, clinical_trials, fema, fdic, flu, chicago, nyc, us_spending, nih,
+    federal_register, fda, clinical_trials, fema, fdic, flu, chicago, nyc, us_spending, nih, eurostat, world_monthly, cfpb, usgs_water, cdc_overdose, maryland, uk, climate_trace, hmda, stackoverflow,
+    eia_grid, us_lawmaking, census_states,
 ]
 NAMES = [s[0] for s in WB_SETS] + [s[0] for s in OWID_SETS] + ["imf", "un_population", "undp", "who", "pwt", "us_monthly", "us_quarterly", "us_daily", "us_debt", "us_climate", "wikipedia", "research", "gbif",
-                                    "github_activity", "federal_register", "fda", "clinical_trials", "fema", "fdic", "flu", "chicago", "nyc", "us_spending", "nih"]
+                                    "github_activity", "federal_register", "fda", "clinical_trials", "fema", "fdic", "flu", "chicago", "nyc", "us_spending", "nih", "eurostat", "world_monthly", "cfpb", "usgs_water", "cdc_overdose", "maryland", "uk", "climate_trace", "hmda", "stackoverflow",
+                                    "eia_grid", "us_lawmaking", "census_states"]
