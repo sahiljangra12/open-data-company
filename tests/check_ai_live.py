@@ -43,6 +43,7 @@ def main():
     check("service answers its health check", status == 200 and health.get("ok") is True, f"HTTP {status} {text[:160]}")
     check("the website is allowed to call it", headers.get("Access-Control-Allow-Origin") == SITE, headers.get("Access-Control-Allow-Origin"))
     check("AI is switched on", health.get("ai") is True, health)
+    print(f"   allowance left before this run: {health.get('left')}", flush=True)
     status, headers, _ = call("OPTIONS", SITE)
     check("browser preflight is accepted", status == 204 and "POST" in (headers.get("Access-Control-Allow-Methods") or ""), status)
     status, _, text = call("POST", "https://example.com", {"messages": [{"role": "user", "content": "hello"}]})
@@ -78,6 +79,8 @@ def main():
             pass
         check("the page reports AI answers are on", page.locator("#ai-state.on").count() == 1, page.inner_text("#ai-state"))
 
+        spent = {"usd": 0.0, "n": 0}
+
         def ask(q):
             n = page.locator(".turn").count()
             page.fill("#q", q)
@@ -89,8 +92,13 @@ def main():
             notes = " ".join(t.locator(".ainote").all_inner_texts())
             cards = [c.strip() for c in t.locator(".answer .ans-q, .answer .kick").all_inner_texts()]
             fell_back = "straight from the data" in notes
-            print(f"\nQ: {q}\n   route: {'AI' if ai else 'built-in lookup'}{' (FELL BACK)' if fell_back else ''}; data cards: {len(t.locator('.answer').all())} {cards[:4]}\n   A: " + text.replace("\n", "\n      ") + f"\n   note: {notes}", flush=True)
-            return {"ai": ai and not fell_back, "text": text, "notes": notes, "cards": t.locator(".answer").count()}
+            d = t.evaluate("e => ({usd: +e.dataset.usd || 0, rounds: +e.dataset.rounds || 0, cached: +e.dataset.cached || 0})")
+            spent["usd"] += d["usd"]; spent["n"] += 1 if d["rounds"] else 0
+            words = len(text.split())
+            print(f"\nQ: {q}\n   route: {'AI' if ai else 'built-in lookup'}{' (FELL BACK)' if fell_back else ''}; data cards: {len(t.locator('.answer').all())} {cards[:4]}"
+                  + (f"\n   cost: ${d['usd']:.5f} in {d['rounds']} round(s), {words} words, {d['cached']} cached input tokens" if d["rounds"] else "")
+                  + "\n   A: " + text.replace("\n", "\n      ") + f"\n   note: {notes}", flush=True)
+            return {"ai": ai and not fell_back, "text": text, "notes": notes, "cards": t.locator(".answer").count(), "words": words}
 
         a = ask("India life expectancy")
         check("a plain lookup is answered instantly from the data, without the AI", not a["ai"] and a["cards"] >= 1)
@@ -113,6 +121,41 @@ def main():
         a = ask("asdf qwer zxcv")
         check("nonsense still gets a helpful reply", a["ai"] and len(a["text"]) > 20)
         check("no script errors on the page", not errors, errors[:2])
+        if spent["n"]:
+            print(f"\n   {spent['n']} AI answers cost ${spent['usd']:.5f} in all, ${spent['usd'] / spent['n']:.5f} each on average ({spent['usd'] * 180:.2f} Netlify credits)", flush=True)
+
+        # ---- the public website itself (GitHub Pages), once it serves this version ----
+        if os.environ.get("CHECK_PUBLIC", "1") != "0":
+            public = browser.new_page(viewport={"width": 1280, "height": 900})
+            perr = []
+            public.on("pageerror", lambda e: perr.append(str(e)))
+            fresh = False
+            for _ in range(18):                                   # GitHub Pages takes a minute or two to publish a push
+                public.goto(SITE + "/open-data-company/ask.html?v=" + os.urandom(3).hex())
+                if public.locator("#mic").count() and public.locator("#ask-go").count():
+                    fresh = True
+                    break
+                public.wait_for_timeout(10000)
+            check("the public Data AI page is live with the microphone", fresh, public.title())
+            if fresh:
+                public.wait_for_selector("#examples button")
+                try:
+                    public.wait_for_function("document.querySelector('#ai-state').classList.contains('on')", timeout=15000)
+                except Exception:
+                    pass
+                check("the public page reports AI answers are on", public.locator("#ai-state.on").count() == 1, public.inner_text("#ai-state"))
+                public.fill("#q", "Is Kenya getting more people online, and why?")
+                public.click("#ask-go")
+                public.wait_for_function("document.querySelectorAll('.turn').length > 0 && !document.querySelector('.thinking') && !document.querySelector('#ask-go').disabled", timeout=120000)
+                t = public.locator(".turn").last
+                text = t.locator(".aitext").first.inner_text() if t.locator(".aitext").count() else ""
+                notes = " ".join(t.locator(".ainote").all_inner_texts())
+                print("\nPublic page, Q: Is Kenya getting more people online, and why?\n   A: " + text.replace("\n", "\n      ") + f"\n   note: {notes}", flush=True)
+                check("the public page gets an AI answer built on the data", t.locator(".acts.small").count() > 0 and "straight from the data" not in notes and "Kenya" in text and t.locator(".answer").count() >= 1)
+                public.goto(SITE + "/open-data-company/?v=" + os.urandom(3).hex())
+                public.wait_for_selector("#quick a")
+                check("the public home page has the microphone and the Data AI name", public.locator("#hmic").count() == 1 and "Data AI" in public.inner_text("nav"), public.inner_text("nav")[:80])
+                check("no script errors on the public pages", not perr, perr[:2])
         browser.close()
     server.shutdown()
     print(f"\n{sum(results)} of {len(results)} checks passed")

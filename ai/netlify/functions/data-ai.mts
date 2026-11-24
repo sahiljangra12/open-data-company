@@ -5,9 +5,11 @@
    The model never touches the data itself: when it wants a number it asks for a tool, the reply goes back to the visitor's
    browser, the browser reads the value from the site's own files and sends it in the next request.
 
-   Spending is guarded three ways, because on a credit-based Netlify plan running out of credits pauses every project:
-   a per-visitor rate limit, a small cap on the length of each reply, and a daily and monthly budget kept in Netlify Blobs.
-   When a budget is used up the function says so and the website falls back to its built-in lookup. */
+   Spending is guarded four ways, because on a credit-based Netlify plan running out of credits pauses every project:
+   a per-visitor rate limit, a cap on model calls a minute across all visitors, a cap on the length of each reply, and a
+   daily and monthly budget kept in Netlify Blobs. The cost of a call is set aside before the model is called and corrected
+   afterwards, so a burst of requests cannot run past the budget. When a limit is reached the function says so and the
+   website falls back to its built-in lookup. */
 import type { Config, Context } from "@netlify/functions";
 import Anthropic from "@anthropic-ai/sdk";
 import { getStore } from "@netlify/blobs";
@@ -17,8 +19,9 @@ const env = (k: string) => Netlify.env.get(k);
 const MODEL = env("DATA_AI_MODEL") || "claude-haiku-5-5";
 /* US dollars per million tokens for MODEL, from Netlify's AI pricing table. Change both together with DATA_AI_MODEL. */
 const PRICE_IN = Number(env("DATA_AI_PRICE_IN") || 0.1), PRICE_OUT = Number(env("DATA_AI_PRICE_OUT") || 0.5);
-const MONTH_USD = Number(env("DATA_AI_MONTHLY_USD") || 0.25), DAY_USD = Number(env("DATA_AI_DAILY_USD") || 0.03);   // 0.25 USD is 45 Netlify credits
-const MAX_TOKENS = 800, MAX_TOKENS_THINKING = 3000, MAX_MESSAGES = 14, MAX_CHARS = 60000, MAX_QUESTION = 1200;
+const MONTH_USD = Number(env("DATA_AI_MONTHLY_USD") || 0.3), DAY_USD = Number(env("DATA_AI_DAILY_USD") || 0.04);   // 0.30 USD is 54 Netlify credits
+const PER_MINUTE = Number(env("DATA_AI_PER_MINUTE") || 40);                                                           // model calls a minute, all visitors together
+const MAX_TOKENS = 700, MAX_TOKENS_THINKING = 3000, MAX_MESSAGES = 14, MAX_CHARS = 60000, MAX_QUESTION = 1200;
 
 const DATASETS = "- co2-and-greenhouse-gases: CO2 and greenhouse gas emissions. Our World in Data. 76 variables, 1750 to 2025. Keys: code, year.\n- energy: Energy production, consumption and electricity mix. Our World in Data. 127 variables, 1900 to 2025. Keys: code, year.\n- world-bank-development: World development indicators. World Bank, World Development Indicators. 57 variables, 1960 to 2025. Keys: code, year.\n- global-temperature: Global temperature, monthly. NASA GISTEMP and NOAA Climate at a Glance, via DataHub. 2 variables, 1850 to 2026. Keys: month.\n- atmospheric-co2: CO2 in the atmosphere, monthly. NOAA Global Monitoring Laboratory, via DataHub. 4 variables, 1958 to 2026. Keys: month.\n- earthquakes-past-30-days: Earthquakes, past 30 days. US Geological Survey, Earthquake Hazards Program. 11 variables, Rolling 30 days. Keys: id, time.\n- crude-oil-prices: Crude oil benchmark prices, daily. US Energy Information Administration, via DataHub. 2 variables, 1986 to 2026. Keys: date.\n- natural-gas-prices: Natural gas spot price, daily. US Energy Information Administration, via DataHub. 1 variables, 1997 to 2026. Keys: date.\n- pjm-summer-peak-forecasts: PJM summer peak load: forecasts and actuals by zone. PJM Load Forecast Reports, January 2025 and 2026. 4 variables, 2024 to 2046. Keys: zone, year.";
 const COMMON = "world-bank-development::population (Population, total, people); world-bank-development::gdp_current_usd (GDP, current US$); world-bank-development::gdp_per_capita (GDP per capita, current US$); world-bank-development::gdp_growth (GDP growth, % per year); world-bank-development::life_expectancy (Life expectancy at birth, years); world-bank-development::under_5_mortality (Mortality rate, under 5, per 1,000 live births); world-bank-development::fertility_rate (Fertility rate, births per woman); world-bank-development::unemployment (Unemployment (modeled ILO estimate), % of labor force); world-bank-development::inflation (Inflation, consumer prices, % per year); world-bank-development::extreme_poverty_share (Poverty headcount at the international poverty line, % of population); world-bank-development::gini_index (Gini index, 0-100); world-bank-development::internet_users (Individuals using the Internet, % of population); world-bank-development::electricity_access (Access to electricity, % of population); world-bank-development::urban_population_share (Urban population, % of total); world-bank-development::adult_literacy (Adult literacy rate, % of people 15+); world-bank-development::health_spending_share_gdp (Current health expenditure, % of GDP); world-bank-development::education_spending_share_gdp (Government expenditure on education, % of GDP); world-bank-development::military_spending_share_gdp (Military expenditure, % of GDP); world-bank-development::forest_area_share (Forest area, % of land area); co2-and-greenhouse-gases::co2 (Annual CO₂ emissions, million tonnes (Mt)); co2-and-greenhouse-gases::co2_per_capita (CO₂ emissions per capita, tonnes per person (t/person)); co2-and-greenhouse-gases::share_global_co2 (Share of global annual CO₂ emissions, %); co2-and-greenhouse-gases::cumulative_co2 (Cumulative CO₂ emissions, million tonnes (Mt)); co2-and-greenhouse-gases::total_ghg (Annual greenhouse gas emissions including land use, million tonnes (Mt)); co2-and-greenhouse-gases::methane (Annual methane emissions including land use, million tonnes (Mt)); energy::primary_energy_consumption (Primary energy consumption, terawatt-hours (TWh)); energy::energy_per_capita (Primary energy consumption per capita, kilowatt-hours per person (kWh)); energy::electricity_generation (Total electricity generation, terawatt-hours (TWh)); energy::renewables_share_elec (Share of electricity generated by renewables, %); energy::solar_share_elec (Share of electricity generated by solar power, %); energy::wind_share_elec (Share of electricity generated by wind power, %); energy::coal_share_elec (Share of electricity generated by coal, %); energy::nuclear_share_elec (Share of electricity generated by nuclear power, %); energy::fossil_share_elec (Share of electricity generated by fossil fuels, %); energy::solar_electricity (Electricity generation from solar power, terawatt-hours (TWh)); energy::wind_electricity (Electricity generation from wind power, terawatt-hours (TWh)); global-temperature::nasa_anomaly_c (Global temperature against the 1951-1980 average (NASA), °C); atmospheric-co2::mauna_loa_ppm (CO2 at Mauna Loa, parts per million); crude-oil-prices::brent_usd_per_barrel (Brent spot price, US$ per barrel); crude-oil-prices::wti_usd_per_barrel (WTI spot price, US$ per barrel); natural-gas-prices::henry_hub_usd_per_mmbtu (Henry Hub spot price, US$ per million Btu)";
@@ -26,7 +29,8 @@ const COMMON = "world-bank-development::population (Population, total, people); 
 const system = () => `You are Data AI, the assistant on Open Data Company (https://sahiljangra12.github.io/open-data-company/), a free site of open datasets on climate, energy, economy, development and natural hazards. Today is ${new Date().toISOString().slice(0, 10)}.
 
 How to answer
-- Answer every question directly and helpfully, like a knowledgeable analyst speaking plainly. Lead with the answer. Keep it short: usually two to six sentences, or a short list when comparing several things.
+- Answer every question directly and helpfully, like a knowledgeable analyst speaking plainly. Lead with the answer.
+- Be brief: under 110 words unless the person asks for more detail. One short paragraph with the figures, then at most one short paragraph of explanation. Use a short "-" list only when comparing several things. The page shows charts and the full figures under your answer, so do not recite long runs of numbers.
 - For any statistic the site's datasets may hold (listed below), call the tools and use the values they return. Put the value, its year and the source in the sentence, for example: "India's life expectancy was 72.2 years in 2024 (World Bank)." Never state a number for those measures from memory, and never change a number a tool returned.
 - If the tools hold nothing for the question, answer from general knowledge and start that part with "From general knowledge, not this site's data:". Facts that change over time, such as office holders, prices and records, may be out of date: say so when it matters.
 - For "why" and "how" questions, give the figures from the tools first, then a brief, balanced explanation from general knowledge, marked as such.
@@ -56,24 +60,42 @@ const TOOLS: Anthropic.Tool[] = [
     input_schema: { type: "object", properties: {} } },
 ];
 
-/* ---------- budget: an append-only log of what each reply cost, summed when needed ---------- */
+/* ---------- budget: an append-only log of what each call cost, summed when needed ----------
+   Keys look like u/2026-11/24/<time>-<random>-r_<millionths of a dollar>. "r" entries set a call's estimated cost aside before
+   the model is called; "a" entries adjust it to the real cost afterwards (they can be negative). Nothing is ever rewritten,
+   so two requests at the same moment cannot lose each other's spending. */
 const memory = new Map<string, string>();
 const store = () => env("DATA_AI_STORE") === "memory"
   ? { set: async (k: string, v: string) => { memory.set(k, v); }, list: async ({ prefix }: { prefix: string }) => ({ blobs: [...memory.keys()].filter(k => k.startsWith(prefix)).map(key => ({ key })) }) }
   : getStore({ name: "data-ai-usage", consistency: "strong" });
-let cached = { at: 0, month: 0, day: 0, key: "" };
-async function spent() {                                       // dollars used this month and today; the cost is the last part of each key
+let cached = { at: 0, month: 0, day: 0, minute: 0, key: "" };
+async function spent(maxAge = 3000) {                          // dollars used this month and today, and model calls in the past minute
   const now = new Date(), ym = now.toISOString().slice(0, 7), d = now.toISOString().slice(8, 10);
-  if (cached.key === ym + d && Date.now() - cached.at < 20000) return cached;
-  const { blobs } = await store().list({ prefix: `u/${ym}/` });
-  let month = 0, day = 0;
-  for (const b of blobs) { const usd = Number(b.key.split("_").pop()) / 1e6 || 0; month += usd; if (b.key.startsWith(`u/${ym}/${d}/`)) day += usd; }
-  return (cached = { at: Date.now(), month, day, key: ym + d });
+  if (cached.key === ym + d && Date.now() - cached.at < maxAge) return cached;
+  const { blobs } = await store().list({ prefix: `u/${ym}/` }), today = `u/${ym}/${d}/`, since = Date.now() - 60000;
+  let month = 0, day = 0, minute = 0;
+  for (const b of blobs) {
+    const usd = Number(b.key.split("_").pop()) / 1e6 || 0; month += usd;
+    if (b.key.startsWith(today)) { day += usd; const name = b.key.slice(today.length); if (name.includes("-r_") && Number(name.split("-")[0]) >= since) minute++; }
+  }
+  return (cached = { at: Date.now(), month, day, minute, key: ym + d });
 }
-async function record(usd: number) {
+async function record(kind: "r" | "a", usd: number) {
   const now = new Date(), iso = now.toISOString();
-  await store().set(`u/${iso.slice(0, 7)}/${iso.slice(8, 10)}/${now.getTime()}-${Math.random().toString(36).slice(2, 8)}_${Math.round(usd * 1e6)}`, "1");
-  cached.month += usd; cached.day += usd;
+  await store().set(`u/${iso.slice(0, 7)}/${iso.slice(8, 10)}/${now.getTime()}-${Math.random().toString(36).slice(2, 8)}-${kind}_${Math.round(usd * 1e6)}`, "1");
+  cached.month += usd; cached.day += usd; if (kind === "r") cached.minute++;
+}
+/* check the limits and set a call's cost aside, one request at a time, so requests that arrive together cannot all slip through */
+let gate: Promise<unknown> = Promise.resolve();
+function reserve(estimate: number): Promise<"ok" | "budget" | "busy"> {
+  const run = gate.then(async () => {
+    const s = await spent();
+    if (s.month >= MONTH_USD || s.day >= DAY_USD) return "budget" as const;
+    if (s.minute >= PER_MINUTE) return "busy" as const;
+    await record("r", estimate); return "ok" as const;
+  });
+  gate = run.catch(() => {});
+  return run;
 }
 
 /* ---------- request checks ---------- */
@@ -135,9 +157,10 @@ export default async (req: Request, context: Context) => {
   const ready = !!env("ANTHROPIC_BASE_URL") || !!env("ANTHROPIC_API_KEY");
 
   if (req.method === "GET") {                                  // a free check the page makes before offering AI answers
-    let open = ready;
-    try { const s = await spent(); if (s.month >= MONTH_USD || s.day >= DAY_USD) open = false; } catch (e) { open = false; }
-    return reply({ ok: true, ai: open, model: MODEL });
+    let open = ready, left: { day: number; month: number } | undefined;
+    try { const s = await spent(20000); if (s.month >= MONTH_USD || s.day >= DAY_USD) open = false; const f = (used: number, cap: number) => (cap > 0 ? Math.max(0, Math.round((1 - used / cap) * 100) / 100) : 0); left = { day: f(s.day, DAY_USD), month: f(s.month, MONTH_USD) }; }
+    catch (e) { open = false; }
+    return reply({ ok: true, ai: open, model: MODEL, left });                                                           // "left" is the share of today's and this month's allowance still unused
   }
   if (req.method !== "POST") return reply({ ok: false, reason: "method" }, 405);
   if (origin && !allowed) return reply({ ok: false, reason: "origin" }, 403);
@@ -147,19 +170,27 @@ export default async (req: Request, context: Context) => {
   const messages = clean(body && body.messages);
   if (typeof messages === "string") return reply({ ok: false, reason: "bad", message: messages }, 400);
 
-  try { const s = await spent(); if (s.month >= MONTH_USD || s.day >= DAY_USD) return reply({ ok: false, reason: "budget", message: "The AI allowance for now is used up." }, 429); }
-  catch (e) { console.error("budget store unavailable", e); return reply({ ok: false, reason: "busy", message: "The AI service is busy." }, 503); }
+  /* set the worst likely cost of this call aside before making it; if that cannot be written down, nothing is spent */
+  const estimate = ((JSON.stringify(messages).length / 3 + 3500) * PRICE_IN + MAX_TOKENS * PRICE_OUT) / 1e6;
+  try {
+    const verdict = await reserve(estimate);
+    if (verdict === "budget") return reply({ ok: false, reason: "budget", message: "The AI allowance for now is used up." }, 429);
+    if (verdict === "busy") return reply({ ok: false, reason: "busy", message: "The AI is getting a lot of questions right now." }, 429);
+  } catch (e) { console.error("budget store unavailable", e); return reply({ ok: false, reason: "busy", message: "The AI service is busy." }, 503); }
 
   try {
     const res = await callModel(messages);
     const u: any = res.usage || {}, tin = (u.input_tokens || 0) + (u.cache_creation_input_tokens || 0) * 1.25 + (u.cache_read_input_tokens || 0) * 0.1;
     const usd = (tin * PRICE_IN + (u.output_tokens || 0) * PRICE_OUT) / 1e6;
-    context.waitUntil(record(usd).catch(e => console.error("usage not recorded", e)));
+    context.waitUntil(record("a", usd - estimate).catch(e => console.error("usage not corrected", e)));
     const content = res.content.map((b: any) => b.type === "text" ? { type: "text", text: b.text } : b.type === "tool_use" ? { type: "tool_use", id: b.id, name: b.name, input: b.input }
       : b.type === "thinking" ? { type: "thinking", thinking: b.thinking, signature: b.signature } : b.type === "redacted_thinking" ? { type: "redacted_thinking", data: b.data } : null).filter(Boolean);
-    return reply({ ok: true, content, stop_reason: res.stop_reason, model: res.model });
+    return reply({ ok: true, content, stop_reason: res.stop_reason, model: res.model,
+      usage: { input: u.input_tokens || 0, output: u.output_tokens || 0, cache_read: u.cache_read_input_tokens || 0, cache_write: u.cache_creation_input_tokens || 0, usd: Math.round(usd * 1e6) / 1e6 },
+      diag: { thinking: thinkingOff ? "off" : "on", key: keyHeader ? "x-api-key" : "bearer" } });
   } catch (e: any) {
     console.error("model call failed", e && e.status, e && e.message);
+    context.waitUntil(record("a", -estimate).catch(() => {}));                                                          // nothing was charged, so hand the reservation back
     const status = e && e.status === 429 ? 429 : 502;
     return reply({ ok: false, reason: status === 429 ? "busy" : "error", message: "The AI service could not answer just now." }, status);
   }

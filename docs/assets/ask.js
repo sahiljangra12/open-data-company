@@ -319,7 +319,7 @@ function aiReady() {
 const TOOL_SAYS = { find_variables: i => `Searching the variables for "${i.query || ""}"`, get_values: i => `Reading ${(V.get(i.variable) || { c: { title: "the data" } }).c.title.toLowerCase()} for ${[].concat(i.places || []).join(", ")}`, rank: i => `Ranking countries by ${(V.get(i.variable) || { c: { title: "that measure" } }).c.title.toLowerCase()}`,
   get_series: i => `Reading the history of ${(V.get(i.variable) || { c: { title: "that measure" } }).c.title.toLowerCase()}${i.place ? " for " + i.place : ""}`, recent_earthquakes: () => "Reading the latest earthquakes" };
 async function aiTurn(question, say) {
-  const messages = [...AI.memory, { role: "user", content: question }], used = [];
+  const messages = [...AI.memory, { role: "user", content: question }], used = [], cost = { usd: 0, rounds: 0, cached: 0 };
   for (let round = 0; round < 4; round++) {                             // 4 rounds is 13 messages at most, inside the service's limit
     const c = new AbortController(), t = setTimeout(() => c.abort(), 60000);
     let body = JSON.stringify({ messages });
@@ -327,11 +327,13 @@ async function aiTurn(question, say) {
     let r, j; try { r = await fetch(AI.url, { method: "POST", headers: { "content-type": "application/json" }, body, signal: c.signal }); j = await r.json(); } finally { clearTimeout(t); }
     if (!r.ok || !j || !j.ok) throw Object.assign(new Error("The AI service did not answer"), { reason: (j && j.reason) || "error" });
     messages.push({ role: "assistant", content: j.content });
+    cost.rounds++; if (j.usage) { cost.usd += j.usage.usd || 0; cost.cached += j.usage.cache_read || 0; }
     const calls = j.content.filter(b => b.type === "tool_use");
     if (j.stop_reason !== "tool_use" || !calls.length) {
-      const text = j.content.filter(b => b.type === "text").map(b => b.text).join("\n\n").trim(); if (!text) throw Object.assign(new Error("Empty answer"), { reason: "error" });
+      let text = j.content.filter(b => b.type === "text").map(b => b.text).join("\n\n").trim(); if (!text) throw Object.assign(new Error("Empty answer"), { reason: "error" });
+      if (j.stop_reason === "max_tokens") text += " …";                                                                // the reply reached its length limit
       AI.memory = [...AI.memory, { role: "user", content: question }, { role: "assistant", content: text }].slice(-6);
-      return { text, used };
+      return { text, used, cost };
     }
     say(calls.map(k => (TOOL_SAYS[k.name] || (() => "Reading the data"))(k.input || {})).join(". ") + ".");
     const results = await Promise.all(calls.map(async k => { let out; try { out = TOOLS[k.name] ? await TOOLS[k.name](k.input || {}, used) : { error: "No such tool" }; } catch (e) { console.warn(e); out = { error: "The data could not be read just now." }; } return { type: "tool_result", tool_use_id: k.id, content: JSON.stringify(out).slice(0, 5000) }; }));
@@ -413,6 +415,7 @@ async function respond(text, opt = {}) {
     if (ai && (opt.force || !simple)) {
       try {
         const a = await aiTurn(opt.prompt || q, turn.say); turn.done(); last.ai = true;
+        turn.root.dataset.rounds = a.cost.rounds; turn.root.dataset.usd = a.cost.usd.toFixed(6); turn.root.dataset.cached = a.cost.cached;
         const ans = el("div", "aitext"); ans.append(mdLite(a.text)); box.append(ans);
         const tools = el("div", "acts small"), cp = el("button", "link", "Copy the answer"), rd = el("button", "link", "Read it aloud"); cp.type = rd.type = "button";
         cp.onclick = () => copy(cp, `${a.text.replace(/\*\*/g, "")}\n\nFrom Data AI, Open Data Company: ${SITE}ask.html?q=${encodeURIComponent(q).replace(/%20/g, "+")}`); rd.onclick = () => speak(rd, a.text);
@@ -427,7 +430,7 @@ async function respond(text, opt = {}) {
         return;
       } catch (e) {
         console.warn("AI unavailable, using the built-in lookup", e); if (e.reason === "budget" || e.reason === "off") AI.state = Promise.resolve(false); aiBadge();
-        box.append(el("p", "ainote", e.reason === "budget" ? "The AI's allowance for now is used up, so this answer comes straight from the data." : "The AI could not be reached just now, so this answer comes straight from the data."));
+        box.append(el("p", "ainote", e.reason === "budget" ? "The AI's allowance for now is used up, so this answer comes straight from the data." : e.reason === "busy" ? "The AI is busy right now, so this answer comes straight from the data." : "The AI could not be reached just now, so this answer comes straight from the data."));
       }
     }
     turn.done(); last.ai = false;
