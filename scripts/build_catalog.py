@@ -148,19 +148,127 @@ Wikidata|World|Science and tech|https://www.wikidata.org|CC0|yes|realtime|yes|Kn
 Wikipedia pageviews|World|Science and tech|https://dumps.wikimedia.org/other/pageviews/|CC0|yes|daily|yes|Media, brand and trend tracking
 """
 
+# Where each source stands on this site. One entry for every source above; main() checks that none is missing.
+#   live    its data is loaded from the source itself, every day
+#   via     its figures are on the site inside a dataset compiled by another publisher (named in the note)
+#   key     the source asks for a free key or account, which only the site's owner can create
+#   images  satellite pictures or map layers, not tables of numbers
+#   bulk    whole-archive downloads far too large for a free static site
+#   terms   the licence does not allow republishing
+#   later   open and loadable, but no loader has been written yet
+WB = "the World Bank"
+OWID = "Our World in Data"
+STATUS = {
+    "NYC Open Data": ("live", ["nyc-traffic-crashes-monthly"], "Motor vehicle crashes, by month."),
+    "Chicago Data Portal": ("live", ["chicago-crime-monthly"], "Reported crimes, by month."),
+    "FRED (St. Louis Fed)": ("live", ["us-economy-monthly", "us-economy-quarterly", "us-rates-and-currencies-daily"], "Fifty of its most-used series."),
+    "Treasury Fiscal Data": ("live", ["us-national-debt"], "Debt to the penny, every business day."),
+    "USAspending": ("live", ["us-federal-spending-by-agency"], "Budget, obligations and outlays by agency."),
+    "FDIC BankFind": ("live", ["us-bank-failures", "us-bank-failures-list"], "Every bank failure since 1934."),
+    "PJM Data Miner": ("live", ["pjm-summer-peak-forecasts"], "PJM's published load forecast tables. The Data Miner feed itself needs an account."),
+    "NOAA climate and weather (NCEI)": ("live", ["us-climate-monthly", "global-temperature"], "US monthly temperature and precipitation, and the global record."),
+    "USGS Earthquake Catalog": ("live", ["earthquakes-past-30-days"], "Also live on the home page globe."),
+    "OpenFEMA": ("live", ["us-disaster-declarations", "us-disaster-declarations-list"], "Every federal disaster declaration since 1953."),
+    "openFDA": ("live", ["us-fda-reports"], "Side-effect reports and recalls, by month."),
+    "ClinicalTrials.gov": ("live", ["clinical-trials-started"], "Studies started each year."),
+    "NIH RePORTER": ("live", ["us-nih-research-projects"], "Projects funded each fiscal year."),
+    "Federal Register": ("live", ["us-federal-register"], "Rules and executive orders, by year."),
+    "World Bank Open Data": ("live", ["world-bank-development", "health-indicators", "education-indicators", "gender-indicators", "poverty-and-inequality", "environment-indicators",
+                                      "trade-and-finance", "technology-and-transport", "labour-indicators", "food-and-agriculture"], "About 250 indicators in ten sets."),
+    "Our World in Data": ("live", ["co2-and-greenhouse-gases", "energy", "democracy-and-rights", "conflict-and-security", "emissions-by-sector", "wellbeing-and-schooling",
+                                   "forests-wildlife-and-plastic", "natural-disasters", "food-supply", "top-incomes", "renewable-capacity", "space-and-ai"], "Its emissions and energy files, and charts from many original sources."),
+    "IMF Data": ("live", ["imf-world-economic-outlook", "imf-projections"], "World Economic Outlook, with projections kept apart."),
+    "Penn World Table": ("live", ["penn-world-table"], ""),
+    "UNDP Human Development Data": ("live", ["human-development-index"], ""),
+    "WHO Global Health Observatory": ("live", ["who-health-observatory"], ""),
+    "UN World Population Prospects": ("live", ["un-population", "un-population-projections"], "Estimates to this year, projections to 2100."),
+    "Berkeley Earth": ("live", ["global-temperature"], "One column of the global temperature set. Its licence is non-commercial."),
+    "GBIF": ("live", ["biodiversity-records-by-year", "biodiversity-records-by-country"], "Counts of records, not the records themselves."),
+    "Worldwide Governance Indicators": ("live", ["governance-indicators"], ""),
+    "OpenAlex": ("live", ["research-papers-by-year", "research-papers-by-country"], "Counts of research works."),
+    "arXiv": ("live", ["research-papers-by-year"], "Papers submitted each year."),
+    "Crossref": ("live", ["research-papers-by-year"], "Records registered each year."),
+    "Wikipedia pageviews": ("live", ["wikipedia-pageviews"], "Monthly views for nine languages and all projects."),
+
+    "Bureau of Economic Analysis": ("via", ["us-economy-quarterly", "us-economy-monthly"], "GDP, income and spending, through FRED."),
+    "Bureau of Labor Statistics": ("via", ["us-economy-monthly"], "Jobs, unemployment, wages and prices, through FRED."),
+    "Census Building Permits Survey": ("via", ["us-economy-monthly"], "National permits and housing starts, through FRED."),
+    "FHFA House Price Index": ("via", ["us-economy-monthly", "us-economy-quarterly"], "The national indexes, through FRED."),
+    "EIA Open Data": ("via", ["crude-oil-prices", "natural-gas-prices", "energy"], "Oil and gas prices through DataHub. EIA's own feed needs a free key."),
+    "UN Data": ("via", ["un-population", "health-indicators", "education-indicators"], "A catalog; its main series are on the site through the UN population file and " + WB + "."),
+    "UN SDG Global Database": ("via", ["health-indicators", "education-indicators", "poverty-and-inequality", "environment-indicators"], "Many goal indicators, through " + WB + "."),
+    "ILOSTAT": ("via", ["labour-indicators", "world-bank-development"], "Employment estimates, through " + WB + "."),
+    "UNESCO Institute for Statistics": ("via", ["education-indicators"], "Through " + WB + "."),
+    "World Inequality Database": ("via", ["top-incomes"], "Through " + OWID + "."),
+    "UNICEF Data": ("via", ["health-indicators"], "Child health and nutrition, through " + WB + "."),
+    "Ember electricity data": ("via", ["energy"], "Through " + OWID + "."),
+    "Energy Institute Statistical Review": ("via", ["energy"], "Through " + OWID + "."),
+    "IRENA statistics": ("via", ["renewable-capacity"], "Solar and wind capacity, through " + OWID + "."),
+    "Global Carbon Project": ("via", ["co2-and-greenhouse-gases"], "Through " + OWID + "."),
+    "EDGAR emissions database": ("via", ["environment-indicators"], "Greenhouse gases per person, through " + WB + "."),
+    "Climate Watch": ("via", ["emissions-by-sector"], "Through " + OWID + "."),
+    "Global Forest Watch": ("via", ["forests-wildlife-and-plastic"], "Tree cover loss, through " + OWID + "."),
+    "FAOSTAT": ("via", ["food-supply", "food-and-agriculture"], "Through " + OWID + " and " + WB + "."),
+    "IUCN Red List": ("via", ["forests-wildlife-and-plastic", "environment-indicators"], "The Red List Index and counts of threatened species."),
+    "FAO AQUASTAT": ("via", ["environment-indicators"], "Freshwater withdrawals, through " + WB + "."),
+    "V-Dem": ("via", ["democracy-and-rights"], "Through " + OWID + "."),
+    "Corruption Perceptions Index": ("via", ["democracy-and-rights"], "Through " + OWID + "."),
+    "UCDP conflict data": ("via", ["conflict-and-security"], "Deaths in armed conflicts, through " + OWID + "."),
+
+    "IHME Global Burden of Disease": ("terms", [], "Free for non-commercial use only, and it turned away this site's automatic requests."),
+    "IEA data": ("terms", [], "Most of it is sold. A few IEA figures reach the site through " + WB + "."),
+}
+KEY = """data.gov|SAM.gov contract opportunities|Census American Community Survey|Census County Business Patterns|HUD User datasets|USPTO patents and trademarks|NREL data (NSRDB, ATB)|
+EPA Air Quality System|NASA Earthdata|USDA NASS Quick Stats|USDA FoodData Central|FMCSA carrier safety data|College Scorecard|O*NET|Congress.gov|Regulations.gov|FEC campaign finance|
+FBI Crime Data Explorer|CourtListener|India data.gov.in|UN Comtrade|WTO Stats|DHS Program surveys|ENTSO-E Transparency Platform|Copernicus ERA5 reanalysis|eBird|ACLED|
+Global Energy Monitor trackers|Google Earth Engine catalog"""
+IMAGES = "Landsat (USGS)|Sentinel (Copernicus)|MODIS and VIIRS (NASA)|VIIRS night lights (EOG)|WorldPop|JRC Global Surface Water|USDA Cropland Data Layer"
+BULK = """HMDA mortgage records|SBA loan data|Hospital price transparency files|BTS airline on-time data|DOL H-1B and PERM disclosures|NOAA Storm Events|OpenStreetMap|GDELT|GH Archive|
+Stack Exchange data dump|Common Crawl|Wikidata"""
+LATER = {  # open, with a reason it is not loaded yet
+    "Maryland Open Data": "A catalog of many tables; single tables are added one at a time.", "Open Baltimore": "A catalog of many tables; single tables are added one at a time.",
+    "EU Open Data Portal": "A catalog of other publishers' files.", "data.gov.uk": "A catalog of other publishers' files.", "Humanitarian Data Exchange": "A catalog of other publishers' files.",
+    "SEC EDGAR": "Company filings rather than one table.", "FERC eLibrary and forms": "Documents and forms rather than one table.", "GTFS transit feeds (Mobility Database)": "Thousands of timetable files rather than one table.",
+    "CDC WONDER": "Its query service limits automatic use. A different CDC feed, weekly flu hospital admissions, is on the site.",
+}
+RELATED = {"CDC WONDER": ["us-flu-hospital-admissions"], "GH Archive": ["github-activity-by-country"], "Census American Community Survey": [], "NASA Earthdata": ["global-temperature"]}
+NOTES = {"GH Archive": "The full event archive is hundreds of gigabytes. GitHub's own country summary is on the site.", "Wikidata": "A database of facts rather than a table; nothing to load as one file.",
+         "Census American Community Survey": "The Census service turned away this site's requests without a key.", "Census County Business Patterns": "The Census service turned away this site's requests without a key.",
+         "NASA Earthdata": "Needs a NASA login. NASA's global temperature record is on the site from another NASA file.", "data.gov": "Its catalog search now asks for a key.",
+         "WTO Stats": "Needs a key. Trade totals are on the site through the World Bank."}
+for group, state, note in ((KEY, "key", "Free, but the source asks for a key or account that only the site's owner can create."),
+                           (IMAGES, "images", "Satellite pictures or map layers rather than tables. They need a mapping tool, not a table of numbers."),
+                           (BULK, "bulk", "Published as whole-archive downloads far larger than a free static site can hold or refresh.")):
+    for name in group.replace("\n", "").split("|"):
+        STATUS[name] = (state, RELATED.get(name, []), NOTES.get(name, note))
+LABEL = {"live": "On the site", "via": "On the site, through another publisher", "key": "Needs a free key", "images": "Satellite images", "bulk": "Too large to host",
+         "terms": "Licence does not allow it", "later": "Not loaded yet"}
+
+
 def main():
+    man = Path(__file__).resolve().parents[1] / "docs" / "data" / "datasets.json"
+    titles = {d["id"]: d["title"] for d in json.loads(man.read_text())["datasets"]} if man.exists() else {}
     out = []
     for line in ROWS.strip().splitlines():
         p = [x.strip() for x in line.split("|")]
         assert len(p) == 9, line
         assert p[1] in ("US", "World") and p[5] in ("yes", "check", "restricted") and p[7] in ("yes", "no"), line
         assert p[6] in ("realtime", "daily", "weekly", "monthly", "quarterly", "annual", "varies"), line
+        state, sets, note = STATUS.get(p[0]) or ("later", RELATED.get(p[0], []), LATER.get(p[0], "Open to load; its loader has not been written yet."))
+        if state in ("live", "via"):
+            assert sets, p[0]
+        have = [dict(id=i, title=titles[i]) for i in sets if i in titles]      # only datasets that were actually built
+        if state in ("live", "via") and not have:
+            state, note = "later", "Its loader is written but has not delivered data yet."
         out.append(dict(name=p[0], region=p[1], domain=p[2], url=p[3], licence=p[4], commercial=p[5],
-                        update=p[6], api=p[7] == "yes", buyers=p[8]))
+                        update=p[6], api=p[7] == "yes", buyers=p[8], status=state, status_label=LABEL[state], datasets=have, note=note))
     assert len({r["name"] for r in out}) == len(out)
+    unknown = set(STATUS) | set(LATER) - {r["name"] for r in out}
+    assert not (set(STATUS) | set(LATER)) - {r["name"] for r in out}, sorted((set(STATUS) | set(LATER)) - {r["name"] for r in out})
+    tally = {k: sum(r["status"] == k for r in out) for k in LABEL}
     dest = Path(__file__).resolve().parents[1] / "docs" / "data" / "catalog.json"
-    dest.write_text(json.dumps({"count": len(out), "sources": out}, indent=1))
-    print(len(out), "sources ->", dest)
+    dest.write_text(json.dumps({"count": len(out), "tally": tally, "labels": LABEL, "sources": out}, indent=1))
+    print(len(out), "sources ->", dest, tally)
 
 if __name__ == "__main__":
     main()

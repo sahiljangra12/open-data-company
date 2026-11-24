@@ -538,8 +538,8 @@ async function visual(spec, box) {
 }
 /* a plain-words reading of a drawn chart, for requests answered without the AI */
 function describe(out, v) {
-  const unit = v.c.unit || "", when = w => (typeof w === "number" ? w : whenText(w, stepOf(v.d)));
-  if (out.series) return out.series.slice(0, 4).map(x => `${out.series.length > 1 || isCountry(v) ? x.place : v.c.title} went from ${full(x.first.value, unit)} in ${when(x.first.when)} to ${full(x.last.value, unit)} in ${when(x.last.when)}${x.highest.when !== x.last.when && x.highest.when !== x.first.when ? `, with a peak of ${full(x.highest.value, unit)} in ${when(x.highest.when)}` : ""}.`).join(" ");
+  const unit = v.c.unit || "", step = stepOf(v.d), when = w => (typeof w === "number" ? `in ${w}` : `${inOn(step)} ${whenText(w, step)}`);
+  if (out.series) return out.series.slice(0, 4).map(x => `${out.series.length > 1 || isCountry(v) ? x.place : v.c.title} went from ${full(x.first.value, unit)} ${when(x.first.when)} to ${full(x.last.value, unit)} ${when(x.last.when)}${x.highest.when !== x.last.when && x.highest.when !== x.first.when ? `, with a peak of ${full(x.highest.value, unit)} ${when(x.highest.when)}` : ""}.`).join(" ");
   if (out.rows) { const a = out.rows[0], z = out.rows[out.rows.length - 1]; return out.rows.length > 1 ? `${a.place} is first at ${full(a.value, unit)} (${a.year}); ${z.place} is last of those shown at ${full(z.value, unit)} (${z.year}).` : `${a.place}: ${full(a.value, unit)} (${a.year}).`; }
   if ("correlation" in out) { const r = out.correlation, size = Math.abs(r) >= 0.7 ? "strongly" : Math.abs(r) >= 0.4 ? "moderately" : Math.abs(r) >= 0.2 ? "weakly" : "hardly"; return `Across ${out.countries} countries the two measures ${size === "hardly" ? "hardly move together" : r > 0 ? `rise together ${size}` : `move in opposite directions ${size}`} (correlation ${r.toFixed(2)}). That alone does not show that one causes the other.`; }
   if (out.highest) return `Highest: ${out.highest.map(x => `${x.place} (${full(x.value, unit)})`).join(", ")}. Lowest: ${out.lowest.map(x => `${x.place} (${full(x.value, unit)})`).join(", ")}.`;
@@ -589,7 +589,7 @@ function newTurn(q) {
     settle: () => { const t = $("#thread"); t.scrollTop = Math.max(0, root.offsetTop - 14); } };          // show the question at the top with its answer under it
 }
 const SMALL = [[/^(hi|hello|hey|hola|namaste|good (morning|afternoon|evening))\b/i, "Hello. Ask me for a number, a comparison, a ranking or a chart, for example \"India life expectancy\", \"top 10 CO2 emitters\" or \"chart oil price since 2020\". I'll answer with the year and the source."],
-  [/\b(who are you|what are you|what can you do|what do you do|help me|how do (you|i) (work|use))\b/i, "I'm Data AI, the assistant for this site's open data. I can give you a single figure, compare countries, rank them, draw a line chart, a bar chart, a scatter or a world map, and report today's earthquakes, oil prices, global temperature and CO2 in the air. Every figure comes with its year and source."],
+  [/\b(who are you|what are you|what can you do|what do you do|help me|how do (you|i) (work|use))\b/i, "I'm Data AI, the assistant for this site's open data. I can give you a single figure, compare countries, rank them, draw a line chart, a bar chart, a scatter or a world map, and report today's earthquakes, oil prices, US interest rates and the national debt. The data covers climate, energy, the economy, health, people, government and science. Every figure comes with its date and source."],
   [/^(thanks|thank you|thx|great|nice|ok|okay|cool)\b/i, "You're welcome. Ask me anything else about the data."]];
 
 async function lookup(q, P, turn) {                                    // the built-in engine: exact, instant, no AI needed
@@ -681,8 +681,8 @@ async function respond(text, opt = {}) {
     /* nothing matched and no AI to hand it to: say what was understood and offer the nearest things that can be answered */
     const near = general ? [] : closest(P.words), p = el("div", "aitext"); turn.label("");
     p.append(el("p", "", general ? "That is a general question rather than one the datasets hold, so it needs the AI part, which is resting right now. I can still answer from the data straight away, for example:" : P.places.length ? `I found ${P.places.map(placeName).join(", ")} in your question, but not which measure you want. Pick one below, or add it to the question, for example "${placeName(P.places[0])} life expectancy".`
-      : near.length ? "I could not match that to one measure in the data, but these are close. Pick one, or say it another way." : "That is outside the datasets I can read right now. I answer from open data on climate, energy, economy, development and natural hazards. Here are things I can answer straight away."));
-    const picks = el("div", "quick"); (near.length ? near.map(v => [v.c.title, (wantsVis ? "Chart " : "") + v.c.title + (P.places.length ? " " + P.places.map(placeName).join(" ") : "")]) : ["World population", "Top 10 CO2 emitters", "Oil price", "Map of life expectancy", "Earthquakes today"].map(t => [t, t]))
+      : near.length ? "I could not match that to one measure in the data, but these are close. Pick one, or say it another way." : "That is outside the datasets I can read right now. I answer from open data on climate, energy, the economy, health, people, government, science and natural hazards. Here are things I can answer straight away."));
+    const picks = el("div", "quick"); (near.length ? near.map(v => [v.c.title, (wantsVis ? "Chart " : "") + v.c.title + (P.places.length ? " " + P.places.map(placeName).join(" ") : "")]) : ["World population", "Top 10 CO2 emitters", "US unemployment rate", "Map of life expectancy", "Happiest countries", "Earthquakes today"].map(t => [t, t]))
       .forEach(([label, ask]) => { const b = el("button", "", label); b.type = "button"; b.onclick = () => respond(ask); picks.append(b); });
     p.append(picks); const more = el("p", "hint"); more.append("Or ", Object.assign(el("a", "", "search the list of every variable"), { href: `datasets.html?q=${encodeURIComponent(P.words.filter(w => !VISFILL.has(w)).join(" "))}` }), "."); p.append(more); box.append(p);
   } catch (e) { console.error(e); turn.done(); box.append(note("Something went wrong while answering. Please ask again.")); }
@@ -701,7 +701,7 @@ async function aiBadge() { const on = await aiReady(), b = $("#ai-state"); b.tex
   form.addEventListener("submit", e => { e.preventDefault(); respond(input.value); });
   input.addEventListener("input", grow);
   input.addEventListener("keydown", e => { if (e.key === "Enter" && !e.shiftKey && !e.isComposing) { e.preventDefault(); respond(input.value); } });   // Enter sends, Shift+Enter starts a new line
-  ["India life expectancy", "Top 10 CO2 emitters", "Chart India's CO2 emissions since 1990", "Map of life expectancy", "Why is the world getting warmer?", "Plot life expectancy against GDP per capita", "Oil price", "Earthquakes today"]
+  ["India life expectancy", "Top 10 CO2 emitters", "Chart India's CO2 emissions since 1990", "Map of life expectancy", "Which countries are the happiest?", "US unemployment rate", "Chart the US national debt", "Why is the world getting warmer?", "Plot life expectancy against GDP per capita", "Earthquakes today"]
     .forEach(t => { const b = el("button", "", t); b.type = "button"; b.onclick = () => respond(t); $("#examples").append(b); });
   $("#fresh-chat").onclick = () => { $$(".turn", $("#thread")).forEach(t => t.remove()); AI.memory = []; last.v = null; last.places = []; last.ai = false; $("#fresh-chat").hidden = true; history.replaceState(null, "", "ask.html"); document.title = "Data AI | Open Data Company"; if ("speechSynthesis" in window) speechSynthesis.cancel(); $("#thread").scrollTop = 0; input.focus(); };
   voiceInput($("#mic"), input, $("#voice-note"), t => respond(t));

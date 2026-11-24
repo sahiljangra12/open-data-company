@@ -13,7 +13,7 @@ function colorOf(keys) {
 }
 
 const keyOf = (d, keys, i) => keys.length === 1 ? String(d.c[keys[0]][i]) : keys.map(k => d.c[k][i]).join("|");
-const sig = ds => ds.keys.join("+");
+const sig = ds => ds.keys.join("+") + (ds.step ? "@" + ds.step : "");         // series merge only with series published at the same pace
 
 /* ---------- the table the visitor is building ---------- */
 function compute() {
@@ -289,7 +289,8 @@ async function openSet(id, st = {}) {
 
 async function init() {
   M = (await (await fetch("data/datasets.json")).json()).datasets;
-  $("#ds").innerHTML = M.map(d => `<option value="${esc(d.id)}">${esc(d.title)}</option>`).join("");
+  const groups = new Map(); M.forEach(d => { if (!groups.has(d.domain)) groups.set(d.domain, []); groups.get(d.domain).push(d); });                  // one group per topic, so a long list stays easy to scan
+  $("#ds").innerHTML = [...groups].map(([name, list]) => `<optgroup label="${esc(name)}">${list.map(d => `<option value="${esc(d.id)}">${esc(d.title)}${d.region === "US" && !/^US\b|United States|Chicago|New York|PJM/.test(d.title) ? " (US)" : ""}</option>`).join("")}</optgroup>`).join("");
   $("#ds").onchange = e => openSet(e.target.value);
   $("#drop").onchange = e => { S.dropEmpty = e.target.checked; refresh(); };
   $("#add-filter").onclick = () => { S.filters.push({ ref: `b:${(S.ds.columns.find(c => S.vars.has(c.name)) || S.ds.columns[0]).name}`, op: ">", val: "" }); drawFilters(); $(".rule:last-child input")?.focus(); };

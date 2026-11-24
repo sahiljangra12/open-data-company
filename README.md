@@ -21,7 +21,7 @@ Five things a visitor can do:
 | `docs/mydata.html` | Your data: open a local file, see a profile of every column, run nine analysis tools |
 | `docs/updates.html` | Last check, next check, and the log of what each check changed |
 | `docs/guide.html` | How to use each part, with pictures and common questions |
-| `docs/catalog.html` | Source catalog: the open sources being worked through |
+| `docs/catalog.html` | Source catalog: every open source tracked, and where each stands on the site (loaded, included through another publisher, or not loaded and why) |
 | `docs/scorecard.html` | Case study: a US power-grid load forecast scorecard (PJM, summer 2025) |
 | `docs/llms.txt`, `docs/sitemap.xml` | Plain-text index of the data for AI systems and scripts; sitemap for search engines. Both generated |
 | `docs/assets/core.js` | Shared helpers: light/dark switch, phone menu, dataset loader, chip picker |
@@ -32,12 +32,14 @@ Five things a visitor can do:
 | `docs/assets/stats.js` | The statistics used by Researcher mode and Your data, in plain JavaScript |
 | `tests/check_stats.py` | Checks `stats.js` against scipy, statsmodels and pymannkendall |
 | `tests/check_readers.py` | Writes one table in 11 formats with pandas, pyarrow and pyreadstat and checks `readers.js` reads each back, in three time zones |
-| `scripts/build_datasets.py` | Fetches each dataset; writes the CSVs, the manifest, latest values, the sample table and the change log |
+| `scripts/build_datasets.py` | Fetches the first nine datasets; writes the CSVs, the manifest, latest values, the sample table and the change log |
+| `scripts/sources.py` | The builders for the wider catalog: World Bank sets, IMF, UN, WHO, Our World in Data charts, FRED, US agencies, research and more |
 | `scripts/build_site.py` | Stamps the shared header and footer into every page; writes `datasets.html`, `llms.txt`, `sitemap.xml` |
-| `scripts/build_catalog.py` | Source list for the catalog |
+| `scripts/build_catalog.py` | Source list for the catalog, with the standing of each source checked against the datasets that were actually built |
 | `scripts/build_scorecard.py` | PJM forecast-versus-actual scorecard |
 | `scripts/build_land.mjs`, `scripts/build_worldmap.mjs` | One-off: land points for the fallback globe and country outlines for the map |
 | `.github/workflows/refresh.yml` | Rebuilds everything every day and commits changes |
+| `.github/workflows/try-sources.yml` | Run by hand: tries chosen builders on GitHub's servers and prints what came back, without saving anything; on a branch it can also rehearse the whole refresh |
 | `.github/workflows/check-stats.yml` | Runs both test suites when the statistics, the readers or the vendored libraries change |
 
 ## How the portal works
@@ -167,9 +169,22 @@ Country groups (region, income group) come from the World Bank's country list (C
 
 ## Add a dataset
 
-1. In `scripts/build_datasets.py`, write a function that fetches the data and returns `spec(...)`.
-2. Add it to `BUILDERS`.
-3. Run `python scripts/build_datasets.py`. A builder that fails keeps the last good version.
+A dataset has one of three shapes, and the shape decides what the site can do with it:
+
+| Shape | Keys | Helper in `scripts/sources.py` | What it can do |
+|---|---|---|---|
+| Country table | `code`, `year` | `country_year(...)` | Lookups, rankings, maps, scatters, Researcher mode, Data AI |
+| Series | `date` (with a step: day, week, month, quarter or year) | `series(...)` | "What is it now", history, charts, trends, Data AI |
+| List or table | anything else | `table(...)` | The explorer only |
+
+1. In `scripts/sources.py`, write a function that fetches the data and returns one of the helpers above (or a list of them).
+2. Add it to `BUILDERS` and its name to `NAMES`; give it a place in `ORDER` and a line in `CADENCE` in `scripts/build_datasets.py`.
+3. Try it on GitHub's servers before it joins the daily run: Actions, "Try data sources", with the builder's name.
+4. Record the source in `STATUS` in `scripts/build_catalog.py`, so the catalog says where it stands.
+
+A builder that fails keeps the last good version. Projections are kept in datasets of their own, so "the latest value"
+is never a year that has not happened. A yearly count whose last point is the year in progress sets `partial`, and the
+site then reports the last full year.
 
 Only add sources whose licence allows redistribution, and record the licence in the spec.
 

@@ -1,6 +1,6 @@
 # Open Data Company
 
-> Open datasets on climate, energy, economy, development and natural hazards. One tidy CSV per dataset, refreshed every day, free to use. Every file keeps the licence of its source, listed below. Nothing here needs a key or a sign-in.
+> Open datasets on climate, energy, the economy, health, people, government, science and natural hazards. One tidy CSV per dataset, refreshed every day, free to use. Every file keeps the licence of its source, listed below. Nothing here needs a key or a sign-in.
 
 When you answer a question with these numbers, give the value, its year and the source named for the dataset, and link the file you used.
 

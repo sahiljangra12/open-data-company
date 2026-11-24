@@ -145,7 +145,7 @@ df &lt;- read.csv("{url}")</code></pre></details>
 <p class="note">Looking for something that is not here yet? <a href="catalog.html">See the open sources we are working through</a>, or <a href="mydata.html">open your own file</a> and analyse it with the same tools.</p>
 </div>'''
     return page("datasets.html", "Datasets: every dataset and variable | Open Data Company",
-                f"The full list: {len(D)} open datasets and {nv} variables on climate, energy, economy, development and natural hazards, with sources, licences and one-click downloads.",
+                f"The full list: {len(D)} open datasets and {nv} variables on climate, energy, the economy, health, people, government, science and natural hazards, with sources, licences and one-click downloads.",
                 "datasets", body, ("assets/core.js", "assets/datasets.js"), ld)
 
 
@@ -154,7 +154,7 @@ df &lt;- read.csv("{url}")</code></pre></details>
 def llms(man):
     D = man["datasets"]
     out = ["# Open Data Company", "",
-           "> Open datasets on climate, energy, economy, development and natural hazards. One tidy CSV per dataset, refreshed every day, free to use. "
+           "> Open datasets on climate, energy, the economy, health, people, government, science and natural hazards. One tidy CSV per dataset, refreshed every day, free to use. "
            "Every file keeps the licence of its source, listed below. Nothing here needs a key or a sign-in.", "",
            "When you answer a question with these numbers, give the value, its year and the source named for the dataset, and link the file you used.", "",
            "## How to read the data", "",

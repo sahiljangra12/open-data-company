@@ -54,7 +54,7 @@ CADENCE = {  # how often each source itself changes; the site checks all of them
     "us-federal-register": "Every business day", "us-fda-reports": "Every week or so", "clinical-trials-started": "Every day",
     "us-disaster-declarations": "Whenever a disaster is declared", "us-disaster-declarations-list": "Whenever a disaster is declared",
     "us-bank-failures": "Whenever a bank fails", "us-bank-failures-list": "Whenever a bank fails", "us-flu-hospital-admissions": "A new week every week",
-    "us-states-census": "Once a year, in September", "us-nih-research-projects": "Every week",
+    "us-nih-research-projects": "Every week",
     "chicago-crime-monthly": "Every day, about a week behind", "nyc-traffic-crashes-monthly": "Every day", "us-federal-spending-by-agency": "Once a month",
 }
 WORLD_BANK_SETS = ["governance-indicators", "health-indicators", "education-indicators", "gender-indicators", "poverty-and-inequality", "environment-indicators",
@@ -74,7 +74,7 @@ ORDER = ["co2-and-greenhouse-gases", "energy", "world-bank-development", "global
          "wikipedia-pageviews", "github-activity-by-country", "biodiversity-records-by-year", "biodiversity-records-by-country", "clinical-trials-started",
          "imf-projections", "un-population-projections",
          "crude-oil-prices", "natural-gas-prices", "us-economy-monthly", "us-economy-quarterly", "us-rates-and-currencies-daily", "us-national-debt",
-         "us-states-census", "us-climate-monthly", "us-flu-hospital-admissions", "us-nih-research-projects", "us-fda-reports", "us-disaster-declarations", "us-disaster-declarations-list", "us-federal-register",
+         "us-climate-monthly", "us-flu-hospital-admissions", "us-nih-research-projects", "us-fda-reports", "us-disaster-declarations", "us-disaster-declarations-list", "us-federal-register",
          "us-federal-spending-by-agency", "us-bank-failures", "us-bank-failures-list", "chicago-crime-monthly", "nyc-traffic-crashes-monthly", "pjm-summer-peak-forecasts"]
 
 

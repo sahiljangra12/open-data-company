@@ -548,6 +548,8 @@ OWID_NAMES = {
     "yearly_per_capita_supply_of_all_meat": ("meat_supply_per_person", "Meat supply per person", "kilograms a year"),
     "share_richest_1_pct_before_tax": ("income_share_top_1_pct", "Share of income going to the richest 1% (before tax)", "% of all income"),
     "share_richest_decile_before_tax": ("income_share_top_10_pct", "Share of income going to the richest 10% (before tax)", "% of all income"),
+    "best_estimate": ("deaths_in_armed_conflicts", "Deaths in armed conflicts (best estimate)", "deaths"),
+    "total_solar_capacity": ("solar_capacity", "Solar power capacity installed", "gigawatts"), "total_wind_capacity": ("wind_capacity", "Wind power capacity installed", "gigawatts"),
     "annual_number_of_objects_launched_into_outer_space": ("objects_launched_into_space", "Objects launched into space in the year", "objects"),
     "ai_scholarly_publications_field_all": ("ai_research_papers", "Research papers on artificial intelligence", "publications"),
 }
@@ -560,7 +562,8 @@ OWID_TIDY = [  # (what their title looks like, our column prefix, our title, uni
     (r"Annual economic damages as a share of GDP from (.+)$", "damage_share_of_gdp_from_", "Economic damage from {}, share of GDP", "% of GDP"),
 ]
 MAIN_HAZARDS = r"all natural disasters|floods|storms|droughts|earthquakes|extreme temperatures|wildfires"
-OWID_KEEP = {"natural-disasters": lambda t: t == "Deaths from natural disasters" or re.search(r"^(People affected by|Death rate from) (" + MAIN_HAZARDS + ")$", t) or "all natural disasters" in t}
+OWID_KEEP = {"conflict-and-security": lambda t: t not in ("High estimate", "Low estimate"),
+             "natural-disasters": lambda t: t == "Deaths from natural disasters" or re.search(r"^(People affected by|Death rate from) (" + MAIN_HAZARDS + ")$", t) or "all natural disasters" in t}
 
 
 def owid_charts(id, title, description, domain, source, slugs, licence="CC BY 4.0 (Our World in Data; original sources named per variable)"):
@@ -1195,7 +1198,7 @@ OWID_SETS = [
      ["electoral-democracy-index", "liberal-democracy-index", "human-rights-index-vdem", "rule-of-law-index", "women-political-empowerment-index", "press-freedom-index-rsf", "ti-corruption-perception-index"]),
     ("conflict-and-security", "Military spending, nuclear weapons, homicide, terrorism and refugees", "War and safety by country and year: what armies cost, who holds nuclear warheads, how many people are killed, and how many flee.",
      "Government and finance", "SIPRI, Federation of American Scientists, UNODC, Global Terrorism Database, UCDP and UNHCR, via Our World in Data",
-     ["military-expenditure-total", "nuclear-warhead-stockpiles", "homicide-rate-unodc", "fatalities-from-terrorism", "terrorist-attacks", "refugee-population-by-country-or-territory-of-origin", "refugee-population-by-country-or-territory-of-asylum", "deaths-in-armed-conflicts-based-on-where-they-occurred"]),
+     ["military-expenditure-total", "nuclear-warhead-stockpiles", "homicide-rate-unodc", "fatalities-from-terrorism", "terrorist-attacks", "refugee-population-by-country-or-territory-of-origin", "refugee-population-by-country-or-territory-of-asylum", "deaths-in-armed-conflicts"]),
     ("renewable-capacity", "Solar and wind power capacity installed", "How much solar and wind generating capacity each country has built.",
      "Energy", "International Renewable Energy Agency (IRENA), via Our World in Data", ["installed-solar-pv-capacity", "cumulative-installed-wind-energy-capacity-gigawatts"]),
     ("emissions-by-sector", "Greenhouse gas emissions by sector", "Where each country's emissions come from: electricity and heat, transport, industry, buildings, farming, land use and waste.",
@@ -1215,94 +1218,6 @@ OWID_SETS = [
      "Science and technology", "UN Office for Outer Space Affairs and CSET, via Our World in Data", ["yearly-number-of-objects-launched-into-outer-space", "annual-scholarly-publications-on-artificial-intelligence"]),
 ]
 
-# ---------- US Census Bureau: every state, year by year ----------
-USPS = dict(zip("01 02 04 05 06 08 09 10 11 12 13 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 44 45 46 47 48 49 50 51 53 54 55 56 72".split(),
-                "AL AK AZ AR CA CO CT DE DC FL GA HI ID IL IN IA KS KY LA ME MD MA MI MN MS MO MT NE NV NH NJ NM NY NC ND OH OK OR PA RI SC SD TN TX UT VT VA WA WV WI WY PR".split()))
-ACS = [("B01003_001E", "population"), ("B19013_001E", "median_household_income"), ("B01002_001E", "median_age"), ("B25077_001E", "median_home_value"), ("B25064_001E", "median_rent")]
-ACS_SHARES = [  # (codes, column, how to turn the counts into a percentage)
-    ("B17001_002E,B17001_001E", "poverty_rate", lambda v: 100 * v[0] / v[1]),
-    ("B15003_022E,B15003_023E,B15003_024E,B15003_025E,B15003_001E", "adults_with_a_degree", lambda v: 100 * sum(v[:4]) / v[4]),
-    ("B23025_005E,B23025_003E", "unemployment_rate", lambda v: 100 * v[0] / v[1]),
-]
-
-
-def census_states():
-    id, cell, names = "us-states-census", {}, {}
-    path = SETS / f"{id}.csv"
-    if path.exists():                                       # earlier years do not change: keep them and ask only for the recent ones
-        with open(path, encoding="utf-8") as f:
-            for r in csv.DictReader(f):
-                names[r["state"]] = r["state_name"]
-                cell[(r["state"], int(r["year"]))] = {c: float(v) for c, v in r.items() if c not in ("state", "state_name", "year") and v != ""}
-    have = {y for _, y in cell}
-
-    def grab(url):
-        rows = J(url, tries=2)
-        return [dict(zip(rows[0], r)) for r in rows[1:]]
-
-    def val(x):
-        try:
-            v = float(x)
-            return v if v >= 0 else None                    # the Census Bureau writes large negative numbers for "not available"
-        except (TypeError, ValueError):
-            return None
-    for y in range(2010, THIS_YEAR):
-        if y in have and y < THIS_YEAR - 3:
-            continue
-        base = f"https://api.census.gov/data/{y}/acs/acs1?for=state:*&get=NAME,"
-        try:
-            for r in grab(base + ",".join(c for c, _ in ACS)):
-                st = USPS.get(r["state"])
-                if not st:
-                    continue
-                names[st] = r["NAME"]
-                for code, col in ACS:
-                    if val(r[code]) is not None:
-                        cell.setdefault((st, y), {})[col] = val(r[code])
-        except Exception as e:
-            print(f"  census acs {y}: {str(e)[:70]}")
-            continue
-        for codes, col, share in ACS_SHARES:
-            try:
-                for r in grab(base + codes):
-                    v = [val(r[c]) for c in codes.split(",")]
-                    if USPS.get(r["state"]) and None not in v and v[-1]:
-                        cell.setdefault((USPS[r["state"]], y), {})[col] = round(share(v), 2)
-            except Exception as e:
-                print(f"  census acs {y} {col}: {str(e)[:60]}")
-            time.sleep(0.3)
-        for vintage in ("NAICS2022", "NAICS2017", "NAICS2012"):   # businesses, from County Business Patterns; the industry list is renamed every five years
-            try:
-                for r in grab(f"https://api.census.gov/data/{y}/cbp?get=ESTAB,EMP,PAYANN&for=state:*&{vintage}=00"):
-                    st = USPS.get(r["state"])
-                    if st and val(r["ESTAB"]):
-                        cell.setdefault((st, y), {}).update({k: v for k, v in (("business_establishments", val(r["ESTAB"])), ("employees_at_businesses", val(r["EMP"])),
-                                                                             ("annual_payroll", val(r["PAYANN"]) * 1000 if val(r["PAYANN"]) is not None else None)) if v is not None})
-                break
-            except Exception:
-                time.sleep(0.2)
-        time.sleep(0.3)
-    cols = [c for _, c in ACS] + [c for _, c, _ in ACS_SHARES] + ["business_establishments", "employees_at_businesses", "annual_payroll"]
-    cols = [c for c in cols if any(c in v for v in cell.values())]
-    S = "US Census Bureau, American Community Survey, 1-year estimates"
-    meta = dict(population=dict(title="Population of the state", unit="people", description=S + ", table B01003."),
-                median_household_income=dict(title="Median household income", unit="US$ a year, in that year's dollars", description=S + ", table B19013. Not adjusted for inflation."),
-                median_age=dict(title="Median age", unit="years", description=S + ", table B01002."),
-                median_home_value=dict(title="Median value of owner-occupied homes", unit="US$", description=S + ", table B25077."),
-                median_rent=dict(title="Median monthly rent, with utilities", unit="US$ a month", description=S + ", table B25064 (gross rent)."),
-                poverty_rate=dict(title="People living below the poverty line", unit="% of people", description=S + ", table B17001."),
-                adults_with_a_degree=dict(title="Adults aged 25 and over with a bachelor's degree or higher", unit="% of adults 25 and over", description=S + ", table B15003."),
-                unemployment_rate=dict(title="Unemployment rate (survey-based)", unit="% of the civilian labour force", description=S + ", table B23025. This differs slightly from the official monthly rate."),
-                business_establishments=dict(title="Business establishments", unit="establishments", description="US Census Bureau, County Business Patterns: places of business with paid employees."),
-                employees_at_businesses=dict(title="Employees at those businesses", unit="people", description="US Census Bureau, County Business Patterns: employees in the pay period including March 12."),
-                annual_payroll=dict(title="Annual payroll of those businesses", unit="US$", description="US Census Bureau, County Business Patterns."))
-    rows = [[st, names.get(st, st), y] + [num(v.get(c)) for c in cols] for (st, y), v in sorted(cell.items())]
-    assert len(rows) >= 200 and len({r[2] for r in rows}) >= 5, f"{id}: only {len(rows)} rows"
-    return table(id, "US states: people, income, housing and business", "Every US state, the District of Columbia and Puerto Rico, year by year: population, income, age, home values, rent, poverty, education, unemployment and businesses.",
-                 "US", "People and society", "US Census Bureau, American Community Survey and County Business Patterns", "https://www.census.gov/data/developers/data-sets.html", PD,
-                 ["state", "year"], "year", "year", dict(col="state", label_col="state_name", label="State"), ["state", "state_name", "year"] + cols, rows, meta)
-
-
 # ---------- US National Institutes of Health: research projects funded each year ----------
 def nih():
     def count(y, c):
@@ -1319,7 +1234,7 @@ def nih():
 
 BUILDERS = [(lambda s=s: wb_set(s[0], s[1], s[2], s[3], s[4], s[5], **s[6])) for s in WB_SETS] + [(lambda s=s: owid_charts(*s)) for s in OWID_SETS] + [
     imf, un_population, undp, who, pwt, us_monthly, us_quarterly, us_daily, us_debt, us_climate, wikipedia, research, gbif, github_activity,
-    federal_register, fda, clinical_trials, fema, fdic, flu, chicago, nyc, us_spending, census_states, nih,
+    federal_register, fda, clinical_trials, fema, fdic, flu, chicago, nyc, us_spending, nih,
 ]
 NAMES = [s[0] for s in WB_SETS] + [s[0] for s in OWID_SETS] + ["imf", "un_population", "undp", "who", "pwt", "us_monthly", "us_quarterly", "us_daily", "us_debt", "us_climate", "wikipedia", "research", "gbif",
-                                    "github_activity", "federal_register", "fda", "clinical_trials", "fema", "fdic", "flu", "chicago", "nyc", "us_spending", "census_states", "nih"]
+                                    "github_activity", "federal_register", "fda", "clinical_trials", "fema", "fdic", "flu", "chicago", "nyc", "us_spending", "nih"]

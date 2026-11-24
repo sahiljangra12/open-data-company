@@ -1,11 +1,14 @@
 /* Researcher mode. Needs core.js (helpers, loader, picker) and stats.js (validated statistics).
    Flow: state -> plan() looks at the data and recommends a method with reasons -> run() -> render(). */
-const FAMILIES = new Set(["code+year", "month", "date", "zone+year"]);            // datasets this page can analyse, by key columns
+/* Datasets this page can analyse: tables by country and year (or zone and year), and series with one row for each date.
+   Variables can be combined when their datasets share a family: the same keys, or series published at the same pace. */
+const stepOf = d => d.step || (d.keys[0] === "month" ? "month" : "day");
+const usable = d => (!!d.entity && ["code+year", "zone+year"].includes(d.keys.join("+"))) || (!d.entity && d.keys.length === 1 && d.keys[0] === d.time.col);
 const WB_TOTALS = new Set("AFE AFW ARB CEB CSS EAP EAR EAS ECA ECS EMU EUU FCS HIC HPC IBD IBT IDA IDB IDX INX LAC LCN LDC LIC LMC LMY LTE MEA MIC MNA NAC OED OSS PRE PSS PST SAS SSA SSF SST TEA TEC TLA TMN TSA TSS UMC WLD".split(" "));
 let M = [], V = new Map(), C = null, P = {}, plan = null, result = null, ticket = 0, timer = 0;
 const st = { kind: "rel", y: new Set(), x: new Set(), c: new Set(), places: new Set(), only: true, from: "", to: "", yearly: true,
   groupby: "", a: new Set(), b: new Set(), pa: ["", ""], pb: ["", ""], method: "", logY: null, logX: null };
-const fam = d => d.keys.join("+"), one = s => [...s][0], vm = id => V.get(id);
+const fam = d => (d.entity ? d.keys.join("+") : "t:" + stepOf(d)), one = s => [...s][0], vm = id => V.get(id);
 const isReal = code => C ? code in C : /^[A-Z]{3}$/.test(code) && !WB_TOTALS.has(code);
 const num = (v, d = 3) => { if (!isFinite(v)) return "–"; const a = Math.abs(v); return a >= 1e9 ? `${+(v / 1e9).toPrecision(3)} billion` : a >= 1e6 ? `${+(v / 1e6).toPrecision(3)} million` : a >= 1000 ? Math.round(v).toLocaleString("en-US") : String(+v.toPrecision(d)); };
 const pv = p => p < 0.001 ? "p < 0.001" : `p = ${p.toFixed(3)}`;
@@ -21,9 +24,10 @@ async function assemble(ids, o) {
   const datas = await Promise.all(metas.map(m => load(m.d))), rows = new Map();
   metas.forEach((m, j) => {
     const D = datas[j], d = m.d, T = D.c[d.time.col], E = ent ? D.c[d.entity.col] : null, L = ent ? D.c[d.entity.label_col] : null, X = D.c[m.c.name];
+    const open = d.partial ? String(new Date().getUTCFullYear()) : null;                 // a count for the year in progress would read as a collapse
     for (let i = 0; i < D.n; i++) {
       const v = X[i]; if (isNaN(v)) continue;
-      let t = T[i];
+      let t = T[i]; if (open && String(t).slice(0, 4) >= open) continue;
       if (yr) { if ((o.from !== "" && t < +o.from) || (o.to !== "" && t > +o.to)) continue; }
       else { t = t.slice(0, 10); if ((o.from && t < o.from) || (o.to && t > o.to)) continue; }
       const code = ent ? E[i] : "";
@@ -35,7 +39,7 @@ async function assemble(ids, o) {
   });
   let list = [...rows.values()];
   if (!yr && o.yearly) {                                        // monthly or daily series -> yearly means, complete-enough years only
-    const need = F === "month" ? 9 : 150, by = new Map();
+    const need = { "t:month": 9, "t:quarter": 3, "t:week": 40, "t:year": 1 }[F] || 150, by = new Map();
     list.forEach(r => { const y = r.t.slice(0, 4); let g = by.get(y); if (!g) by.set(y, g = { s: new Float64Array(ids.length), n: new Int32Array(ids.length) }); r.v.forEach((v, j) => { if (!isNaN(v)) { g.s[j] += v; g.n[j]++; } }); });
     list = [...by].map(([y, g]) => ({ e: "", label: "", t: +y, v: Float64Array.from(g.s, (s, j) => (g.n[j] >= need ? s / g.n[j] : NaN)) }));
   } else if (!yr) list.forEach(r => { r.date = r.t; r.t = 1970 + Date.parse(r.t) / 31557600000; });
@@ -515,7 +519,7 @@ function applyExample(e) {
 (async () => {
   const get = u => fetch(u).then(r => { if (!r.ok) throw new Error(u); return r.json(); });
   const [sets, countries] = await Promise.all([get("data/datasets.json"), get("data/countries.json").catch(() => null)]);
-  M = sets.datasets.filter(d => FAMILIES.has(fam(d))); C = countries && countries.countries;
+  M = sets.datasets.filter(usable); C = countries && countries.countries;
   M.forEach(d => d.columns.filter(c => c.type === "num").forEach(c => V.set(`${d.id}::${c.name}`, { id: `${d.id}::${c.name}`, d, c })));
   EXAMPLES.forEach(([label, e]) => { if (!V.has(e.y) || (e.x && !V.has(e.x)) || (e.groupby === "income" && !C)) return; const b = el("button", "", label); b.type = "button"; b.onclick = () => applyExample(e); $("#examples").append(b); });
   $("#kind").onclick = e => { const b = e.target.closest("button"); if (!b) return; st.kind = b.dataset.k; st.method = ""; if (st.kind === "trend" && st.places.size > 8) st.places.clear(); syncControls(); schedule(); };

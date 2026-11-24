@@ -1,5 +1,23 @@
 {
  "count": 136,
+ "tally": {
+  "live": 27,
+  "via": 23,
+  "key": 29,
+  "images": 7,
+  "bulk": 12,
+  "terms": 2,
+  "later": 36
+ },
+ "labels": {
+  "live": "On the site",
+  "via": "On the site, through another publisher",
+  "key": "Needs a free key",
+  "images": "Satellite images",
+  "bulk": "Too large to host",
+  "terms": "Licence does not allow it",
+  "later": "Not loaded yet"
+ },
  "sources": [
   {
    "name": "data.gov",
@@ -10,7 +28,11 @@
    "commercial": "check",
    "update": "varies",
    "api": true,
-   "buyers": "Analysts, civic tech"
+   "buyers": "Analysts, civic tech",
+   "status": "key",
+   "status_label": "Needs a free key",
+   "datasets": [],
+   "note": "Its catalog search now asks for a key."
   },
   {
    "name": "Maryland Open Data",
@@ -21,7 +43,11 @@
    "commercial": "check",
    "update": "varies",
    "api": true,
-   "buyers": "State contractors, nonprofits"
+   "buyers": "State contractors, nonprofits",
+   "status": "later",
+   "status_label": "Not loaded yet",
+   "datasets": [],
+   "note": "A catalog of many tables; single tables are added one at a time."
   },
   {
    "name": "Open Baltimore",
@@ -32,7 +58,11 @@
    "commercial": "check",
    "update": "varies",
    "api": true,
-   "buyers": "City agencies, nonprofits, real estate"
+   "buyers": "City agencies, nonprofits, real estate",
+   "status": "later",
+   "status_label": "Not loaded yet",
+   "datasets": [],
+   "note": "A catalog of many tables; single tables are added one at a time."
   },
   {
    "name": "NYC Open Data",
@@ -43,7 +73,16 @@
    "commercial": "check",
    "update": "daily",
    "api": true,
-   "buyers": "Real estate, civic tech, media"
+   "buyers": "Real estate, civic tech, media",
+   "status": "live",
+   "status_label": "On the site",
+   "datasets": [
+    {
+     "id": "nyc-traffic-crashes-monthly",
+     "title": "New York City: traffic crashes, injuries and deaths by month"
+    }
+   ],
+   "note": "Motor vehicle crashes, by month."
   },
   {
    "name": "Chicago Data Portal",
@@ -54,7 +93,16 @@
    "commercial": "check",
    "update": "daily",
    "api": true,
-   "buyers": "Real estate, civic tech, media"
+   "buyers": "Real estate, civic tech, media",
+   "status": "live",
+   "status_label": "On the site",
+   "datasets": [
+    {
+     "id": "chicago-crime-monthly",
+     "title": "Chicago: reported crime by month and type"
+    }
+   ],
+   "note": "Reported crimes, by month."
   },
   {
    "name": "FRED (St. Louis Fed)",
@@ -65,7 +113,24 @@
    "commercial": "check",
    "update": "daily",
    "api": true,
-   "buyers": "Finance, economists, consultants"
+   "buyers": "Finance, economists, consultants",
+   "status": "live",
+   "status_label": "On the site",
+   "datasets": [
+    {
+     "id": "us-economy-monthly",
+     "title": "US economy, monthly: jobs, prices, rates, spending, housing"
+    },
+    {
+     "id": "us-economy-quarterly",
+     "title": "US economy, quarterly: GDP, debt, profits, home prices"
+    },
+    {
+     "id": "us-rates-and-currencies-daily",
+     "title": "US interest rates and exchange rates, daily"
+    }
+   ],
+   "note": "Fifty of its most-used series."
   },
   {
    "name": "Bureau of Economic Analysis",
@@ -76,7 +141,20 @@
    "commercial": "yes",
    "update": "monthly",
    "api": true,
-   "buyers": "Economists, site selection, finance"
+   "buyers": "Economists, site selection, finance",
+   "status": "via",
+   "status_label": "On the site, through another publisher",
+   "datasets": [
+    {
+     "id": "us-economy-quarterly",
+     "title": "US economy, quarterly: GDP, debt, profits, home prices"
+    },
+    {
+     "id": "us-economy-monthly",
+     "title": "US economy, monthly: jobs, prices, rates, spending, housing"
+    }
+   ],
+   "note": "GDP, income and spending, through FRED."
   },
   {
    "name": "Bureau of Labor Statistics",
@@ -87,7 +165,16 @@
    "commercial": "yes",
    "update": "monthly",
    "api": true,
-   "buyers": "HR, compensation, economists"
+   "buyers": "HR, compensation, economists",
+   "status": "via",
+   "status_label": "On the site, through another publisher",
+   "datasets": [
+    {
+     "id": "us-economy-monthly",
+     "title": "US economy, monthly: jobs, prices, rates, spending, housing"
+    }
+   ],
+   "note": "Jobs, unemployment, wages and prices, through FRED."
   },
   {
    "name": "Treasury Fiscal Data",
@@ -98,7 +185,16 @@
    "commercial": "yes",
    "update": "daily",
    "api": true,
-   "buyers": "Finance, policy analysts"
+   "buyers": "Finance, policy analysts",
+   "status": "live",
+   "status_label": "On the site",
+   "datasets": [
+    {
+     "id": "us-national-debt",
+     "title": "US national debt, daily"
+    }
+   ],
+   "note": "Debt to the penny, every business day."
   },
   {
    "name": "USAspending",
@@ -109,7 +205,16 @@
    "commercial": "yes",
    "update": "daily",
    "api": true,
-   "buyers": "Government contractors, lobbyists"
+   "buyers": "Government contractors, lobbyists",
+   "status": "live",
+   "status_label": "On the site",
+   "datasets": [
+    {
+     "id": "us-federal-spending-by-agency",
+     "title": "US federal spending by agency, this fiscal year"
+    }
+   ],
+   "note": "Budget, obligations and outlays by agency."
   },
   {
    "name": "SAM.gov contract opportunities",
@@ -120,7 +225,11 @@
    "commercial": "yes",
    "update": "daily",
    "api": true,
-   "buyers": "Government contractors"
+   "buyers": "Government contractors",
+   "status": "key",
+   "status_label": "Needs a free key",
+   "datasets": [],
+   "note": "Free, but the source asks for a key or account that only the site's owner can create."
   },
   {
    "name": "Census American Community Survey",
@@ -131,7 +240,11 @@
    "commercial": "yes",
    "update": "annual",
    "api": true,
-   "buyers": "Retail, real estate, marketing"
+   "buyers": "Retail, real estate, marketing",
+   "status": "key",
+   "status_label": "Needs a free key",
+   "datasets": [],
+   "note": "The Census service turned away this site's requests without a key."
   },
   {
    "name": "Census County Business Patterns",
@@ -142,7 +255,11 @@
    "commercial": "yes",
    "update": "annual",
    "api": true,
-   "buyers": "Site selection, market sizing"
+   "buyers": "Site selection, market sizing",
+   "status": "key",
+   "status_label": "Needs a free key",
+   "datasets": [],
+   "note": "The Census service turned away this site's requests without a key."
   },
   {
    "name": "Census Building Permits Survey",
@@ -153,7 +270,16 @@
    "commercial": "yes",
    "update": "monthly",
    "api": false,
-   "buyers": "Home builders, suppliers, lenders"
+   "buyers": "Home builders, suppliers, lenders",
+   "status": "via",
+   "status_label": "On the site, through another publisher",
+   "datasets": [
+    {
+     "id": "us-economy-monthly",
+     "title": "US economy, monthly: jobs, prices, rates, spending, housing"
+    }
+   ],
+   "note": "National permits and housing starts, through FRED."
   },
   {
    "name": "HUD User datasets",
@@ -164,7 +290,11 @@
    "commercial": "yes",
    "update": "annual",
    "api": true,
-   "buyers": "Landlords, housing nonprofits"
+   "buyers": "Landlords, housing nonprofits",
+   "status": "key",
+   "status_label": "Needs a free key",
+   "datasets": [],
+   "note": "Free, but the source asks for a key or account that only the site's owner can create."
   },
   {
    "name": "FHFA House Price Index",
@@ -175,7 +305,20 @@
    "commercial": "yes",
    "update": "quarterly",
    "api": false,
-   "buyers": "Lenders, real estate investors"
+   "buyers": "Lenders, real estate investors",
+   "status": "via",
+   "status_label": "On the site, through another publisher",
+   "datasets": [
+    {
+     "id": "us-economy-monthly",
+     "title": "US economy, monthly: jobs, prices, rates, spending, housing"
+    },
+    {
+     "id": "us-economy-quarterly",
+     "title": "US economy, quarterly: GDP, debt, profits, home prices"
+    }
+   ],
+   "note": "The national indexes, through FRED."
   },
   {
    "name": "HMDA mortgage records",
@@ -186,7 +329,11 @@
    "commercial": "yes",
    "update": "annual",
    "api": true,
-   "buyers": "Lenders, fair-lending compliance"
+   "buyers": "Lenders, fair-lending compliance",
+   "status": "bulk",
+   "status_label": "Too large to host",
+   "datasets": [],
+   "note": "Published as whole-archive downloads far larger than a free static site can hold or refresh."
   },
   {
    "name": "SEC EDGAR",
@@ -197,7 +344,11 @@
    "commercial": "yes",
    "update": "realtime",
    "api": true,
-   "buyers": "Investors, competitive intelligence"
+   "buyers": "Investors, competitive intelligence",
+   "status": "later",
+   "status_label": "Not loaded yet",
+   "datasets": [],
+   "note": "Company filings rather than one table."
   },
   {
    "name": "FDIC BankFind",
@@ -208,7 +359,20 @@
    "commercial": "yes",
    "update": "quarterly",
    "api": true,
-   "buyers": "Banks, fintech, investors"
+   "buyers": "Banks, fintech, investors",
+   "status": "live",
+   "status_label": "On the site",
+   "datasets": [
+    {
+     "id": "us-bank-failures",
+     "title": "US bank failures by year"
+    },
+    {
+     "id": "us-bank-failures-list",
+     "title": "Every US bank failure since 1934"
+    }
+   ],
+   "note": "Every bank failure since 1934."
   },
   {
    "name": "CFPB Consumer Complaints",
@@ -219,7 +383,11 @@
    "commercial": "yes",
    "update": "daily",
    "api": true,
-   "buyers": "Banks, compliance, law firms"
+   "buyers": "Banks, compliance, law firms",
+   "status": "later",
+   "status_label": "Not loaded yet",
+   "datasets": [],
+   "note": "Open to load; its loader has not been written yet."
   },
   {
    "name": "SBA loan data",
@@ -230,7 +398,11 @@
    "commercial": "yes",
    "update": "quarterly",
    "api": false,
-   "buyers": "Lenders, B2B sales teams"
+   "buyers": "Lenders, B2B sales teams",
+   "status": "bulk",
+   "status_label": "Too large to host",
+   "datasets": [],
+   "note": "Published as whole-archive downloads far larger than a free static site can hold or refresh."
   },
   {
    "name": "USPTO patents and trademarks",
@@ -241,7 +413,11 @@
    "commercial": "yes",
    "update": "weekly",
    "api": true,
-   "buyers": "IP law firms, R&D strategy"
+   "buyers": "IP law firms, R&D strategy",
+   "status": "key",
+   "status_label": "Needs a free key",
+   "datasets": [],
+   "note": "Free, but the source asks for a key or account that only the site's owner can create."
   },
   {
    "name": "EIA Open Data",
@@ -252,7 +428,24 @@
    "commercial": "yes",
    "update": "realtime",
    "api": true,
-   "buyers": "Energy consultants, developers, traders"
+   "buyers": "Energy consultants, developers, traders",
+   "status": "via",
+   "status_label": "On the site, through another publisher",
+   "datasets": [
+    {
+     "id": "crude-oil-prices",
+     "title": "Crude oil benchmark prices, daily"
+    },
+    {
+     "id": "natural-gas-prices",
+     "title": "Natural gas spot price, daily"
+    },
+    {
+     "id": "energy",
+     "title": "Energy production, consumption and electricity mix"
+    }
+   ],
+   "note": "Oil and gas prices through DataHub. EIA's own feed needs a free key."
   },
   {
    "name": "FERC eLibrary and forms",
@@ -263,7 +456,11 @@
    "commercial": "yes",
    "update": "daily",
    "api": false,
-   "buyers": "Energy lawyers, developers"
+   "buyers": "Energy lawyers, developers",
+   "status": "later",
+   "status_label": "Not loaded yet",
+   "datasets": [],
+   "note": "Documents and forms rather than one table."
   },
   {
    "name": "NREL data (NSRDB, ATB)",
@@ -274,7 +471,11 @@
    "commercial": "check",
    "update": "annual",
    "api": true,
-   "buyers": "Solar and wind developers"
+   "buyers": "Solar and wind developers",
+   "status": "key",
+   "status_label": "Needs a free key",
+   "datasets": [],
+   "note": "Free, but the source asks for a key or account that only the site's owner can create."
   },
   {
    "name": "PJM Data Miner",
@@ -285,7 +486,16 @@
    "commercial": "check",
    "update": "realtime",
    "api": true,
-   "buyers": "Traders, developers, consultants"
+   "buyers": "Traders, developers, consultants",
+   "status": "live",
+   "status_label": "On the site",
+   "datasets": [
+    {
+     "id": "pjm-summer-peak-forecasts",
+     "title": "PJM summer peak load: forecasts and actuals by zone"
+    }
+   ],
+   "note": "PJM's published load forecast tables. The Data Miner feed itself needs an account."
   },
   {
    "name": "ERCOT data",
@@ -296,7 +506,11 @@
    "commercial": "check",
    "update": "realtime",
    "api": true,
-   "buyers": "Traders, developers, consultants"
+   "buyers": "Traders, developers, consultants",
+   "status": "later",
+   "status_label": "Not loaded yet",
+   "datasets": [],
+   "note": "Open to load; its loader has not been written yet."
   },
   {
    "name": "CAISO OASIS",
@@ -307,7 +521,11 @@
    "commercial": "check",
    "update": "realtime",
    "api": true,
-   "buyers": "Traders, storage developers"
+   "buyers": "Traders, storage developers",
+   "status": "later",
+   "status_label": "Not loaded yet",
+   "datasets": [],
+   "note": "Open to load; its loader has not been written yet."
   },
   {
    "name": "MISO market data",
@@ -318,7 +536,11 @@
    "commercial": "check",
    "update": "realtime",
    "api": true,
-   "buyers": "Traders, developers"
+   "buyers": "Traders, developers",
+   "status": "later",
+   "status_label": "Not loaded yet",
+   "datasets": [],
+   "note": "Open to load; its loader has not been written yet."
   },
   {
    "name": "NYISO market data",
@@ -329,7 +551,11 @@
    "commercial": "check",
    "update": "realtime",
    "api": true,
-   "buyers": "Traders, developers"
+   "buyers": "Traders, developers",
+   "status": "later",
+   "status_label": "Not loaded yet",
+   "datasets": [],
+   "note": "Open to load; its loader has not been written yet."
   },
   {
    "name": "ISO New England data",
@@ -340,7 +566,11 @@
    "commercial": "check",
    "update": "realtime",
    "api": true,
-   "buyers": "Traders, developers"
+   "buyers": "Traders, developers",
+   "status": "later",
+   "status_label": "Not loaded yet",
+   "datasets": [],
+   "note": "Open to load; its loader has not been written yet."
   },
   {
    "name": "SPP data",
@@ -351,7 +581,11 @@
    "commercial": "check",
    "update": "realtime",
    "api": false,
-   "buyers": "Traders, wind developers"
+   "buyers": "Traders, wind developers",
+   "status": "later",
+   "status_label": "Not loaded yet",
+   "datasets": [],
+   "note": "Open to load; its loader has not been written yet."
   },
   {
    "name": "LBNL interconnection queues",
@@ -362,7 +596,11 @@
    "commercial": "check",
    "update": "annual",
    "api": false,
-   "buyers": "Developers, investors"
+   "buyers": "Developers, investors",
+   "status": "later",
+   "status_label": "Not loaded yet",
+   "datasets": [],
+   "note": "Open to load; its loader has not been written yet."
   },
   {
    "name": "EPA Air Quality System",
@@ -373,7 +611,11 @@
    "commercial": "yes",
    "update": "daily",
    "api": true,
-   "buyers": "Health researchers, insurers"
+   "buyers": "Health researchers, insurers",
+   "status": "key",
+   "status_label": "Needs a free key",
+   "datasets": [],
+   "note": "Free, but the source asks for a key or account that only the site's owner can create."
   },
   {
    "name": "EPA Toxics Release Inventory",
@@ -384,7 +626,11 @@
    "commercial": "yes",
    "update": "annual",
    "api": true,
-   "buyers": "ESG analysts, law firms, real estate"
+   "buyers": "ESG analysts, law firms, real estate",
+   "status": "later",
+   "status_label": "Not loaded yet",
+   "datasets": [],
+   "note": "Open to load; its loader has not been written yet."
   },
   {
    "name": "EPA Greenhouse Gas Reporting",
@@ -395,7 +641,11 @@
    "commercial": "yes",
    "update": "annual",
    "api": true,
-   "buyers": "ESG analysts, carbon markets"
+   "buyers": "ESG analysts, carbon markets",
+   "status": "later",
+   "status_label": "Not loaded yet",
+   "datasets": [],
+   "note": "Open to load; its loader has not been written yet."
   },
   {
    "name": "EPA ECHO compliance",
@@ -406,7 +656,11 @@
    "commercial": "yes",
    "update": "weekly",
    "api": true,
-   "buyers": "Environmental due diligence, law firms"
+   "buyers": "Environmental due diligence, law firms",
+   "status": "later",
+   "status_label": "Not loaded yet",
+   "datasets": [],
+   "note": "Open to load; its loader has not been written yet."
   },
   {
    "name": "NOAA climate and weather (NCEI)",
@@ -417,7 +671,20 @@
    "commercial": "yes",
    "update": "daily",
    "api": true,
-   "buyers": "Insurers, agriculture, energy"
+   "buyers": "Insurers, agriculture, energy",
+   "status": "live",
+   "status_label": "On the site",
+   "datasets": [
+    {
+     "id": "us-climate-monthly",
+     "title": "United States temperature and rainfall, monthly since 1895"
+    },
+    {
+     "id": "global-temperature",
+     "title": "Global temperature, monthly"
+    }
+   ],
+   "note": "US monthly temperature and precipitation, and the global record."
   },
   {
    "name": "NOAA Storm Events",
@@ -428,7 +695,11 @@
    "commercial": "yes",
    "update": "monthly",
    "api": false,
-   "buyers": "Insurers, roofing and restoration"
+   "buyers": "Insurers, roofing and restoration",
+   "status": "bulk",
+   "status_label": "Too large to host",
+   "datasets": [],
+   "note": "Published as whole-archive downloads far larger than a free static site can hold or refresh."
   },
   {
    "name": "USGS Water Data",
@@ -439,7 +710,11 @@
    "commercial": "yes",
    "update": "realtime",
    "api": true,
-   "buyers": "Utilities, engineering firms"
+   "buyers": "Utilities, engineering firms",
+   "status": "later",
+   "status_label": "Not loaded yet",
+   "datasets": [],
+   "note": "Open to load; its loader has not been written yet."
   },
   {
    "name": "USGS Earthquake Catalog",
@@ -450,7 +725,16 @@
    "commercial": "yes",
    "update": "realtime",
    "api": true,
-   "buyers": "Insurers, engineers"
+   "buyers": "Insurers, engineers",
+   "status": "live",
+   "status_label": "On the site",
+   "datasets": [
+    {
+     "id": "earthquakes-past-30-days",
+     "title": "Earthquakes, past 30 days"
+    }
+   ],
+   "note": "Also live on the home page globe."
   },
   {
    "name": "OpenFEMA",
@@ -461,7 +745,20 @@
    "commercial": "yes",
    "update": "daily",
    "api": true,
-   "buyers": "Insurers, real estate, emergency planners"
+   "buyers": "Insurers, real estate, emergency planners",
+   "status": "live",
+   "status_label": "On the site",
+   "datasets": [
+    {
+     "id": "us-disaster-declarations",
+     "title": "US disaster declarations by year and cause"
+    },
+    {
+     "id": "us-disaster-declarations-list",
+     "title": "Every US disaster declaration since 1953"
+    }
+   ],
+   "note": "Every federal disaster declaration since 1953."
   },
   {
    "name": "NASA Earthdata",
@@ -472,7 +769,16 @@
    "commercial": "yes",
    "update": "daily",
    "api": true,
-   "buyers": "Agriculture, climate risk, insurers"
+   "buyers": "Agriculture, climate risk, insurers",
+   "status": "key",
+   "status_label": "Needs a free key",
+   "datasets": [
+    {
+     "id": "global-temperature",
+     "title": "Global temperature, monthly"
+    }
+   ],
+   "note": "Needs a NASA login. NASA's global temperature record is on the site from another NASA file."
   },
   {
    "name": "CDC WONDER",
@@ -483,7 +789,16 @@
    "commercial": "check",
    "update": "annual",
    "api": true,
-   "buyers": "Public health, pharma"
+   "buyers": "Public health, pharma",
+   "status": "later",
+   "status_label": "Not loaded yet",
+   "datasets": [
+    {
+     "id": "us-flu-hospital-admissions",
+     "title": "US flu hospital admissions, weekly, by state"
+    }
+   ],
+   "note": "Its query service limits automatic use. A different CDC feed, weekly flu hospital admissions, is on the site."
   },
   {
    "name": "CDC PLACES",
@@ -494,7 +809,11 @@
    "commercial": "yes",
    "update": "annual",
    "api": true,
-   "buyers": "Hospitals, health nonprofits, insurers"
+   "buyers": "Hospitals, health nonprofits, insurers",
+   "status": "later",
+   "status_label": "Not loaded yet",
+   "datasets": [],
+   "note": "Open to load; its loader has not been written yet."
   },
   {
    "name": "CMS data (Medicare, hospitals)",
@@ -505,7 +824,11 @@
    "commercial": "yes",
    "update": "quarterly",
    "api": true,
-   "buyers": "Hospitals, health consultants, pharma"
+   "buyers": "Hospitals, health consultants, pharma",
+   "status": "later",
+   "status_label": "Not loaded yet",
+   "datasets": [],
+   "note": "Open to load; its loader has not been written yet."
   },
   {
    "name": "Hospital price transparency files",
@@ -516,7 +839,11 @@
    "commercial": "check",
    "update": "annual",
    "api": false,
-   "buyers": "Employers, insurers, health startups"
+   "buyers": "Employers, insurers, health startups",
+   "status": "bulk",
+   "status_label": "Too large to host",
+   "datasets": [],
+   "note": "Published as whole-archive downloads far larger than a free static site can hold or refresh."
   },
   {
    "name": "openFDA",
@@ -527,7 +854,16 @@
    "commercial": "yes",
    "update": "weekly",
    "api": true,
-   "buyers": "Pharma, medical devices, law firms"
+   "buyers": "Pharma, medical devices, law firms",
+   "status": "live",
+   "status_label": "On the site",
+   "datasets": [
+    {
+     "id": "us-fda-reports",
+     "title": "US drug and device safety reports and recalls, monthly"
+    }
+   ],
+   "note": "Side-effect reports and recalls, by month."
   },
   {
    "name": "ClinicalTrials.gov",
@@ -538,7 +874,16 @@
    "commercial": "yes",
    "update": "daily",
    "api": true,
-   "buyers": "Pharma, biotech investors"
+   "buyers": "Pharma, biotech investors",
+   "status": "live",
+   "status_label": "On the site",
+   "datasets": [
+    {
+     "id": "clinical-trials-started",
+     "title": "Clinical trials started each year"
+    }
+   ],
+   "note": "Studies started each year."
   },
   {
    "name": "NIH RePORTER",
@@ -549,7 +894,11 @@
    "commercial": "yes",
    "update": "weekly",
    "api": true,
-   "buyers": "Universities, biotech, grant consultants"
+   "buyers": "Universities, biotech, grant consultants",
+   "status": "later",
+   "status_label": "Not loaded yet",
+   "datasets": [],
+   "note": "Its loader is written but has not delivered data yet."
   },
   {
    "name": "USDA NASS Quick Stats",
@@ -560,7 +909,11 @@
    "commercial": "yes",
    "update": "weekly",
    "api": true,
-   "buyers": "Agribusiness, commodity traders"
+   "buyers": "Agribusiness, commodity traders",
+   "status": "key",
+   "status_label": "Needs a free key",
+   "datasets": [],
+   "note": "Free, but the source asks for a key or account that only the site's owner can create."
   },
   {
    "name": "USDA Economic Research Service",
@@ -571,7 +924,11 @@
    "commercial": "yes",
    "update": "monthly",
    "api": false,
-   "buyers": "Food companies, retailers"
+   "buyers": "Food companies, retailers",
+   "status": "later",
+   "status_label": "Not loaded yet",
+   "datasets": [],
+   "note": "Open to load; its loader has not been written yet."
   },
   {
    "name": "USDA FoodData Central",
@@ -582,7 +939,11 @@
    "commercial": "yes",
    "update": "quarterly",
    "api": true,
-   "buyers": "Food and nutrition apps"
+   "buyers": "Food and nutrition apps",
+   "status": "key",
+   "status_label": "Needs a free key",
+   "datasets": [],
+   "note": "Free, but the source asks for a key or account that only the site's owner can create."
   },
   {
    "name": "USDA Cropland Data Layer",
@@ -593,7 +954,11 @@
    "commercial": "yes",
    "update": "annual",
    "api": false,
-   "buyers": "Agribusiness, crop insurers"
+   "buyers": "Agribusiness, crop insurers",
+   "status": "images",
+   "status_label": "Satellite images",
+   "datasets": [],
+   "note": "Satellite pictures or map layers rather than tables. They need a mapping tool, not a table of numbers."
   },
   {
    "name": "BTS airline on-time data",
@@ -604,7 +969,11 @@
    "commercial": "yes",
    "update": "monthly",
    "api": false,
-   "buyers": "Travel companies, airports"
+   "buyers": "Travel companies, airports",
+   "status": "bulk",
+   "status_label": "Too large to host",
+   "datasets": [],
+   "note": "Published as whole-archive downloads far larger than a free static site can hold or refresh."
   },
   {
    "name": "NHTSA crashes and recalls",
@@ -615,7 +984,11 @@
    "commercial": "yes",
    "update": "daily",
    "api": true,
-   "buyers": "Auto insurers, law firms, dealers"
+   "buyers": "Auto insurers, law firms, dealers",
+   "status": "later",
+   "status_label": "Not loaded yet",
+   "datasets": [],
+   "note": "Open to load; its loader has not been written yet."
   },
   {
    "name": "FMCSA carrier safety data",
@@ -626,7 +999,11 @@
    "commercial": "yes",
    "update": "monthly",
    "api": true,
-   "buyers": "Freight brokers, insurers"
+   "buyers": "Freight brokers, insurers",
+   "status": "key",
+   "status_label": "Needs a free key",
+   "datasets": [],
+   "note": "Free, but the source asks for a key or account that only the site's owner can create."
   },
   {
    "name": "National Transit Database",
@@ -637,7 +1014,11 @@
    "commercial": "yes",
    "update": "monthly",
    "api": false,
-   "buyers": "Transit agencies, planners"
+   "buyers": "Transit agencies, planners",
+   "status": "later",
+   "status_label": "Not loaded yet",
+   "datasets": [],
+   "note": "Open to load; its loader has not been written yet."
   },
   {
    "name": "GTFS transit feeds (Mobility Database)",
@@ -648,7 +1029,11 @@
    "commercial": "check",
    "update": "weekly",
    "api": true,
-   "buyers": "Mobility apps, planners"
+   "buyers": "Mobility apps, planners",
+   "status": "later",
+   "status_label": "Not loaded yet",
+   "datasets": [],
+   "note": "Thousands of timetable files rather than one table."
   },
   {
    "name": "NCES and IPEDS",
@@ -659,7 +1044,11 @@
    "commercial": "yes",
    "update": "annual",
    "api": true,
-   "buyers": "Colleges, edtech, enrollment consultants"
+   "buyers": "Colleges, edtech, enrollment consultants",
+   "status": "later",
+   "status_label": "Not loaded yet",
+   "datasets": [],
+   "note": "Open to load; its loader has not been written yet."
   },
   {
    "name": "College Scorecard",
@@ -670,7 +1059,11 @@
    "commercial": "yes",
    "update": "annual",
    "api": true,
-   "buyers": "Edtech, student advisers"
+   "buyers": "Edtech, student advisers",
+   "status": "key",
+   "status_label": "Needs a free key",
+   "datasets": [],
+   "note": "Free, but the source asks for a key or account that only the site's owner can create."
   },
   {
    "name": "O*NET",
@@ -681,7 +1074,11 @@
    "commercial": "yes",
    "update": "quarterly",
    "api": true,
-   "buyers": "HR tech, career platforms"
+   "buyers": "HR tech, career platforms",
+   "status": "key",
+   "status_label": "Needs a free key",
+   "datasets": [],
+   "note": "Free, but the source asks for a key or account that only the site's owner can create."
   },
   {
    "name": "DOL H-1B and PERM disclosures",
@@ -692,7 +1089,11 @@
    "commercial": "yes",
    "update": "quarterly",
    "api": false,
-   "buyers": "Immigration law firms, recruiters, job seekers"
+   "buyers": "Immigration law firms, recruiters, job seekers",
+   "status": "bulk",
+   "status_label": "Too large to host",
+   "datasets": [],
+   "note": "Published as whole-archive downloads far larger than a free static site can hold or refresh."
   },
   {
    "name": "Congress.gov",
@@ -703,7 +1104,11 @@
    "commercial": "yes",
    "update": "daily",
    "api": true,
-   "buyers": "Lobbyists, policy teams"
+   "buyers": "Lobbyists, policy teams",
+   "status": "key",
+   "status_label": "Needs a free key",
+   "datasets": [],
+   "note": "Free, but the source asks for a key or account that only the site's owner can create."
   },
   {
    "name": "Federal Register",
@@ -714,7 +1119,16 @@
    "commercial": "yes",
    "update": "daily",
    "api": true,
-   "buyers": "Compliance teams, trade groups"
+   "buyers": "Compliance teams, trade groups",
+   "status": "live",
+   "status_label": "On the site",
+   "datasets": [
+    {
+     "id": "us-federal-register",
+     "title": "US federal rules and executive orders, by year"
+    }
+   ],
+   "note": "Rules and executive orders, by year."
   },
   {
    "name": "Regulations.gov",
@@ -725,7 +1139,11 @@
    "commercial": "yes",
    "update": "daily",
    "api": true,
-   "buyers": "Compliance teams, law firms"
+   "buyers": "Compliance teams, law firms",
+   "status": "key",
+   "status_label": "Needs a free key",
+   "datasets": [],
+   "note": "Free, but the source asks for a key or account that only the site's owner can create."
   },
   {
    "name": "FEC campaign finance",
@@ -736,7 +1154,11 @@
    "commercial": "check",
    "update": "daily",
    "api": true,
-   "buyers": "Media, political consultants"
+   "buyers": "Media, political consultants",
+   "status": "key",
+   "status_label": "Needs a free key",
+   "datasets": [],
+   "note": "Free, but the source asks for a key or account that only the site's owner can create."
   },
   {
    "name": "FBI Crime Data Explorer",
@@ -747,7 +1169,11 @@
    "commercial": "yes",
    "update": "quarterly",
    "api": true,
-   "buyers": "Real estate, insurers, security firms"
+   "buyers": "Real estate, insurers, security firms",
+   "status": "key",
+   "status_label": "Needs a free key",
+   "datasets": [],
+   "note": "Free, but the source asks for a key or account that only the site's owner can create."
   },
   {
    "name": "CourtListener",
@@ -758,7 +1184,11 @@
    "commercial": "check",
    "update": "daily",
    "api": true,
-   "buyers": "Law firms, legal tech"
+   "buyers": "Law firms, legal tech",
+   "status": "key",
+   "status_label": "Needs a free key",
+   "datasets": [],
+   "note": "Free, but the source asks for a key or account that only the site's owner can create."
   },
   {
    "name": "World Bank Open Data",
@@ -769,7 +1199,52 @@
    "commercial": "yes",
    "update": "quarterly",
    "api": true,
-   "buyers": "Development consultants, investors"
+   "buyers": "Development consultants, investors",
+   "status": "live",
+   "status_label": "On the site",
+   "datasets": [
+    {
+     "id": "world-bank-development",
+     "title": "World development indicators"
+    },
+    {
+     "id": "health-indicators",
+     "title": "Health: spending, disease, mothers and children, causes of death"
+    },
+    {
+     "id": "education-indicators",
+     "title": "Education: enrolment, completion, literacy, teachers and learning"
+    },
+    {
+     "id": "gender-indicators",
+     "title": "Women and men: work, law, management, marriage and money"
+    },
+    {
+     "id": "poverty-and-inequality",
+     "title": "Poverty and inequality: poverty lines, income shares, shared prosperity"
+    },
+    {
+     "id": "environment-indicators",
+     "title": "Environment: protected land and sea, water, threatened species, land"
+    },
+    {
+     "id": "trade-and-finance",
+     "title": "Trade, money and government finance"
+    },
+    {
+     "id": "technology-and-transport",
+     "title": "Technology and transport: broadband, patents, research, flights, ports, rail"
+    },
+    {
+     "id": "labour-indicators",
+     "title": "Work: employment, youth out of work, sectors and kinds of jobs"
+    },
+    {
+     "id": "food-and-agriculture",
+     "title": "Food and farming: yields, production, fisheries, hunger"
+    }
+   ],
+   "note": "About 250 indicators in ten sets."
   },
   {
    "name": "UN Data",
@@ -780,7 +1255,24 @@
    "commercial": "check",
    "update": "varies",
    "api": true,
-   "buyers": "Researchers, NGOs"
+   "buyers": "Researchers, NGOs",
+   "status": "via",
+   "status_label": "On the site, through another publisher",
+   "datasets": [
+    {
+     "id": "un-population",
+     "title": "Population, births, deaths and migration since 1950 (UN)"
+    },
+    {
+     "id": "health-indicators",
+     "title": "Health: spending, disease, mothers and children, causes of death"
+    },
+    {
+     "id": "education-indicators",
+     "title": "Education: enrolment, completion, literacy, teachers and learning"
+    }
+   ],
+   "note": "A catalog; its main series are on the site through the UN population file and the World Bank."
   },
   {
    "name": "Our World in Data",
@@ -791,7 +1283,56 @@
    "commercial": "check",
    "update": "varies",
    "api": true,
-   "buyers": "Media, educators, analysts"
+   "buyers": "Media, educators, analysts",
+   "status": "live",
+   "status_label": "On the site",
+   "datasets": [
+    {
+     "id": "co2-and-greenhouse-gases",
+     "title": "CO2 and greenhouse gas emissions"
+    },
+    {
+     "id": "energy",
+     "title": "Energy production, consumption and electricity mix"
+    },
+    {
+     "id": "democracy-and-rights",
+     "title": "Democracy, human rights, press freedom and corruption"
+    },
+    {
+     "id": "conflict-and-security",
+     "title": "Military spending, nuclear weapons, homicide, terrorism and refugees"
+    },
+    {
+     "id": "emissions-by-sector",
+     "title": "Greenhouse gas emissions by sector"
+    },
+    {
+     "id": "wellbeing-and-schooling",
+     "title": "Happiness, working hours and years of schooling"
+    },
+    {
+     "id": "forests-wildlife-and-plastic",
+     "title": "Forest loss, threatened wildlife and plastic in the ocean"
+    },
+    {
+     "id": "natural-disasters",
+     "title": "Natural disasters: deaths, people affected and damage"
+    },
+    {
+     "id": "food-supply",
+     "title": "Food supply: calories and meat per person"
+    },
+    {
+     "id": "top-incomes",
+     "title": "Income going to the top 1% and top 10%"
+    },
+    {
+     "id": "space-and-ai",
+     "title": "Objects launched into space, and AI research"
+    }
+   ],
+   "note": "Its emissions and energy files, and charts from many original sources."
   },
   {
    "name": "EU Open Data Portal",
@@ -802,7 +1343,11 @@
    "commercial": "check",
    "update": "varies",
    "api": true,
-   "buyers": "EU-facing businesses"
+   "buyers": "EU-facing businesses",
+   "status": "later",
+   "status_label": "Not loaded yet",
+   "datasets": [],
+   "note": "A catalog of other publishers' files."
   },
   {
    "name": "data.gov.uk",
@@ -813,7 +1358,11 @@
    "commercial": "yes",
    "update": "varies",
    "api": true,
-   "buyers": "UK-facing businesses"
+   "buyers": "UK-facing businesses",
+   "status": "later",
+   "status_label": "Not loaded yet",
+   "datasets": [],
+   "note": "A catalog of other publishers' files."
   },
   {
    "name": "India data.gov.in",
@@ -824,7 +1373,11 @@
    "commercial": "yes",
    "update": "varies",
    "api": true,
-   "buyers": "India-facing businesses, NGOs"
+   "buyers": "India-facing businesses, NGOs",
+   "status": "key",
+   "status_label": "Needs a free key",
+   "datasets": [],
+   "note": "Free, but the source asks for a key or account that only the site's owner can create."
   },
   {
    "name": "Humanitarian Data Exchange",
@@ -835,7 +1388,11 @@
    "commercial": "check",
    "update": "varies",
    "api": true,
-   "buyers": "NGOs, aid agencies"
+   "buyers": "NGOs, aid agencies",
+   "status": "later",
+   "status_label": "Not loaded yet",
+   "datasets": [],
+   "note": "A catalog of other publishers' files."
   },
   {
    "name": "IMF Data",
@@ -846,7 +1403,20 @@
    "commercial": "check",
    "update": "monthly",
    "api": true,
-   "buyers": "Finance, country-risk analysts"
+   "buyers": "Finance, country-risk analysts",
+   "status": "live",
+   "status_label": "On the site",
+   "datasets": [
+    {
+     "id": "imf-world-economic-outlook",
+     "title": "IMF World Economic Outlook: growth, inflation, debt, jobs"
+    },
+    {
+     "id": "imf-projections",
+     "title": "IMF projections for the next five years"
+    }
+   ],
+   "note": "World Economic Outlook, with projections kept apart."
   },
   {
    "name": "OECD Data Explorer",
@@ -857,7 +1427,11 @@
    "commercial": "yes",
    "update": "monthly",
    "api": true,
-   "buyers": "Consultants, policy teams"
+   "buyers": "Consultants, policy teams",
+   "status": "later",
+   "status_label": "Not loaded yet",
+   "datasets": [],
+   "note": "Open to load; its loader has not been written yet."
   },
   {
    "name": "UN Comtrade",
@@ -868,7 +1442,11 @@
    "commercial": "restricted",
    "update": "monthly",
    "api": true,
-   "buyers": "Importers, exporters, trade consultants"
+   "buyers": "Importers, exporters, trade consultants",
+   "status": "key",
+   "status_label": "Needs a free key",
+   "datasets": [],
+   "note": "Free, but the source asks for a key or account that only the site's owner can create."
   },
   {
    "name": "WTO Stats",
@@ -879,7 +1457,11 @@
    "commercial": "check",
    "update": "quarterly",
    "api": true,
-   "buyers": "Trade consultants"
+   "buyers": "Trade consultants",
+   "status": "key",
+   "status_label": "Needs a free key",
+   "datasets": [],
+   "note": "Needs a key. Trade totals are on the site through the World Bank."
   },
   {
    "name": "BIS statistics",
@@ -890,7 +1472,11 @@
    "commercial": "check",
    "update": "quarterly",
    "api": true,
-   "buyers": "Banks, macro investors"
+   "buyers": "Banks, macro investors",
+   "status": "later",
+   "status_label": "Not loaded yet",
+   "datasets": [],
+   "note": "Open to load; its loader has not been written yet."
   },
   {
    "name": "Eurostat",
@@ -901,7 +1487,11 @@
    "commercial": "yes",
    "update": "monthly",
    "api": true,
-   "buyers": "EU market research"
+   "buyers": "EU market research",
+   "status": "later",
+   "status_label": "Not loaded yet",
+   "datasets": [],
+   "note": "Open to load; its loader has not been written yet."
   },
   {
    "name": "Penn World Table",
@@ -912,7 +1502,16 @@
    "commercial": "yes",
    "update": "annual",
    "api": false,
-   "buyers": "Economists"
+   "buyers": "Economists",
+   "status": "live",
+   "status_label": "On the site",
+   "datasets": [
+    {
+     "id": "penn-world-table",
+     "title": "Penn World Table: real GDP, productivity, hours worked, human capital"
+    }
+   ],
+   "note": ""
   },
   {
    "name": "UN SDG Global Database",
@@ -923,7 +1522,28 @@
    "commercial": "check",
    "update": "annual",
    "api": true,
-   "buyers": "ESG, NGOs, development finance"
+   "buyers": "ESG, NGOs, development finance",
+   "status": "via",
+   "status_label": "On the site, through another publisher",
+   "datasets": [
+    {
+     "id": "health-indicators",
+     "title": "Health: spending, disease, mothers and children, causes of death"
+    },
+    {
+     "id": "education-indicators",
+     "title": "Education: enrolment, completion, literacy, teachers and learning"
+    },
+    {
+     "id": "poverty-and-inequality",
+     "title": "Poverty and inequality: poverty lines, income shares, shared prosperity"
+    },
+    {
+     "id": "environment-indicators",
+     "title": "Environment: protected land and sea, water, threatened species, land"
+    }
+   ],
+   "note": "Many goal indicators, through the World Bank."
   },
   {
    "name": "UNDP Human Development Data",
@@ -934,7 +1554,16 @@
    "commercial": "yes",
    "update": "annual",
    "api": true,
-   "buyers": "NGOs, development finance"
+   "buyers": "NGOs, development finance",
+   "status": "live",
+   "status_label": "On the site",
+   "datasets": [
+    {
+     "id": "human-development-index",
+     "title": "Human Development Index and its parts (UNDP)"
+    }
+   ],
+   "note": ""
   },
   {
    "name": "ILOSTAT",
@@ -945,7 +1574,20 @@
    "commercial": "yes",
    "update": "quarterly",
    "api": true,
-   "buyers": "HR, supply-chain compliance"
+   "buyers": "HR, supply-chain compliance",
+   "status": "via",
+   "status_label": "On the site, through another publisher",
+   "datasets": [
+    {
+     "id": "labour-indicators",
+     "title": "Work: employment, youth out of work, sectors and kinds of jobs"
+    },
+    {
+     "id": "world-bank-development",
+     "title": "World development indicators"
+    }
+   ],
+   "note": "Employment estimates, through the World Bank."
   },
   {
    "name": "UNESCO Institute for Statistics",
@@ -956,7 +1598,16 @@
    "commercial": "check",
    "update": "annual",
    "api": true,
-   "buyers": "Edtech, NGOs"
+   "buyers": "Edtech, NGOs",
+   "status": "via",
+   "status_label": "On the site, through another publisher",
+   "datasets": [
+    {
+     "id": "education-indicators",
+     "title": "Education: enrolment, completion, literacy, teachers and learning"
+    }
+   ],
+   "note": "Through the World Bank."
   },
   {
    "name": "World Inequality Database",
@@ -967,7 +1618,16 @@
    "commercial": "check",
    "update": "annual",
    "api": true,
-   "buyers": "Researchers, media"
+   "buyers": "Researchers, media",
+   "status": "via",
+   "status_label": "On the site, through another publisher",
+   "datasets": [
+    {
+     "id": "top-incomes",
+     "title": "Income going to the top 1% and top 10%"
+    }
+   ],
+   "note": "Through Our World in Data."
   },
   {
    "name": "DHS Program surveys",
@@ -978,7 +1638,11 @@
    "commercial": "restricted",
    "update": "varies",
    "api": true,
-   "buyers": "Health NGOs, researchers"
+   "buyers": "Health NGOs, researchers",
+   "status": "key",
+   "status_label": "Needs a free key",
+   "datasets": [],
+   "note": "Free, but the source asks for a key or account that only the site's owner can create."
   },
   {
    "name": "WHO Global Health Observatory",
@@ -989,7 +1653,16 @@
    "commercial": "check",
    "update": "annual",
    "api": true,
-   "buyers": "Pharma, global health NGOs"
+   "buyers": "Pharma, global health NGOs",
+   "status": "live",
+   "status_label": "On the site",
+   "datasets": [
+    {
+     "id": "who-health-observatory",
+     "title": "WHO health observatory: healthy life, obesity, blood pressure, health workers"
+    }
+   ],
+   "note": ""
   },
   {
    "name": "IHME Global Burden of Disease",
@@ -1000,7 +1673,11 @@
    "commercial": "restricted",
    "update": "annual",
    "api": false,
-   "buyers": "Researchers (licence needed commercially)"
+   "buyers": "Researchers (licence needed commercially)",
+   "status": "terms",
+   "status_label": "Licence does not allow it",
+   "datasets": [],
+   "note": "Free for non-commercial use only, and it turned away this site's automatic requests."
   },
   {
    "name": "UNICEF Data",
@@ -1011,7 +1688,16 @@
    "commercial": "check",
    "update": "annual",
    "api": true,
-   "buyers": "NGOs, child-health programmes"
+   "buyers": "NGOs, child-health programmes",
+   "status": "via",
+   "status_label": "On the site, through another publisher",
+   "datasets": [
+    {
+     "id": "health-indicators",
+     "title": "Health: spending, disease, mothers and children, causes of death"
+    }
+   ],
+   "note": "Child health and nutrition, through the World Bank."
   },
   {
    "name": "UN World Population Prospects",
@@ -1022,7 +1708,20 @@
    "commercial": "yes",
    "update": "annual",
    "api": true,
-   "buyers": "Market sizing, insurers, planners"
+   "buyers": "Market sizing, insurers, planners",
+   "status": "live",
+   "status_label": "On the site",
+   "datasets": [
+    {
+     "id": "un-population",
+     "title": "Population, births, deaths and migration since 1950 (UN)"
+    },
+    {
+     "id": "un-population-projections",
+     "title": "Population projections to 2100 (UN)"
+    }
+   ],
+   "note": "Estimates to this year, projections to 2100."
   },
   {
    "name": "Ember electricity data",
@@ -1033,7 +1732,16 @@
    "commercial": "yes",
    "update": "monthly",
    "api": true,
-   "buyers": "Energy analysts, investors, media"
+   "buyers": "Energy analysts, investors, media",
+   "status": "via",
+   "status_label": "On the site, through another publisher",
+   "datasets": [
+    {
+     "id": "energy",
+     "title": "Energy production, consumption and electricity mix"
+    }
+   ],
+   "note": "Through Our World in Data."
   },
   {
    "name": "Energy Institute Statistical Review",
@@ -1044,7 +1752,16 @@
    "commercial": "check",
    "update": "annual",
    "api": false,
-   "buyers": "Energy analysts"
+   "buyers": "Energy analysts",
+   "status": "via",
+   "status_label": "On the site, through another publisher",
+   "datasets": [
+    {
+     "id": "energy",
+     "title": "Energy production, consumption and electricity mix"
+    }
+   ],
+   "note": "Through Our World in Data."
   },
   {
    "name": "IRENA statistics",
@@ -1055,7 +1772,11 @@
    "commercial": "check",
    "update": "annual",
    "api": false,
-   "buyers": "Renewables developers, investors"
+   "buyers": "Renewables developers, investors",
+   "status": "later",
+   "status_label": "Not loaded yet",
+   "datasets": [],
+   "note": "Its loader is written but has not delivered data yet."
   },
   {
    "name": "Global Energy Monitor trackers",
@@ -1066,7 +1787,11 @@
    "commercial": "yes",
    "update": "quarterly",
    "api": false,
-   "buyers": "Investors, ESG, commodity analysts"
+   "buyers": "Investors, ESG, commodity analysts",
+   "status": "key",
+   "status_label": "Needs a free key",
+   "datasets": [],
+   "note": "Free, but the source asks for a key or account that only the site's owner can create."
   },
   {
    "name": "ENTSO-E Transparency Platform",
@@ -1077,7 +1802,11 @@
    "commercial": "check",
    "update": "realtime",
    "api": true,
-   "buyers": "European power traders"
+   "buyers": "European power traders",
+   "status": "key",
+   "status_label": "Needs a free key",
+   "datasets": [],
+   "note": "Free, but the source asks for a key or account that only the site's owner can create."
   },
   {
    "name": "IEA data",
@@ -1088,7 +1817,11 @@
    "commercial": "restricted",
    "update": "annual",
    "api": true,
-   "buyers": "Energy analysts"
+   "buyers": "Energy analysts",
+   "status": "terms",
+   "status_label": "Licence does not allow it",
+   "datasets": [],
+   "note": "Most of it is sold. A few IEA figures reach the site through the World Bank."
   },
   {
    "name": "Global Carbon Project",
@@ -1099,7 +1832,16 @@
    "commercial": "yes",
    "update": "annual",
    "api": false,
-   "buyers": "Climate analysts, media"
+   "buyers": "Climate analysts, media",
+   "status": "via",
+   "status_label": "On the site, through another publisher",
+   "datasets": [
+    {
+     "id": "co2-and-greenhouse-gases",
+     "title": "CO2 and greenhouse gas emissions"
+    }
+   ],
+   "note": "Through Our World in Data."
   },
   {
    "name": "EDGAR emissions database",
@@ -1110,7 +1852,16 @@
    "commercial": "yes",
    "update": "annual",
    "api": false,
-   "buyers": "Climate analysts, ESG"
+   "buyers": "Climate analysts, ESG",
+   "status": "via",
+   "status_label": "On the site, through another publisher",
+   "datasets": [
+    {
+     "id": "environment-indicators",
+     "title": "Environment: protected land and sea, water, threatened species, land"
+    }
+   ],
+   "note": "Greenhouse gases per person, through the World Bank."
   },
   {
    "name": "Climate Watch",
@@ -1121,7 +1872,16 @@
    "commercial": "check",
    "update": "annual",
    "api": true,
-   "buyers": "ESG, policy teams"
+   "buyers": "ESG, policy teams",
+   "status": "via",
+   "status_label": "On the site, through another publisher",
+   "datasets": [
+    {
+     "id": "emissions-by-sector",
+     "title": "Greenhouse gas emissions by sector"
+    }
+   ],
+   "note": "Through Our World in Data."
   },
   {
    "name": "Climate TRACE",
@@ -1132,7 +1892,11 @@
    "commercial": "yes",
    "update": "monthly",
    "api": true,
-   "buyers": "ESG, supply-chain emissions, investors"
+   "buyers": "ESG, supply-chain emissions, investors",
+   "status": "later",
+   "status_label": "Not loaded yet",
+   "datasets": [],
+   "note": "Open to load; its loader has not been written yet."
   },
   {
    "name": "Copernicus ERA5 reanalysis",
@@ -1143,7 +1907,11 @@
    "commercial": "yes",
    "update": "daily",
    "api": true,
-   "buyers": "Energy, agriculture, insurers"
+   "buyers": "Energy, agriculture, insurers",
+   "status": "key",
+   "status_label": "Needs a free key",
+   "datasets": [],
+   "note": "Free, but the source asks for a key or account that only the site's owner can create."
   },
   {
    "name": "Berkeley Earth",
@@ -1154,7 +1922,16 @@
    "commercial": "restricted",
    "update": "monthly",
    "api": false,
-   "buyers": "Researchers"
+   "buyers": "Researchers",
+   "status": "live",
+   "status_label": "On the site",
+   "datasets": [
+    {
+     "id": "global-temperature",
+     "title": "Global temperature, monthly"
+    }
+   ],
+   "note": "One column of the global temperature set. Its licence is non-commercial."
   },
   {
    "name": "Landsat (USGS)",
@@ -1165,7 +1942,11 @@
    "commercial": "yes",
    "update": "daily",
    "api": true,
-   "buyers": "Agriculture, mining, insurers"
+   "buyers": "Agriculture, mining, insurers",
+   "status": "images",
+   "status_label": "Satellite images",
+   "datasets": [],
+   "note": "Satellite pictures or map layers rather than tables. They need a mapping tool, not a table of numbers."
   },
   {
    "name": "Sentinel (Copernicus)",
@@ -1176,7 +1957,11 @@
    "commercial": "yes",
    "update": "daily",
    "api": true,
-   "buyers": "Agriculture, insurers, commodities"
+   "buyers": "Agriculture, insurers, commodities",
+   "status": "images",
+   "status_label": "Satellite images",
+   "datasets": [],
+   "note": "Satellite pictures or map layers rather than tables. They need a mapping tool, not a table of numbers."
   },
   {
    "name": "MODIS and VIIRS (NASA)",
@@ -1187,7 +1972,11 @@
    "commercial": "yes",
    "update": "daily",
    "api": true,
-   "buyers": "Agriculture, fire and flood risk"
+   "buyers": "Agriculture, fire and flood risk",
+   "status": "images",
+   "status_label": "Satellite images",
+   "datasets": [],
+   "note": "Satellite pictures or map layers rather than tables. They need a mapping tool, not a table of numbers."
   },
   {
    "name": "VIIRS night lights (EOG)",
@@ -1198,7 +1987,11 @@
    "commercial": "check",
    "update": "monthly",
    "api": false,
-   "buyers": "Economists, market sizing"
+   "buyers": "Economists, market sizing",
+   "status": "images",
+   "status_label": "Satellite images",
+   "datasets": [],
+   "note": "Satellite pictures or map layers rather than tables. They need a mapping tool, not a table of numbers."
   },
   {
    "name": "Global Forest Watch",
@@ -1209,7 +2002,16 @@
    "commercial": "yes",
    "update": "weekly",
    "api": true,
-   "buyers": "Supply-chain deforestation compliance"
+   "buyers": "Supply-chain deforestation compliance",
+   "status": "via",
+   "status_label": "On the site, through another publisher",
+   "datasets": [
+    {
+     "id": "forests-wildlife-and-plastic",
+     "title": "Forest loss, threatened wildlife and plastic in the ocean"
+    }
+   ],
+   "note": "Tree cover loss, through Our World in Data."
   },
   {
    "name": "OpenStreetMap",
@@ -1220,7 +2022,11 @@
    "commercial": "check",
    "update": "realtime",
    "api": true,
-   "buyers": "Logistics, retail site selection"
+   "buyers": "Logistics, retail site selection",
+   "status": "bulk",
+   "status_label": "Too large to host",
+   "datasets": [],
+   "note": "Published as whole-archive downloads far larger than a free static site can hold or refresh."
   },
   {
    "name": "WorldPop",
@@ -1231,7 +2037,11 @@
    "commercial": "yes",
    "update": "annual",
    "api": true,
-   "buyers": "Telecom, retail, NGOs"
+   "buyers": "Telecom, retail, NGOs",
+   "status": "images",
+   "status_label": "Satellite images",
+   "datasets": [],
+   "note": "Satellite pictures or map layers rather than tables. They need a mapping tool, not a table of numbers."
   },
   {
    "name": "Google Earth Engine catalog",
@@ -1242,7 +2052,11 @@
    "commercial": "restricted",
    "update": "daily",
    "api": true,
-   "buyers": "Geospatial teams"
+   "buyers": "Geospatial teams",
+   "status": "key",
+   "status_label": "Needs a free key",
+   "datasets": [],
+   "note": "Free, but the source asks for a key or account that only the site's owner can create."
   },
   {
    "name": "FAOSTAT",
@@ -1253,7 +2067,20 @@
    "commercial": "check",
    "update": "annual",
    "api": true,
-   "buyers": "Agribusiness, commodity analysts"
+   "buyers": "Agribusiness, commodity analysts",
+   "status": "via",
+   "status_label": "On the site, through another publisher",
+   "datasets": [
+    {
+     "id": "food-supply",
+     "title": "Food supply: calories and meat per person"
+    },
+    {
+     "id": "food-and-agriculture",
+     "title": "Food and farming: yields, production, fisheries, hunger"
+    }
+   ],
+   "note": "Through Our World in Data and the World Bank."
   },
   {
    "name": "FAO Food Price Index",
@@ -1264,7 +2091,11 @@
    "commercial": "check",
    "update": "monthly",
    "api": false,
-   "buyers": "Food companies, traders"
+   "buyers": "Food companies, traders",
+   "status": "later",
+   "status_label": "Not loaded yet",
+   "datasets": [],
+   "note": "Open to load; its loader has not been written yet."
   },
   {
    "name": "WFP food prices",
@@ -1275,7 +2106,11 @@
    "commercial": "yes",
    "update": "monthly",
    "api": true,
-   "buyers": "NGOs, commodity analysts"
+   "buyers": "NGOs, commodity analysts",
+   "status": "later",
+   "status_label": "Not loaded yet",
+   "datasets": [],
+   "note": "Open to load; its loader has not been written yet."
   },
   {
    "name": "AMIS market monitor",
@@ -1286,7 +2121,11 @@
    "commercial": "check",
    "update": "monthly",
    "api": false,
-   "buyers": "Grain traders"
+   "buyers": "Grain traders",
+   "status": "later",
+   "status_label": "Not loaded yet",
+   "datasets": [],
+   "note": "Open to load; its loader has not been written yet."
   },
   {
    "name": "GBIF",
@@ -1297,7 +2136,20 @@
    "commercial": "check",
    "update": "daily",
    "api": true,
-   "buyers": "Environmental consultants, nature-risk reporting"
+   "buyers": "Environmental consultants, nature-risk reporting",
+   "status": "live",
+   "status_label": "On the site",
+   "datasets": [
+    {
+     "id": "biodiversity-records-by-year",
+     "title": "Biodiversity records by year observed (GBIF)"
+    },
+    {
+     "id": "biodiversity-records-by-country",
+     "title": "Biodiversity records by country (GBIF)"
+    }
+   ],
+   "note": "Counts of records, not the records themselves."
   },
   {
    "name": "IUCN Red List",
@@ -1308,7 +2160,20 @@
    "commercial": "restricted",
    "update": "annual",
    "api": true,
-   "buyers": "Researchers (IBAT for business)"
+   "buyers": "Researchers (IBAT for business)",
+   "status": "via",
+   "status_label": "On the site, through another publisher",
+   "datasets": [
+    {
+     "id": "forests-wildlife-and-plastic",
+     "title": "Forest loss, threatened wildlife and plastic in the ocean"
+    },
+    {
+     "id": "environment-indicators",
+     "title": "Environment: protected land and sea, water, threatened species, land"
+    }
+   ],
+   "note": "The Red List Index and counts of threatened species."
   },
   {
    "name": "eBird",
@@ -1319,7 +2184,11 @@
    "commercial": "restricted",
    "update": "monthly",
    "api": true,
-   "buyers": "Researchers"
+   "buyers": "Researchers",
+   "status": "key",
+   "status_label": "Needs a free key",
+   "datasets": [],
+   "note": "Free, but the source asks for a key or account that only the site's owner can create."
   },
   {
    "name": "FAO AQUASTAT",
@@ -1330,7 +2199,16 @@
    "commercial": "check",
    "update": "annual",
    "api": false,
-   "buyers": "Water consultants"
+   "buyers": "Water consultants",
+   "status": "via",
+   "status_label": "On the site, through another publisher",
+   "datasets": [
+    {
+     "id": "environment-indicators",
+     "title": "Environment: protected land and sea, water, threatened species, land"
+    }
+   ],
+   "note": "Freshwater withdrawals, through the World Bank."
   },
   {
    "name": "JRC Global Surface Water",
@@ -1341,7 +2219,11 @@
    "commercial": "yes",
    "update": "annual",
    "api": false,
-   "buyers": "Water risk, insurers"
+   "buyers": "Water risk, insurers",
+   "status": "images",
+   "status_label": "Satellite images",
+   "datasets": [],
+   "note": "Satellite pictures or map layers rather than tables. They need a mapping tool, not a table of numbers."
   },
   {
    "name": "V-Dem",
@@ -1352,7 +2234,16 @@
    "commercial": "check",
    "update": "annual",
    "api": false,
-   "buyers": "Country-risk analysts"
+   "buyers": "Country-risk analysts",
+   "status": "via",
+   "status_label": "On the site, through another publisher",
+   "datasets": [
+    {
+     "id": "democracy-and-rights",
+     "title": "Democracy, human rights, press freedom and corruption"
+    }
+   ],
+   "note": "Through Our World in Data."
   },
   {
    "name": "Worldwide Governance Indicators",
@@ -1363,7 +2254,16 @@
    "commercial": "yes",
    "update": "annual",
    "api": true,
-   "buyers": "Country-risk analysts"
+   "buyers": "Country-risk analysts",
+   "status": "live",
+   "status_label": "On the site",
+   "datasets": [
+    {
+     "id": "governance-indicators",
+     "title": "Governance: corruption, rule of law, stability and three more"
+    }
+   ],
+   "note": ""
   },
   {
    "name": "Corruption Perceptions Index",
@@ -1374,7 +2274,16 @@
    "commercial": "check",
    "update": "annual",
    "api": false,
-   "buyers": "Compliance teams"
+   "buyers": "Compliance teams",
+   "status": "via",
+   "status_label": "On the site, through another publisher",
+   "datasets": [
+    {
+     "id": "democracy-and-rights",
+     "title": "Democracy, human rights, press freedom and corruption"
+    }
+   ],
+   "note": "Through Our World in Data."
   },
   {
    "name": "UCDP conflict data",
@@ -1385,7 +2294,16 @@
    "commercial": "yes",
    "update": "monthly",
    "api": true,
-   "buyers": "Security and country-risk firms"
+   "buyers": "Security and country-risk firms",
+   "status": "via",
+   "status_label": "On the site, through another publisher",
+   "datasets": [
+    {
+     "id": "conflict-and-security",
+     "title": "Military spending, nuclear weapons, homicide, terrorism and refugees"
+    }
+   ],
+   "note": "Deaths in armed conflicts, through Our World in Data."
   },
   {
    "name": "ACLED",
@@ -1396,7 +2314,11 @@
    "commercial": "restricted",
    "update": "weekly",
    "api": true,
-   "buyers": "Security firms (licence needed)"
+   "buyers": "Security firms (licence needed)",
+   "status": "key",
+   "status_label": "Needs a free key",
+   "datasets": [],
+   "note": "Free, but the source asks for a key or account that only the site's owner can create."
   },
   {
    "name": "GDELT",
@@ -1407,7 +2329,11 @@
    "commercial": "yes",
    "update": "realtime",
    "api": true,
-   "buyers": "Media monitoring, risk analysts"
+   "buyers": "Media monitoring, risk analysts",
+   "status": "bulk",
+   "status_label": "Too large to host",
+   "datasets": [],
+   "note": "Published as whole-archive downloads far larger than a free static site can hold or refresh."
   },
   {
    "name": "OpenAlex",
@@ -1418,7 +2344,20 @@
    "commercial": "yes",
    "update": "monthly",
    "api": true,
-   "buyers": "Universities, R&D intelligence"
+   "buyers": "Universities, R&D intelligence",
+   "status": "live",
+   "status_label": "On the site",
+   "datasets": [
+    {
+     "id": "research-papers-by-year",
+     "title": "Research papers published each year, worldwide"
+    },
+    {
+     "id": "research-papers-by-country",
+     "title": "Research papers by country and year"
+    }
+   ],
+   "note": "Counts of research works."
   },
   {
    "name": "arXiv",
@@ -1429,7 +2368,16 @@
    "commercial": "check",
    "update": "daily",
    "api": true,
-   "buyers": "R&D intelligence"
+   "buyers": "R&D intelligence",
+   "status": "live",
+   "status_label": "On the site",
+   "datasets": [
+    {
+     "id": "research-papers-by-year",
+     "title": "Research papers published each year, worldwide"
+    }
+   ],
+   "note": "Papers submitted each year."
   },
   {
    "name": "Crossref",
@@ -1440,7 +2388,16 @@
    "commercial": "yes",
    "update": "daily",
    "api": true,
-   "buyers": "Publishers, research analytics"
+   "buyers": "Publishers, research analytics",
+   "status": "live",
+   "status_label": "On the site",
+   "datasets": [
+    {
+     "id": "research-papers-by-year",
+     "title": "Research papers published each year, worldwide"
+    }
+   ],
+   "note": "Records registered each year."
   },
   {
    "name": "GH Archive",
@@ -1451,7 +2408,16 @@
    "commercial": "check",
    "update": "realtime",
    "api": true,
-   "buyers": "Developer-tool companies, investors"
+   "buyers": "Developer-tool companies, investors",
+   "status": "bulk",
+   "status_label": "Too large to host",
+   "datasets": [
+    {
+     "id": "github-activity-by-country",
+     "title": "Software development on GitHub, by country"
+    }
+   ],
+   "note": "The full event archive is hundreds of gigabytes. GitHub's own country summary is on the site."
   },
   {
    "name": "Stack Exchange data dump",
@@ -1462,7 +2428,11 @@
    "commercial": "check",
    "update": "quarterly",
    "api": false,
-   "buyers": "Developer-tool companies"
+   "buyers": "Developer-tool companies",
+   "status": "bulk",
+   "status_label": "Too large to host",
+   "datasets": [],
+   "note": "Published as whole-archive downloads far larger than a free static site can hold or refresh."
   },
   {
    "name": "Common Crawl",
@@ -1473,7 +2443,11 @@
    "commercial": "check",
    "update": "monthly",
    "api": true,
-   "buyers": "Search and AI companies"
+   "buyers": "Search and AI companies",
+   "status": "bulk",
+   "status_label": "Too large to host",
+   "datasets": [],
+   "note": "Published as whole-archive downloads far larger than a free static site can hold or refresh."
   },
   {
    "name": "Wikidata",
@@ -1484,7 +2458,11 @@
    "commercial": "yes",
    "update": "realtime",
    "api": true,
-   "buyers": "Knowledge-graph and search products"
+   "buyers": "Knowledge-graph and search products",
+   "status": "bulk",
+   "status_label": "Too large to host",
+   "datasets": [],
+   "note": "A database of facts rather than a table; nothing to load as one file."
   },
   {
    "name": "Wikipedia pageviews",
@@ -1495,7 +2473,16 @@
    "commercial": "yes",
    "update": "daily",
    "api": true,
-   "buyers": "Media, brand and trend tracking"
+   "buyers": "Media, brand and trend tracking",
+   "status": "live",
+   "status_label": "On the site",
+   "datasets": [
+    {
+     "id": "wikipedia-pageviews",
+     "title": "Wikipedia page views, monthly, by language"
+    }
+   ],
+   "note": "Monthly views for nine languages and all projects."
   }
  ]
 }
