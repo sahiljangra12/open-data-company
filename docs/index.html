@@ -1,70 +1,62 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Open Data Company</title><meta name="description" content="Public datasets from the US and the world, refreshed every day. Explore, compare, merge and download.">
-<meta name="theme-color" content="#000000"><link rel="stylesheet" href="assets/site.css"></head>
-<body data-page="home"><header class="top"><div class="wrap"><a class="brand" href="index.html">Open Data Company</a><nav><a href="index.html#datasets" class="wide on">Datasets</a><a href="explore.html" class="">Explore</a><a href="catalog.html" class="">Sources</a><a href="scorecard.html" class="">Scorecard</a><a href="https://github.com/sahiljangra12/open-data-company" class="wide">GitHub</a></nav></div></header><main>
+<title>Open Data Company</title><meta name="description" content="Find, shape and download the world's open data in a few clicks. No scraping, no cleaning, no sign-up."><meta name="theme-color" content="#000000">
+<link rel="preload" href="fonts/barlow-condensed-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="assets/site.css"></head>
+<body data-page="home"><header class="top"><div class="wrap"><a class="brand" href="index.html">Open Data<span class="wide"> Company</span></a><nav><a href="index.html#datasets" class="on">Datasets</a><a href="explore.html" class="wide ">Explorer</a><a href="catalog.html" class="">Sources</a><a href="scorecard.html" class="">Scorecard</a><a href="https://github.com/sahiljangra12/open-data-company" class="wide">GitHub</a></nav></div></header><main>
 
 <section class="hero">
-<div class="wrap">
-<h1>Open data.<br>In motion.</h1>
-<p class="lead">Public datasets from the US and the world, refreshed every day. Explore them, compare them, and download exactly the table you need.</p>
-<p class="cta"><a class="btn" href="#datasets">Browse datasets</a><a class="textlink" href="explore.html">Open the explorer</a></p>
-<div class="globe" id="globe"><canvas role="img" aria-label="Rotating globe. Each dot marks an earthquake from the past 24 hours."></canvas><div class="tip" id="gtip" hidden></div></div>
-<p class="status" aria-live="polite"><span class="dot" id="live-dot"></span><span id="live-text">Connecting to the US Geological Survey earthquake feed.</span></p>
-<div class="live">
-<div><span class="k">Earthquakes in the past 24 hours</span><strong id="q-count">–</strong><span class="s" id="q-count-s"></span></div>
-<div><span class="k">Strongest</span><strong id="q-max">–</strong><span class="s" id="q-max-s"></span></div>
-<div><span class="k">Most recent</span><strong id="q-last">–</strong><span class="s" id="q-last-s"></span></div>
-</div>
-<p class="caption">Each dot is an earthquake reported by the US Geological Survey. Bigger and brighter means stronger, and a ring marks one from the last hour. Drag to turn the globe.</p>
-</div>
+<div class="wrap"><div class="hero-in">
+<h1>The world's open data</h1>
+<p class="lede">Find it, shape it and download it in a few clicks. No scraping, no cleaning, no sign-up.</p>
+<div class="search"><input id="sq" type="search" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="sres" aria-label="Search every dataset, variable and country" placeholder="Search, for example India GDP, solar or earthquakes"><div class="results" id="sres" role="listbox" hidden></div></div>
+<div class="quick" id="quick"><span class="up">Popular</span></div>
+<p class="scope" id="scope"></p>
+</div></div>
+<div class="hero-art"><div class="globe" id="globe"><canvas role="img" aria-label="Rotating globe. Each dot marks an earthquake from the past 24 hours."></canvas><div class="tip" id="gtip" hidden></div></div></div>
+<div class="wrap"><div class="hero-foot">
+<span class="status" aria-live="polite"><span class="dot" id="live-dot"></span><span id="live-text">Connecting to the US Geological Survey earthquake feed.</span></span>
+<span class="rd"><b id="q-count">–</b>earthquakes in the past 24 hours</span>
+<span class="rd"><b id="q-max">–</b><span id="q-max-s">strongest</span></span>
+<span class="rd"><b id="q-last">–</b><span id="q-last-s">most recent</span></span>
+</div></div>
 </section>
 
 <div class="ticker" id="ticker" role="region" aria-label="Latest values from the datasets"><div class="track" id="track"></div></div>
 
-<section class="band" id="now">
-<div class="wrap">
-<div class="head"><h2>This year, so far</h2><p>Running estimates. Each one takes the latest full-year figure and spreads it evenly across the year.</p></div>
-<div class="counters" id="counters"></div>
-</div>
-</section>
+<section class="sec" id="datasets"><div class="wrap">
+<div class="sec-head"><div><h2>Datasets</h2><p>Take a whole dataset in one click, or customize it first: choose the variables, places and years you need.</p></div>
+<div class="seg" id="regions" role="group" aria-label="Show datasets for"><button type="button" data-r="" aria-pressed="true">All</button><button type="button" data-r="World" aria-pressed="false">World</button><button type="button" data-r="US" aria-pressed="false">United States</button></div></div>
+<div id="rows"></div>
+</div></section>
 
-<section class="band dark" id="stories">
-<div class="wrap">
-<div class="head"><h2>Watch the data draw itself</h2><p>Six views built from the datasets below. Pick one, or let them play.</p></div>
+<section class="sec" id="now"><div class="wrap">
+<div class="sec-head"><div><h2>The world this year</h2><p>Running estimates. Each one takes the latest full-year figure and spreads it evenly across the year.</p></div></div>
+<div class="counters" id="counters"></div>
+</div></section>
+
+<section class="sec" id="stories"><div class="wrap">
+<div class="sec-head"><div><h2>The world in six charts</h2><p>Drawn from the datasets above. Pick one, or let them play.</p></div></div>
 <div class="pills" id="pills" role="tablist" aria-label="Featured charts"></div>
 <div class="story" id="story" role="tabpanel">
-<h3 id="st-title"></h3><p class="note" id="st-note"></p>
+<h3 id="st-title"></h3><p class="sub" id="st-note"></p>
 <div class="keys" id="st-keys"></div>
 <div class="plot" id="st-plot"></div>
-<p class="more"><a id="st-link" href="explore.html">Open this data in the explorer</a></p>
+<p class="more"><a class="btn" id="st-link" href="explore.html">Open this data</a></p>
 </div>
-</div>
-</section>
+</div></section>
 
-<section class="band gray" id="datasets">
-<div class="wrap">
-<div class="head"><h2>Every dataset, ready to download</h2><p>Choose the variables, places and years. Preview the table. Download CSV, Excel or JSON.</p></div>
-<div class="find"><input id="q" type="search" placeholder="Search datasets and variables, such as solar, GDP or oil price" aria-label="Search datasets">
-<select id="f-region" aria-label="Region"><option value="">US and world</option><option>US</option><option>World</option></select></div>
-<div class="tiles" id="tiles"></div>
-</div>
-</section>
-
-<section class="band" id="how">
-<div class="wrap">
-<div class="head"><h2>From question to file in four steps</h2></div>
+<section class="sec" id="how"><div class="wrap">
+<div class="sec-head"><div><h2>How it works</h2></div></div>
 <div class="steps">
-<div><div class="n">1</div><h3>Choose</h3><p>Tick the variables you want, pick countries or zones, and set the years.</p></div>
-<div><div class="n">2</div><h3>Filter</h3><p>Add conditions such as GDP per person above 10,000, and drop empty rows.</p></div>
-<div><div class="n">3</div><h3>Compare or merge</h3><p>Chart places against each other, or join a second dataset on the same keys.</p></div>
-<div><div class="n">4</div><h3>Download</h3><p>Check the exact table in the preview, then take it as CSV, Excel, JSON or TSV.</p></div>
+<div><div class="n">01</div><h3>Find</h3><p>Search for a topic, a variable or a country, or pick a dataset from the list.</p></div>
+<div><div class="n">02</div><h3>Shape</h3><p>Choose the variables, places and years. Add conditions or merge a second dataset if you need to.</p></div>
+<div><div class="n">03</div><h3>Check</h3><p>See the exact table, a chart and a summary before you take anything.</p></div>
+<div><div class="n">04</div><h3>Download</h3><p>One click for CSV, Excel, JSON or TSV. Copy a link to share the same view.</p></div>
 </div>
 <div class="duo">
-<a class="k" href="scorecard.html"><h3>Load Forecast Scorecard</h3><p>How close were the power grid's demand forecasts to what happened? Our first analysis, zone by zone.</p></a>
-<a href="catalog.html"><h3><span id="n-src">136</span> sources mapped</h3><p>The open sources we are working through, each rated for licence, update frequency and API access.</p></a>
+<a href="scorecard.html"><h3>Load Forecast Scorecard</h3><p>How close were the power grid's demand forecasts to what happened? Our first analysis, zone by zone.</p><span class="btn">Read the scorecard</span></a>
+<a href="catalog.html"><h3><span id="n-src">136</span> sources mapped</h3><p>The open sources we are working through, each rated for licence, update frequency and API access.</p><span class="btn">See the sources</span></a>
 </div>
-</div>
-</section>
+</div></section>
 
 </main><footer><div class="wrap"><p>Open Data Company is a working name. Everything here is free to use. Each dataset keeps its own source and licence, shown beside it.</p>
-<p>Data from the US Geological Survey, Our World in Data, the World Bank, the US Energy Information Administration and PJM. Land outline from Natural Earth. Code and methods are on <a href="https://github.com/sahiljangra12/open-data-company">GitHub</a>.</p></div></footer><script src="assets/home.js"></script></body></html>
+<p>Data from Our World in Data, the World Bank, NASA, NOAA, the US Geological Survey, the US Energy Information Administration and PJM. Land outline from Natural Earth. Code and methods are on <a href="https://github.com/sahiljangra12/open-data-company">GitHub</a>.</p></div></footer><script src="assets/home.js"></script></body></html>

@@ -639,17 +639,1057 @@
    "bytes": 15462636,
    "built": "2026-11-24",
    "coverage": "1750 to 2025",
+   "entities": 259,
    "default_vars": [
     "co2",
     "co2_per_capita"
    ],
-   "default_entities": [
-    "USA",
+   "chart_entities": [
+    "WLD",
     "CHN",
     "IND",
-    "WLD"
+    "USA",
+    "BRA",
+    "NGA"
    ],
-   "entities": 259
+   "places": [
+    [
+     "AFG",
+     "Afghanistan"
+    ],
+    [
+     "OWID_AFRICA",
+     "Africa"
+    ],
+    [
+     "OWID_AFRICA_GCP",
+     "Africa (GCP)"
+    ],
+    [
+     "ALB",
+     "Albania"
+    ],
+    [
+     "DZA",
+     "Algeria"
+    ],
+    [
+     "AND",
+     "Andorra"
+    ],
+    [
+     "AGO",
+     "Angola"
+    ],
+    [
+     "AIA",
+     "Anguilla"
+    ],
+    [
+     "ATA",
+     "Antarctica"
+    ],
+    [
+     "ATG",
+     "Antigua and Barbuda"
+    ],
+    [
+     "ARG",
+     "Argentina"
+    ],
+    [
+     "ARM",
+     "Armenia"
+    ],
+    [
+     "ABW",
+     "Aruba"
+    ],
+    [
+     "OWID_ASIA",
+     "Asia"
+    ],
+    [
+     "OWID_ASIA_GCP",
+     "Asia (GCP)"
+    ],
+    [
+     "OWID_ASIA_EXCL_CHINA_AND_INDIA",
+     "Asia (excl. China and India)"
+    ],
+    [
+     "AUS",
+     "Australia"
+    ],
+    [
+     "AUT",
+     "Austria"
+    ],
+    [
+     "AZE",
+     "Azerbaijan"
+    ],
+    [
+     "BHS",
+     "Bahamas"
+    ],
+    [
+     "BHR",
+     "Bahrain"
+    ],
+    [
+     "BGD",
+     "Bangladesh"
+    ],
+    [
+     "BRB",
+     "Barbados"
+    ],
+    [
+     "BLR",
+     "Belarus"
+    ],
+    [
+     "BEL",
+     "Belgium"
+    ],
+    [
+     "BLZ",
+     "Belize"
+    ],
+    [
+     "BEN",
+     "Benin"
+    ],
+    [
+     "BMU",
+     "Bermuda"
+    ],
+    [
+     "BTN",
+     "Bhutan"
+    ],
+    [
+     "BOL",
+     "Bolivia"
+    ],
+    [
+     "BES",
+     "Bonaire Sint Eustatius and Saba"
+    ],
+    [
+     "BIH",
+     "Bosnia and Herzegovina"
+    ],
+    [
+     "BWA",
+     "Botswana"
+    ],
+    [
+     "BRA",
+     "Brazil"
+    ],
+    [
+     "VGB",
+     "British Virgin Islands"
+    ],
+    [
+     "BRN",
+     "Brunei"
+    ],
+    [
+     "BGR",
+     "Bulgaria"
+    ],
+    [
+     "BFA",
+     "Burkina Faso"
+    ],
+    [
+     "BDI",
+     "Burundi"
+    ],
+    [
+     "KHM",
+     "Cambodia"
+    ],
+    [
+     "CMR",
+     "Cameroon"
+    ],
+    [
+     "CAN",
+     "Canada"
+    ],
+    [
+     "CPV",
+     "Cape Verde"
+    ],
+    [
+     "CAF",
+     "Central African Republic"
+    ],
+    [
+     "OWID_CENTRAL_AMERICA_GCP",
+     "Central America (GCP)"
+    ],
+    [
+     "TCD",
+     "Chad"
+    ],
+    [
+     "CHL",
+     "Chile"
+    ],
+    [
+     "CHN",
+     "China"
+    ],
+    [
+     "CXR",
+     "Christmas Island"
+    ],
+    [
+     "COL",
+     "Colombia"
+    ],
+    [
+     "COM",
+     "Comoros"
+    ],
+    [
+     "COG",
+     "Congo"
+    ],
+    [
+     "COK",
+     "Cook Islands"
+    ],
+    [
+     "CRI",
+     "Costa Rica"
+    ],
+    [
+     "CIV",
+     "Cote d'Ivoire"
+    ],
+    [
+     "HRV",
+     "Croatia"
+    ],
+    [
+     "CUB",
+     "Cuba"
+    ],
+    [
+     "CUW",
+     "Curacao"
+    ],
+    [
+     "CYP",
+     "Cyprus"
+    ],
+    [
+     "CZE",
+     "Czechia"
+    ],
+    [
+     "COD",
+     "Democratic Republic of Congo"
+    ],
+    [
+     "DNK",
+     "Denmark"
+    ],
+    [
+     "DJI",
+     "Djibouti"
+    ],
+    [
+     "DMA",
+     "Dominica"
+    ],
+    [
+     "DOM",
+     "Dominican Republic"
+    ],
+    [
+     "TLS",
+     "East Timor"
+    ],
+    [
+     "ECU",
+     "Ecuador"
+    ],
+    [
+     "EGY",
+     "Egypt"
+    ],
+    [
+     "SLV",
+     "El Salvador"
+    ],
+    [
+     "GNQ",
+     "Equatorial Guinea"
+    ],
+    [
+     "ERI",
+     "Eritrea"
+    ],
+    [
+     "EST",
+     "Estonia"
+    ],
+    [
+     "SWZ",
+     "Eswatini"
+    ],
+    [
+     "ETH",
+     "Ethiopia"
+    ],
+    [
+     "OWID_EUROPE",
+     "Europe"
+    ],
+    [
+     "OWID_EUROPE_GCP",
+     "Europe (GCP)"
+    ],
+    [
+     "OWID_EUROPE_EXCL_EU_27",
+     "Europe (excl. EU-27)"
+    ],
+    [
+     "OWID_EUROPE_EXCL_EU_28",
+     "Europe (excl. EU-28)"
+    ],
+    [
+     "OWID_EUROPEAN_UNION_27",
+     "European Union (27)"
+    ],
+    [
+     "OWID_EUROPEAN_UNION_28",
+     "European Union (28)"
+    ],
+    [
+     "FRO",
+     "Faroe Islands"
+    ],
+    [
+     "FJI",
+     "Fiji"
+    ],
+    [
+     "FIN",
+     "Finland"
+    ],
+    [
+     "FRA",
+     "France"
+    ],
+    [
+     "GUF",
+     "French Guiana"
+    ],
+    [
+     "PYF",
+     "French Polynesia"
+    ],
+    [
+     "GAB",
+     "Gabon"
+    ],
+    [
+     "GMB",
+     "Gambia"
+    ],
+    [
+     "GEO",
+     "Georgia"
+    ],
+    [
+     "DEU",
+     "Germany"
+    ],
+    [
+     "GHA",
+     "Ghana"
+    ],
+    [
+     "GRC",
+     "Greece"
+    ],
+    [
+     "GRL",
+     "Greenland"
+    ],
+    [
+     "GRD",
+     "Grenada"
+    ],
+    [
+     "GLP",
+     "Guadeloupe"
+    ],
+    [
+     "GTM",
+     "Guatemala"
+    ],
+    [
+     "GIN",
+     "Guinea"
+    ],
+    [
+     "GNB",
+     "Guinea-Bissau"
+    ],
+    [
+     "GUY",
+     "Guyana"
+    ],
+    [
+     "HTI",
+     "Haiti"
+    ],
+    [
+     "OWID_HIGH_INCOME_COUNTRIES",
+     "High-income countries"
+    ],
+    [
+     "HND",
+     "Honduras"
+    ],
+    [
+     "HKG",
+     "Hong Kong"
+    ],
+    [
+     "HUN",
+     "Hungary"
+    ],
+    [
+     "ISL",
+     "Iceland"
+    ],
+    [
+     "IND",
+     "India"
+    ],
+    [
+     "IDN",
+     "Indonesia"
+    ],
+    [
+     "OWID_INTERNATIONAL_AVIATION",
+     "International aviation"
+    ],
+    [
+     "OWID_INTERNATIONAL_SHIPPING",
+     "International shipping"
+    ],
+    [
+     "IRN",
+     "Iran"
+    ],
+    [
+     "IRQ",
+     "Iraq"
+    ],
+    [
+     "IRL",
+     "Ireland"
+    ],
+    [
+     "ISR",
+     "Israel"
+    ],
+    [
+     "ITA",
+     "Italy"
+    ],
+    [
+     "JAM",
+     "Jamaica"
+    ],
+    [
+     "JPN",
+     "Japan"
+    ],
+    [
+     "JOR",
+     "Jordan"
+    ],
+    [
+     "KAZ",
+     "Kazakhstan"
+    ],
+    [
+     "KEN",
+     "Kenya"
+    ],
+    [
+     "KIR",
+     "Kiribati"
+    ],
+    [
+     "OWID_KOSOVO",
+     "Kosovo"
+    ],
+    [
+     "KWT",
+     "Kuwait"
+    ],
+    [
+     "OWID_KUWAITI_OIL_FIRES",
+     "Kuwaiti Oil Fires"
+    ],
+    [
+     "OWID_KUWAITI_OIL_FIRES_GCP",
+     "Kuwaiti Oil Fires (GCP)"
+    ],
+    [
+     "KGZ",
+     "Kyrgyzstan"
+    ],
+    [
+     "LAO",
+     "Laos"
+    ],
+    [
+     "LVA",
+     "Latvia"
+    ],
+    [
+     "OWID_LEAST_DEVELOPED_COUNTRIES_JONES_ET_AL",
+     "Least developed countries (Jones et al.)"
+    ],
+    [
+     "LBN",
+     "Lebanon"
+    ],
+    [
+     "LSO",
+     "Lesotho"
+    ],
+    [
+     "LBR",
+     "Liberia"
+    ],
+    [
+     "LBY",
+     "Libya"
+    ],
+    [
+     "LIE",
+     "Liechtenstein"
+    ],
+    [
+     "LTU",
+     "Lithuania"
+    ],
+    [
+     "OWID_LOW_INCOME_COUNTRIES",
+     "Low-income countries"
+    ],
+    [
+     "OWID_LOWER_MIDDLE_INCOME_COUNTRIES",
+     "Lower-middle-income countries"
+    ],
+    [
+     "LUX",
+     "Luxembourg"
+    ],
+    [
+     "MAC",
+     "Macao"
+    ],
+    [
+     "MDG",
+     "Madagascar"
+    ],
+    [
+     "MWI",
+     "Malawi"
+    ],
+    [
+     "MYS",
+     "Malaysia"
+    ],
+    [
+     "MDV",
+     "Maldives"
+    ],
+    [
+     "MLI",
+     "Mali"
+    ],
+    [
+     "MLT",
+     "Malta"
+    ],
+    [
+     "MHL",
+     "Marshall Islands"
+    ],
+    [
+     "MTQ",
+     "Martinique"
+    ],
+    [
+     "MRT",
+     "Mauritania"
+    ],
+    [
+     "MUS",
+     "Mauritius"
+    ],
+    [
+     "MYT",
+     "Mayotte"
+    ],
+    [
+     "MEX",
+     "Mexico"
+    ],
+    [
+     "FSM",
+     "Micronesia (country)"
+    ],
+    [
+     "OWID_MIDDLE_EAST_GCP",
+     "Middle East (GCP)"
+    ],
+    [
+     "MDA",
+     "Moldova"
+    ],
+    [
+     "MCO",
+     "Monaco"
+    ],
+    [
+     "MNG",
+     "Mongolia"
+    ],
+    [
+     "MNE",
+     "Montenegro"
+    ],
+    [
+     "MSR",
+     "Montserrat"
+    ],
+    [
+     "MAR",
+     "Morocco"
+    ],
+    [
+     "MOZ",
+     "Mozambique"
+    ],
+    [
+     "MMR",
+     "Myanmar"
+    ],
+    [
+     "NAM",
+     "Namibia"
+    ],
+    [
+     "NRU",
+     "Nauru"
+    ],
+    [
+     "NPL",
+     "Nepal"
+    ],
+    [
+     "NLD",
+     "Netherlands"
+    ],
+    [
+     "NCL",
+     "New Caledonia"
+    ],
+    [
+     "NZL",
+     "New Zealand"
+    ],
+    [
+     "NIC",
+     "Nicaragua"
+    ],
+    [
+     "NER",
+     "Niger"
+    ],
+    [
+     "NGA",
+     "Nigeria"
+    ],
+    [
+     "NIU",
+     "Niue"
+    ],
+    [
+     "OWID_NON_OECD_GCP",
+     "Non-OECD (GCP)"
+    ],
+    [
+     "OWID_NORTH_AMERICA",
+     "North America"
+    ],
+    [
+     "OWID_NORTH_AMERICA_GCP",
+     "North America (GCP)"
+    ],
+    [
+     "OWID_NORTH_AMERICA_EXCL_USA",
+     "North America (excl. USA)"
+    ],
+    [
+     "PRK",
+     "North Korea"
+    ],
+    [
+     "MKD",
+     "North Macedonia"
+    ],
+    [
+     "NOR",
+     "Norway"
+    ],
+    [
+     "OWID_OECD_GCP",
+     "OECD (GCP)"
+    ],
+    [
+     "OWID_OECD_JONES_ET_AL",
+     "OECD (Jones et al.)"
+    ],
+    [
+     "OWID_OCEANIA",
+     "Oceania"
+    ],
+    [
+     "OWID_OCEANIA_GCP",
+     "Oceania (GCP)"
+    ],
+    [
+     "OMN",
+     "Oman"
+    ],
+    [
+     "PAK",
+     "Pakistan"
+    ],
+    [
+     "PLW",
+     "Palau"
+    ],
+    [
+     "PSE",
+     "Palestine"
+    ],
+    [
+     "PAN",
+     "Panama"
+    ],
+    [
+     "PNG",
+     "Papua New Guinea"
+    ],
+    [
+     "PRY",
+     "Paraguay"
+    ],
+    [
+     "PER",
+     "Peru"
+    ],
+    [
+     "PHL",
+     "Philippines"
+    ],
+    [
+     "POL",
+     "Poland"
+    ],
+    [
+     "PRT",
+     "Portugal"
+    ],
+    [
+     "QAT",
+     "Qatar"
+    ],
+    [
+     "REU",
+     "Reunion"
+    ],
+    [
+     "ROU",
+     "Romania"
+    ],
+    [
+     "RUS",
+     "Russia"
+    ],
+    [
+     "RWA",
+     "Rwanda"
+    ],
+    [
+     "OWID_RYUKYU_ISLANDS",
+     "Ryukyu Islands"
+    ],
+    [
+     "OWID_RYUKYU_ISLANDS_GCP",
+     "Ryukyu Islands (GCP)"
+    ],
+    [
+     "SHN",
+     "Saint Helena"
+    ],
+    [
+     "KNA",
+     "Saint Kitts and Nevis"
+    ],
+    [
+     "LCA",
+     "Saint Lucia"
+    ],
+    [
+     "SPM",
+     "Saint Pierre and Miquelon"
+    ],
+    [
+     "VCT",
+     "Saint Vincent and the Grenadines"
+    ],
+    [
+     "WSM",
+     "Samoa"
+    ],
+    [
+     "SMR",
+     "San Marino"
+    ],
+    [
+     "STP",
+     "Sao Tome and Principe"
+    ],
+    [
+     "SAU",
+     "Saudi Arabia"
+    ],
+    [
+     "SEN",
+     "Senegal"
+    ],
+    [
+     "SRB",
+     "Serbia"
+    ],
+    [
+     "SYC",
+     "Seychelles"
+    ],
+    [
+     "SLE",
+     "Sierra Leone"
+    ],
+    [
+     "SGP",
+     "Singapore"
+    ],
+    [
+     "SXM",
+     "Sint Maarten (Dutch part)"
+    ],
+    [
+     "SVK",
+     "Slovakia"
+    ],
+    [
+     "SVN",
+     "Slovenia"
+    ],
+    [
+     "SLB",
+     "Solomon Islands"
+    ],
+    [
+     "SOM",
+     "Somalia"
+    ],
+    [
+     "ZAF",
+     "South Africa"
+    ],
+    [
+     "OWID_SOUTH_AMERICA",
+     "South America"
+    ],
+    [
+     "OWID_SOUTH_AMERICA_GCP",
+     "South America (GCP)"
+    ],
+    [
+     "KOR",
+     "South Korea"
+    ],
+    [
+     "SSD",
+     "South Sudan"
+    ],
+    [
+     "ESP",
+     "Spain"
+    ],
+    [
+     "LKA",
+     "Sri Lanka"
+    ],
+    [
+     "SDN",
+     "Sudan"
+    ],
+    [
+     "SUR",
+     "Suriname"
+    ],
+    [
+     "SWE",
+     "Sweden"
+    ],
+    [
+     "CHE",
+     "Switzerland"
+    ],
+    [
+     "SYR",
+     "Syria"
+    ],
+    [
+     "TWN",
+     "Taiwan"
+    ],
+    [
+     "TJK",
+     "Tajikistan"
+    ],
+    [
+     "TZA",
+     "Tanzania"
+    ],
+    [
+     "THA",
+     "Thailand"
+    ],
+    [
+     "TGO",
+     "Togo"
+    ],
+    [
+     "TON",
+     "Tonga"
+    ],
+    [
+     "TTO",
+     "Trinidad and Tobago"
+    ],
+    [
+     "TUN",
+     "Tunisia"
+    ],
+    [
+     "TUR",
+     "Turkey"
+    ],
+    [
+     "TKM",
+     "Turkmenistan"
+    ],
+    [
+     "TCA",
+     "Turks and Caicos Islands"
+    ],
+    [
+     "TUV",
+     "Tuvalu"
+    ],
+    [
+     "UGA",
+     "Uganda"
+    ],
+    [
+     "UKR",
+     "Ukraine"
+    ],
+    [
+     "ARE",
+     "United Arab Emirates"
+    ],
+    [
+     "GBR",
+     "United Kingdom"
+    ],
+    [
+     "USA",
+     "United States"
+    ],
+    [
+     "OWID_UPPER_MIDDLE_INCOME_COUNTRIES",
+     "Upper-middle-income countries"
+    ],
+    [
+     "URY",
+     "Uruguay"
+    ],
+    [
+     "UZB",
+     "Uzbekistan"
+    ],
+    [
+     "VUT",
+     "Vanuatu"
+    ],
+    [
+     "VAT",
+     "Vatican"
+    ],
+    [
+     "VEN",
+     "Venezuela"
+    ],
+    [
+     "VNM",
+     "Vietnam"
+    ],
+    [
+     "WLF",
+     "Wallis and Futuna"
+    ],
+    [
+     "WLD",
+     "World"
+    ],
+    [
+     "YEM",
+     "Yemen"
+    ],
+    [
+     "ZMB",
+     "Zambia"
+    ],
+    [
+     "ZWE",
+     "Zimbabwe"
+    ]
+   ]
   },
   {
    "id": "energy",
@@ -1698,17 +2738,1277 @@
    "bytes": 9378028,
    "built": "2026-11-24",
    "coverage": "1900 to 2025",
+   "entities": 314,
    "default_vars": [
     "primary_energy_consumption",
     "renewables_share_elec"
    ],
-   "default_entities": [
-    "USA",
+   "chart_entities": [
+    "WLD",
     "CHN",
     "IND",
-    "WLD"
+    "USA",
+    "BRA",
+    "NGA"
    ],
-   "entities": 314
+   "places": [
+    [
+     "OWID_ASEAN_EMBER",
+     "ASEAN (Ember)"
+    ],
+    [
+     "AFG",
+     "Afghanistan"
+    ],
+    [
+     "OWID_AFRICA",
+     "Africa"
+    ],
+    [
+     "OWID_AFRICA_EI",
+     "Africa (EI)"
+    ],
+    [
+     "OWID_AFRICA_EIA",
+     "Africa (EIA)"
+    ],
+    [
+     "OWID_AFRICA_EMBER",
+     "Africa (Ember)"
+    ],
+    [
+     "OWID_AFRICA_SHIFT",
+     "Africa (Shift)"
+    ],
+    [
+     "ALB",
+     "Albania"
+    ],
+    [
+     "DZA",
+     "Algeria"
+    ],
+    [
+     "ASM",
+     "American Samoa"
+    ],
+    [
+     "AGO",
+     "Angola"
+    ],
+    [
+     "ATA",
+     "Antarctica"
+    ],
+    [
+     "ATG",
+     "Antigua and Barbuda"
+    ],
+    [
+     "ARG",
+     "Argentina"
+    ],
+    [
+     "ARM",
+     "Armenia"
+    ],
+    [
+     "ABW",
+     "Aruba"
+    ],
+    [
+     "OWID_ASIA",
+     "Asia"
+    ],
+    [
+     "OWID_ASIA_EMBER",
+     "Asia (Ember)"
+    ],
+    [
+     "OWID_ASIA_PACIFIC_EI",
+     "Asia Pacific (EI)"
+    ],
+    [
+     "OWID_ASIA_AND_OCEANIA_EIA",
+     "Asia and Oceania (EIA)"
+    ],
+    [
+     "OWID_ASIA_AND_OCEANIA_SHIFT",
+     "Asia and Oceania (Shift)"
+    ],
+    [
+     "AUS",
+     "Australia"
+    ],
+    [
+     "OWID_AUSTRALIA_AND_NEW_ZEALAND_EIA",
+     "Australia and New Zealand (EIA)"
+    ],
+    [
+     "AUT",
+     "Austria"
+    ],
+    [
+     "AZE",
+     "Azerbaijan"
+    ],
+    [
+     "BHS",
+     "Bahamas"
+    ],
+    [
+     "BHR",
+     "Bahrain"
+    ],
+    [
+     "BGD",
+     "Bangladesh"
+    ],
+    [
+     "BRB",
+     "Barbados"
+    ],
+    [
+     "BLR",
+     "Belarus"
+    ],
+    [
+     "BEL",
+     "Belgium"
+    ],
+    [
+     "BLZ",
+     "Belize"
+    ],
+    [
+     "BEN",
+     "Benin"
+    ],
+    [
+     "BMU",
+     "Bermuda"
+    ],
+    [
+     "BTN",
+     "Bhutan"
+    ],
+    [
+     "BOL",
+     "Bolivia"
+    ],
+    [
+     "BIH",
+     "Bosnia and Herzegovina"
+    ],
+    [
+     "BWA",
+     "Botswana"
+    ],
+    [
+     "BRA",
+     "Brazil"
+    ],
+    [
+     "VGB",
+     "British Virgin Islands"
+    ],
+    [
+     "BRN",
+     "Brunei"
+    ],
+    [
+     "BGR",
+     "Bulgaria"
+    ],
+    [
+     "BFA",
+     "Burkina Faso"
+    ],
+    [
+     "BDI",
+     "Burundi"
+    ],
+    [
+     "OWID_CIS_EI",
+     "CIS (EI)"
+    ],
+    [
+     "KHM",
+     "Cambodia"
+    ],
+    [
+     "CMR",
+     "Cameroon"
+    ],
+    [
+     "CAN",
+     "Canada"
+    ],
+    [
+     "CPV",
+     "Cape Verde"
+    ],
+    [
+     "CYM",
+     "Cayman Islands"
+    ],
+    [
+     "CAF",
+     "Central African Republic"
+    ],
+    [
+     "OWID_CENTRAL_AMERICA_EI",
+     "Central America (EI)"
+    ],
+    [
+     "OWID_CENTRAL_AND_SOUTH_AMERICA_EIA",
+     "Central and South America (EIA)"
+    ],
+    [
+     "OWID_CENTRAL_AND_SOUTH_AMERICA_SHIFT",
+     "Central and South America (Shift)"
+    ],
+    [
+     "TCD",
+     "Chad"
+    ],
+    [
+     "CHL",
+     "Chile"
+    ],
+    [
+     "CHN",
+     "China"
+    ],
+    [
+     "COL",
+     "Colombia"
+    ],
+    [
+     "COM",
+     "Comoros"
+    ],
+    [
+     "COG",
+     "Congo"
+    ],
+    [
+     "COK",
+     "Cook Islands"
+    ],
+    [
+     "CRI",
+     "Costa Rica"
+    ],
+    [
+     "CIV",
+     "Cote d'Ivoire"
+    ],
+    [
+     "HRV",
+     "Croatia"
+    ],
+    [
+     "CUB",
+     "Cuba"
+    ],
+    [
+     "CUW",
+     "Curacao"
+    ],
+    [
+     "CYP",
+     "Cyprus"
+    ],
+    [
+     "CZE",
+     "Czechia"
+    ],
+    [
+     "OWID_CZECHOSLOVAKIA",
+     "Czechoslovakia"
+    ],
+    [
+     "COD",
+     "Democratic Republic of Congo"
+    ],
+    [
+     "DNK",
+     "Denmark"
+    ],
+    [
+     "DJI",
+     "Djibouti"
+    ],
+    [
+     "DMA",
+     "Dominica"
+    ],
+    [
+     "DOM",
+     "Dominican Republic"
+    ],
+    [
+     "OWID_EU_EMBER",
+     "EU (Ember)"
+    ],
+    [
+     "OWID_EU28_SHIFT",
+     "EU28 (Shift)"
+    ],
+    [
+     "OWID_EAST_GERMANY",
+     "East Germany"
+    ],
+    [
+     "TLS",
+     "East Timor"
+    ],
+    [
+     "OWID_EASTERN_AFRICA_EI",
+     "Eastern Africa (EI)"
+    ],
+    [
+     "OWID_EASTERN_EUROPE_AND_EURASIA_EIA",
+     "Eastern Europe and Eurasia (EIA)"
+    ],
+    [
+     "ECU",
+     "Ecuador"
+    ],
+    [
+     "EGY",
+     "Egypt"
+    ],
+    [
+     "SLV",
+     "El Salvador"
+    ],
+    [
+     "GNQ",
+     "Equatorial Guinea"
+    ],
+    [
+     "ERI",
+     "Eritrea"
+    ],
+    [
+     "EST",
+     "Estonia"
+    ],
+    [
+     "SWZ",
+     "Eswatini"
+    ],
+    [
+     "ETH",
+     "Ethiopia"
+    ],
+    [
+     "OWID_EURASIA_EIA",
+     "Eurasia (EIA)"
+    ],
+    [
+     "OWID_EURASIA_SHIFT",
+     "Eurasia (Shift)"
+    ],
+    [
+     "OWID_EUROPE",
+     "Europe"
+    ],
+    [
+     "OWID_EUROPE_EI",
+     "Europe (EI)"
+    ],
+    [
+     "OWID_EUROPE_EIA",
+     "Europe (EIA)"
+    ],
+    [
+     "OWID_EUROPE_EMBER",
+     "Europe (Ember)"
+    ],
+    [
+     "OWID_EUROPE_SHIFT",
+     "Europe (Shift)"
+    ],
+    [
+     "OWID_EUROPEAN_UNION_27",
+     "European Union (27)"
+    ],
+    [
+     "FLK",
+     "Falkland Islands"
+    ],
+    [
+     "FRO",
+     "Faroe Islands"
+    ],
+    [
+     "FJI",
+     "Fiji"
+    ],
+    [
+     "FIN",
+     "Finland"
+    ],
+    [
+     "FRA",
+     "France"
+    ],
+    [
+     "GUF",
+     "French Guiana"
+    ],
+    [
+     "PYF",
+     "French Polynesia"
+    ],
+    [
+     "OWID_G20_EMBER",
+     "G20 (Ember)"
+    ],
+    [
+     "OWID_G7_EMBER",
+     "G7 (Ember)"
+    ],
+    [
+     "GAB",
+     "Gabon"
+    ],
+    [
+     "GMB",
+     "Gambia"
+    ],
+    [
+     "GEO",
+     "Georgia"
+    ],
+    [
+     "DEU",
+     "Germany"
+    ],
+    [
+     "GHA",
+     "Ghana"
+    ],
+    [
+     "GIB",
+     "Gibraltar"
+    ],
+    [
+     "GRC",
+     "Greece"
+    ],
+    [
+     "GRL",
+     "Greenland"
+    ],
+    [
+     "GRD",
+     "Grenada"
+    ],
+    [
+     "GLP",
+     "Guadeloupe"
+    ],
+    [
+     "GUM",
+     "Guam"
+    ],
+    [
+     "GTM",
+     "Guatemala"
+    ],
+    [
+     "GIN",
+     "Guinea"
+    ],
+    [
+     "GNB",
+     "Guinea-Bissau"
+    ],
+    [
+     "GUY",
+     "Guyana"
+    ],
+    [
+     "HTI",
+     "Haiti"
+    ],
+    [
+     "OWID_HIGH_INCOME_COUNTRIES",
+     "High-income countries"
+    ],
+    [
+     "HND",
+     "Honduras"
+    ],
+    [
+     "HKG",
+     "Hong Kong"
+    ],
+    [
+     "HUN",
+     "Hungary"
+    ],
+    [
+     "ISL",
+     "Iceland"
+    ],
+    [
+     "IND",
+     "India"
+    ],
+    [
+     "IDN",
+     "Indonesia"
+    ],
+    [
+     "IRN",
+     "Iran"
+    ],
+    [
+     "IRQ",
+     "Iraq"
+    ],
+    [
+     "IRL",
+     "Ireland"
+    ],
+    [
+     "ISR",
+     "Israel"
+    ],
+    [
+     "ITA",
+     "Italy"
+    ],
+    [
+     "JAM",
+     "Jamaica"
+    ],
+    [
+     "JPN",
+     "Japan"
+    ],
+    [
+     "JOR",
+     "Jordan"
+    ],
+    [
+     "KAZ",
+     "Kazakhstan"
+    ],
+    [
+     "KEN",
+     "Kenya"
+    ],
+    [
+     "KIR",
+     "Kiribati"
+    ],
+    [
+     "OWID_KOSOVO",
+     "Kosovo"
+    ],
+    [
+     "KWT",
+     "Kuwait"
+    ],
+    [
+     "KGZ",
+     "Kyrgyzstan"
+    ],
+    [
+     "LAO",
+     "Laos"
+    ],
+    [
+     "OWID_LATIN_AMERICA_AND_CARIBBEAN_EMBER",
+     "Latin America and Caribbean (Ember)"
+    ],
+    [
+     "LVA",
+     "Latvia"
+    ],
+    [
+     "LBN",
+     "Lebanon"
+    ],
+    [
+     "LSO",
+     "Lesotho"
+    ],
+    [
+     "LBR",
+     "Liberia"
+    ],
+    [
+     "LBY",
+     "Libya"
+    ],
+    [
+     "LTU",
+     "Lithuania"
+    ],
+    [
+     "OWID_LOW_INCOME_COUNTRIES",
+     "Low-income countries"
+    ],
+    [
+     "OWID_LOWER_MIDDLE_INCOME_COUNTRIES",
+     "Lower-middle-income countries"
+    ],
+    [
+     "LUX",
+     "Luxembourg"
+    ],
+    [
+     "MAC",
+     "Macao"
+    ],
+    [
+     "MDG",
+     "Madagascar"
+    ],
+    [
+     "MWI",
+     "Malawi"
+    ],
+    [
+     "MYS",
+     "Malaysia"
+    ],
+    [
+     "MDV",
+     "Maldives"
+    ],
+    [
+     "MLI",
+     "Mali"
+    ],
+    [
+     "MLT",
+     "Malta"
+    ],
+    [
+     "MTQ",
+     "Martinique"
+    ],
+    [
+     "MRT",
+     "Mauritania"
+    ],
+    [
+     "MUS",
+     "Mauritius"
+    ],
+    [
+     "MEX",
+     "Mexico"
+    ],
+    [
+     "FSM",
+     "Micronesia (country)"
+    ],
+    [
+     "OWID_MIDDLE_AFRICA_EI",
+     "Middle Africa (EI)"
+    ],
+    [
+     "OWID_MIDDLE_EAST_EI",
+     "Middle East (EI)"
+    ],
+    [
+     "OWID_MIDDLE_EAST_EIA",
+     "Middle East (EIA)"
+    ],
+    [
+     "OWID_MIDDLE_EAST_EMBER",
+     "Middle East (Ember)"
+    ],
+    [
+     "OWID_MIDDLE_EAST_SHIFT",
+     "Middle East (Shift)"
+    ],
+    [
+     "MDA",
+     "Moldova"
+    ],
+    [
+     "MNG",
+     "Mongolia"
+    ],
+    [
+     "MNE",
+     "Montenegro"
+    ],
+    [
+     "MSR",
+     "Montserrat"
+    ],
+    [
+     "MAR",
+     "Morocco"
+    ],
+    [
+     "MOZ",
+     "Mozambique"
+    ],
+    [
+     "MMR",
+     "Myanmar"
+    ],
+    [
+     "NAM",
+     "Namibia"
+    ],
+    [
+     "NRU",
+     "Nauru"
+    ],
+    [
+     "NPL",
+     "Nepal"
+    ],
+    [
+     "NLD",
+     "Netherlands"
+    ],
+    [
+     "ANT",
+     "Netherlands Antilles"
+    ],
+    [
+     "NCL",
+     "New Caledonia"
+    ],
+    [
+     "NZL",
+     "New Zealand"
+    ],
+    [
+     "NIC",
+     "Nicaragua"
+    ],
+    [
+     "NER",
+     "Niger"
+    ],
+    [
+     "NGA",
+     "Nigeria"
+    ],
+    [
+     "NIU",
+     "Niue"
+    ],
+    [
+     "OWID_NON_OECD_EI",
+     "Non-OECD (EI)"
+    ],
+    [
+     "OWID_NON_OECD_EIA",
+     "Non-OECD (EIA)"
+    ],
+    [
+     "OWID_NON_OPEC_EI",
+     "Non-OPEC (EI)"
+    ],
+    [
+     "OWID_NON_OPEC_EIA",
+     "Non-OPEC (EIA)"
+    ],
+    [
+     "OWID_NORTH_AMERICA",
+     "North America"
+    ],
+    [
+     "OWID_NORTH_AMERICA_EI",
+     "North America (EI)"
+    ],
+    [
+     "OWID_NORTH_AMERICA_EMBER",
+     "North America (Ember)"
+    ],
+    [
+     "OWID_NORTH_AMERICA_SHIFT",
+     "North America (Shift)"
+    ],
+    [
+     "PRK",
+     "North Korea"
+    ],
+    [
+     "MKD",
+     "North Macedonia"
+    ],
+    [
+     "MNP",
+     "Northern Mariana Islands"
+    ],
+    [
+     "NOR",
+     "Norway"
+    ],
+    [
+     "OWID_OECD_EI",
+     "OECD (EI)"
+    ],
+    [
+     "OWID_OECD_EIA",
+     "OECD (EIA)"
+    ],
+    [
+     "OWID_OECD_EMBER",
+     "OECD (Ember)"
+    ],
+    [
+     "OWID_OECD_SHIFT",
+     "OECD (Shift)"
+    ],
+    [
+     "OWID_OPEC_EI",
+     "OPEC (EI)"
+    ],
+    [
+     "OWID_OPEC_EIA",
+     "OPEC (EIA)"
+    ],
+    [
+     "OWID_OPEC_SHIFT",
+     "OPEC (Shift)"
+    ],
+    [
+     "OWID_OCEANIA",
+     "Oceania"
+    ],
+    [
+     "OWID_OCEANIA_EMBER",
+     "Oceania (Ember)"
+    ],
+    [
+     "OMN",
+     "Oman"
+    ],
+    [
+     "OWID_OTHER_AFRICA_EI",
+     "Other Africa (EI)"
+    ],
+    [
+     "OWID_OTHER_AMERICAS_EIA",
+     "Other Americas (EIA)"
+    ],
+    [
+     "OWID_OTHER_ASIA_PACIFIC_EI",
+     "Other Asia Pacific (EI)"
+    ],
+    [
+     "OWID_OTHER_ASIA_PACIFIC_EIA",
+     "Other Asia-Pacific (EIA)"
+    ],
+    [
+     "OWID_OTHER_CIS_EI",
+     "Other CIS (EI)"
+    ],
+    [
+     "OWID_OTHER_CARIBBEAN_EI",
+     "Other Caribbean (EI)"
+    ],
+    [
+     "OWID_OTHER_EASTERN_AFRICA_EI",
+     "Other Eastern Africa (EI)"
+    ],
+    [
+     "OWID_OTHER_EUROPE_EI",
+     "Other Europe (EI)"
+    ],
+    [
+     "OWID_OTHER_MIDDLE_AFRICA_EI",
+     "Other Middle Africa (EI)"
+    ],
+    [
+     "OWID_OTHER_MIDDLE_EAST_EI",
+     "Other Middle East (EI)"
+    ],
+    [
+     "OWID_OTHER_NORTH_AMERICA_EI",
+     "Other North America (EI)"
+    ],
+    [
+     "OWID_OTHER_NORTHERN_AFRICA_EI",
+     "Other Northern Africa (EI)"
+    ],
+    [
+     "OWID_OTHER_SOUTH_AMERICA_EI",
+     "Other South America (EI)"
+    ],
+    [
+     "OWID_OTHER_SOUTH_AND_CENTRAL_AMERICA_EI",
+     "Other South and Central America (EI)"
+    ],
+    [
+     "OWID_OTHER_SOUTHERN_AFRICA_EI",
+     "Other Southern Africa (EI)"
+    ],
+    [
+     "OWID_OTHER_WESTERN_AFRICA_EI",
+     "Other Western Africa (EI)"
+    ],
+    [
+     "PAK",
+     "Pakistan"
+    ],
+    [
+     "PSE",
+     "Palestine"
+    ],
+    [
+     "PAN",
+     "Panama"
+    ],
+    [
+     "PNG",
+     "Papua New Guinea"
+    ],
+    [
+     "PRY",
+     "Paraguay"
+    ],
+    [
+     "OWID_PERSIAN_GULF_EIA",
+     "Persian Gulf (EIA)"
+    ],
+    [
+     "OWID_PERSIAN_GULF_SHIFT",
+     "Persian Gulf (Shift)"
+    ],
+    [
+     "PER",
+     "Peru"
+    ],
+    [
+     "PHL",
+     "Philippines"
+    ],
+    [
+     "POL",
+     "Poland"
+    ],
+    [
+     "PRT",
+     "Portugal"
+    ],
+    [
+     "PRI",
+     "Puerto Rico"
+    ],
+    [
+     "QAT",
+     "Qatar"
+    ],
+    [
+     "OWID_REST_OF_WORLD_EI",
+     "Rest of World (EI)"
+    ],
+    [
+     "REU",
+     "Reunion"
+    ],
+    [
+     "ROU",
+     "Romania"
+    ],
+    [
+     "RUS",
+     "Russia"
+    ],
+    [
+     "RWA",
+     "Rwanda"
+    ],
+    [
+     "SHN",
+     "Saint Helena"
+    ],
+    [
+     "KNA",
+     "Saint Kitts and Nevis"
+    ],
+    [
+     "LCA",
+     "Saint Lucia"
+    ],
+    [
+     "SPM",
+     "Saint Pierre and Miquelon"
+    ],
+    [
+     "VCT",
+     "Saint Vincent and the Grenadines"
+    ],
+    [
+     "WSM",
+     "Samoa"
+    ],
+    [
+     "STP",
+     "Sao Tome and Principe"
+    ],
+    [
+     "SAU",
+     "Saudi Arabia"
+    ],
+    [
+     "SEN",
+     "Senegal"
+    ],
+    [
+     "SRB",
+     "Serbia"
+    ],
+    [
+     "OWID_SERBIA_AND_MONTENEGRO",
+     "Serbia and Montenegro"
+    ],
+    [
+     "SYC",
+     "Seychelles"
+    ],
+    [
+     "SLE",
+     "Sierra Leone"
+    ],
+    [
+     "SGP",
+     "Singapore"
+    ],
+    [
+     "SVK",
+     "Slovakia"
+    ],
+    [
+     "SVN",
+     "Slovenia"
+    ],
+    [
+     "SLB",
+     "Solomon Islands"
+    ],
+    [
+     "SOM",
+     "Somalia"
+    ],
+    [
+     "ZAF",
+     "South Africa"
+    ],
+    [
+     "OWID_SOUTH_AMERICA",
+     "South America"
+    ],
+    [
+     "KOR",
+     "South Korea"
+    ],
+    [
+     "SSD",
+     "South Sudan"
+    ],
+    [
+     "OWID_SOUTH_AND_CENTRAL_AMERICA_EI",
+     "South and Central America (EI)"
+    ],
+    [
+     "ESP",
+     "Spain"
+    ],
+    [
+     "LKA",
+     "Sri Lanka"
+    ],
+    [
+     "SDN",
+     "Sudan"
+    ],
+    [
+     "SUR",
+     "Suriname"
+    ],
+    [
+     "SWE",
+     "Sweden"
+    ],
+    [
+     "CHE",
+     "Switzerland"
+    ],
+    [
+     "SYR",
+     "Syria"
+    ],
+    [
+     "TWN",
+     "Taiwan"
+    ],
+    [
+     "TJK",
+     "Tajikistan"
+    ],
+    [
+     "TZA",
+     "Tanzania"
+    ],
+    [
+     "THA",
+     "Thailand"
+    ],
+    [
+     "TGO",
+     "Togo"
+    ],
+    [
+     "TON",
+     "Tonga"
+    ],
+    [
+     "TTO",
+     "Trinidad and Tobago"
+    ],
+    [
+     "TUN",
+     "Tunisia"
+    ],
+    [
+     "TUR",
+     "Turkey"
+    ],
+    [
+     "TKM",
+     "Turkmenistan"
+    ],
+    [
+     "TCA",
+     "Turks and Caicos Islands"
+    ],
+    [
+     "TUV",
+     "Tuvalu"
+    ],
+    [
+     "OWID_U_S_PACIFIC_ISLANDS_EIA",
+     "U.S. Pacific Islands (EIA)"
+    ],
+    [
+     "OWID_U_S_TERRITORIES_EIA",
+     "U.S. Territories (EIA)"
+    ],
+    [
+     "OWID_USSR",
+     "USSR"
+    ],
+    [
+     "UGA",
+     "Uganda"
+    ],
+    [
+     "UKR",
+     "Ukraine"
+    ],
+    [
+     "ARE",
+     "United Arab Emirates"
+    ],
+    [
+     "GBR",
+     "United Kingdom"
+    ],
+    [
+     "USA",
+     "United States"
+    ],
+    [
+     "OWID_UNITED_STATES_PACIFIC_ISLANDS_SHIFT",
+     "United States Pacific Islands (Shift)"
+    ],
+    [
+     "OWID_UNITED_STATES_TERRITORIES_SHIFT",
+     "United States Territories (Shift)"
+    ],
+    [
+     "VIR",
+     "United States Virgin Islands"
+    ],
+    [
+     "OWID_UPPER_MIDDLE_INCOME_COUNTRIES",
+     "Upper-middle-income countries"
+    ],
+    [
+     "URY",
+     "Uruguay"
+    ],
+    [
+     "UZB",
+     "Uzbekistan"
+    ],
+    [
+     "VUT",
+     "Vanuatu"
+    ],
+    [
+     "VEN",
+     "Venezuela"
+    ],
+    [
+     "VNM",
+     "Vietnam"
+    ],
+    [
+     "OWID_WAKE_ISLAND_EIA",
+     "Wake Island (EIA)"
+    ],
+    [
+     "OWID_WAKE_ISLAND_SHIFT",
+     "Wake Island (Shift)"
+    ],
+    [
+     "OWID_WEST_GERMANY",
+     "West Germany"
+    ],
+    [
+     "OWID_WESTERN_AFRICA_EI",
+     "Western Africa (EI)"
+    ],
+    [
+     "OWID_WESTERN_EUROPE_EIA",
+     "Western Europe (EIA)"
+    ],
+    [
+     "ESH",
+     "Western Sahara"
+    ],
+    [
+     "WLD",
+     "World"
+    ],
+    [
+     "YEM",
+     "Yemen"
+    ],
+    [
+     "OWID_YUGOSLAVIA",
+     "Yugoslavia"
+    ],
+    [
+     "ZMB",
+     "Zambia"
+    ],
+    [
+     "ZWE",
+     "Zimbabwe"
+    ]
+   ]
   },
   {
    "id": "world-bank-development",
@@ -1975,15 +4275,1166 @@
    "coverage": "1960 to 2025",
    "default_vars": [
     "population",
-    "gdp_current_usd"
+    "gdp_per_capita",
+    "life_expectancy"
    ],
-   "default_entities": [
-    "USA",
+   "entities": 261,
+   "chart_entities": [
+    "WLD",
     "CHN",
     "IND",
-    "WLD"
+    "USA",
+    "BRA",
+    "NGA"
    ],
-   "entities": 261
+   "places": [
+    [
+     "AFG",
+     "Afghanistan"
+    ],
+    [
+     "AFE",
+     "Africa Eastern and Southern"
+    ],
+    [
+     "AFW",
+     "Africa Western and Central"
+    ],
+    [
+     "ALB",
+     "Albania"
+    ],
+    [
+     "DZA",
+     "Algeria"
+    ],
+    [
+     "ASM",
+     "American Samoa"
+    ],
+    [
+     "AND",
+     "Andorra"
+    ],
+    [
+     "AGO",
+     "Angola"
+    ],
+    [
+     "ATG",
+     "Antigua and Barbuda"
+    ],
+    [
+     "ARB",
+     "Arab World"
+    ],
+    [
+     "ARG",
+     "Argentina"
+    ],
+    [
+     "ARM",
+     "Armenia"
+    ],
+    [
+     "ABW",
+     "Aruba"
+    ],
+    [
+     "AUS",
+     "Australia"
+    ],
+    [
+     "AUT",
+     "Austria"
+    ],
+    [
+     "AZE",
+     "Azerbaijan"
+    ],
+    [
+     "BHS",
+     "Bahamas, The"
+    ],
+    [
+     "BHR",
+     "Bahrain"
+    ],
+    [
+     "BGD",
+     "Bangladesh"
+    ],
+    [
+     "BRB",
+     "Barbados"
+    ],
+    [
+     "BLR",
+     "Belarus"
+    ],
+    [
+     "BEL",
+     "Belgium"
+    ],
+    [
+     "BLZ",
+     "Belize"
+    ],
+    [
+     "BEN",
+     "Benin"
+    ],
+    [
+     "BMU",
+     "Bermuda"
+    ],
+    [
+     "BTN",
+     "Bhutan"
+    ],
+    [
+     "BOL",
+     "Bolivia"
+    ],
+    [
+     "BIH",
+     "Bosnia and Herzegovina"
+    ],
+    [
+     "BWA",
+     "Botswana"
+    ],
+    [
+     "BRA",
+     "Brazil"
+    ],
+    [
+     "VGB",
+     "British Virgin Islands"
+    ],
+    [
+     "BRN",
+     "Brunei Darussalam"
+    ],
+    [
+     "BGR",
+     "Bulgaria"
+    ],
+    [
+     "BFA",
+     "Burkina Faso"
+    ],
+    [
+     "BDI",
+     "Burundi"
+    ],
+    [
+     "CPV",
+     "Cabo Verde"
+    ],
+    [
+     "KHM",
+     "Cambodia"
+    ],
+    [
+     "CMR",
+     "Cameroon"
+    ],
+    [
+     "CAN",
+     "Canada"
+    ],
+    [
+     "CSS",
+     "Caribbean small states"
+    ],
+    [
+     "CYM",
+     "Cayman Islands"
+    ],
+    [
+     "CAF",
+     "Central African Republic"
+    ],
+    [
+     "CEB",
+     "Central Europe and the Baltics"
+    ],
+    [
+     "TCD",
+     "Chad"
+    ],
+    [
+     "CHI",
+     "Channel Islands"
+    ],
+    [
+     "CHL",
+     "Chile"
+    ],
+    [
+     "CHN",
+     "China"
+    ],
+    [
+     "COL",
+     "Colombia"
+    ],
+    [
+     "COM",
+     "Comoros"
+    ],
+    [
+     "COD",
+     "Congo, Dem. Rep."
+    ],
+    [
+     "COG",
+     "Congo, Rep."
+    ],
+    [
+     "CRI",
+     "Costa Rica"
+    ],
+    [
+     "CIV",
+     "Cote d'Ivoire"
+    ],
+    [
+     "HRV",
+     "Croatia"
+    ],
+    [
+     "CUB",
+     "Cuba"
+    ],
+    [
+     "CUW",
+     "Curacao"
+    ],
+    [
+     "CYP",
+     "Cyprus"
+    ],
+    [
+     "CZE",
+     "Czechia"
+    ],
+    [
+     "DNK",
+     "Denmark"
+    ],
+    [
+     "DJI",
+     "Djibouti"
+    ],
+    [
+     "DMA",
+     "Dominica"
+    ],
+    [
+     "DOM",
+     "Dominican Republic"
+    ],
+    [
+     "EAR",
+     "Early-demographic dividend"
+    ],
+    [
+     "EAS",
+     "East Asia & Pacific"
+    ],
+    [
+     "TEA",
+     "East Asia & Pacific (IDA & IBRD countries)"
+    ],
+    [
+     "EAP",
+     "East Asia & Pacific (excluding high income)"
+    ],
+    [
+     "ECU",
+     "Ecuador"
+    ],
+    [
+     "EGY",
+     "Egypt, Arab Rep."
+    ],
+    [
+     "SLV",
+     "El Salvador"
+    ],
+    [
+     "GNQ",
+     "Equatorial Guinea"
+    ],
+    [
+     "ERI",
+     "Eritrea"
+    ],
+    [
+     "EST",
+     "Estonia"
+    ],
+    [
+     "SWZ",
+     "Eswatini"
+    ],
+    [
+     "ETH",
+     "Ethiopia"
+    ],
+    [
+     "EMU",
+     "Euro area"
+    ],
+    [
+     "ECS",
+     "Europe & Central Asia"
+    ],
+    [
+     "TEC",
+     "Europe & Central Asia (IDA & IBRD countries)"
+    ],
+    [
+     "ECA",
+     "Europe & Central Asia (excluding high income)"
+    ],
+    [
+     "EUU",
+     "European Union"
+    ],
+    [
+     "FRO",
+     "Faroe Islands"
+    ],
+    [
+     "FJI",
+     "Fiji"
+    ],
+    [
+     "FIN",
+     "Finland"
+    ],
+    [
+     "FCV",
+     "Fragility, Conflict, and Violence (FCV) situations"
+    ],
+    [
+     "FRA",
+     "France"
+    ],
+    [
+     "PYF",
+     "French Polynesia"
+    ],
+    [
+     "GAB",
+     "Gabon"
+    ],
+    [
+     "GMB",
+     "Gambia, The"
+    ],
+    [
+     "GEO",
+     "Georgia"
+    ],
+    [
+     "DEU",
+     "Germany"
+    ],
+    [
+     "GHA",
+     "Ghana"
+    ],
+    [
+     "GIB",
+     "Gibraltar"
+    ],
+    [
+     "GRC",
+     "Greece"
+    ],
+    [
+     "GRL",
+     "Greenland"
+    ],
+    [
+     "GRD",
+     "Grenada"
+    ],
+    [
+     "GUM",
+     "Guam"
+    ],
+    [
+     "GTM",
+     "Guatemala"
+    ],
+    [
+     "GIN",
+     "Guinea"
+    ],
+    [
+     "GNB",
+     "Guinea-Bissau"
+    ],
+    [
+     "GUY",
+     "Guyana"
+    ],
+    [
+     "HTI",
+     "Haiti"
+    ],
+    [
+     "HPC",
+     "Heavily indebted poor countries (HIPC)"
+    ],
+    [
+     "HND",
+     "Honduras"
+    ],
+    [
+     "HKG",
+     "Hong Kong SAR, China"
+    ],
+    [
+     "HUN",
+     "Hungary"
+    ],
+    [
+     "IBD",
+     "IBRD only"
+    ],
+    [
+     "IBT",
+     "IDA & IBRD total"
+    ],
+    [
+     "IDB",
+     "IDA blend"
+    ],
+    [
+     "IDX",
+     "IDA only"
+    ],
+    [
+     "IDA",
+     "IDA total"
+    ],
+    [
+     "ISL",
+     "Iceland"
+    ],
+    [
+     "IND",
+     "India"
+    ],
+    [
+     "IDN",
+     "Indonesia"
+    ],
+    [
+     "IRN",
+     "Iran, Islamic Rep."
+    ],
+    [
+     "IRQ",
+     "Iraq"
+    ],
+    [
+     "IRL",
+     "Ireland"
+    ],
+    [
+     "IMN",
+     "Isle of Man"
+    ],
+    [
+     "ISR",
+     "Israel"
+    ],
+    [
+     "ITA",
+     "Italy"
+    ],
+    [
+     "JAM",
+     "Jamaica"
+    ],
+    [
+     "JPN",
+     "Japan"
+    ],
+    [
+     "JOR",
+     "Jordan"
+    ],
+    [
+     "KAZ",
+     "Kazakhstan"
+    ],
+    [
+     "KEN",
+     "Kenya"
+    ],
+    [
+     "KIR",
+     "Kiribati"
+    ],
+    [
+     "PRK",
+     "Korea, Dem. People's Rep."
+    ],
+    [
+     "KOR",
+     "Korea, Rep."
+    ],
+    [
+     "XKX",
+     "Kosovo"
+    ],
+    [
+     "KWT",
+     "Kuwait"
+    ],
+    [
+     "KGZ",
+     "Kyrgyz Republic"
+    ],
+    [
+     "LAO",
+     "Lao PDR"
+    ],
+    [
+     "LTE",
+     "Late-demographic dividend"
+    ],
+    [
+     "LCN",
+     "Latin America & Caribbean"
+    ],
+    [
+     "LAC",
+     "Latin America & Caribbean (excluding high income)"
+    ],
+    [
+     "TLA",
+     "Latin America & the Caribbean (IDA & IBRD countries)"
+    ],
+    [
+     "LVA",
+     "Latvia"
+    ],
+    [
+     "LDC",
+     "Least developed countries: UN classification"
+    ],
+    [
+     "LBN",
+     "Lebanon"
+    ],
+    [
+     "LSO",
+     "Lesotho"
+    ],
+    [
+     "LBR",
+     "Liberia"
+    ],
+    [
+     "LBY",
+     "Libya"
+    ],
+    [
+     "LIE",
+     "Liechtenstein"
+    ],
+    [
+     "LTU",
+     "Lithuania"
+    ],
+    [
+     "LMY",
+     "Low & middle income"
+    ],
+    [
+     "LUX",
+     "Luxembourg"
+    ],
+    [
+     "MAC",
+     "Macao SAR, China"
+    ],
+    [
+     "MDG",
+     "Madagascar"
+    ],
+    [
+     "MWI",
+     "Malawi"
+    ],
+    [
+     "MYS",
+     "Malaysia"
+    ],
+    [
+     "MDV",
+     "Maldives"
+    ],
+    [
+     "MLI",
+     "Mali"
+    ],
+    [
+     "MLT",
+     "Malta"
+    ],
+    [
+     "MHL",
+     "Marshall Islands"
+    ],
+    [
+     "MRT",
+     "Mauritania"
+    ],
+    [
+     "MUS",
+     "Mauritius"
+    ],
+    [
+     "MEX",
+     "Mexico"
+    ],
+    [
+     "FSM",
+     "Micronesia, Fed. Sts."
+    ],
+    [
+     "MEA",
+     "Middle East, North Africa, Afghanistan & Pakistan"
+    ],
+    [
+     "TMN",
+     "Middle East, North Africa, Afghanistan & Pakistan (IDA & IBRD)"
+    ],
+    [
+     "MNA",
+     "Middle East, North Africa, Afghanistan & Pakistan (excluding high income)"
+    ],
+    [
+     "MIC",
+     "Middle income"
+    ],
+    [
+     "MDA",
+     "Moldova"
+    ],
+    [
+     "MCO",
+     "Monaco"
+    ],
+    [
+     "MNG",
+     "Mongolia"
+    ],
+    [
+     "MNE",
+     "Montenegro"
+    ],
+    [
+     "MAR",
+     "Morocco"
+    ],
+    [
+     "MOZ",
+     "Mozambique"
+    ],
+    [
+     "MMR",
+     "Myanmar"
+    ],
+    [
+     "NAM",
+     "Namibia"
+    ],
+    [
+     "NRU",
+     "Naoero"
+    ],
+    [
+     "NPL",
+     "Nepal"
+    ],
+    [
+     "NLD",
+     "Netherlands"
+    ],
+    [
+     "NCL",
+     "New Caledonia"
+    ],
+    [
+     "NZL",
+     "New Zealand"
+    ],
+    [
+     "NIC",
+     "Nicaragua"
+    ],
+    [
+     "NER",
+     "Niger"
+    ],
+    [
+     "NGA",
+     "Nigeria"
+    ],
+    [
+     "NAC",
+     "North America"
+    ],
+    [
+     "MKD",
+     "North Macedonia"
+    ],
+    [
+     "MNP",
+     "Northern Mariana Islands"
+    ],
+    [
+     "NOR",
+     "Norway"
+    ],
+    [
+     "OED",
+     "OECD members"
+    ],
+    [
+     "OMN",
+     "Oman"
+    ],
+    [
+     "OSS",
+     "Other small states"
+    ],
+    [
+     "PSS",
+     "Pacific island small states"
+    ],
+    [
+     "PAK",
+     "Pakistan"
+    ],
+    [
+     "PLW",
+     "Palau"
+    ],
+    [
+     "PAN",
+     "Panama"
+    ],
+    [
+     "PNG",
+     "Papua New Guinea"
+    ],
+    [
+     "PRY",
+     "Paraguay"
+    ],
+    [
+     "PER",
+     "Peru"
+    ],
+    [
+     "PHL",
+     "Philippines"
+    ],
+    [
+     "POL",
+     "Poland"
+    ],
+    [
+     "PRT",
+     "Portugal"
+    ],
+    [
+     "PST",
+     "Post-demographic dividend"
+    ],
+    [
+     "PRE",
+     "Pre-demographic dividend"
+    ],
+    [
+     "PRI",
+     "Puerto Rico (US)"
+    ],
+    [
+     "QAT",
+     "Qatar"
+    ],
+    [
+     "ROU",
+     "Romania"
+    ],
+    [
+     "RUS",
+     "Russian Federation"
+    ],
+    [
+     "RWA",
+     "Rwanda"
+    ],
+    [
+     "WSM",
+     "Samoa"
+    ],
+    [
+     "SMR",
+     "San Marino"
+    ],
+    [
+     "STP",
+     "Sao Tome and Principe"
+    ],
+    [
+     "SAU",
+     "Saudi Arabia"
+    ],
+    [
+     "SEN",
+     "Senegal"
+    ],
+    [
+     "SRB",
+     "Serbia"
+    ],
+    [
+     "SYC",
+     "Seychelles"
+    ],
+    [
+     "SLE",
+     "Sierra Leone"
+    ],
+    [
+     "SGP",
+     "Singapore"
+    ],
+    [
+     "SXM",
+     "Sint Maarten (Dutch part)"
+    ],
+    [
+     "SVK",
+     "Slovak Republic"
+    ],
+    [
+     "SVN",
+     "Slovenia"
+    ],
+    [
+     "SST",
+     "Small states"
+    ],
+    [
+     "SLB",
+     "Solomon Islands"
+    ],
+    [
+     "SOM",
+     "Somalia, Fed. Rep."
+    ],
+    [
+     "ZAF",
+     "South Africa"
+    ],
+    [
+     "SAS",
+     "South Asia"
+    ],
+    [
+     "TSA",
+     "South Asia (IDA & IBRD)"
+    ],
+    [
+     "SSD",
+     "South Sudan"
+    ],
+    [
+     "ESP",
+     "Spain"
+    ],
+    [
+     "LKA",
+     "Sri Lanka"
+    ],
+    [
+     "KNA",
+     "St. Kitts and Nevis"
+    ],
+    [
+     "LCA",
+     "St. Lucia"
+    ],
+    [
+     "MAF",
+     "St. Martin (French part)"
+    ],
+    [
+     "VCT",
+     "St. Vincent and the Grenadines"
+    ],
+    [
+     "SSF",
+     "Sub-Saharan Africa"
+    ],
+    [
+     "TSS",
+     "Sub-Saharan Africa (IDA & IBRD countries)"
+    ],
+    [
+     "SSA",
+     "Sub-Saharan Africa (excluding high income)"
+    ],
+    [
+     "SDN",
+     "Sudan"
+    ],
+    [
+     "SUR",
+     "Suriname"
+    ],
+    [
+     "SWE",
+     "Sweden"
+    ],
+    [
+     "CHE",
+     "Switzerland"
+    ],
+    [
+     "SYR",
+     "Syrian Arab Republic"
+    ],
+    [
+     "TJK",
+     "Tajikistan"
+    ],
+    [
+     "TZA",
+     "Tanzania"
+    ],
+    [
+     "THA",
+     "Thailand"
+    ],
+    [
+     "TLS",
+     "Timor-Leste"
+    ],
+    [
+     "TGO",
+     "Togo"
+    ],
+    [
+     "TON",
+     "Tonga"
+    ],
+    [
+     "TTO",
+     "Trinidad and Tobago"
+    ],
+    [
+     "TUN",
+     "Tunisia"
+    ],
+    [
+     "TUR",
+     "Turkiye"
+    ],
+    [
+     "TKM",
+     "Turkmenistan"
+    ],
+    [
+     "TCA",
+     "Turks and Caicos Islands"
+    ],
+    [
+     "TUV",
+     "Tuvalu"
+    ],
+    [
+     "UGA",
+     "Uganda"
+    ],
+    [
+     "UKR",
+     "Ukraine"
+    ],
+    [
+     "ARE",
+     "United Arab Emirates"
+    ],
+    [
+     "GBR",
+     "United Kingdom"
+    ],
+    [
+     "USA",
+     "United States"
+    ],
+    [
+     "URY",
+     "Uruguay"
+    ],
+    [
+     "UZB",
+     "Uzbekistan"
+    ],
+    [
+     "VUT",
+     "Vanuatu"
+    ],
+    [
+     "VEN",
+     "Venezuela, RB"
+    ],
+    [
+     "VNM",
+     "Viet Nam"
+    ],
+    [
+     "VIR",
+     "Virgin Islands (U.S.)"
+    ],
+    [
+     "PSE",
+     "West Bank and Gaza"
+    ],
+    [
+     "WLD",
+     "World"
+    ],
+    [
+     "YEM",
+     "Yemen, Rep."
+    ],
+    [
+     "ZMB",
+     "Zambia"
+    ],
+    [
+     "ZWE",
+     "Zimbabwe"
+    ]
+   ]
+  },
+  {
+   "id": "global-temperature",
+   "title": "Global temperature, monthly",
+   "description": "How much warmer or cooler the planet's surface was each month than a long-term average, from NASA and NOAA.",
+   "region": "World",
+   "domain": "Climate and emissions",
+   "source": "NASA GISTEMP and NOAA Climate at a Glance, via DataHub",
+   "source_url": "https://github.com/datasets/global-temp",
+   "licence": "CC BY 4.0 packaging of US federal data",
+   "file": "data/sets/global-temperature.csv",
+   "keys": [
+    "month"
+   ],
+   "time": {
+    "col": "month",
+    "type": "date",
+    "min": "1850-01-01",
+    "max": "2026-07-01"
+   },
+   "entity": null,
+   "rows": 2119,
+   "columns": [
+    {
+     "name": "nasa_anomaly_c",
+     "title": "Temperature anomaly, NASA",
+     "unit": "°C vs 1951-1980 average",
+     "description": "GISTEMP global land-ocean temperature index: difference from the 1951 to 1980 mean.",
+     "type": "num",
+     "filled": 1752
+    },
+    {
+     "name": "noaa_anomaly_c",
+     "title": "Temperature anomaly, NOAA",
+     "unit": "°C vs 20th-century average",
+     "description": "NOAA global land and ocean temperature anomaly: difference from the 20th-century average.",
+     "type": "num",
+     "filled": 2119
+    }
+   ],
+   "bytes": 51341,
+   "built": "2026-11-24",
+   "coverage": "1850 to 2026"
+  },
+  {
+   "id": "atmospheric-co2",
+   "title": "CO2 in the atmosphere, monthly",
+   "description": "The concentration of carbon dioxide in the air, measured at Mauna Loa since 1958 and averaged across the globe since 1979.",
+   "region": "World",
+   "domain": "Climate and emissions",
+   "source": "NOAA Global Monitoring Laboratory, via DataHub",
+   "source_url": "https://github.com/datasets/co2-ppm",
+   "licence": "Public domain (US federal data; PDDL packaging)",
+   "file": "data/sets/atmospheric-co2.csv",
+   "keys": [
+    "month"
+   ],
+   "time": {
+    "col": "month",
+    "type": "date",
+    "min": "1958-03-01",
+    "max": "2026-09-01"
+   },
+   "entity": null,
+   "rows": 823,
+   "columns": [
+    {
+     "name": "mauna_loa_ppm",
+     "title": "CO2 at Mauna Loa",
+     "unit": "parts per million",
+     "description": "Monthly mean CO2 at Mauna Loa Observatory, Hawaii.",
+     "type": "num",
+     "filled": 823
+    },
+    {
+     "name": "mauna_loa_trend_ppm",
+     "title": "CO2 at Mauna Loa, seasonal cycle removed",
+     "unit": "parts per million",
+     "description": "",
+     "type": "num",
+     "filled": 823
+    },
+    {
+     "name": "global_ppm",
+     "title": "CO2, global average",
+     "unit": "parts per million",
+     "description": "Monthly mean over marine surface sites worldwide.",
+     "type": "num",
+     "filled": 571
+    },
+    {
+     "name": "global_trend_ppm",
+     "title": "CO2, global average, seasonal cycle removed",
+     "unit": "parts per million",
+     "description": "",
+     "type": "num",
+     "filled": 571
+    }
+   ],
+   "bytes": 29965,
+   "built": "2026-11-24",
+   "coverage": "1958 to 2026"
   },
   {
    "id": "earthquakes-past-30-days",
@@ -2111,9 +5562,9 @@
   },
   {
    "id": "crude-oil-prices",
-   "title": "Crude oil spot prices, daily",
-   "description": "Daily WTI (Cushing, Oklahoma) and Brent (Europe) spot prices.",
-   "region": "US",
+   "title": "Crude oil benchmark prices, daily",
+   "description": "Daily spot prices for Brent, the international benchmark, and WTI, the US benchmark.",
+   "region": "World",
    "domain": "Energy",
    "source": "US Energy Information Administration, via DataHub",
    "source_url": "https://github.com/datasets/oil-prices",
@@ -2132,20 +5583,20 @@
    "rows": 10239,
    "columns": [
     {
-     "name": "wti_usd_per_barrel",
-     "title": "WTI spot price",
-     "unit": "US$ per barrel",
-     "description": "",
-     "type": "num",
-     "filled": 9547
-    },
-    {
      "name": "brent_usd_per_barrel",
      "title": "Brent spot price",
      "unit": "US$ per barrel",
      "description": "",
      "type": "num",
      "filled": 9132
+    },
+    {
+     "name": "wti_usd_per_barrel",
+     "title": "WTI spot price",
+     "unit": "US$ per barrel",
+     "description": "",
+     "type": "num",
+     "filled": 9547
     }
    ],
    "bytes": 235846,
@@ -2250,12 +5701,123 @@
    "bytes": 15231,
    "built": "2026-11-24",
    "coverage": "2024 to 2046",
-   "default_entities": [
+   "entities": 27,
+   "chart_entities": [
+    "PJM RTO",
     "DOM",
     "AEP",
-    "PJM RTO"
+    "COMED"
    ],
-   "entities": 27
+   "places": [
+    [
+     "AE",
+     "AE"
+    ],
+    [
+     "AEP",
+     "AEP"
+    ],
+    [
+     "APS",
+     "APS"
+    ],
+    [
+     "ATSI",
+     "ATSI"
+    ],
+    [
+     "BGE",
+     "BGE"
+    ],
+    [
+     "COMED",
+     "COMED"
+    ],
+    [
+     "DAYTON",
+     "DAYTON"
+    ],
+    [
+     "DEOK",
+     "DEOK"
+    ],
+    [
+     "DLCO",
+     "DLCO"
+    ],
+    [
+     "DOM",
+     "DOM"
+    ],
+    [
+     "DPL",
+     "DPL"
+    ],
+    [
+     "EKPC",
+     "EKPC"
+    ],
+    [
+     "FE-EAST",
+     "FE-EAST"
+    ],
+    [
+     "JCPL",
+     "JCPL"
+    ],
+    [
+     "METED",
+     "METED"
+    ],
+    [
+     "OVEC",
+     "OVEC"
+    ],
+    [
+     "PECO",
+     "PECO"
+    ],
+    [
+     "PENLC",
+     "PENLC"
+    ],
+    [
+     "PEPCO",
+     "PEPCO"
+    ],
+    [
+     "PJM MID-ATLANTIC",
+     "PJM MID-ATLANTIC"
+    ],
+    [
+     "PJM RTO",
+     "PJM RTO"
+    ],
+    [
+     "PJM WESTERN",
+     "PJM WESTERN"
+    ],
+    [
+     "PL",
+     "PL"
+    ],
+    [
+     "PLGRP",
+     "PLGRP"
+    ],
+    [
+     "PS",
+     "PS"
+    ],
+    [
+     "RECO",
+     "RECO"
+    ],
+    [
+     "UGI",
+     "UGI"
+    ]
+   ]
   }
  ]
 }

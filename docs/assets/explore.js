@@ -1,16 +1,17 @@
-/* Dataset explorer: pick variables, entities, time and filters; preview, compare, merge, download. */
+/* Explorer: pick variables, places and time; add conditions or merge; check the table and chart; download. */
 const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-const PAL = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#6250d6", "#e34948"];   // fixed order, validated on white
-const slots = new Map();   // a series keeps its colour while it stays on the chart
+const PAL = ["#3987e5", "#d95926", "#199e70", "#c98500", "#d55181", "#0ca30c", "#9085e9", "#e66767"];   // fixed order, validated on black
+const OPS = { ">": (a, b) => a > b, ">=": (a, b) => a >= b, "<": (a, b) => a < b, "<=": (a, b) => a <= b, "=": (a, b) => a == b, "≠": (a, b) => a != b };
+const FMT = { csv: "CSV", xlsx: "Excel", json: "JSON", tsv: "TSV" };
+let M = [], S = null, R = null, timer = 0, P = {};
+const cache = {}, slots = new Map();   // a series keeps its colour while it stays on the chart
+
 function colorOf(keys) {
   for (const k of [...slots.keys()]) if (!keys.includes(k)) slots.delete(k);
   keys.forEach(k => { if (!slots.has(k)) { const used = new Set(slots.values()); slots.set(k, PAL.findIndex((_, i) => !used.has(i))); } });
   return k => PAL[slots.get(k)];
 }
-const OPS = { ">": (a, b) => a > b, ">=": (a, b) => a >= b, "<": (a, b) => a < b, "<=": (a, b) => a <= b, "=": (a, b) => a == b, "≠": (a, b) => a != b };
-let M = [], S = null, R = null, timer = 0;
-const cache = {};
 
 function splitLine(line) {
   if (line.indexOf('"') < 0) return line.split(",");
@@ -46,7 +47,10 @@ async function load(ds) {
 const keyOf = (d, keys, i) => keys.length === 1 ? String(d.c[keys[0]][i]) : keys.map(k => d.c[k][i]).join("|");
 const sig = ds => ds.keys.join("+");
 const empty = v => v === "" || v === undefined || (typeof v === "number" && isNaN(v));
+const day = t => String(t).slice(0, 10);
+const size = b => b < 1e6 ? `${Math.max(1, Math.round(b / 1e3))} KB` : `${(b / 1e6).toFixed(1)} MB`;
 
+/* ---------- the table the visitor is building ---------- */
 function compute() {
   const ds = S.ds, d = S.data, T = d.c[ds.time.col], E = ds.entity ? d.c[ds.entity.col] : null;
   const ents = S.ents.size ? S.ents : null, m = S.merge && S.merge.data ? S.merge : null;
@@ -95,22 +99,22 @@ const fmt = (v, c) => empty(v) ? "" : c.type !== "num" || c.key ? String(v) :
 const raw = v => empty(v) ? "" : v;
 
 function drawPreview() {
-  const N = Math.min(R.n, 100);
-  let h = "<thead><tr>" + R.cols.map(c => `<th class="${c.type === "num" && !c.key ? "num" : ""}" title="${esc(c.title + (c.unit ? " (" + c.unit + ")" : ""))}">${esc(c.name)}</th>`).join("") + "</tr></thead><tbody>";
-  for (let r = 0; r < N; r++) h += "<tr>" + R.cols.map(c => `<td class="${c.type === "num" && !c.key ? "num" : ""}">${esc(fmt(R.get(r, c), c))}</td>`).join("") + "</tr>";
-  $("#preview").innerHTML = R.n ? h + "</tbody>" : `<tbody><tr><td>No rows match. Loosen the filters or select more variables.</td></tr></tbody>`;
-  $("#preview-note").textContent = R.n > N ? `Showing the first ${N} of ${R.n.toLocaleString()} rows. The download contains all of them.` : "";
+  const N = Math.min(R.n, 100), cls = c => c.type === "num" && !c.key ? "num" : "";
+  let h = "<thead><tr>" + R.cols.map(c => `<th class="${cls(c)}" title="${esc(c.title + (c.unit ? " (" + c.unit + ")" : ""))}">${esc(c.name)}</th>`).join("") + "</tr></thead><tbody>";
+  for (let r = 0; r < N; r++) h += "<tr>" + R.cols.map(c => `<td class="${cls(c)}">${esc(fmt(R.get(r, c), c))}</td>`).join("") + "</tr>";
+  $("#preview").innerHTML = R.n ? h + "</tbody>" : `<tbody><tr><td>No rows match. Remove a condition, widen the years, or add a variable.</td></tr></tbody>`;
+  $("#preview-note").textContent = R.n > N ? `The first ${N} of ${R.n.toLocaleString()} rows. The download has all of them.` : "";
 }
 
 function drawStats() {
   const vs = R.cols.filter(c => !c.key && c.type === "num");
-  $("#stats").innerHTML = "<thead><tr><th>Variable</th><th>Unit</th><th class='num'>Filled</th><th class='num'>Min</th><th class='num'>Mean</th><th class='num'>Max</th></tr></thead><tbody>" +
+  $("#stats").innerHTML = "<thead><tr><th>Variable</th><th>Unit</th><th class='num'>Filled</th><th class='num'>Lowest</th><th class='num'>Average</th><th class='num'>Highest</th></tr></thead><tbody>" +
     vs.map(c => {
       let n = 0, s = 0, lo = Infinity, hi = -Infinity;
       for (let r = 0; r < R.n; r++) { const v = R.get(r, c); if (!isNaN(v)) { n++; s += v; if (v < lo) lo = v; if (v > hi) hi = v; } }
       const f = x => n ? fmt(x, c) : "";
       return `<tr><td>${esc(c.title)}</td><td>${esc(c.unit || "")}</td><td class="num">${n.toLocaleString()}</td><td class="num">${f(lo)}</td><td class="num">${f(s / n)}</td><td class="num">${f(hi)}</td></tr>`;
-    }).join("") + (vs.length ? "" : "<tr><td colspan='6'>Select at least one numeric variable.</td></tr>") + "</tbody>";
+    }).join("") + (vs.length ? "" : "<tr><td colspan='6'>Add a numeric variable to see its summary.</td></tr>") + "</tbody>";
 }
 
 function drawChart() {
@@ -118,23 +122,29 @@ function drawChart() {
   const keep = sel.value; sel.innerHTML = nums.map(c => `<option value="${esc(c.name)}">${esc(c.title)}</option>`).join("");
   if (nums.some(c => c.name === keep)) sel.value = keep;
   sel.parentElement.style.display = ds.entity ? "" : "none";
-  if (!nums.length || !R.n) { box.innerHTML = "<p class='legend'>Select at least one numeric variable to draw a chart.</p>"; return; }
+  if (!nums.length || !R.n) { box.innerHTML = "<p class='legend'>Add a numeric variable to draw a chart.</p>"; return; }
   const tc = R.cols.find(c => c.col === ds.time.col && c.key), x = r => ds.time.type === "year" ? R.get(r, tc) : Date.parse(R.get(r, tc));
-  const series = new Map(); let note = "";
+  const series = new Map(); let note = "", unit = "";
   if (ds.entity) {
-    const vc = nums.find(c => c.name === sel.value) || nums[0], lc = R.cols.find(c => c.col === ds.entity.label_col) || R.cols[0];
-    for (let r = 0; r < R.n; r++) { const v = R.get(r, vc); if (isNaN(v)) continue; const k = R.get(r, lc); (series.get(k) || series.set(k, []).get(k)).push([x(r), v]); }
+    const vc = nums.find(c => c.name === sel.value) || nums[0], lc = R.cols.find(c => c.col === ds.entity.label_col) || R.cols[0], ec = R.cols.find(c => c.col === ds.entity.col);
+    const prefer = !S.ents.size && ds.chart_entities ? new Set(ds.chart_entities) : null;
+    for (let r = 0; r < R.n; r++) {
+      if (prefer && !prefer.has(R.get(r, ec))) continue;
+      const v = R.get(r, vc); if (isNaN(v)) continue;
+      const k = R.get(r, lc); (series.get(k) || series.set(k, []).get(k)).push([x(r), v]);
+    }
+    if (prefer) note = `Showing a starter set of ${series.size}. Pick places above to compare your own.`;
     if (series.size > 8) {
       const top = [...series].sort((a, b) => b[1][b[1].length - 1][1] - a[1][a[1].length - 1][1]).slice(0, 8);
-      note = `Showing the 8 largest of ${series.size} ${ds.entity.label.toLowerCase()} entries by latest value. Select up to 8 on the left to compare them.`;
+      note = `Showing the 8 largest of ${series.size} by latest value. Pick up to 8 places above to compare them.`;
       series.clear(); top.forEach(([k, v]) => series.set(k, v));
     }
-    box.dataset.unit = vc.unit || "";
+    unit = vc.unit || "";
   } else {
     nums.slice(0, 8).forEach(c => { const pts = []; for (let r = 0; r < R.n; r++) { const v = R.get(r, c); if (!isNaN(v)) pts.push([x(r), v]); } if (pts.length) series.set(c.title, pts); });
-    box.dataset.unit = nums.length === 1 ? nums[0].unit || "" : "";
+    unit = nums.length === 1 ? nums[0].unit || "" : "";
   }
-  const idx = $("#chart-index").checked;
+  const idx = $("#chart-index").checked, dots = ds.chart === "points";
   let all = [];
   series.forEach((pts, k) => {
     pts.sort((a, b) => a[0] - b[0]);
@@ -143,44 +153,45 @@ function drawChart() {
     series.set(k, pts); all = all.concat(pts);
   });
   if (!all.length) { box.innerHTML = "<p class='legend'>No values to plot for this selection.</p>"; return; }
-  const W = Math.max(320, box.clientWidth || 700), H = 360, m = { l: 62, r: 22, t: 14, b: 30 };
+  const W = Math.max(320, box.clientWidth || 700), H = 400, m = { l: 62, r: 22, t: 14, b: 30 };
   let x0 = Math.min(...all.map(p => p[0])), x1 = Math.max(...all.map(p => p[0])), y0 = Math.min(0, ...all.map(p => p[1])), y1 = Math.max(...all.map(p => p[1]));
   if (x0 === x1) { x0 -= 1; x1 += 1; } if (y0 === y1) y1 = y0 + 1;
-  const step = (() => { const raw = (y1 - y0) / 5, p = Math.pow(10, Math.floor(Math.log10(raw))), f = raw / p; return (f < 1.5 ? 1 : f < 3 ? 2 : f < 7 ? 5 : 10) * p; })();
+  const step = (() => { const rw = (y1 - y0) / 5, p = Math.pow(10, Math.floor(Math.log10(rw))), f = rw / p; return (f < 1.5 ? 1 : f < 3 ? 2 : f < 7 ? 5 : 10) * p; })();
   y1 = Math.ceil(y1 / step) * step; y0 = Math.floor(y0 / step) * step;
   const sx = v => m.l + (v - x0) / (x1 - x0) * (W - m.l - m.r), sy = v => H - m.b - (v - y0) / (y1 - y0) * (H - m.t - m.b);
   const short = v => Math.abs(v) >= 1e9 ? +(v / 1e9).toPrecision(3) + "B" : Math.abs(v) >= 1e6 ? +(v / 1e6).toPrecision(3) + "M" : Math.abs(v) >= 1e4 ? +(v / 1e3).toPrecision(3) + "k" : String(+v.toPrecision(4));
-  const xl = v => S.ds.time.type === "year" ? String(Math.round(v)) : new Date(v).toISOString().slice(0, 10);
+  const xl = v => ds.time.type === "year" ? String(Math.round(v)) : new Date(v).toISOString().slice(0, 10);
   let g = "";
-  for (let v = y0; v <= y1 + step / 2; v += step) g += `<line x1="${m.l}" x2="${W - m.r}" y1="${sy(v)}" y2="${sy(v)}" stroke="#e8e8ed"/><text x="${m.l - 8}" y="${sy(v) + 4}" text-anchor="end" font-size="12" fill="#6e6e73">${short(v)}</text>`;
-  const yr = S.ds.time.type === "year", Y = v => yr ? v : new Date(v).getUTCFullYear() + (v - Date.UTC(new Date(v).getUTCFullYear(), 0, 1)) / 31557600000;
+  for (let v = y0; v <= y1 + step / 2; v += step) g += `<line x1="${m.l}" x2="${W - m.r}" y1="${sy(v)}" y2="${sy(v)}" stroke="rgba(240,240,250,${Math.abs(v) < step / 1e6 ? ".38" : ".13"})"/><text x="${m.l - 8}" y="${sy(v) + 4}" text-anchor="end" font-size="12" fill="#80808a">${short(v)}</text>`;
+  const yr = ds.time.type === "year", Y = v => yr ? v : new Date(v).getUTCFullYear() + (v - Date.UTC(new Date(v).getUTCFullYear(), 0, 1)) / 31557600000;
   const span = Y(x1) - Y(x0), ticks = [];
   if (span >= 3) {
     const st = [1, 2, 5, 10, 20, 25, 50, 100].find(s => span / s <= (W < 520 ? 5 : 9)) || 100;
     for (let y = Math.ceil(Y(x0) / st) * st; y <= Y(x1) + 1e-9; y += st) ticks.push([yr ? y : Date.UTC(y, 0, 1), String(y)]);
   } else for (let i = 0; i <= 4; i++) { const v = x0 + (x1 - x0) * i / 4; ticks.push([v, xl(v)]); }
-  ticks.forEach(([v, t]) => { g += `<line x1="${sx(v)}" x2="${sx(v)}" y1="${H - m.b}" y2="${H - m.b + 5}" stroke="#c7c7cc"/><text x="${sx(v)}" y="${H - 8}" text-anchor="middle" font-size="12" fill="#6e6e73">${t}</text>`; });
-  const paint = colorOf([...series.keys()]), dots = ds.chart === "points";
+  ticks.forEach(([v, t]) => { g += `<line x1="${sx(v)}" x2="${sx(v)}" y1="${H - m.b}" y2="${H - m.b + 5}" stroke="rgba(240,240,250,.38)"/><text x="${sx(v)}" y="${H - 8}" text-anchor="middle" font-size="12" fill="#80808a">${t}</text>`; });
+  const paint = colorOf([...series.keys()]);
   let leg = "";
   series.forEach((pts, k) => {
     const col = paint(k);
-    if (dots) g += pts.map(p => `<circle cx="${sx(p[0]).toFixed(1)}" cy="${sy(p[1]).toFixed(1)}" r="2.6" fill="${col}" fill-opacity=".55"/>`).join("");
-    else g += `<path d="${pts.map((p, j) => (j ? "L" : "M") + sx(p[0]).toFixed(1) + " " + sy(p[1]).toFixed(1)).join("")}" fill="none" stroke="${col}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`;
-    if (!dots) { const e = pts[pts.length - 1]; g += `<circle cx="${sx(e[0]).toFixed(1)}" cy="${sy(e[1]).toFixed(1)}" r="4.5" fill="${col}" stroke="#fff" stroke-width="2"/>`; }
+    if (dots) g += pts.map(p => `<circle cx="${sx(p[0]).toFixed(1)}" cy="${sy(p[1]).toFixed(1)}" r="2.6" fill="${col}" fill-opacity=".6"/>`).join("");
+    else {
+      g += `<path d="${pts.map((p, j) => (j ? "L" : "M") + sx(p[0]).toFixed(1) + " " + sy(p[1]).toFixed(1)).join("")}" fill="none" stroke="${col}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`;
+      const e = pts[pts.length - 1]; g += `<circle cx="${sx(e[0]).toFixed(1)}" cy="${sy(e[1]).toFixed(1)}" r="4.5" fill="${col}" stroke="#000" stroke-width="2"/>`;
+    }
     leg += `<span><b style="background:${col}"></b>${esc(k)}</span>`;
   });
-  box.innerHTML = `<svg viewBox="0 0 ${W} ${H}" width="100%" height="${H}" role="img" aria-label="Line chart of the current selection">${g}<line id="rule" y1="${m.t}" y2="${H - m.b}" stroke="#86868b" visibility="hidden"/></svg>
-    <div class="legend chartleg">${leg}</div><div class="legend">${idx ? "Indexed: first value = 100. " : box.dataset.unit ? "Unit: " + esc(box.dataset.unit) + ". " : ""}${esc(note)}</div><div id="tip" class="tip" hidden></div>`;
+  box.innerHTML = `<svg viewBox="0 0 ${W} ${H}" width="100%" height="${H}" role="img" aria-label="Chart of the current selection. The Table tab has the same values.">${g}<line id="rule" y1="${m.t}" y2="${H - m.b}" stroke="rgba(240,240,250,.6)" visibility="hidden"/></svg>
+    <div class="legend chartleg">${leg}</div><div class="legend">${idx ? "Indexed: first value = 100. " : unit ? "Unit: " + esc(unit) + ". " : ""}${esc(note)}</div><div id="tip" class="tip" hidden></div>`;
   const svg = $("svg", box), tip = $("#tip"), rule = $("#rule");
   svg.onmousemove = ev => {
     const rc = svg.getBoundingClientRect(), xv = x0 + ((ev.clientX - rc.left) / rc.width * W - m.l) / (W - m.l - m.r) * (x1 - x0);
     let best = null; series.forEach(pts => pts.forEach(p => { if (best === null || Math.abs(p[0] - xv) < Math.abs(best - xv)) best = p[0]; }));
-    const rows = []; let j = 0;
-    const tol = (x1 - x0) / 150;
-    series.forEach((pts, k) => { const col = paint(k); let p = pts[0]; for (const q of pts) if (Math.abs(q[0] - best) < Math.abs(p[0] - best)) p = q; if (Math.abs(p[0] - best) <= tol) rows.push([p[1], `<div class="row"><span class="key" style="background:${col}"></span><strong>${short(p[1])}</strong> <span class="nm">${esc(k)}</span></div>`]); });
+    const rows = [], tol = (x1 - x0) / 150;
+    series.forEach((pts, k) => { let p = pts[0]; for (const q of pts) if (Math.abs(q[0] - best) < Math.abs(p[0] - best)) p = q; if (Math.abs(p[0] - best) <= tol) rows.push([p[1], `<div class="row"><span class="key" style="background:${paint(k)}"></span><strong>${short(p[1])}</strong> <span class="nm">${esc(k)}</span></div>`]); });
     rule.setAttribute("x1", sx(best)); rule.setAttribute("x2", sx(best)); rule.setAttribute("visibility", "visible");
     tip.innerHTML = `<div class="nm">${xl(best)}</div>` + rows.sort((a, b) => b[0] - a[0]).map(r => r[1]).join("");
-    tip.hidden = false; tip.style.left = Math.min(rc.width - 200, Math.max(0, ev.clientX - rc.left + 14)) + "px"; tip.style.top = (ev.clientY - rc.top + 10) + "px";
+    tip.hidden = false; tip.style.left = Math.min(rc.width - 210, Math.max(0, ev.clientX - rc.left + 14)) + "px"; tip.style.top = (ev.clientY - rc.top + 10) + "px";
   };
   svg.onmouseleave = () => { tip.hidden = true; rule.setAttribute("visibility", "hidden"); };
 }
@@ -189,45 +200,105 @@ function refresh() {
   clearTimeout(timer);
   timer = setTimeout(() => {
     R = compute();
-    $("#summary").innerHTML = `<strong>${R.n.toLocaleString()}</strong> rows, <strong>${R.cols.length}</strong> columns` + (S.merge && S.merge.data ? `, merged with ${esc(S.merge.ds.title)}` : "");
-    $("#dl").disabled = !R.n;
-    const cells = R.n * R.cols.length;
-    $("#dl-note").textContent = $("#fmt").value === "xlsx" && cells > 2e6 ? "This selection is too large for Excel export here. Use CSV, or narrow the selection." : "";
-    drawPreview(); drawStats(); drawChart(); saveHash();
+    $("#summary").innerHTML = `<strong>${R.n.toLocaleString()}</strong> rows, <strong>${R.cols.length}</strong> columns` + (S.merge && S.merge.data ? `, merged` : "");
+    const big = S.fmt === "xlsx" && R.n * R.cols.length > 2e6;
+    $("#dl").disabled = !R.n || big; $("#dl").textContent = `Download ${FMT[S.fmt]}`;
+    $("#dl-note").textContent = big ? "This table is too large for Excel here. Switch to CSV, or narrow the selection." : "";
+    drawPreview(); drawStats(); if (!$("#pane-chart").hidden) drawChart(); saveHash();
   }, 90);
 }
 
-function checklist(box, items, set, onChange) {
-  box.innerHTML = items.map(it => `<label title="${esc(it.tip || "")}" data-q="${esc((it.label + " " + it.value).toLowerCase())}"><input type="checkbox" value="${esc(it.value)}" ${set.has(it.value) ? "checked" : ""}><span>${esc(it.label)}${it.sub ? ` <small>${esc(it.sub)}</small>` : ""}</span></label>`).join("");
-  box.onchange = e => { e.target.checked ? set.add(e.target.value) : set.delete(e.target.value); onChange(); };
+/* ---------- chip picker: search box, tick list, selected items as removable chips ---------- */
+const live = new Map();
+function picker(root, o) {
+  live.get(root.id)?.abort();
+  const ac = new AbortController(), on = { signal: ac.signal }; live.set(root.id, ac);
+  root.innerHTML = `<div class="chips"></div><div class="combo"><input type="search" role="combobox" aria-expanded="false" aria-autocomplete="list" autocomplete="off" placeholder="${esc(o.add)}" aria-label="${esc(o.add)}"><div class="menu" role="listbox" hidden></div></div>
+    <div class="pacts">${o.allText ? `<button type="button" class="link" data-a="all">${esc(o.allText)}</button>` : ""}<button type="button" class="link" data-a="none">${esc(o.clearText)}</button></div>`;
+  const chips = $(".chips", root), input = $("input", root), menu = $(".menu", root), by = new Map(o.items.map(i => [i.value, i]));
+  o.items.forEach(i => i.q = (i.label + " " + i.value + " " + (i.sub || "")).toLowerCase());
+  let act = -1, list = [], showAll = false;
+  const matches = () => { const q = input.value.trim().toLowerCase(); return o.items.filter(i => !q || i.q.includes(q)); };
+  function drawChips() {
+    const sel = [...o.set].filter(v => by.has(v));
+    if (!sel.length) { chips.innerHTML = `<span class="chip ghost">${esc(o.none)}</span>`; return; }
+    const lim = showAll ? sel.length : 10;
+    chips.innerHTML = sel.slice(0, lim).map(v => `<span class="chip">${esc(by.get(v).label)}<button type="button" data-v="${esc(v)}" aria-label="Remove ${esc(by.get(v).label)}">×</button></span>`).join("") +
+      (sel.length > lim ? `<button type="button" class="chip more" data-more="1">and ${sel.length - lim} more</button>` : "");
+  }
+  function drawMenu() {
+    const top = menu.scrollTop; list = matches().slice(0, 400);
+    menu.innerHTML = list.map((i, k) => `<div class="opt${k === act ? " act" : ""}" role="option" aria-selected="${o.set.has(i.value)}" data-v="${esc(i.value)}" title="${esc(i.tip || "")}"><span class="box"></span><span>${esc(i.label)}${i.sub ? ` <small>${esc(i.sub)}</small>` : ""}</span></div>`).join("") ||
+      `<div class="opt none">Nothing matches. Try a shorter word.</div>`;
+    menu.scrollTop = top;
+  }
+  const open = () => { if (menu.hidden) { menu.hidden = false; input.setAttribute("aria-expanded", "true"); act = -1; drawMenu(); } };
+  const close = () => { menu.hidden = true; input.setAttribute("aria-expanded", "false"); };
+  const toggle = v => { o.set.has(v) ? o.set.delete(v) : o.set.add(v); drawChips(); drawMenu(); o.onChange(); };
+  input.addEventListener("focus", open, on);
+  input.addEventListener("input", () => { act = -1; open(); menu.scrollTop = 0; drawMenu(); }, on);
+  input.addEventListener("keydown", e => {
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") { open(); act = Math.max(0, Math.min(list.length - 1, act + (e.key === "ArrowDown" ? 1 : -1))); drawMenu(); $(".opt.act", menu)?.scrollIntoView({ block: "nearest" }); e.preventDefault(); }
+    else if (e.key === "Enter") { const it = list[act < 0 ? 0 : act]; if (it && !menu.hidden) { toggle(it.value); if (input.value) { input.value = ""; act = -1; drawMenu(); } } e.preventDefault(); }
+    else if (e.key === "Escape") { close(); input.blur(); }
+    else if (e.key === "Backspace" && !input.value && o.set.size) { const last = [...o.set].filter(v => by.has(v)).pop(); if (last !== undefined) toggle(last); }
+  }, on);
+  menu.addEventListener("mousedown", e => e.preventDefault(), on);       // keep focus in the box while ticking
+  menu.addEventListener("click", e => { const op = e.target.closest(".opt[data-v]"); if (op) toggle(op.dataset.v); }, on);
+  root.addEventListener("click", e => {
+    const b = e.target.closest("button"); if (!b) return;
+    if (b.dataset.v !== undefined) { o.set.delete(b.dataset.v); }
+    else if (b.dataset.more) { showAll = true; drawChips(); return; }
+    else if (b.dataset.a === "all") matches().forEach(i => o.set.add(i.value));
+    else if (b.dataset.a === "none") { o.set.clear(); showAll = false; }
+    else return;
+    drawChips(); if (!menu.hidden) drawMenu(); o.onChange();
+  }, on);
+  document.addEventListener("mousedown", e => { if (!root.contains(e.target)) close(); }, on);
+  input.addEventListener("blur", () => setTimeout(() => { if (!root.contains(document.activeElement)) close(); }, 0), on);
+  drawChips();
+  return { redraw: () => { drawChips(); if (!menu.hidden) drawMenu(); } };
 }
-const search = (input, box) => input.oninput = () => { const q = input.value.trim().toLowerCase(); $$("label", box).forEach(l => l.hidden = q && !l.dataset.q.includes(q)); };
-const setAll = (box, set, on, onChange) => { $$("label:not([hidden]) input", box).forEach(i => { i.checked = on; on ? set.add(i.value) : set.delete(i.value); }); onChange(); };
-const count = (id, set, total, none) => $("#" + id).textContent = set.size ? `${set.size} of ${total} selected` : none;
 
+/* ---------- time presets ---------- */
+function drawPresets() {
+  const ds = S.ds, yr = ds.time.type === "year", box = $("#presets"), lo = day(ds.time.min), hi = day(ds.time.max), list = [["All", "", ""]];
+  if (yr) {
+    const now = Math.min(+hi, new Date().getFullYear());
+    if (+lo < 2000 && +hi >= 2000) list.push(["Since 2000", "2000", ""]);
+    if (now - 9 > +lo) list.push(["Last 10 years", String(now - 9), String(now)]);
+    list.push(["Latest year", hi, hi]);
+  } else {
+    const back = n => { const d = new Date(hi + "T00:00:00Z"); d.setUTCDate(d.getUTCDate() - n); return d.toISOString().slice(0, 10); };
+    [["Last 30 days", 30], ["Last year", 365], ["Last 5 years", 1826], ["Last 20 years", 7305]].forEach(([l, n]) => { if (back(n) > lo) list.push([l, back(n), ""]); });
+  }
+  box.innerHTML = list.map(([l, f, t]) => `<button type="button" data-f="${f}" data-t="${t}">${l}</button>`).join("");
+  box.onclick = e => { const b = e.target.closest("button"); if (!b) return; S.from = b.dataset.f; S.to = b.dataset.t; $("#t-from").value = S.from; $("#t-to").value = S.to; refresh(); };
+}
+
+/* ---------- conditions and merging ---------- */
 function drawFilters() {
   const opts = [...S.ds.columns.map(c => [`b:${c.name}`, c.title]), ...(S.merge && S.merge.data ? S.merge.ds.columns.map(c => [`m:${c.name}`, `${c.title} (${S.merge.ds.title})`]) : [])];
-  $("#filters").innerHTML = S.filters.map((f, i) => `<div class="rule" data-i="${i}"><select data-k="ref" aria-label="Filter variable">${opts.map(o => `<option value="${esc(o[0])}" ${o[0] === f.ref ? "selected" : ""}>${esc(o[1])}</option>`).join("")}</select>
+  $("#filters").innerHTML = S.filters.map((f, i) => `<div class="rule" data-i="${i}"><select data-k="ref" aria-label="Variable">${opts.map(o => `<option value="${esc(o[0])}" ${o[0] === f.ref ? "selected" : ""}>${esc(o[1])}</option>`).join("")}</select>
     <select data-k="op" aria-label="Condition">${[...Object.keys(OPS), "filled"].map(o => `<option value="${o}" ${o === f.op ? "selected" : ""}>${o === "filled" ? "is not empty" : o}</option>`).join("")}</select>
-    <input data-k="val" value="${esc(f.val)}" placeholder="value" aria-label="Value" ${f.op === "filled" ? "hidden" : ""}><button type="button" data-k="x" aria-label="Remove filter">×</button></div>`).join("");
+    <input data-k="val" value="${esc(f.val)}" placeholder="value" aria-label="Value" ${f.op === "filled" ? "hidden" : ""}><button type="button" data-k="x" aria-label="Remove this condition">×</button></div>`).join("");
 }
 
 function drawMerge() {
   const m = S.merge, box = $("#merge-body");
-  if (!m || !m.data) { box.innerHTML = m ? "<p class='legend'>Loading…</p>" : ""; return; }
-  box.innerHTML = `<p class="legend" style="margin:8px 0">Matched on ${S.ds.keys.join(" + ")}. Choose which of its variables to add.</p>
-    <select id="m-how" aria-label="Join type"><option value="left">Keep all rows of this dataset</option><option value="inner" ${m.how === "inner" ? "selected" : ""}>Keep only rows found in both</option></select>
-    <input id="m-q" type="search" placeholder="Search its variables" style="margin-top:8px"><div class="list" id="m-vars"></div><div class="mini"><span id="m-count"></span></div>`;
-  const upd = () => { count("m-count", m.vars, m.ds.columns.length, "None selected"); refresh(); };
-  checklist($("#m-vars"), m.ds.columns.map(c => ({ value: c.name, label: c.title, sub: c.unit, tip: c.description })), m.vars, upd);
-  search($("#m-q"), $("#m-vars")); $("#m-how").onchange = e => { m.how = e.target.value; refresh(); };
-  count("m-count", m.vars, m.ds.columns.length, "None selected");
+  if (!m) { box.innerHTML = ""; return; }
+  if (!m.data) { box.innerHTML = "<p>Loading that dataset.</p>"; return; }
+  box.innerHTML = `<p>Rows are matched on ${esc(S.ds.keys.join(" and "))}. Choose which of its variables to add.</p>
+    <select id="m-how" aria-label="Rows to keep"><option value="left">Keep every row of this dataset</option><option value="inner" ${m.how === "inner" ? "selected" : ""}>Keep only rows found in both</option></select>
+    <div class="pick" id="p-merge"></div>`;
+  picker($("#p-merge"), { items: m.ds.columns.map(c => ({ value: c.name, label: c.title, sub: c.unit, tip: c.description })), set: m.vars, add: "Add a variable from it", none: "No variables added yet", allText: "", clearText: "Clear", onChange: refresh });
+  $("#m-how").onchange = e => { m.how = e.target.value; refresh(); };
 }
 
 async function setMerge(id, vars, how) {
   if (!id) { S.merge = null; drawMerge(); drawFilters(); refresh(); return; }
   const ds = M.find(d => d.id === id);
-  S.merge = { ds, data: null, vars: new Set(vars || (ds.default_vars || ds.columns.slice(0, 1).map(c => c.name)).filter(v => ds.columns.some(c => c.name === v))), how: how || "left" };
+  S.merge = { ds, data: null, vars: new Set((vars || ds.default_vars || ds.columns.slice(0, 1).map(c => c.name)).filter(v => ds.columns.some(c => c.name === v))), how: how || "left" };
   drawMerge();
   S.merge.data = await load(ds);
   drawMerge(); drawFilters(); refresh();
@@ -241,7 +312,7 @@ function saveHash() {
 }
 
 function download() {
-  const f = $("#fmt").value, name = `${S.ds.id}${S.merge && S.merge.data ? "_merged" : ""}_${new Date().toISOString().slice(0, 10)}`;
+  const f = S.fmt, name = `${S.ds.id}${S.merge && S.merge.data ? "_merged" : ""}_${new Date().toISOString().slice(0, 10)}`;
   const head = R.cols.map(c => c.name);
   const save = (blob, ext) => { const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = `${name}.${ext}`; document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000); };
   if (f === "csv" || f === "tsv") {
@@ -269,38 +340,33 @@ async function openSet(id, st = {}) {
   const ds = M.find(d => d.id === id) || M[0];
   $("#ds").value = ds.id; document.title = `${ds.title} | Open Data Company`;
   $("#title").textContent = ds.title; $("#desc").textContent = ds.description;
-  const day = t => String(t).slice(0, 10);
   $("#meta").innerHTML = [`Source: <a href="${esc(ds.source_url)}" target="_blank" rel="noopener">${esc(ds.source)}</a>`, `Licence: ${esc(ds.licence)}`,
     `${ds.rows.toLocaleString()} rows, ${ds.columns.length} variables`, `${esc(day(ds.time.min))} to ${esc(day(ds.time.max))}`, `Built ${esc(ds.built)}`,
-    `<a href="${esc(ds.file)}" download>Download the full file (CSV, ${(ds.bytes / 1e6).toFixed(1)} MB)</a>`].map(x => `<span>${x}</span>`).join("");
-  $("#work").hidden = true; $("#loading").hidden = false; $("#loading").textContent = `Loading ${(ds.bytes / 1e6).toFixed(1)} MB of data…`;
+    `<a href="${esc(ds.file)}" download>Download everything (CSV, ${size(ds.bytes)})</a>`].map(x => `<span>${x}</span>`).join("");
+  $("#work").hidden = true; $("#dock").hidden = true; $("#loading").hidden = false; $("#loading").textContent = `Loading ${size(ds.bytes)} of data.`;
   const data = await load(ds), has = v => ds.columns.some(c => c.name === v);
   const dv = (st.v ?? (ds.default_vars || ds.columns.slice(0, 4).map(c => c.name))).filter(has);
-  S = { ds, data, vars: new Set(dv), ents: new Set(), from: st.f ?? "", to: st.t ?? "", filters: st.q || [], dropEmpty: true, merge: null };
-  $("#loading").hidden = true; $("#work").hidden = false;
-  const vupd = () => { count("v-count", S.vars, ds.columns.length, "None selected: keys only"); refresh(); };
-  checklist($("#vars"), ds.columns.map(c => ({ value: c.name, label: c.title, sub: c.unit, tip: c.description })), S.vars, vupd);
-  $("#v-q").value = ""; search($("#v-q"), $("#vars"));
-  $("#v-all").onclick = () => setAll($("#vars"), S.vars, true, vupd); $("#v-none").onclick = () => setAll($("#vars"), S.vars, false, vupd);
-  count("v-count", S.vars, ds.columns.length, "None selected: keys only");
-  $("#ent-panel").hidden = !ds.entity;
+  S = { ds, data, vars: new Set(dv), ents: new Set(), from: st.f ?? "", to: st.t ?? "", filters: st.q || [], dropEmpty: true, merge: null, fmt: S ? S.fmt : "csv" };
+  slots.clear();
+  $("#loading").hidden = true; $("#work").hidden = false; $("#dock").hidden = false;
+  P.vars = picker($("#p-vars"), { items: ds.columns.map(c => ({ value: c.name, label: c.title, sub: c.unit, tip: c.description })), set: S.vars, add: "Search and add variables",
+    none: "No variables picked: the file will hold only the key columns", allText: ds.columns.length > 1 ? "Add all" : "", clearText: "Clear", onChange: refresh });
+  $("#row-ents").hidden = !ds.entity; $("#n-time").textContent = ds.entity ? "3" : "2"; $("#n-more").textContent = ds.entity ? "4" : "3";
   if (ds.entity) {
     const E = data.c[ds.entity.col], L = data.c[ds.entity.label_col], seen = new Map();
     for (let i = 0; i < data.n; i++) if (!seen.has(E[i])) seen.set(E[i], L[i]);
     const items = [...seen].map(([value, label]) => ({ value, label, sub: label === value ? "" : value })).sort((a, b) => a.label.localeCompare(b.label));
-    (st.e ?? ds.default_entities ?? []).filter(e => seen.has(e)).forEach(e => S.ents.add(e));
-    const eupd = () => { count("e-count", S.ents, items.length, `All ${items.length} included`); refresh(); };
+    (st.e ?? []).filter(e => seen.has(e)).forEach(e => S.ents.add(e));
     $("#e-title").textContent = ds.entity.label;
-    checklist($("#ents"), items, S.ents, eupd); $("#e-q").value = ""; search($("#e-q"), $("#ents"));
-    $("#e-all").onclick = () => { S.ents.clear(); $$("input", $("#ents")).forEach(i => i.checked = false); eupd(); };
-    count("e-count", S.ents, items.length, `All ${items.length} included`);
+    P.ents = picker($("#p-ents"), { items, set: S.ents, add: `Search and add, for example ${items.find(i => i.label === "India") ? "India" : items[0].label}`, none: `All ${items.length} included`, allText: "", clearText: "Include all", onChange: refresh });
   }
   const yr = ds.time.type === "year";
   ["from", "to"].forEach(k => { const el = $("#t-" + k); el.type = yr ? "number" : "date"; el.min = day(ds.time.min); el.max = day(ds.time.max); el.value = S[k]; el.placeholder = k === "from" ? day(ds.time.min) : day(ds.time.max); el.oninput = () => { S[k] = el.value; refresh(); }; });
-  $("#t-note").textContent = `Available: ${day(ds.time.min)} to ${day(ds.time.max)}. Leave blank for everything.`;
+  drawPresets();
   const mates = M.filter(d => d.id !== ds.id && sig(d) === sig(ds));
-  $("#merge").innerHTML = `<option value="">${mates.length ? "No merge" : "No compatible dataset yet"}</option>` + mates.map(d => `<option value="${esc(d.id)}">${esc(d.title)}</option>`).join("");
+  $("#merge").innerHTML = `<option value="">${mates.length ? "None" : "Nothing shares this dataset's keys yet"}</option>` + mates.map(d => `<option value="${esc(d.id)}">${esc(d.title)}</option>`).join("");
   $("#merge").disabled = !mates.length; $("#merge").onchange = e => setMerge(e.target.value);
+  $("#drop").checked = true; $("#more").open = !!(S.filters.length || st.m);
   drawMerge(); drawFilters();
   if (st.m && mates.some(d => d.id === st.m)) { $("#merge").value = st.m; await setMerge(st.m, st.mv, st.how); } else refresh();
 }
@@ -310,16 +376,17 @@ async function init() {
   $("#ds").innerHTML = M.map(d => `<option value="${esc(d.id)}">${esc(d.title)}</option>`).join("");
   $("#ds").onchange = e => openSet(e.target.value);
   $("#drop").onchange = e => { S.dropEmpty = e.target.checked; refresh(); };
-  $("#add-filter").onclick = () => { S.filters.push({ ref: `b:${(S.ds.columns.find(c => S.vars.has(c.name)) || S.ds.columns[0]).name}`, op: ">", val: "" }); drawFilters(); };
+  $("#add-filter").onclick = () => { S.filters.push({ ref: `b:${(S.ds.columns.find(c => S.vars.has(c.name)) || S.ds.columns[0]).name}`, op: ">", val: "" }); drawFilters(); $(".rule:last-child input")?.focus(); };
   $("#filters").addEventListener("input", e => { const i = +e.target.closest(".rule").dataset.i, k = e.target.dataset.k; if (k && k !== "x") { S.filters[i][k] = e.target.value; if (k === "op") drawFilters(); refresh(); } });
   $("#filters").addEventListener("click", e => { if (e.target.dataset.k === "x") { S.filters.splice(+e.target.closest(".rule").dataset.i, 1); drawFilters(); refresh(); } });
   $$(".tabs button").forEach(b => b.onclick = () => { $$(".tabs button").forEach(x => x.classList.toggle("on", x === b)); $$(".pane").forEach(p => p.hidden = p.id !== "pane-" + b.dataset.t); if (b.dataset.t === "chart") drawChart(); });
-  $("#chart-var").onchange = drawChart; $("#chart-index").onchange = drawChart; $("#fmt").onchange = refresh;
+  $("#chart-var").onchange = drawChart; $("#chart-index").onchange = drawChart;
+  $("#fmt").onclick = e => { const b = e.target.closest("button"); if (!b) return; S.fmt = b.dataset.f; $$("#fmt button").forEach(x => x.setAttribute("aria-pressed", x === b)); refresh(); };
   $("#dl").onclick = download;
-  $("#share").onclick = async () => { try { await navigator.clipboard.writeText(location.href); $("#share").textContent = "Link copied"; } catch { $("#share").textContent = "Copy the address bar"; } setTimeout(() => $("#share").textContent = "Copy link to this view", 1800); };
+  $("#share").onclick = async () => { try { await navigator.clipboard.writeText(location.href); $("#share").textContent = "Link copied"; } catch { $("#share").textContent = "Copy the address bar"; } setTimeout(() => $("#share").textContent = "Copy link", 1800); };
   window.addEventListener("resize", () => { if (R && !$("#pane-chart").hidden) drawChart(); });
-  const p = new URLSearchParams(location.hash.slice(1) || location.search.slice(1)), list = k => p.has(k) ? p.get(k).split(",").filter(Boolean) : undefined;
-  let q; try { q = p.has("q") ? JSON.parse(p.get("q")) : undefined; } catch { q = undefined; }
-  await openSet(p.get("d"), { v: list("v"), e: list("e"), f: p.get("f") ?? undefined, t: p.get("t") ?? undefined, m: p.get("m"), mv: list("mv"), how: p.get("how"), q });
+  const read = () => { const p = new URLSearchParams(location.hash.slice(1) || location.search.slice(1)), list = k => p.has(k) ? p.get(k).split(",").filter(Boolean) : undefined; let q; try { q = p.has("q") ? JSON.parse(p.get("q")) : undefined; } catch { q = undefined; }
+    return [p.get("d"), { v: list("v"), e: list("e"), f: p.get("f") ?? undefined, t: p.get("t") ?? undefined, m: p.get("m"), mv: list("mv"), how: p.get("how"), q }]; };
+  await openSet(...read());
 }
-init().catch(e => { console.error(e); $("#loading").hidden = false; $("#loading").textContent = "The data failed to load. Please reload the page."; });
+init().catch(e => { console.error(e); $("#loading").hidden = false; $("#loading").textContent = "The data did not load. Reload the page to try again."; });

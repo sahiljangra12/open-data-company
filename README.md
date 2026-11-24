@@ -1,12 +1,13 @@
 # Open Data Company (working name)
 
-An open data portal: browse datasets, choose variables, places, years and filters, preview,
-compare, merge, and download as CSV, Excel, JSON or TSV. Site: GitHub Pages from `docs/`.
+An open data portal built around one job: get someone from "I need data on X" to a clean file in a
+few clicks. Search across every dataset, variable and country; choose variables, places and years;
+check the table; download CSV, Excel, JSON or TSV. World data comes first. Site: GitHub Pages from `docs/`.
 
 | Path | What it is |
 |---|---|
-| `docs/index.html` | Home: live earthquake globe, latest-value ticker, running counters, self-drawing charts, dataset tiles |
-| `docs/explore.html` | Explorer: select, filter, preview, compare, merge, download |
+| `docs/index.html` | Home: search, quick picks, dataset list with one-click download, live globe, ticker, counters, featured charts |
+| `docs/explore.html` | Explorer: chip pickers for variables and places, time presets, conditions, merging, table, chart, summary, download bar |
 | `docs/catalog.html` | Source catalog: the open sources being worked through |
 | `docs/scorecard.html` | Load Forecast Scorecard (PJM, summer 2025 preview) |
 | `scripts/build_datasets.py` | Fetches each dataset and writes `docs/data/sets/*.csv` and `docs/data/datasets.json` |
@@ -59,3 +60,4 @@ Error = (forecast - normalized actual) / normalized actual. Positive means the f
 
 `docs/vendor/xlsx.mini.min.js` is SheetJS Community Edition 0.18.5 (Apache 2.0), used only to write Excel files.
 The globe's land outline comes from Natural Earth (public domain) through the `world-atlas` package.
+The typefaces are Barlow and Barlow Condensed (SIL Open Font License), served from `docs/fonts/`.

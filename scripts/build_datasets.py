@@ -16,19 +16,19 @@ RAW = "https://raw.githubusercontent.com/"
 UA = {"User-Agent": "open-data-company-pipeline (github.com/sahiljangra12/open-data-company)"}
 
 
-C = ["USA", "CHN", "IND", "WLD"]
-DEFAULTS = {  # what the explorer selects when a dataset is first opened
-    "co2-and-greenhouse-gases": dict(default_vars=["co2", "co2_per_capita"], default_entities=C),
-    "energy": dict(default_vars=["primary_energy_consumption", "renewables_share_elec"], default_entities=C),
-    "world-bank-development": dict(default_vars=["population", "gdp_current_usd"], default_entities=C),
-    "pjm-summer-peak-forecasts": dict(default_entities=["DOM", "AEP", "PJM RTO"]),
+C = ["WLD", "CHN", "IND", "USA", "BRA", "NGA"]
+DEFAULTS = {  # what the explorer selects first, and which places its chart shows when none are picked
+    "co2-and-greenhouse-gases": dict(default_vars=["co2", "co2_per_capita"], chart_entities=C),
+    "energy": dict(default_vars=["primary_energy_consumption", "renewables_share_elec"], chart_entities=C),
+    "world-bank-development": dict(default_vars=["population", "gdp_per_capita", "life_expectancy"], chart_entities=C),
+    "pjm-summer-peak-forecasts": dict(chart_entities=["PJM RTO", "DOM", "AEP", "COMED"]),
     "earthquakes-past-30-days": dict(default_vars=["magnitude", "place", "depth_km", "latitude", "longitude"],
                                      coverage="Rolling 30 days", chart="points"),
 }
 
 
-ORDER = ["co2-and-greenhouse-gases", "energy", "world-bank-development", "earthquakes-past-30-days", "crude-oil-prices",
-         "natural-gas-prices", "pjm-summer-peak-forecasts"]            # order on the home page
+ORDER = ["co2-and-greenhouse-gases", "energy", "world-bank-development", "global-temperature", "atmospheric-co2",
+         "earthquakes-past-30-days", "crude-oil-prices", "natural-gas-prices", "pjm-summer-peak-forecasts"]   # home page order: world first
 
 
 def get(url, tries=3):
@@ -80,7 +80,6 @@ def spec(id, title, description, region, domain, source, source_url, licence, ke
                time=dict(col=time_col, type=time_type, min=min(t), max=max(t)), entity=entity, rows=len(rows),
                columns=cols, bytes=(SETS / f"{id}.csv").stat().st_size, built=date.today().isoformat())
     out["coverage"] = t0[:4] if (t0 := min(t))[:4] == max(t)[:4] else f"{t0[:4]} to {max(t)[:4]}"
-    out.update(DEFAULTS.get(id, {}))
     if entity:
         out["entities"] = len({r[idx[entity["col"]]] for r in rows})
     return out
@@ -131,6 +130,34 @@ WB = {  # indicator id: (column, title, unit)
     "IT.NET.USER.ZS": ("internet_users", "Individuals using the Internet", "% of population"),
     "SH.H2O.BASW.ZS": ("basic_water_access", "People using at least basic drinking water services", "% of population"),
     "AG.LND.FRST.ZS": ("forest_area_share", "Forest area", "% of land area"),
+    "SP.POP.0014.TO.ZS": ("population_under_15_share", "Population ages 0 to 14", "% of total"),
+    "SP.POP.65UP.TO.ZS": ("population_65_plus_share", "Population ages 65 and above", "% of total"),
+    "EN.POP.DNST": ("population_density", "Population density", "people per sq. km"),
+    "SM.POP.NETM": ("net_migration", "Net migration", "people"),
+    "NY.GNP.PCAP.CD": ("gni_per_capita", "GNI per capita, Atlas method", "current US$"),
+    "NE.GDI.TOTL.ZS": ("investment_share_gdp", "Gross capital formation", "% of GDP"),
+    "NY.GNS.ICTR.ZS": ("savings_share_gdp", "Gross savings", "% of GDP"),
+    "GC.TAX.TOTL.GD.ZS": ("tax_revenue_share_gdp", "Tax revenue", "% of GDP"),
+    "MS.MIL.XPND.GD.ZS": ("military_spending_share_gdp", "Military expenditure", "% of GDP"),
+    "BN.CAB.XOKA.GD.ZS": ("current_account_share_gdp", "Current account balance", "% of GDP"),
+    "PA.NUS.FCRF": ("exchange_rate", "Official exchange rate", "local currency per US$"),
+    "GB.XPD.RSDV.GD.ZS": ("research_spending_share_gdp", "Research and development expenditure", "% of GDP"),
+    "TX.VAL.TECH.MF.ZS": ("high_tech_exports_share", "High-technology exports", "% of manufactured exports"),
+    "ST.INT.ARVL": ("tourist_arrivals", "International tourism, arrivals", "people"),
+    "SE.PRM.ENRR": ("primary_enrollment", "School enrollment, primary", "% gross"),
+    "SE.SEC.ENRR": ("secondary_enrollment", "School enrollment, secondary", "% gross"),
+    "SE.TER.ENRR": ("tertiary_enrollment", "School enrollment, tertiary", "% gross"),
+    "SH.DYN.MORT": ("under_5_mortality", "Mortality rate, under 5", "per 1,000 live births"),
+    "SH.STA.MMRT": ("maternal_mortality", "Maternal mortality ratio", "per 100,000 live births"),
+    "SH.MED.PHYS.ZS": ("physicians", "Physicians", "per 1,000 people"),
+    "SH.IMM.MEAS": ("measles_immunization", "Immunization, measles", "% of children 12 to 23 months"),
+    "SN.ITK.DEFC.ZS": ("undernourishment", "Prevalence of undernourishment", "% of population"),
+    "SH.STA.BASS.ZS": ("basic_sanitation_access", "People using at least basic sanitation services", "% of population"),
+    "EG.USE.ELEC.KH.PC": ("electricity_use_per_capita", "Electric power consumption", "kWh per person"),
+    "EN.ATM.PM25.MC.M3": ("pm25_air_pollution", "PM2.5 air pollution, mean annual exposure", "micrograms per cubic meter"),
+    "AG.LND.AGRI.ZS": ("agricultural_land_share", "Agricultural land", "% of land area"),
+    "IT.CEL.SETS.P2": ("mobile_subscriptions", "Mobile cellular subscriptions", "per 100 people"),
+    "SG.GEN.PARL.ZS": ("women_in_parliament", "Seats held by women in national parliaments", "%"),
 }
 
 
@@ -189,13 +216,14 @@ def by_date(series):
 
 
 def oil():
-    cols, rows = by_date([("wti_usd_per_barrel", f"{RAW}datasets/oil-prices/main/data/wti-daily.csv"),
-                          ("brent_usd_per_barrel", f"{RAW}datasets/oil-prices/main/data/brent-daily.csv")])
-    return spec("crude-oil-prices", "Crude oil spot prices, daily", "Daily WTI (Cushing, Oklahoma) and Brent (Europe) spot prices.",
-                "US", "Energy", "US Energy Information Administration, via DataHub", "https://github.com/datasets/oil-prices",
+    cols, rows = by_date([("brent_usd_per_barrel", f"{RAW}datasets/oil-prices/main/data/brent-daily.csv"),
+                          ("wti_usd_per_barrel", f"{RAW}datasets/oil-prices/main/data/wti-daily.csv")])
+    return spec("crude-oil-prices", "Crude oil benchmark prices, daily",
+                "Daily spot prices for Brent, the international benchmark, and WTI, the US benchmark.",
+                "World", "Energy", "US Energy Information Administration, via DataHub", "https://github.com/datasets/oil-prices",
                 "Public domain (US federal data; PDDL packaging)", ["date"], "date", "date", None, ["date"] + cols, rows,
-                dict(wti_usd_per_barrel=dict(title="WTI spot price", unit="US$ per barrel"),
-                     brent_usd_per_barrel=dict(title="Brent spot price", unit="US$ per barrel")))
+                dict(brent_usd_per_barrel=dict(title="Brent spot price", unit="US$ per barrel"),
+                     wti_usd_per_barrel=dict(title="WTI spot price", unit="US$ per barrel")))
 
 
 def gas():
@@ -269,6 +297,49 @@ def quakes():
                      felt_reports=dict(title="Felt reports", unit="reports"), url=dict(title="USGS event page")))
 
 
+def temperature():
+    cell = {}
+    for r in read_csv(f"{RAW}datasets/global-temp/main/data/monthly.csv"):
+        col = {"GISTEMP": "nasa_anomaly_c", "GCAG": "noaa_anomaly_c"}.get(r["Source"])
+        if col and re.fullmatch(r"\d{4}-\d{2}", r["Year"]) and r["Mean"] not in ("", None):
+            cell.setdefault(r["Year"] + "-01", {})[col] = r["Mean"]
+    cols = ["nasa_anomaly_c", "noaa_anomaly_c"]
+    rows = [[m] + [v.get(c, "") for c in cols] for m, v in sorted(cell.items())]
+    return spec("global-temperature", "Global temperature, monthly",
+                "How much warmer or cooler the planet's surface was each month than a long-term average, from NASA and NOAA.",
+                "World", "Climate and emissions", "NASA GISTEMP and NOAA Climate at a Glance, via DataHub",
+                "https://github.com/datasets/global-temp", "CC BY 4.0 packaging of US federal data", ["month"], "month", "date", None,
+                ["month"] + cols, rows,
+                dict(nasa_anomaly_c=dict(title="Temperature anomaly, NASA", unit="°C vs 1951-1980 average",
+                                         description="GISTEMP global land-ocean temperature index: difference from the 1951 to 1980 mean."),
+                     noaa_anomaly_c=dict(title="Temperature anomaly, NOAA", unit="°C vs 20th-century average",
+                                         description="NOAA global land and ocean temperature anomaly: difference from the 20th-century average.")))
+
+
+def co2ppm():
+    cell = {}
+
+    def take(url, picks):
+        rows = list(csv.reader(io.StringIO(get(url).decode("utf-8-sig"))))[1:]   # header labels do not match the columns; use positions
+        for r in rows:
+            if len(r) > max(i for i, _ in picks) and re.fullmatch(r"\d{4}-\d{2}", r[0]):
+                for i, col in picks:
+                    if is_num(r[i]) and 250 < float(r[i]) < 700:                # skip fill values such as -99.99
+                        cell.setdefault(r[0] + "-01", {})[col] = r[i]
+    take(f"{RAW}datasets/co2-ppm/main/data/co2-mm-mlo.csv", [(2, "mauna_loa_ppm"), (3, "mauna_loa_trend_ppm")])
+    take(f"{RAW}datasets/co2-ppm/main/data/co2-mm-gl.csv", [(2, "global_ppm"), (4, "global_trend_ppm")])
+    cols = ["mauna_loa_ppm", "mauna_loa_trend_ppm", "global_ppm", "global_trend_ppm"]
+    rows = [[m] + [v.get(c, "") for c in cols] for m, v in sorted(cell.items())]
+    return spec("atmospheric-co2", "CO2 in the atmosphere, monthly",
+                "The concentration of carbon dioxide in the air, measured at Mauna Loa since 1958 and averaged across the globe since 1979.",
+                "World", "Climate and emissions", "NOAA Global Monitoring Laboratory, via DataHub", "https://github.com/datasets/co2-ppm",
+                "Public domain (US federal data; PDDL packaging)", ["month"], "month", "date", None, ["month"] + cols, rows,
+                dict(mauna_loa_ppm=dict(title="CO2 at Mauna Loa", unit="parts per million", description="Monthly mean CO2 at Mauna Loa Observatory, Hawaii."),
+                     mauna_loa_trend_ppm=dict(title="CO2 at Mauna Loa, seasonal cycle removed", unit="parts per million"),
+                     global_ppm=dict(title="CO2, global average", unit="parts per million", description="Monthly mean over marine surface sites worldwide."),
+                     global_trend_ppm=dict(title="CO2, global average, seasonal cycle removed", unit="parts per million")))
+
+
 BUILDERS = [
     lambda: owid("co2-and-greenhouse-gases", "co2-data", "co2", "CO2 and greenhouse gas emissions",
                  "Annual emissions by country: CO2 by fuel and sector, per-capita and cumulative figures, methane, nitrous oxide, and each country's share of the world total.",
@@ -276,7 +347,7 @@ BUILDERS = [
     lambda: owid("energy", "energy-data", "energy", "Energy production, consumption and electricity mix",
                  "Annual energy data by country: primary energy, electricity generation by source, shares of coal, gas, nuclear, solar and wind, and per-capita use.",
                  "Energy"),
-    worldbank, oil, gas, pjm, quakes,
+    worldbank, temperature, co2ppm, quakes, oil, gas, pjm,
 ]
 
 
@@ -290,7 +361,7 @@ def pull(ds, wants):
     with open(path, encoding="utf-8") as f:
         r = csv.reader(f)
         h = {c: i for i, c in enumerate(next(r))}
-        tcol = h.get("year", h.get("date", h.get("time")))
+        tcol = h.get("year", h.get("date", h.get("month", h.get("time"))))
         ecol = h.get("code", h.get("zone"))
         by = {}
         for code, col in wants:
@@ -325,39 +396,54 @@ def nice(v, kind):
 
 
 def build_pulse():
-    co2 = pull("co2-and-greenhouse-gases", [("WLD", "co2"), ("WLD", "co2_per_capita")])
-    en = pull("energy", [("WLD", c) for c in ("solar_share_elec", "wind_share_elec", "coal_share_elec", "electricity_generation",
-                                              "primary_energy_consumption", "renewables_share_elec")])
-    wb = pull("world-bank-development", [(c, "population") for c in ("WLD", "IND", "CHN", "USA")] +
-              [("WLD", "gdp_current_usd"), ("WLD", "gdp_per_capita"), ("WLD", "life_expectancy")])
-    oil = pull("crude-oil-prices", [(None, "wti_usd_per_barrel"), (None, "brent_usd_per_barrel")])
+    W = "WLD"
+    co2 = pull("co2-and-greenhouse-gases", [(W, "co2")])
+    en = pull("energy", [(W, c) for c in ("solar_share_elec", "wind_share_elec", "coal_share_elec", "electricity_generation", "primary_energy_consumption")])
+    big5 = (("India", "IND"), ("China", "CHN"), ("United States", "USA"), ("Indonesia", "IDN"), ("Pakistan", "PAK"))
+    life4 = (("Japan", "JPN"), ("World", W), ("India", "IND"), ("Nigeria", "NGA"))
+    wb = pull("world-bank-development", [(c, "population") for _, c in big5] + [(c, "life_expectancy") for _, c in life4] +
+              [(W, "population"), (W, "gdp_current_usd"), (W, "gdp_per_capita")])
+    oil = pull("crude-oil-prices", [(None, "brent_usd_per_barrel"), (None, "wti_usd_per_barrel")])
     gas = pull("natural-gas-prices", [(None, "henry_hub_usd_per_mmbtu")])
-    pj = pull("pjm-summer-peak-forecasts", [(z, "forecast_jan2026_mw") for z in ("DOM", "AEP", "PJM RTO")])
+    pj = pull("pjm-summer-peak-forecasts", [("PJM RTO", "forecast_jan2026_mw")])
+    tm = pull("global-temperature", [(None, "nasa_anomaly_c")])[(None, "nasa_anomaly_c")]
+    pp = pull("atmospheric-co2", [(None, "mauna_loa_ppm")])[(None, "mauna_loa_ppm")]
     X = "explore.html#d="
 
-    def tick(label, pts, kind, unit, href, scale=1.0, points=False):
-        if len(pts) < 2:
-            return None
-        (t1, v1), (t0, v0) = pts[-1], pts[-2]
-        daily = len(t1) > 4
-        asof = datetime.strptime(t1, "%Y-%m-%d").strftime("%b %-d, %Y") if daily else t1
-        change = (v1 - v0) if points else (100 * (v1 - v0) / v0 if v0 else 0)
-        return dict(label=label, display=nice(v1 * scale, kind), unit=unit, asof=asof,
-                    change=round(change, 2), change_unit="points" if points else "%",
-                    versus="previous trading day" if daily else t0, href=href,
-                    spark=[round(v, 4) for _, v in thin(pts[-60:] if daily else pts[-30:], 30)])
+    by_year = {}
+    for m, v in tm:
+        by_year.setdefault(m[:4], []).append(v)
+    temp_years = [(y, sum(v) / 12) for y, v in sorted(by_year.items()) if len(v) == 12]     # complete years only
 
+    def tick(label, pts, show, unit, href, lag=1, versus=None, change="%", monthly=False):
+        if len(pts) <= lag:
+            return None
+        (t1, v1), (t0, v0) = pts[-1], pts[-1 - lag]
+        if len(t1) == 4:
+            asof = t1
+        else:
+            asof = datetime.strptime(t1, "%Y-%m-%d").strftime("%b %Y" if monthly else "%b %-d, %Y")
+        delta = 100 * (v1 - v0) / v0 if change == "%" and v0 else v1 - v0
+        return dict(label=label, display=show(v1), unit=unit, asof=asof, change=round(delta, 2), change_unit=change,
+                    versus=versus or (t0 if len(t0) == 4 else "the day before"), href=href,
+                    spark=[round(v, 4) for _, v in thin(pts[-60:], 30)])
+
+    big = lambda scale=1.0: (lambda v: nice(v * scale, "num"))
+    usd = lambda v: f"${v:,.2f}"
+    pct = lambda v: f"{v:.1f}%"
     tickers = [t for t in (
-        tick("WTI crude oil", oil[(None, "wti_usd_per_barrel")], "usd", "per barrel", X + "crude-oil-prices"),
-        tick("Brent crude oil", oil[(None, "brent_usd_per_barrel")], "usd", "per barrel", X + "crude-oil-prices"),
-        tick("Henry Hub natural gas", gas[(None, "henry_hub_usd_per_mmbtu")], "usd", "per million Btu", X + "natural-gas-prices"),
-        tick("World CO2 emissions", co2[("WLD", "co2")], "num", "tonnes a year", X + "co2-and-greenhouse-gases&v=co2&e=WLD", 1e6),
-        tick("World population", wb[("WLD", "population")], "num", "people", X + "world-bank-development&v=population&e=WLD"),
-        tick("World GDP", wb[("WLD", "gdp_current_usd")], "num", "US dollars", X + "world-bank-development&v=gdp_current_usd&e=WLD"),
-        tick("Solar share of world electricity", en[("WLD", "solar_share_elec")], "pct", "", X + "energy&v=solar_share_elec&e=WLD", points=True),
-        tick("Wind share of world electricity", en[("WLD", "wind_share_elec")], "pct", "", X + "energy&v=wind_share_elec&e=WLD", points=True),
-        tick("Coal share of world electricity", en[("WLD", "coal_share_elec")], "pct", "", X + "energy&v=coal_share_elec&e=WLD", points=True),
-        tick("World life expectancy", wb[("WLD", "life_expectancy")], "one", "years", X + "world-bank-development&v=life_expectancy&e=WLD"),
+        tick("World CO2 emissions", co2[(W, "co2")], big(1e6), "tonnes a year", X + "co2-and-greenhouse-gases&v=co2&e=WLD"),
+        tick("Global temperature", temp_years, lambda v: f"{v:+.2f} °C", "against the 1951 to 1980 average", X + "global-temperature", change=" °C"),
+        tick("CO2 in the air", pp, lambda v: f"{v:.1f} ppm", "at Mauna Loa", X + "atmospheric-co2", lag=12, versus="a year earlier", change=" ppm", monthly=True),
+        tick("World population", wb[(W, "population")], big(), "people", X + "world-bank-development&v=population&e=WLD"),
+        tick("World GDP", wb[(W, "gdp_current_usd")], lambda v: "$" + nice(v, "num"), "", X + "world-bank-development&v=gdp_current_usd&e=WLD"),
+        tick("World life expectancy", wb[(W, "life_expectancy")], lambda v: f"{v:.1f}", "years", X + "world-bank-development&v=life_expectancy&e=WLD"),
+        tick("Solar share of world electricity", en[(W, "solar_share_elec")], pct, "", X + "energy&v=solar_share_elec&e=WLD", change=" points"),
+        tick("Wind share of world electricity", en[(W, "wind_share_elec")], pct, "", X + "energy&v=wind_share_elec&e=WLD", change=" points"),
+        tick("Coal share of world electricity", en[(W, "coal_share_elec")], pct, "", X + "energy&v=coal_share_elec&e=WLD", change=" points"),
+        tick("Brent crude oil", oil[(None, "brent_usd_per_barrel")], usd, "per barrel", X + "crude-oil-prices"),
+        tick("WTI crude oil", oil[(None, "wti_usd_per_barrel")], usd, "per barrel", X + "crude-oil-prices"),
+        tick("US natural gas", gas[(None, "henry_hub_usd_per_mmbtu")], usd, "per million Btu", X + "natural-gas-prices"),
     ) if t]
 
     def since(pts, start):
@@ -372,44 +458,46 @@ def build_pulse():
     stories = [s for s in (
         story("co2", "CO2", "Global CO2 emissions since 1900", "Billion tonnes a year, fossil fuels and industry. Our World in Data.",
               "billion tonnes", "year", X + "co2-and-greenhouse-gases&v=co2&e=WLD&f=1900",
-              [("World", [[t, round(v / 1000, 3)] for t, v in co2[("WLD", "co2")] if t >= "1900"])]),
+              [("World", [[t, round(v / 1000, 3)] for t, v in co2[(W, "co2")] if t >= "1900"])]),
+        story("temperature", "Temperature", "Global temperature since 1880", "Yearly average, °C warmer or cooler than the 1951 to 1980 average. NASA.",
+              "°C", "year", X + "global-temperature&v=nasa_anomaly_c", [("World", [[y, round(v, 3)] for y, v in temp_years])], 2),
         story("renewables", "Solar and wind", "Solar and wind in the world's electricity", "Share of electricity generation, percent. Our World in Data.",
               "%", "year", X + "energy&v=solar_share_elec,wind_share_elec&e=WLD&f=2000",
-              [("Wind", since(en[("WLD", "wind_share_elec")], "2000")), ("Solar", since(en[("WLD", "solar_share_elec")], "2000"))]),
+              [("Wind", since(en[(W, "wind_share_elec")], "2000")), ("Solar", since(en[(W, "solar_share_elec")], "2000"))]),
+        story("life", "Life expectancy", "Life expectancy since 1960", "Years at birth. World Bank.",
+              "years", "year", X + "world-bank-development&v=life_expectancy&e=" + ",".join(c for _, c in life4),
+              [(n, [[t, round(v, 2)] for t, v in wb[(c, "life_expectancy")]]) for n, c in life4]),
+        story("population", "Population", "The five most populous countries", "Population in billions. World Bank.",
+              "billion", "year", X + "world-bank-development&v=population&e=" + ",".join(c for _, c in big5),
+              [(n, [[t, round(v / 1e9, 4)] for t, v in wb[(c, "population")]]) for n, c in big5], 2),
         story("oil", "Oil", "Crude oil prices, past five years", "US dollars per barrel, spot. US Energy Information Administration.",
               "$", "date", X + "crude-oil-prices&f=" + five,
-              [("WTI", week(oil[(None, "wti_usd_per_barrel")])), ("Brent", week(oil[(None, "brent_usd_per_barrel")]))], 2),
-        story("gas", "Natural gas", "US natural gas price, past five years", "US dollars per million Btu, Henry Hub spot. US Energy Information Administration.",
-              "$", "date", X + "natural-gas-prices&f=" + five, [("Henry Hub", week(gas[(None, "henry_hub_usd_per_mmbtu")]))], 2),
-        story("population", "Population", "India, China and the United States", "Population in billions. World Bank.",
-              "billion", "year", X + "world-bank-development&v=population&e=IND,CHN,USA",
-              [(n, [[t, round(v / 1e9, 4)] for t, v in wb[(c, "population")]]) for n, c in (("India", "IND"), ("China", "CHN"), ("United States", "USA"))], 2),
-        story("grid", "Power grid", "Forecast peak demand in two data-center zones", "Summer peak in gigawatts, PJM's January 2026 forecast.",
-              "GW", "year", X + "pjm-summer-peak-forecasts&v=forecast_jan2026_mw&e=DOM,AEP",
-              [(n, [[t, round(v / 1000, 2)] for t, v in pj[(z, "forecast_jan2026_mw")]]) for n, z in (("Dominion", "DOM"), ("AEP", "AEP"))]),
+              [("Brent", week(oil[(None, "brent_usd_per_barrel")])), ("WTI", week(oil[(None, "wti_usd_per_barrel")]))], 2),
     ) if s]
 
     def spark(label, pts, n=60):
         return dict(label=label, pts=[round(v, 4) for _, v in thin(pts, n)]) if len(pts) > 1 else None
 
     sparks = {k: v for k, v in {
-        "co2-and-greenhouse-gases": spark("World CO2 emissions since 1950", [p for p in co2[("WLD", "co2")] if p[0] >= "1950"]),
-        "energy": spark("World energy consumption", en[("WLD", "primary_energy_consumption")]),
-        "world-bank-development": spark("World GDP per person", wb[("WLD", "gdp_per_capita")] or wb[("WLD", "gdp_current_usd")]),
-        "crude-oil-prices": spark("WTI, past year", oil[(None, "wti_usd_per_barrel")][-250:]),
+        "co2-and-greenhouse-gases": spark("World CO2 emissions since 1950", [p for p in co2[(W, "co2")] if p[0] >= "1950"]),
+        "energy": spark("World energy consumption", en[(W, "primary_energy_consumption")]),
+        "world-bank-development": spark("World GDP per person", wb[(W, "gdp_per_capita")] or wb[(W, "gdp_current_usd")]),
+        "global-temperature": spark("Yearly anomaly since 1880", temp_years),
+        "atmospheric-co2": spark("Mauna Loa since 1958", pp, 80),
+        "crude-oil-prices": spark("Brent, past year", oil[(None, "brent_usd_per_barrel")][-250:]),
         "natural-gas-prices": spark("Henry Hub, past year", gas[(None, "henry_hub_usd_per_mmbtu")][-250:]),
         "pjm-summer-peak-forecasts": spark("PJM forecast peak to 2046", pj[("PJM RTO", "forecast_jan2026_mw")]),
     }.items() if v}
 
     counters = {}
-    if co2[("WLD", "co2")]:
-        y, v = co2[("WLD", "co2")][-1]
+    if co2[(W, "co2")]:
+        y, v = co2[(W, "co2")][-1]
         counters["co2"] = dict(year=int(y), per_year=v * 1e6)                      # tonnes
-    if en[("WLD", "electricity_generation")]:
-        y, v = en[("WLD", "electricity_generation")][-1]
+    if en[(W, "electricity_generation")]:
+        y, v = en[(W, "electricity_generation")][-1]
         counters["electricity"] = dict(year=int(y), per_year=v * 1e6)             # MWh
-    if len(wb[("WLD", "population")]) > 1:
-        (y0, v0), (y1, v1) = wb[("WLD", "population")][-2:]
+    if len(wb[(W, "population")]) > 1:
+        (y0, v0), (y1, v1) = wb[(W, "population")][-2:]
         counters["population"] = dict(year=int(y1), value=v1, growth=v1 / v0 - 1)  # mid-year estimate
 
     out = dict(built=datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"), tickers=tickers, stories=stories, sparks=sparks, counters=counters)
@@ -442,7 +530,8 @@ def main():
     for b in BUILDERS:
         try:
             d = b()
-            if old.get(d["id"]) and {k: v for k, v in old[d["id"]].items() if k != "built"} == {k: v for k, v in d.items() if k != "built"}:
+            skip = ("built", "places", "default_vars", "chart_entities", "coverage", "chart", "default_entities")
+            if old.get(d["id"]) and {k: v for k, v in old[d["id"]].items() if k not in skip} == {k: v for k, v in d.items() if k not in skip}:
                 d["built"] = old[d["id"]]["built"]          # unchanged data keeps its date
             out.append(d)
             print(f"ok   {d['id']}: {d['rows']} rows, {len(d['columns'])} variables")
@@ -452,6 +541,15 @@ def main():
     keep = {d["id"] for d in out}
     out += [d for i, d in old.items() if i not in keep]     # a failed build keeps the last good version
     out.sort(key=lambda d: ORDER.index(d["id"]) if d["id"] in ORDER else len(ORDER))
+    for d in out:
+        d.update(DEFAULTS.get(d["id"], {}))
+        d.pop("default_entities", None)
+        if d.get("entity"):
+            with open(ROOT / "docs" / d["file"], encoding="utf-8") as f:
+                r = csv.reader(f)
+                h = next(r)
+                ci, li = h.index(d["entity"]["col"]), h.index(d["entity"]["label_col"])
+                d["places"] = sorted({(row[ci], row[li]) for row in r}, key=lambda p: p[1])
     MANIFEST.write_text(json.dumps({"datasets": out}, indent=1, ensure_ascii=False))
     build_pulse()
     sys.exit(1 if failed and not out else 0)

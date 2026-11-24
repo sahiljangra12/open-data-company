@@ -112,14 +112,12 @@ function makeGlobe(box, land) {
 function liveFeed(globe, snapshot) {
   const dot = $("#live-dot"), text = $("#live-text");
   let list = [], mode = "";
-  const put = (id, a, b) => { $(id).textContent = a; $(id + "-s").textContent = b; };
   function readouts() {
     if (!list.length) return;
     const strong = list.reduce((a, b) => (b.mag > a.mag ? b : a)), recent = list.reduce((a, b) => (b.time > a.time ? b : a));
-    const big = list.filter(q => q.mag >= 2.5).length;
-    put("#q-count", list.length.toLocaleString("en-US"), mode === "live" ? `${big} of them magnitude 2.5 or stronger` : "Magnitude 2.5 and stronger only");
-    put("#q-max", `M ${strong.mag.toFixed(1)}`, `${strong.place}, ${ago(strong.time)}`);
-    put("#q-last", `M ${recent.mag.toFixed(1)}`, `${recent.place}, ${ago(recent.time)}`);
+    $("#q-count").textContent = list.length.toLocaleString("en-US");
+    $("#q-max").textContent = `M ${strong.mag.toFixed(1)}`; $("#q-max-s").textContent = `strongest: ${strong.place}, ${ago(strong.time)}`;
+    $("#q-last").textContent = `M ${recent.mag.toFixed(1)}`; $("#q-last-s").textContent = `most recent: ${recent.place}, ${ago(recent.time)}`;
   }
   function show(qs, how, label) { list = qs; mode = how; globe.set(qs); dot.classList.toggle("on", how === "live"); text.textContent = label; readouts(); }
   async function poll() {
@@ -130,13 +128,13 @@ function liveFeed(globe, snapshot) {
       const j = await r.json();
       const qs = j.features.filter(f => f.geometry && f.properties && typeof f.properties.mag === "number" && f.properties.time)
         .map(f => ({ id: f.id, lon: f.geometry.coordinates[0], lat: f.geometry.coordinates[1], mag: f.properties.mag, time: f.properties.time, place: f.properties.place || "Location not named" }));
-      show(qs, "live", `Live from the US Geological Survey. Updated ${new Date().toLocaleTimeString()}, and again every minute.`);
+      show(qs, "live", `Live from the US Geological Survey, updated ${new Date().toLocaleTimeString()}`);
     } catch (e) {
-      if (mode === "live") { dot.classList.remove("on"); text.textContent = "The live feed did not answer just now. Showing the last update and trying again each minute."; return; }
+      if (mode === "live") { dot.classList.remove("on"); text.textContent = "The live feed did not answer just now. Trying again each minute."; return; }
       if (snapshot && snapshot.events && snapshot.events.length) {
         const qs = snapshot.events.map((q, i) => ({ id: "s" + i, lon: q[0], lat: q[1], mag: q[2], time: Date.parse(q[3]), place: q[4] || "Location not named" }));
-        show(qs, "saved", `The live feed is not reachable from this network. Showing the 24 hours up to ${new Date(snapshot.asof).toLocaleString()}.`);
-      } else text.textContent = "The live earthquake feed is not reachable from this network right now.";
+        show(qs, "saved", `Live feed not reachable here. Showing magnitude 2.5 and up for the 24 hours to ${new Date(snapshot.asof).toLocaleString()}`);
+      } else text.textContent = "The live earthquake feed is not reachable from this network right now";
     }
   }
   poll(); setInterval(poll, 60000); setInterval(readouts, 30000);
@@ -150,8 +148,8 @@ function ticker(items) {
   const one = (t, copy) => {
     const a = el("a", "tk"); a.href = t.href;
     if (copy) { a.tabIndex = -1; a.setAttribute("aria-hidden", "true"); }
-    const dir = t.change > 0 ? "▲" : t.change < 0 ? "▼" : "•", amt = Math.abs(t.change).toFixed(2).replace(/\.?0+$/, "") + (t.change_unit === "%" ? "%" : " points");
-    a.append(el("span", "l", t.label), el("strong", "", t.display), el("span", "l", t.unit), el("span", "d", `${dir} ${amt} from ${t.versus === "previous trading day" ? "the day before" : t.versus}`), el("span", "d", t.asof));
+    const dir = t.change > 0 ? "▲" : t.change < 0 ? "▼" : "•", amt = Math.abs(t.change).toFixed(2).replace(/\.?0+$/, "") + t.change_unit;
+    a.append(el("span", "l", t.label), el("strong", "", t.display), el("span", "l", t.unit), el("span", "d", `${dir} ${amt} from ${t.versus}`), el("span", "d", t.asof));
     return a;
   };
   items.forEach(t => track.append(one(t, false)));
@@ -195,22 +193,23 @@ function stories(list) {
     const m = { l: 4, r: small ? 58 : 124, t: 22, b: 30 };
     const S = st.series.map((s, i) => ({ name: s.name, color: DARK[i], pts: s.pts.map(p => [X(st, p[0]), p[1], p[0]]) }));
     const all = S.flatMap(s => s.pts), x0 = Math.min(...all.map(p => p[0])), x1 = Math.max(...all.map(p => p[0]));
-    let y1 = Math.max(...all.map(p => p[1]));
-    const raw = y1 / 4, pw = Math.pow(10, Math.floor(Math.log10(raw))), f = raw / pw, step = (f < 1.5 ? 1 : f < 3 ? 2 : f < 7 ? 5 : 10) * pw;
-    y1 = Math.ceil(y1 / step) * step;
-    const sx = v => m.l + (v - x0) / (x1 - x0) * (W - m.l - m.r), sy = v => H - m.b - v / y1 * (H - m.t - m.b);
+    let y1 = Math.max(...all.map(p => p[1])), y0 = Math.min(0, ...all.map(p => p[1]));
+    const raw = (y1 - y0) / 4, pw = Math.pow(10, Math.floor(Math.log10(raw))), f = raw / pw, step = (f < 1.5 ? 1 : f < 3 ? 2 : f < 7 ? 5 : 10) * pw;
+    y1 = Math.ceil(y1 / step) * step; y0 = Math.floor(y0 / step) * step;
+    const sx = v => m.l + (v - x0) / (x1 - x0) * (W - m.l - m.r), sy = v => H - m.b - (v - y0) / (y1 - y0) * (H - m.t - m.b);
     const root = svg("svg", { viewBox: `0 0 ${W} ${H}`, height: H, tabindex: 0, role: "img",
       "aria-label": `${st.title}. ${S.map(s => `${s.name}: ${withUnit(st, s.pts[s.pts.length - 1][1])} in ${xText(st, s.pts[s.pts.length - 1][2])}`).join(". ")}. Use the left and right arrow keys to read values.` });
-    for (let v = 0; v <= y1 + step / 2; v += step) {
-      root.append(svg("line", { x1: m.l, x2: W - m.r, y1: sy(v), y2: sy(v), stroke: v ? "rgba(255,255,255,.12)" : "rgba(255,255,255,.3)" }));
-      const tx = svg("text", { x: m.l, y: sy(v) - 6, fill: "#86868b", "font-size": 12 }); tx.textContent = val({ ...st, decimals: step < 1 ? 1 : 0 }, v); if (v) root.append(tx);
+    for (let k = Math.round(y0 / step); k * step <= y1 + step / 2; k++) {
+      const v = k * step;
+      root.append(svg("line", { x1: m.l, x2: W - m.r, y1: sy(v), y2: sy(v), stroke: k ? "rgba(240,240,250,.13)" : "rgba(240,240,250,.4)" }));
+      const tx = svg("text", { x: m.l, y: sy(v) - 6, fill: "#80808a", "font-size": 12 }); tx.textContent = val({ ...st, decimals: step < 1 ? 1 : 0 }, v); if (k || y0 < 0) root.append(tx);
     }
     const yr = v => st.x === "year" ? v : new Date(v).getUTCFullYear() + (v - Date.UTC(new Date(v).getUTCFullYear(), 0, 1)) / 31557600000;
     const span = yr(x1) - yr(x0), ys = [1, 2, 5, 10, 20, 25, 50].find(s => span / s <= (small ? 4 : 8)) || 50;
     for (let y = Math.ceil(yr(x0) / ys) * ys; y <= yr(x1) + 1e-9; y += ys) {
       const px = sx(st.x === "year" ? y : Date.UTC(y, 0, 1));
-      root.append(svg("line", { x1: px, x2: px, y1: H - m.b, y2: H - m.b + 5, stroke: "rgba(255,255,255,.3)" }));
-      const tx = svg("text", { x: px, y: H - 8, fill: "#86868b", "font-size": 12, "text-anchor": px < 24 ? "start" : "middle" }); tx.textContent = y; root.append(tx);
+      root.append(svg("line", { x1: px, x2: px, y1: H - m.b, y2: H - m.b + 5, stroke: "rgba(240,240,250,.4)" }));
+      const tx = svg("text", { x: px, y: H - 8, fill: "#80808a", "font-size": 12, "text-anchor": px < 24 ? "start" : "middle" }); tx.textContent = y; root.append(tx);
     }
     const ends = S.map(s => sy(s.pts[s.pts.length - 1][1])), sorted = [...ends].sort((a, b) => a - b);
     const clash = sorted.some((y, i) => i && y - sorted[i - 1] < 34);
@@ -222,8 +221,8 @@ function stories(list) {
       const lastP = s.pts[s.pts.length - 1], ex = sx(lastP[0]), ey = ends[i];
       const g = svg("g"); g.append(svg("circle", { cx: ex, cy: ey, r: 5, fill: s.color, stroke: "#000", "stroke-width": 2 }));
       if (!clash) {
-        const v = svg("text", { x: ex + 12, y: ey + (S.length > 1 && !small ? -1 : 5), fill: "#f5f5f7", "font-size": 15, "font-weight": 600 }); v.textContent = val(st, lastP[1]); g.append(v);
-        if (S.length > 1 && !small) { const n = svg("text", { x: ex + 12, y: ey + 15, fill: "#a1a1a6", "font-size": 12 }); n.textContent = s.name; g.append(n); }
+        const v = svg("text", { x: ex + 12, y: ey + (S.length > 1 && !small ? -1 : 5), fill: "#f0f0fa", "font-size": 15, "font-weight": 600 }); v.textContent = val(st, lastP[1]); g.append(v);
+        if (S.length > 1 && !small) { const n = svg("text", { x: ex + 12, y: ey + 15, fill: "#b4b4be", "font-size": 12 }); n.textContent = s.name; g.append(n); }
       }
       root.append(g); late.push(g);
       if (animate) { path.dataset.anim = "1"; g.style.opacity = 0; }
@@ -283,34 +282,90 @@ function stories(list) {
   if (!reduce) requestAnimationFrame(frame);
 }
 
-/* ---------- dataset tiles ---------- */
-function tiles(D, sparks) {
-  const box = $("#tiles");
-  const spark = s => {
-    const w = el("div", "spark"), lo = Math.min(...s.pts), hi = Math.max(...s.pts), n = s.pts.length, y = v => 4 + (1 - (v - lo) / (hi - lo || 1)) * 92;
-    const sv = svg("svg", { viewBox: "0 0 100 100", preserveAspectRatio: "none", "aria-hidden": "true" });
-    sv.append(svg("path", { d: s.pts.map((v, i) => (i ? "L" : "M") + (i / (n - 1) * 100).toFixed(2) + " " + y(v).toFixed(2)).join(""), fill: "none", stroke: "#86868b", "stroke-width": 1.6, "vector-effect": "non-scaling-stroke", "stroke-linejoin": "round" }));
-    const dot = el("b"); dot.style.left = "100%"; dot.style.top = y(s.pts[n - 1]) + "%";
+/* ---------- dataset list ---------- */
+function rows(D, sparks) {
+  const box = $("#rows"); let region = "";
+  const spark = sp => {
+    const w = el("div", "spark"), lo = Math.min(...sp.pts), hi = Math.max(...sp.pts), n = sp.pts.length, y = v => 6 + (1 - (v - lo) / (hi - lo || 1)) * 88;
+    const sv = svg("svg", { viewBox: "0 0 100 100", preserveAspectRatio: "none", role: "img", "aria-label": sp.label });
+    sv.append(svg("path", { d: sp.pts.map((v, i) => (i ? "L" : "M") + (i / (n - 1) * 100).toFixed(2) + " " + y(v).toFixed(2)).join(""), fill: "none", stroke: "#80808a", "stroke-width": 1.5, "vector-effect": "non-scaling-stroke", "stroke-linejoin": "round" }));
+    const dot = el("b"); dot.style.left = "100%"; dot.style.top = y(sp.pts[n - 1]) + "%"; w.title = sp.label;
     w.append(sv, dot); return w;
   };
   function draw() {
-    const q = $("#q").value.trim().toLowerCase(), r = $("#f-region").value;
-    const rows = D.filter(s => (!r || s.region === r) && (!q || (s.title + " " + s.description + " " + s.domain + " " + s.source + " " + s.columns.map(c => c.title + " " + c.name).join(" ")).toLowerCase().includes(q)));
-    box.replaceChildren(...rows.map(s => {
-      const a = el("a", "tile"); a.href = `explore.html#d=${encodeURIComponent(s.id)}`;
-      a.append(el("span", "where", `${s.region === "US" ? "United States" : "World"}, ${s.domain.toLowerCase()}`), el("h3", "", s.title), el("p", "", s.description));
+    const list = D.filter(d => !region || d.region === region);
+    box.replaceChildren(...list.map(d => {
+      const row = el("article", "ds"), main = el("div"), h = el("h3"), a = el("a", "", d.title), href = `explore.html#d=${encodeURIComponent(d.id)}`;
+      a.href = href; h.append(a);
+      main.append(el("div", "where up", `${d.region === "US" ? "United States" : "World"}, ${d.domain}`), h, el("p", "", d.description));
       const dl = el("dl", "facts");
-      [["Variables", s.columns.length], ["Rows", s.rows.toLocaleString("en-US")], ["Coverage", s.coverage || `${String(s.time.min).slice(0, 4)} to ${String(s.time.max).slice(0, 4)}`]]
-        .forEach(([k, v]) => { const d = el("div"); d.append(el("dt", "", k), el("dd", "", v)); dl.append(d); });
-      a.append(dl);
-      if (sparks[s.id]) a.append(spark(sparks[s.id]), el("span", "sl", sparks[s.id].label));
-      a.append(el("span", "src", `${s.source}. ${s.licence.split("(")[0].split(";")[0].trim()}.`));
-      return a;
+      [["Variables", d.columns.length], ["Rows", d.rows.toLocaleString("en-US")], ["Coverage", d.coverage || `${String(d.time.min).slice(0, 4)} to ${String(d.time.max).slice(0, 4)}`]]
+        .forEach(([k, v]) => { const x = el("div"); x.append(el("dt", "", k), el("dd", "", v)); dl.append(x); });
+      const go = el("div", "go"), c = el("a", "btn solid", "Customize"), f = el("a", "btn", "Download CSV");
+      c.href = href; f.href = d.file; f.setAttribute("download", ""); f.append(el("small", "", d.bytes < 1e6 ? `${Math.max(1, Math.round(d.bytes / 1e3))} KB` : `${(d.bytes / 1e6).toFixed(1)} MB`));
+      c.setAttribute("aria-label", `Customize ${d.title}`); f.setAttribute("aria-label", `Download all of ${d.title} as CSV`);
+      go.append(c, f);
+      row.append(main, dl, sparks[d.id] ? spark(sparks[d.id]) : el("div", "spark"), go);
+      return row;
     }));
-    if (!rows.length) box.append(el("p", "empty", "No datasets match that search. Try a broader word, or clear the box to see them all."));
+    if (!list.length) box.append(el("p", "empty", "No datasets for that region yet."));
   }
-  ["q", "f-region"].forEach(id => $("#" + id).addEventListener("input", draw));
+  $("#regions").onclick = e => { const b = e.target.closest("button"); if (!b) return; region = b.dataset.r; [...$("#regions").children].forEach(x => x.setAttribute("aria-pressed", x === b)); draw(); };
   draw();
+}
+
+/* ---------- search across datasets, variables and places ---------- */
+function search(D) {
+  const input = $("#sq"), box = $("#sres");
+  const norm = t => String(t).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9%]+/g, " ").trim();
+  const ALIAS = { usa: "united states", us: "united states", america: "united states", uk: "united kingdom", britain: "united kingdom", uae: "united arab emirates", global: "world", worldwide: "world" };
+  const places = [], vars = [];
+  D.forEach(d => {
+    (d.places || []).forEach(([code, label]) => places.push({ code, label, n: norm(label), d }));
+    d.columns.forEach(c => vars.push({ c, d, q: norm(`${c.title} ${c.name} ${c.unit || ""}`), t: norm(c.title), n: norm(c.name) }));
+  });
+  const link = (d, v, code) => `explore.html#d=${encodeURIComponent(d.id)}${v ? "&v=" + encodeURIComponent(v) : ""}${code ? "&e=" + encodeURIComponent(code) : ""}`;
+  function find(text) {
+    let q = ` ${norm(text)} `;
+    for (const a in ALIAS) q = q.replace(` ${a} `, ` ${ALIAS[a]} `);
+    let place = null;
+    for (const p of places) if (p.n && q.includes(` ${p.n} `) && (!place || p.n.length > place.n.length)) place = p;
+    const words = (place ? q.replace(` ${place.n} `, " ") : q).trim().split(" ").filter(Boolean), out = [];
+    const codeIn = d => place && (d.places || []).find(p => norm(p[1]) === place.n)?.[0];
+    const ok = d => !place || codeIn(d);
+    if (words.length) {
+      D.forEach(d => { if (ok(d) && words.every(w => norm(`${d.title} ${d.domain}`).includes(w))) out.push({ rank: 0, main: d.title, side: place ? place.label : "Dataset", href: link(d, null, codeIn(d)) }); });
+      vars.forEach(v => { if (ok(v.d) && words.every(w => v.q.includes(w))) out.push({ rank: v.n === words.join(" ") ? 0.5 : v.t.startsWith(words[0]) ? 1 : 2, main: v.c.title + (v.c.unit ? `, ${v.c.unit}` : ""), side: (place ? `${place.label}, ` : "") + v.d.title, href: link(v.d, v.c.name, codeIn(v.d)) }); });
+    } else if (place) D.forEach(d => { if (ok(d)) out.push({ rank: 0, main: `${place.label}: ${d.title}`, side: `${d.columns.length} variables`, href: link(d, null, codeIn(d)) }); });
+    return out.sort((a, b) => a.rank - b.rank || a.main.length - b.main.length).slice(0, 9);
+  }
+  let act = -1, list = [];
+  const close = () => { box.hidden = true; input.setAttribute("aria-expanded", "false"); };
+  function draw() {
+    if (!input.value.trim()) { close(); return; }
+    list = find(input.value); act = Math.min(act, list.length - 1);
+    box.replaceChildren(...(list.length ? list.map((r, i) => { const a = el("a", "res" + (i === act ? " act" : "")); a.href = r.href; a.setAttribute("role", "option"); a.append(el("b", "", r.main), el("small", "", r.side)); return a; })
+      : [el("div", "res none", "Nothing matches. Try one simpler word, or browse the datasets below.")]));
+    box.hidden = false; input.setAttribute("aria-expanded", "true");
+  }
+  input.addEventListener("input", () => { act = -1; draw(); });
+  input.addEventListener("focus", draw);
+  input.addEventListener("keydown", e => {
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") { act = Math.max(0, Math.min(list.length - 1, act + (e.key === "ArrowDown" ? 1 : -1))); draw(); $(".res.act", box)?.scrollIntoView({ block: "nearest" }); e.preventDefault(); }
+    else if (e.key === "Enter") { const r = list[act < 0 ? 0 : act]; if (r && input.value.trim()) location.href = r.href; e.preventDefault(); }
+    else if (e.key === "Escape") { close(); }
+  });
+  document.addEventListener("mousedown", e => { if (!e.target.closest(".search")) close(); });
+
+  const QUICK = [["CO2 by country", "co2-and-greenhouse-gases", "co2,co2_per_capita"], ["GDP per person", "world-bank-development", "gdp_per_capita"], ["Population", "world-bank-development", "population"],
+    ["Solar and wind", "energy", "solar_share_elec,wind_share_elec"], ["Life expectancy", "world-bank-development", "life_expectancy"], ["Global temperature", "global-temperature", ""],
+    ["Earthquakes", "earthquakes-past-30-days", ""], ["Oil prices", "crude-oil-prices", ""]];
+  QUICK.forEach(([label, id, v]) => {
+    const d = D.find(x => x.id === id); if (!d || (v && !v.split(",").every(n => d.columns.some(c => c.name === n)))) return;
+    const a = el("a", "", label); a.href = link(d, v, null); $("#quick").append(a);
+  });
+  const nv = D.reduce((n, d) => n + d.columns.length, 0), nr = D.reduce((n, d) => n + d.rows, 0);
+  $("#scope").textContent = `${D.length} datasets, ${nv} variables, ${nr.toLocaleString("en-US")} rows. Refreshed every day.`;
 }
 
 /* ---------- start ---------- */
@@ -321,6 +376,7 @@ function tiles(D, sparks) {
   ticker(pulse.tickers || []);
   counters(pulse.counters || {});
   stories(pulse.stories || []);
-  tiles(sets.datasets, pulse.sparks || {});
+  rows(sets.datasets, pulse.sparks || {});
+  search(sets.datasets);
   if (cat) $("#n-src").textContent = cat.count;
 })().catch(e => { console.error(e); $("#live-text").textContent = "This page could not load its data. Reload to try again."; });
