@@ -9,7 +9,7 @@
   color-scheme:light;
   --bg:#fff;--ink:#0b0b0f;--ink2:#4b4b57;--ink3:#72727e;--line:rgba(11,11,15,.13);--line2:rgba(11,11,15,.34);--panel:#f4f4f7;--wash:rgba(11,11,15,.05);
   --navbg:rgba(255,255,255,.88);--menu:#fff;--grid:rgba(11,11,15,.1);--on:#fff;
-  --hero:#eef2f8;--hero-fade:rgba(238,242,248,.78);--hero-clear:rgba(238,242,248,0);
+  --hero:#eef2f8;
   --accent:#1f6feb;--accent-2:#1158c7;--accent-soft:rgba(31,111,235,.1);--accent-text:#1158c7;--go:#1a7f37;--go-2:#116329;
   /* chart series, fixed order, validated for colour-blind separation on each surface */
   --s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--s4:#eda100;--s5:#e87ba4;--s6:#008300;--s7:#6250d6;--s8:#e34948;
@@ -24,7 +24,7 @@
   color-scheme:dark;
   --bg:#000;--ink:#f0f0fa;--ink2:#b4b4be;--ink3:#80808a;--line:rgba(240,240,250,.16);--line2:rgba(240,240,250,.38);--panel:#0b0b0d;--wash:rgba(240,240,250,.07);
   --navbg:rgba(0,0,0,.84);--menu:#08080a;--grid:rgba(240,240,250,.13);--on:#000;
-  --hero:#000;--hero-fade:rgba(0,0,0,.72);--hero-clear:rgba(0,0,0,0);
+  --hero:#000;
   --accent-soft:rgba(47,129,247,.16);--accent-text:#6cb0ff;
   --s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--s5:#d55181;--s6:#0ca30c;--s7:#9085e9;--s8:#e66767;
   --q1:#0d366b;--q2:#184f95;--q3:#256abf;--q4:#3987e5;--q5:#6da7ec;--q6:#b7d3f6;--nodata:rgba(240,240,250,.08);
@@ -92,15 +92,16 @@ input[type=checkbox],input[type=radio]{accent-color:var(--accent);width:16px;hei
 .tip .nm{color:var(--ink2)}
 
 /* ---------- home: hero ---------- */
-.hero{position:relative;min-height:min(calc(100svh - var(--nav)),940px);display:flex;flex-direction:column;justify-content:space-between;border-bottom:1px solid var(--line)}
+/* --g is the size of the square the Earth is drawn in; the globe itself fills 88% of it and the glow the rest.
+   It is sized to sit whole beside the text: never cut by the edge of the screen, never under the words. */
+.hero{--g:min(44vw,78vh,720px);position:relative;min-height:min(calc(100svh - var(--nav)),940px);display:flex;flex-direction:column;justify-content:space-between;border-bottom:1px solid var(--line)}
 .hero-art{position:absolute;inset:0;overflow:hidden}
-.globe{position:absolute;right:max(-7vw,-130px);top:45%;width:min(82vh,60vw,790px);aspect-ratio:1;transform:translateY(-50%)}
+.globe{position:absolute;right:calc(max(var(--pad),(100vw - 1360px)/2 + var(--pad)) - var(--g)*.04);top:45%;width:var(--g);aspect-ratio:1;transform:translateY(-50%)}
 .globe canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
 .globe canvas.earth{pointer-events:none}
 .globe canvas.marks{cursor:grab;touch-action:pan-y}
 .globe canvas.marks:active{cursor:grabbing}
-.hero-art::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--hero) 0,var(--hero-fade) 30%,var(--hero-clear) 56%);pointer-events:none}
-.hero-in{position:relative;z-index:2;padding:clamp(40px,9vh,110px) 0 28px;max-width:720px;pointer-events:none}
+.hero-in{position:relative;z-index:2;padding:clamp(40px,9vh,110px) 0 28px;max-width:min(720px,calc(100% - var(--g)*.9 - 20px));pointer-events:none}
 .hero-in>*{pointer-events:auto}
 .hero h1{font-size:clamp(46px,7vw,104px);max-width:12ch}
 .lede{font-size:clamp(17px,1.5vw,21px);color:var(--ink2);max-width:46ch;margin:22px 0 30px}
@@ -133,7 +134,6 @@ input[type=checkbox],input[type=radio]{accent-color:var(--accent);width:16px;hei
   .hero{min-height:0}
   .globe{position:relative;right:auto;top:auto;transform:none;width:min(96vw,560px);margin:0 auto -16px}
   .hero-art{position:relative;inset:auto}
-  .hero-art::after{display:none}
   .hero-in{max-width:none;padding:36px 0 8px}
 }
 
