@@ -322,17 +322,32 @@ def temperature():
         col = {"GISTEMP": "nasa_anomaly_c", "GCAG": "noaa_anomaly_c"}.get(r["Source"])
         if col and re.fullmatch(r"\d{4}-\d{2}", r["Year"]) and r["Mean"] not in ("", None):
             cell.setdefault(r["Year"] + "-01", {})[col] = r["Mean"]
-    cols = ["nasa_anomaly_c", "noaa_anomaly_c"]
+    try:                                                    # a third, independent record; the dataset still builds without it
+        prev = 0
+        for line in get("https://berkeley-earth-temperature.s3.us-west-1.amazonaws.com/Global/Land_and_Ocean_complete.txt").decode("utf-8", "replace").splitlines():
+            p = line.split()
+            if line.startswith("%") or len(p) < 3 or not p[0].isdigit():
+                continue
+            if int(p[0]) < prev:
+                break                                       # the file repeats with a second way of treating sea ice; keep the first
+            prev = int(p[0])
+            if is_num(p[2]) and p[2].lower() != "nan":
+                cell.setdefault(f"{p[0]}-{int(p[1]):02d}-01", {})["berkeley_anomaly_c"] = float(p[2])
+    except Exception as e:
+        print("  Berkeley Earth not loaded:", str(e)[:80])
+    cols = ["nasa_anomaly_c", "noaa_anomaly_c"] + (["berkeley_anomaly_c"] if any("berkeley_anomaly_c" in v for v in cell.values()) else [])
     rows = [[m] + [v.get(c, "") for c in cols] for m, v in sorted(cell.items())]
     return spec("global-temperature", "Global temperature, monthly",
-                "How much warmer or cooler the planet's surface was each month than a long-term average, from NASA and NOAA.",
-                "World", "Climate and environment", "NASA GISTEMP and NOAA Climate at a Glance, via DataHub",
-                "https://github.com/datasets/global-temp", "CC BY 4.0 packaging of US federal data", ["month"], "month", "date", None,
+                "How much warmer or cooler the planet's surface was each month than a long-term average, from NASA, NOAA and Berkeley Earth.",
+                "World", "Climate and environment", "NASA GISTEMP and NOAA Climate at a Glance, via DataHub; Berkeley Earth",
+                "https://github.com/datasets/global-temp", "NASA and NOAA columns: US federal data (CC BY 4.0 packaging). Berkeley Earth column: CC BY-NC 4.0, non-commercial use only", ["month"], "month", "date", None,
                 ["month"] + cols, rows,
                 dict(nasa_anomaly_c=dict(title="Global temperature against the 1951-1980 average (NASA)", unit="°C",
                                          description="GISTEMP global land-ocean temperature index: difference from the 1951 to 1980 mean."),
                      noaa_anomaly_c=dict(title="Global temperature against the 20th-century average (NOAA)", unit="°C",
-                                         description="NOAA global land and ocean temperature anomaly: difference from the 20th-century average.")))
+                                         description="NOAA global land and ocean temperature anomaly: difference from the 20th-century average."),
+                     berkeley_anomaly_c=dict(title="Global temperature against the 1951-1980 average (Berkeley Earth)", unit="°C",
+                                             description="Berkeley Earth global land and ocean temperature: difference from the 1951 to 1980 mean. Licensed CC BY-NC 4.0.")))
 
 
 def co2ppm():

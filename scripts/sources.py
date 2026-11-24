@@ -66,7 +66,13 @@ def num(v, n=7):
 def split_unit(label):
     """'Hospital beds (per 1,000 people)' -> ('Hospital beds', 'per 1,000 people')."""
     m = re.match(r"^(.*\S)\s*\(([^()]+)\)\s*$", label.strip())
-    return (m.group(1), m.group(2)) if m else (label.strip(), "")
+    t, u = (m.group(1), m.group(2)) if m else (label.strip(), "")
+    k = u.rfind(", %")
+    if k > 0:                                               # 'modeled estimate, % of children under 5' -> the unit starts at the percent sign
+        t, u = f"{t} ({u[:k]})", u[k + 2:]
+    if not u and re.search(r"share held by", t, re.I):
+        u = "% of all income"
+    return t, u
 
 
 _iso = {}
@@ -140,9 +146,13 @@ def wb_set(id, title, description, domain, source, codes, source_param=None, rel
     for ind in codes:
         try:
             page, pages, got, label = 1, 1, {}, ""
+            base = f"https://api.worldbank.org/v2/country/all/indicator/{ind}?format=json&per_page=20000"
             while page <= pages:
-                j = J(f"https://api.worldbank.org/v2/country/all/indicator/{ind}?format=json&per_page=20000&date=1960:2035&page={page}"
-                      + (f"&source={source_param}" if source_param else ""))
+                j = None
+                for q in ([f"&source={source_param}", "&date=1960:2035"] if source_param else ["&date=1960:2035"]):     # databases other than the main one reject a date range
+                    j = J(f"{base}{q}&page={page}")
+                    if isinstance(j, list) and len(j) >= 2:
+                        break
                 if not isinstance(j, list) or len(j) < 2:
                     raise ValueError(str(j)[:120])
                 pages = int(j[0]["pages"])
@@ -189,7 +199,7 @@ WB_SETS = [
      ["SH.XPD.CHEX.PC.CD", "SH.XPD.OOPC.CH.ZS", "SH.XPD.GHED.GD.ZS", "SH.MED.BEDS.ZS", "SH.MED.NUMW.P3", "SH.IMM.IDPT", "SH.TBS.INCD", "SH.DYN.AIDS.ZS",
       "SH.MLR.INCD.P3", "SH.STA.STNT.ME.ZS", "SH.STA.WAST.ZS", "SH.STA.OWGH.ME.ZS", "SH.ANM.ALLW.ZS", "SH.STA.BRTC.ZS", "SP.ADO.TFRT", "SH.DYN.NMRT",
       "SP.DYN.CDRT.IN", "SP.DYN.CBRT.IN", "SH.DTH.COMM.ZS", "SH.DTH.NCOM.ZS", "SH.DTH.INJR.ZS", "SH.STA.SUIC.P5", "SH.STA.TRAF.P5", "SH.PRV.SMOK",
-      "SH.ALC.PCAP.LI", "SH.STA.DIAB.ZS", "SH.DYN.NCOM.ZS", "SH.UHC.SRVS.CV.XD", "SH.H2O.SMDW.ZS", "SH.STA.SMSS.ZS", "SH.STA.AIRP.P5",
+      "SH.ALC.PCAP.LI", "SH.STA.DIAB.ZS", "SH.DYN.NCOM.ZS", "SH.H2O.SMDW.ZS", "SH.STA.SMSS.ZS", "SH.STA.AIRP.P5",
       "SP.DYN.LE00.FE.IN", "SP.DYN.LE00.MA.IN", "SH.STA.ANVC.ZS", "SP.DYN.CONU.ZS"], {}),
     ("education-indicators", "Education: enrolment, completion, literacy, teachers and learning",
      "Schooling by country and year, compiled by the World Bank from the UNESCO Institute for Statistics.",
@@ -200,14 +210,14 @@ WB_SETS = [
     ("gender-indicators", "Women and men: work, law, management, marriage and money",
      "How women's lives compare with men's by country and year: work, legal rights, leadership, marriage and access to finance.",
      "People and society", "World Bank, World Development Indicators and Gender Data Portal",
-     ["SL.TLF.CACT.MA.ZS", "SL.TLF.CACT.FM.ZS", "SG.LAW.INDX", "SL.EMP.SMGT.FE.ZS", "SP.M18.2024.FE.ZS", "SG.VAW.1549.ZS", "IC.FRM.FEMO.ZS",
+     ["SL.TLF.CACT.MA.ZS", "SL.TLF.CACT.FM.ZS", "SL.EMP.SMGT.FE.ZS", "SP.M18.2024.FE.ZS", "SG.VAW.1549.ZS", "IC.FRM.FEMO.ZS",
       "SL.UEM.TOTL.FE.ZS", "SL.UEM.TOTL.MA.ZS", "FX.OWN.TOTL.FE.ZS", "FX.OWN.TOTL.MA.ZS", "SP.POP.TOTL.FE.ZS", "SL.EMP.WORK.FE.ZS", "SL.EMP.VULN.FE.ZS",
       "SE.SEC.ENRR.FE", "SG.GEN.MNST.ZS"], {}),
     ("poverty-and-inequality", "Poverty and inequality: poverty lines, income shares, shared prosperity",
      "Who is poor and how income is shared, by country and year, from household surveys compiled by the World Bank.",
      "People and society", "World Bank, Poverty and Inequality Platform, via World Development Indicators",
      ["SI.POV.LMIC", "SI.POV.UMIC", "SI.POV.NAHC", "SI.POV.GAPS", "SI.DST.FRST.20", "SI.DST.05TH.20", "SI.DST.10TH.10", "SI.DST.FRST.10",
-      "SI.SPR.PCAP.ZG", "SI.SPR.PC40.ZG", "SI.POV.MDIM", "SI.DST.50MD", "SI.POV.SOPO", "EN.POP.SLUM.UR.ZS"], {}),
+      "SI.SPR.PCAP.ZG", "SI.SPR.PC40.ZG", "SI.DST.50MD", "SI.POV.SOPO", "EN.POP.SLUM.UR.ZS"], {}),
     ("environment-indicators", "Environment: protected land and sea, water, threatened species, land",
      "Nature and natural resources by country and year, compiled by the World Bank from FAO, the IUCN Red List, AQUASTAT and UN Environment.",
      "Climate and environment", "World Bank, World Development Indicators (FAO, IUCN, AQUASTAT and UN sources)",
@@ -222,11 +232,11 @@ WB_SETS = [
       "FI.RES.TOTL.CD", "DT.DOD.DECT.GN.ZS", "GC.DOD.TOTL.GD.ZS", "GC.XPN.TOTL.GD.ZS", "GC.REV.XGRT.GD.ZS", "FS.AST.PRVT.GD.ZS", "CM.MKT.LCAP.GD.ZS",
       "FR.INR.LEND", "FR.INR.RINR", "FB.BNK.CAPA.ZS", "FB.AST.NPER.ZS", "FX.OWN.TOTL.ZS", "FB.CBK.BRCH.P5", "FB.ATM.TOTL.P5", "BX.KLT.DINV.CD.WD",
       "BM.KLT.DINV.WD.GD.ZS", "DT.ODA.ODAT.GN.ZS", "DT.ODA.ODAT.PC.ZS", "NY.GDP.DEFL.KD.ZG", "PA.NUS.PPP", "NY.GDP.MKTP.PP.CD", "NY.GDP.MKTP.KD",
-      "NY.GDP.PCAP.KD", "NY.GDP.PCAP.KD.ZG", "NE.CON.PRVT.ZS", "NE.CON.GOVT.ZS", "IC.BUS.NDNS.ZS", "IC.REG.DURS", "LP.LPI.OVRL.XQ"], {}),
+      "NY.GDP.PCAP.KD", "NY.GDP.PCAP.KD.ZG", "NE.CON.PRVT.ZS", "NE.CON.GOVT.ZS", "IC.BUS.NDNS.ZS", "LP.LPI.OVRL.XQ"], {}),
     ("technology-and-transport", "Technology and transport: broadband, patents, research, flights, ports, rail",
      "How connected and inventive countries are, by year: internet and phones, patents and research, air, sea and rail traffic, tourism.",
      "Science and technology", "World Bank, World Development Indicators (ITU, WIPO, UNESCO, ICAO and UN sources)",
-     ["IT.NET.BBND.P2", "IT.NET.SECR.P6", "IT.MLT.MAIN.P2", "IP.PAT.RESD", "IP.PAT.NRES", "IP.TMK.TOTL", "IP.JRN.ARTC.SC", "SP.POP.SCIE.RD.P6",
+     ["IT.NET.BBND.P2", "IT.NET.SECR.P6", "IT.MLT.MAIN.P2", "IP.PAT.RESD", "IP.PAT.NRES", "IP.JRN.ARTC.SC", "SP.POP.SCIE.RD.P6",
       "TX.VAL.TECH.CD", "TX.VAL.ICTG.ZS.UN", "BX.GSR.CCIS.ZS", "IS.AIR.PSGR", "IS.AIR.DPRT", "IS.AIR.GOOD.MT.K1", "IS.SHP.GOOD.TU", "IS.RRS.TOTL.KM",
       "IS.RRS.PASG.KM", "ST.INT.RCPT.CD", "ST.INT.DPRT"], {}),
     ("labour-indicators", "Work: employment, youth out of work, sectors and kinds of jobs",
@@ -451,22 +461,22 @@ def owid_charts(id, title, description, domain, source, slugs, licence="CC BY 4.
     q = "?v=1&csvType=full&useColumnShortNames=true"
     for s in slugs:
         try:
-            rows = list(csv.DictReader(io.StringIO(text(f"https://ourworldindata.org/grapher/{s}.csv{q}"))))
+            rows = [{k.lower() if k.lower() in ("entity", "code", "year") else k: v for k, v in r.items()} for r in csv.DictReader(io.StringIO(text(f"https://ourworldindata.org/grapher/{s}.csv{q}")))]
             info = J(f"https://ourworldindata.org/grapher/{s}.metadata.json{q}").get("columns", {})
-            fields = [c for c in rows[0] if c not in ("Entity", "Code", "Year")]
+            fields = [c for c in rows[0] if c not in ("entity", "code", "year", "owid_region")]
             for f in fields:
                 m = info.get(f, {})
                 vals = {}
                 for r in rows:
-                    if r[f] in ("", None) or not str(r["Year"]).lstrip("-").isdigit():
+                    if r[f] in ("", None) or not str(r["year"]).lstrip("-").isdigit():
                         continue
                     try:
                         v = float(r[f])
                     except ValueError:
                         continue
-                    code = {"OWID_WRL": "WLD", "OWID_KOS": "XKX"}.get(r["Code"], r["Code"]) or "OWID_" + re.sub(r"[^A-Z0-9]+", "_", r["Entity"].upper()).strip("_")
-                    vals[(code, int(r["Year"]))] = v
-                    names[code] = r["Entity"]
+                    code = {"OWID_WRL": "WLD", "OWID_KOS": "XKX"}.get(r["code"], r["code"]) or "OWID_" + re.sub(r"[^A-Z0-9]+", "_", r["entity"].upper()).strip("_")
+                    vals[(code, int(r["year"]))] = v
+                    names[code] = r["entity"]
                 if len(vals) < 100:
                     continue
                 t = m.get("titleShort") or m.get("titleLong") or f.replace("_", " ").capitalize()
@@ -693,26 +703,11 @@ def us_climate():
 
 
 # ---------- research and the internet ----------
-def arxiv():
-    cell, raw = {}, text("https://arxiv.org/stats/get_monthly_submissions")
-    for r in csv.reader(io.StringIO(raw)):
-        if len(r) >= 2 and re.fullmatch(r"\d{4}-\d{2}", r[0].strip()) and r[1].strip().isdigit():
-            cell[r[0].strip() + "-01"] = dict(submissions=int(r[1]))
-    assert cell, "arXiv reply not understood: " + raw[:160].replace("\n", " | ")
-    last = max(cell)
-    if last[:7] == date.today().strftime("%Y-%m"):
-        del cell[last]                                      # the month in progress
-    return series("arxiv-submissions", "arXiv: new research papers submitted each month", "How many papers researchers posted to arXiv each month since it opened in 1991.",
-                  "World", "Science and technology", "arXiv", "https://arxiv.org/stats/monthly_submissions", "CC0 (arXiv usage statistics)", cell,
-                  dict(submissions=dict(title="Papers submitted to arXiv in the month", unit="papers")), ["submissions"], "month")
-
-
 WIKIS = [("all-projects", "all_wikipedias_and_sister_projects", "Wikimedia page views, all projects"), ("en.wikipedia", "english_wikipedia", "English Wikipedia page views"),
          ("es.wikipedia", "spanish_wikipedia", "Spanish Wikipedia page views"), ("de.wikipedia", "german_wikipedia", "German Wikipedia page views"),
          ("ja.wikipedia", "japanese_wikipedia", "Japanese Wikipedia page views"), ("fr.wikipedia", "french_wikipedia", "French Wikipedia page views"),
          ("ru.wikipedia", "russian_wikipedia", "Russian Wikipedia page views"), ("zh.wikipedia", "chinese_wikipedia", "Chinese Wikipedia page views"),
-         ("hi.wikipedia", "hindi_wikipedia", "Hindi Wikipedia page views"), ("pt.wikipedia", "portuguese_wikipedia", "Portuguese Wikipedia page views"),
-         ("ar.wikipedia", "arabic_wikipedia", "Arabic Wikipedia page views")]
+         ("hi.wikipedia", "hindi_wikipedia", "Hindi Wikipedia page views"), ("pt.wikipedia", "portuguese_wikipedia", "Portuguese Wikipedia page views")]
 
 
 def wikipedia():
@@ -728,7 +723,7 @@ def wikipedia():
             print(f"  wikipedia {proj}: {str(e)[:70]}")
         time.sleep(2)
     cell.pop(date.today().strftime("%Y-%m-01"), None)
-    return series("wikipedia-pageviews", "Wikipedia page views, monthly, by language", "How many pages people read on Wikipedia each month since July 2015, in total and for eleven languages.",
+    return series("wikipedia-pageviews", "Wikipedia page views, monthly, by language", "How many pages people read on Wikipedia each month since July 2015, in total and for nine languages.",
                   "World", "Science and technology", "Wikimedia Foundation, Pageviews API", "https://wikitech.wikimedia.org/wiki/Analytics/AQS/Pageviews", "CC0", cell, meta, cols, "month")
 
 
@@ -756,9 +751,25 @@ def research():
         meta["crossref_records"] = dict(title="Scholarly records registered with Crossref, by year published", unit="records", description="Journal articles, books, preprints and other items with a Crossref DOI, by publication year.")
     except Exception as e:
         print("  crossref:", str(e)[:80])
+    try:                                                    # arXiv asks for one request every three seconds; years already on disk are not asked again
+        _, old = prior("research-papers-by-year")
+        for y in range(1991, THIS_YEAR):
+            d = f"{y}-01-01"
+            if d in old and old[d].get("arxiv_papers") and y < THIS_YEAR - 2:
+                n = float(old[d]["arxiv_papers"])
+            else:
+                m = re.search(r"<opensearch:totalResults[^>]*>(\d+)<", text(f"https://export.arxiv.org/api/query?search_query=submittedDate:[{y}01010000+TO+{y}12312359]&max_results=1"))
+                n = int(m.group(1))
+                time.sleep(3)
+            if n:
+                cell.setdefault(d, {})["arxiv_papers"] = n
+        cols.append("arxiv_papers")
+        meta["arxiv_papers"] = dict(title="Papers submitted to arXiv in the year", unit="papers", description="Preprints first submitted to arXiv in the year, counted through arXiv's public search.")
+    except Exception as e:
+        print("  arxiv:", str(e)[:80])
     if cols:
-        out.append(series("research-papers-by-year", "Research papers published each year, worldwide", "How much research the world publishes: works indexed by OpenAlex, the share that is free to read, and records registered with Crossref.",
-                          "World", "Science and technology", "OpenAlex and Crossref", "https://openalex.org", "CC0", cell, meta, cols, "year"))
+        out.append(series("research-papers-by-year", "Research papers published each year, worldwide", "How much research the world publishes: works indexed by OpenAlex, the share that is free to read, records registered with Crossref, and preprints posted to arXiv.",
+                          "World", "Science and technology", "OpenAlex, Crossref and arXiv", "https://openalex.org", "CC0", cell, meta, cols, "year"))
     # by country: only the last three years are asked again; earlier years are read back from the file
     try:
         h, old = prior("research-papers-by-country")
@@ -869,28 +880,20 @@ def yearly(id, first, count, cols, recent=2):
 
 
 def federal_register():
-    kinds = dict(final_rules="conditions[type][]=RULE", proposed_rules="conditions[type][]=PRORULE", notices="conditions[type][]=NOTICE",
+    kinds = dict(final_rules="conditions[type][]=RULE", proposed_rules="conditions[type][]=PRORULE",
                  presidential_documents="conditions[type][]=PRESDOCU", executive_orders="conditions[presidential_document_type][]=executive_order")
-    api = "https://www.federalregister.gov/api/v1/documents.json?per_page=1&"
 
     def count(y, c):
-        n = J(f"{api}conditions[publication_date][year]={y}&{kinds[c]}")["count"]
-        if n < 10000:
-            return n
-        total = 0                                           # the count is capped at 10,000: add the months up instead
-        for m in range(1, 13):
-            end = date(y + (m == 12), m % 12 + 1, 1).toordinal() - 1
-            k = J(f"{api}conditions[publication_date][gte]={y}-{m:02d}-01&conditions[publication_date][lte]={date.fromordinal(end).isoformat()}&{kinds[c]}")["count"]
-            assert k < 10000, "a month is capped too"
-            total += k
-            time.sleep(0.2)
-        return total
+        n = J(f"https://www.federalregister.gov/api/v1/documents.json?per_page=1&conditions[publication_date][year]={y}&{kinds[c]}")["count"]
+        assert n < 10000, "the count is capped at 10,000"
+        return n
     cell = yearly("us-federal-register", 1995, count, list(kinds))
     meta = dict(final_rules=dict(title="US federal final rules published in the year", unit="documents"), proposed_rules=dict(title="US federal proposed rules published in the year", unit="documents"),
-                notices=dict(title="US federal notices published in the year", unit="documents"), presidential_documents=dict(title="US presidential documents published in the year", unit="documents"),
-                executive_orders=dict(title="US executive orders published in the year", unit="orders"))
-    return series("us-federal-register", "US federal rules, notices and executive orders, by year", "How much the US government regulates and announces: documents published in the Federal Register each year since 1995. The current year is a count so far.",
-                  "US", "Government and finance", "US National Archives, Federal Register", "https://www.federalregister.gov", PD, cell, meta, list(kinds), "year")
+                presidential_documents=dict(title="US presidential documents published in the year", unit="documents"), executive_orders=dict(title="US executive orders published in the year", unit="orders"))
+    out = series("us-federal-register", "US federal rules and executive orders, by year", "How much the US government regulates: final rules, proposed rules, presidential documents and executive orders published in the Federal Register each year since 1995.",
+                 "US", "Government and finance", "US National Archives, Federal Register", "https://www.federalregister.gov", PD, cell, meta, list(kinds), "year")
+    out["partial"] = True                                   # the newest year is a count so far
+    return out
 
 
 def fda():
@@ -923,8 +926,10 @@ def clinical_trials():
     cell = yearly("clinical-trials-started", 2000, count, list(kinds), recent=4)
     meta = dict(studies_started=dict(title="Clinical studies started in the year", unit="studies", description="Studies registered on ClinicalTrials.gov by the year they started, worldwide. The current year includes studies registered to start before it ends."),
                 interventional_studies_started=dict(title="Clinical trials (interventional studies) started in the year", unit="trials"), phase_3_trials_started=dict(title="Phase 3 clinical trials started in the year", unit="trials"))
-    return series("clinical-trials-started", "Clinical trials started each year", "How many medical studies begin each year, from the world's largest trial registry. The current year is a count so far.",
-                  "World", "Health", "US National Library of Medicine, ClinicalTrials.gov", "https://clinicaltrials.gov", PD, cell, meta, list(kinds), "year")
+    out = series("clinical-trials-started", "Clinical trials started each year", "How many medical studies begin each year, from the world's largest trial registry.",
+                 "World", "Health", "US National Library of Medicine, ClinicalTrials.gov", "https://clinicaltrials.gov", PD, cell, meta, list(kinds), "year")
+    out["partial"] = True
+    return out
 
 
 def fema():
@@ -954,8 +959,10 @@ def fema():
                  tornadoes="US disaster declarations for tornadoes", winter_storms="US disaster declarations for snow and ice storms", earthquakes="US disaster declarations for earthquakes", droughts="US disaster declarations for droughts",
                  biological="US disaster declarations for biological events (such as COVID-19)", other="US disaster declarations for other causes")
     meta = {c: dict(title=t, unit="declarations", description="Each disaster is counted once for each state or territory it was declared in. The current year is a count so far.") for c, t in label.items()}
-    return [series("us-disaster-declarations", "US disaster declarations by year and cause", "How many disasters the US government has declared each year since 1953, and what caused them.",
-                   "US", "Natural hazards", "Federal Emergency Management Agency, OpenFEMA", "https://www.fema.gov/about/openfema", PD, cell, meta, cols, "year"),
+    yearly_counts = series("us-disaster-declarations", "US disaster declarations by year and cause", "How many disasters the US government has declared each year since 1953, and what caused them.",
+                           "US", "Natural hazards", "Federal Emergency Management Agency, OpenFEMA", "https://www.fema.gov/about/openfema", PD, cell, meta, cols, "year")
+    yearly_counts["partial"] = True
+    return [yearly_counts,
             table("us-disaster-declarations-list", "Every US disaster declaration since 1953", "One line for each federally declared disaster, with its date, state, type and name.",
                   "US", "Natural hazards", "Federal Emergency Management Agency, OpenFEMA", "https://www.fema.gov/about/openfema", PD, ["disaster_number"], "declared", "date", None,
                   ["disaster_number", "declared", "state", "declaration_type", "incident_type", "name"], rows,
@@ -978,9 +985,11 @@ def fdic():
         c["assets_of_failed_banks"] += assets or 0
     for y in range(int(min(cell)[:4]), THIS_YEAR + 1):
         cell.setdefault(f"{y}-01-01", dict(bank_failures=0, assets_of_failed_banks=0))
-    return [series("us-bank-failures", "US bank failures by year", "How many banks failed in the United States each year since 1934, and how large they were. The current year is a count so far.",
-                   "US", "Government and finance", "Federal Deposit Insurance Corporation, BankFind", "https://banks.data.fdic.gov", PD, cell,
-                   dict(bank_failures=dict(title="US bank failures in the year", unit="banks"), assets_of_failed_banks=dict(title="Assets of US banks that failed in the year", unit="current US$")), ["bank_failures", "assets_of_failed_banks"], "year"),
+    by_year = series("us-bank-failures", "US bank failures by year", "How many banks failed in the United States each year since 1934, and how large they were.",
+                     "US", "Government and finance", "Federal Deposit Insurance Corporation, BankFind", "https://banks.data.fdic.gov", PD, cell,
+                     dict(bank_failures=dict(title="US bank failures in the year", unit="banks"), assets_of_failed_banks=dict(title="Assets of US banks that failed in the year", unit="current US$")), ["bank_failures", "assets_of_failed_banks"], "year")
+    by_year["partial"] = True
+    return [by_year,
             table("us-bank-failures-list", "Every US bank failure since 1934", "One line for each failed bank: date, name, place, assets, deposits and the estimated cost to the insurance fund.",
                   "US", "Government and finance", "Federal Deposit Insurance Corporation, BankFind", "https://banks.data.fdic.gov", PD, ["id"], "failed", "date", None,
                   ["id", "failed", "bank", "city_and_state", "assets", "deposits", "estimated_cost", "resolution"], rows,
@@ -1061,9 +1070,33 @@ def us_spending():
                       outlays=dict(title="Outlays", unit="current US$", description="What has actually been paid out."), share_of_federal_budget=dict(title="Share of total federal budget authority", unit="% of the total")))
 
 
-BUILDERS = [(lambda s=s: wb_set(s[0], s[1], s[2], s[3], s[4], s[5], **s[6])) for s in WB_SETS] + [
-    imf, un_population, undp, who, pwt, us_monthly, us_quarterly, us_daily, us_debt, us_climate, arxiv, wikipedia, research, gbif, github_activity,
+OWID_SETS = [
+    ("democracy-and-rights", "Democracy, human rights, press freedom and corruption", "How free and how clean countries are: democracy and rights scores from V-Dem, press freedom from Reporters Without Borders, and perceived corruption from Transparency International.",
+     "Government and finance", "V-Dem, Reporters Without Borders and Transparency International, via Our World in Data",
+     ["electoral-democracy-index", "liberal-democracy-index", "human-rights-index-vdem", "rule-of-law-index", "women-political-empowerment-index", "press-freedom-index-rsf", "ti-corruption-perception-index"]),
+    ("conflict-and-security", "Military spending, nuclear weapons, homicide, terrorism and refugees", "War and safety by country and year: what armies cost, who holds nuclear warheads, how many people are killed, and how many flee.",
+     "Government and finance", "SIPRI, Federation of American Scientists, UNODC, Global Terrorism Database and UNHCR, via Our World in Data",
+     ["military-expenditure-total", "nuclear-warhead-stockpiles", "homicide-rate-unodc", "fatalities-from-terrorism", "terrorist-attacks", "refugee-population-by-country-or-territory-of-origin", "refugee-population-by-country-or-territory-of-asylum"]),
+    ("emissions-by-sector", "Greenhouse gas emissions by sector", "Where each country's emissions come from: electricity and heat, transport, industry, buildings, farming, land use and waste.",
+     "Climate and environment", "Climate Watch (World Resources Institute), via Our World in Data", ["ghg-emissions-by-sector"]),
+    ("wellbeing-and-schooling", "Happiness, working hours and years of schooling", "How people say their lives are going, how long they work, and how long they stay in school.",
+     "People and society", "World Happiness Report, Penn World Table, Barro and Lee, and the World Bank, via Our World in Data",
+     ["happiness-cantril-ladder", "annual-working-hours-per-worker", "mean-years-of-schooling-long-run", "learning-adjusted-years-of-school-lays"]),
+    ("forests-wildlife-and-plastic", "Forest loss, threatened wildlife and plastic in the ocean", "Pressure on nature by country: forest cleared each year, tree cover lost, how close species are to extinction, and plastic reaching the sea.",
+     "Climate and environment", "FAO, Global Forest Watch, IUCN Red List and Meijer et al., via Our World in Data", ["annual-deforestation", "tree-cover-loss", "red-list-index", "plastic-waste-emitted-to-the-ocean"]),
+    ("natural-disasters", "Natural disasters: events and deaths", "How many natural disasters are recorded each year and how many people they kill.",
+     "Natural hazards", "EM-DAT, CRED, UCLouvain, via Our World in Data", ["number-of-natural-disaster-events", "deaths-from-natural-disasters"]),
+    ("food-supply", "Food supply: calories and meat per person", "How much food is available per person in each country: daily calories and meat.",
+     "Economy and development", "Food and Agriculture Organization (FAOSTAT), via Our World in Data", ["daily-per-capita-caloric-supply", "meat-supply-per-person"]),
+    ("top-incomes", "Income going to the top 1% and top 10%", "How much of each country's income goes to its highest earners, before tax.",
+     "People and society", "World Inequality Database, via Our World in Data", ["income-share-top-1-before-tax-wid", "income-share-top-10-before-tax-wid"]),
+    ("space-and-ai", "Objects launched into space, and AI research", "Satellites and other objects launched each year by country, and research papers on artificial intelligence.",
+     "Science and technology", "UN Office for Outer Space Affairs and CSET, via Our World in Data", ["yearly-number-of-objects-launched-into-outer-space", "annual-scholarly-publications-on-artificial-intelligence"]),
+]
+
+BUILDERS = [(lambda s=s: wb_set(s[0], s[1], s[2], s[3], s[4], s[5], **s[6])) for s in WB_SETS] + [(lambda s=s: owid_charts(*s)) for s in OWID_SETS] + [
+    imf, un_population, undp, who, pwt, us_monthly, us_quarterly, us_daily, us_debt, us_climate, wikipedia, research, gbif, github_activity,
     federal_register, fda, clinical_trials, fema, fdic, flu, chicago, nyc, us_spending,
 ]
-NAMES = [s[0] for s in WB_SETS] + ["imf", "un_population", "undp", "who", "pwt", "us_monthly", "us_quarterly", "us_daily", "us_debt", "us_climate", "arxiv", "wikipedia", "research", "gbif",
+NAMES = [s[0] for s in WB_SETS] + [s[0] for s in OWID_SETS] + ["imf", "un_population", "undp", "who", "pwt", "us_monthly", "us_quarterly", "us_daily", "us_debt", "us_climate", "wikipedia", "research", "gbif",
                                     "github_activity", "federal_register", "fda", "clinical_trials", "fema", "fdic", "flu", "chicago", "nyc", "us_spending"]
