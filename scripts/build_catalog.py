@@ -193,7 +193,6 @@ STATUS = {
     "Eurostat": ("live", ["europe-eurostat"], "Twelve headline tables for every European country."),
     "USGS Water Data": ("live", ["us-river-flow-monthly"], "Monthly flow of eight major rivers."),
     "Maryland Open Data": ("live", ["maryland-crime"], "Statewide crime, 1975 to 2020. Other tables are added one at a time."),
-    "FAO Food Price Index": ("live", ["fao-food-price-index"], "The monthly index and its five parts."),
     "CDC PLACES": ("live", ["us-states-health"], "State figures built up from its county estimates."),
     "Climate TRACE": ("live", ["climate-trace-emissions"], "Country totals."),
     "HMDA mortgage records": ("live", ["us-mortgage-lending"], "Yearly national totals. The loan-by-loan files are too large to host."),
@@ -242,7 +241,7 @@ LATER = {  # open, with a reason it is not loaded yet
     "Open Baltimore": "A catalog of many tables; single tables are added one at a time.",
     "Humanitarian Data Exchange": "A catalog of other publishers' files.",
     "SEC EDGAR": "Company filings rather than one table.", "FERC eLibrary and forms": "Documents and forms rather than one table.", "GTFS transit feeds (Mobility Database)": "Thousands of timetable files rather than one table.",
-    "CFPB Consumer Complaints": "Its service turned away this site's automatic requests.", "FAO Food Price Index": "Published as a file whose address changes every month.",
+    "CFPB Consumer Complaints": "Its service turned away this site's automatic requests.", "FAO Food Price Index": "The only file at a fixed address stopped in 2018; the current one moves every month.",
 }
 RELATED = {"GH Archive": ["github-activity-by-country"], "Census American Community Survey": [], "NASA Earthdata": ["global-temperature"]}
 NOTES = {"Stack Exchange data dump": "The full dump is too large to host, and its small API turned away this site's requests for being too frequent.", "GH Archive": "The full event archive is hundreds of gigabytes. GitHub's own country summary is on the site.", "Wikidata": "A database of facts rather than a table; nothing to load as one file.",
