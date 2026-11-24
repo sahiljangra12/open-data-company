@@ -71,6 +71,8 @@ const CONCEPTS_MORE = [
   [/leading indicators?/, "world-leading-indicators-and-exchange-rates::leading_indicator_usa"], [/real exchange rate/, "world-leading-indicators-and-exchange-rates::real_exchange_rate_united_states"],
   [/maryland/, "maryland-crime::violent_crime_rate"], [/electricity demand|power demand|grid demand/, "us-grid-demand-daily::demand_us48"],
   [/bills? (introduced|in congress)|congress bills?/, "us-congress-and-rulemaking::bills_introduced"], [/laws? (passed|enacted)/, "us-congress-and-rulemaking::laws_enacted"], [/public comments?/, "us-congress-and-rulemaking::public_comments_posted"],
+  [/\bcorn\b|maize (harvest|crop)/, "us-crop-production::corn_production"], [/soybeans?|\bsoy\b/, "us-crop-production::soybean_production"], [/\bwheat\b/, "us-crop-production::wheat_production"],
+  [/crop yields?/, "us-crop-production::corn_yield"], [/charging (stations?|ports?)|ev chargers?/, "us-ev-charging-stations::charging_stations"], [/candidates? for president|presidential candidates?/, "us-election-candidates::candidates_for_president"],
   [/rainfall|precipitation/, "environment-indicators::average_precipitation_in_depth"], [/protected (areas?|land)/, "environment-indicators::terrestrial_and_marine_protected_areas"],
 ];
 const PLACE_ALIAS = { usa: "USA", us: "USA", "u s": "USA", america: "USA", "united states of america": "USA", "the states": "USA", uk: "GBR", "u k": "GBR", britain: "GBR", "great britain": "GBR", england: "GBR",
