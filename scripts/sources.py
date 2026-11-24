@@ -1950,6 +1950,65 @@ def foods():
                  ["food_id", "food", "year"] + cols, rows, meta, min_rows=50)
 
 
+def hud_rents():
+    k = key("HUD_API_TOKEN")
+    h = {"Authorization": "Bearer " + k, "Accept": "application/json"}
+    id, cell, names = "us-states-rents", {}, {}
+    path = SETS / f"{id}.csv"
+    if path.exists():                                       # a year's rents do not change once published
+        with open(path, encoding="utf-8") as f:
+            for r in csv.DictReader(f):
+                names[r["state"]] = r["state_name"]
+                cell[(r["state"], int(r["year"]))] = {c: float(v) for c, v in r.items() if c not in ("state", "state_name", "year") and v != ""}
+    have = {y for _, y in cell}
+    states = J("https://www.huduser.gov/hudapi/public/fmr/listStates", headers=h, tries=2)
+    states = states.get("data", states) if isinstance(states, dict) else states
+    codes = [(x.get("state_code"), x.get("state_name")) for x in states if x.get("state_code") and len(x["state_code"]) == 2]
+    assert len(codes) >= 50, "hud_rents: states list: " + json.dumps(states)[:200]
+
+    def one(code, y):
+        j = J(f"https://www.huduser.gov/hudapi/public/fmr/statedata/{code}?year={y}", headers=h, tries=2)
+        d = j.get("data", j)
+        rows = (d.get("counties") or []) + (d.get("metroareas") or [])
+        pick = lambda r, *names_: next((float(r[n]) for n in names_ if r.get(n) not in (None, "")), None)
+        return [(pick(r, "One-Bedroom", "one_bedroom"), pick(r, "Two-Bedroom", "two_bedroom"), pick(r, "Three-Bedroom", "three_bedroom")) for r in rows], j
+    median = lambda v: sorted(v)[len(v) // 2] if len(v) % 2 else sum(sorted(v)[len(v) // 2 - 1:len(v) // 2 + 1]) / 2
+    shown = False
+    for y in range(2021, THIS_YEAR + 2):
+        if y in have:
+            continue
+        try:
+            first, raw = one("MD", y)
+            if not shown:
+                print(f"  hud_rents {y}: {json.dumps(raw)[:380]}")
+                shown = True
+            if not first:
+                continue                                    # that year is not published yet
+        except Exception as e:
+            print(f"  hud_rents {y}: {str(e)[:70]}")
+            continue
+        for code, name in codes:
+            try:
+                rows, _ = (first, None) if code == "MD" else one(code, y)
+                two = [r[1] for r in rows if r[1]]
+                if two:
+                    names[code] = name
+                    cell[(code, y)] = dict(one_bedroom_rent=median([r[0] for r in rows if r[0]] or two), two_bedroom_rent=median(two), three_bedroom_rent=median([r[2] for r in rows if r[2]] or two),
+                                           highest_two_bedroom_rent=max(two), lowest_two_bedroom_rent=min(two), areas=len(two))
+            except Exception as e:
+                print(f"  hud_rents {code} {y}: {str(e)[:60]}")
+            time.sleep(1.1)                                 # the service allows about one request a second
+    cols = ["one_bedroom_rent", "two_bedroom_rent", "three_bedroom_rent", "lowest_two_bedroom_rent", "highest_two_bedroom_rent", "areas"]
+    D = "US Department of Housing and Urban Development, Fair Market Rents: the rent, with utilities, that 40% of typical homes in an area fall under. Here, the middle value across the state's counties and metropolitan areas, each counted once."
+    meta = dict(one_bedroom_rent=dict(title="Typical fair market rent, one bedroom", unit="US$ a month", description=D), two_bedroom_rent=dict(title="Typical fair market rent, two bedrooms", unit="US$ a month", description=D),
+                three_bedroom_rent=dict(title="Typical fair market rent, three bedrooms", unit="US$ a month", description=D), lowest_two_bedroom_rent=dict(title="Lowest two-bedroom fair market rent in the state", unit="US$ a month"),
+                highest_two_bedroom_rent=dict(title="Highest two-bedroom fair market rent in the state", unit="US$ a month"), areas=dict(title="Counties and metropolitan areas counted", unit="areas"))
+    rows = [[st, names.get(st, st), y] + [num(v.get(c)) for c in cols] for (st, y), v in sorted(cell.items())]
+    return table(id, "US rents by state: fair market rents", "What a modest home rents for in each US state, from the federal government's yearly fair market rents.",
+                 "US", "People and society", "US Department of Housing and Urban Development, Fair Market Rents", "https://www.huduser.gov/portal/datasets/fmr.html", PD,
+                 ["state", "year"], "year", "year", dict(col="state", label_col="state_name", label="State"), ["state", "state_name", "year"] + cols, rows, meta, min_rows=40)
+
+
 # ---------- addresses to look at before writing a loader; not part of a normal run ----------
 PROBES = ["https://www.fao.org/fileadmin/templates/worldfood/Reports_and_docs/Food_price_indices_data.csv",
           "https://www.fao.org/media/docs/worldfoodsituationlibraries/default-document-library/food_price_indices_data.csv",
@@ -1982,8 +2041,8 @@ def probe_urls():
 BUILDERS = [(lambda s=s: wb_set(s[0], s[1], s[2], s[3], s[4], s[5], **s[6])) for s in WB_SETS] + [(lambda s=s: owid_charts(*s)) for s in OWID_SETS] + [
     imf, un_population, undp, who, pwt, us_monthly, us_quarterly, us_daily, us_debt, us_climate, wikipedia, research, gbif, github_activity,
     federal_register, fda, clinical_trials, fema, fdic, flu, chicago, nyc, us_spending, nih, eurostat, world_monthly, usgs_water, cdc_overdose, maryland, uk, climate_trace, hmda, cdc_places, comtrade,
-    eia_grid, us_lawmaking, census_states, us_crops, us_elections, us_crime, us_colleges, us_ev_charging, foods,
+    eia_grid, us_lawmaking, census_states, us_crops, us_elections, us_crime, us_colleges, us_ev_charging, foods, hud_rents,
 ]
 NAMES = [s[0] for s in WB_SETS] + [s[0] for s in OWID_SETS] + ["imf", "un_population", "undp", "who", "pwt", "us_monthly", "us_quarterly", "us_daily", "us_debt", "us_climate", "wikipedia", "research", "gbif",
                                     "github_activity", "federal_register", "fda", "clinical_trials", "fema", "fdic", "flu", "chicago", "nyc", "us_spending", "nih", "eurostat", "world_monthly", "usgs_water", "cdc_overdose", "maryland", "uk", "climate_trace", "hmda", "cdc_places", "comtrade",
-                                    "eia_grid", "us_lawmaking", "census_states", "us_crops", "us_elections", "us_crime", "us_colleges", "us_ev_charging", "foods"]
+                                    "eia_grid", "us_lawmaking", "census_states", "us_crops", "us_elections", "us_crime", "us_colleges", "us_ev_charging", "foods", "hud_rents"]
