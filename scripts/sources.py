@@ -405,15 +405,23 @@ def undp():
 
 
 # ---------- WHO Global Health Observatory ----------
-GHO = ["WHOSIS_000002", "WHOSIS_000015", "NCD_BMI_30A", "NCD_BMI_25A", "BP_04", "NCD_PAA", "HWF_0001", "HWF_0006", "HWF_0010", "HWF_0014", "SA_0000001688", "M_Est_tob_curr_std", "MH_12", "RS_198"]
+GHO = {  # WHO indicator code: (column, title, unit)
+    "WHOSIS_000002": ("healthy_life_expectancy", "Healthy life expectancy at birth (WHO)", "years"), "WHOSIS_000015": ("life_expectancy_at_60", "Life expectancy at age 60 (WHO)", "years"),
+    "NCD_BMI_30A": ("adults_with_obesity", "Adults with obesity (WHO)", "% of adults"), "NCD_BMI_25A": ("adults_overweight", "Adults who are overweight (WHO)", "% of adults"),
+    "BP_04": ("adults_with_raised_blood_pressure", "Adults with raised blood pressure (WHO)", "% of adults"), "NCD_PAA": ("adults_not_active_enough", "Adults who are not physically active enough (WHO)", "% of adults"),
+    "HWF_0001": ("medical_doctors", "Medical doctors (WHO)", "per 10,000 people"), "HWF_0006": ("nurses_and_midwives", "Nurses and midwives (WHO)", "per 10,000 people"),
+    "HWF_0010": ("dentists", "Dentists (WHO)", "per 10,000 people"), "HWF_0014": ("pharmacists", "Pharmacists (WHO)", "per 10,000 people"),
+    "SA_0000001688": ("alcohol_per_adult", "Alcohol consumed per adult in a year (WHO)", "litres of pure alcohol"), "M_Est_tob_curr_std": ("adults_using_tobacco", "Adults who use tobacco (WHO)", "% of adults"),
+    "MH_12": ("suicide_rate", "Suicide rate (WHO)", "per 100,000 people"), "RS_198": ("road_traffic_death_rate", "Road traffic death rate (WHO)", "per 100,000 people"),
+}
 
 
 def who():
     base, cell, names, meta, cols = "https://ghoapi.azureedge.net/api/", {}, {}, {}, []
-    for code in GHO:
+    for code, (col, title, unit) in GHO.items():
         try:
             rows = J(base + code + "?$filter=" + urllib.parse.quote("SpatialDimType eq 'COUNTRY'"))["value"]
-            both = [r for r in rows if r.get("NumericValue") is not None and (r.get("Dim1") in (None, "", "SEX_BTSX", "BTSX")) and str(r.get("TimeDim", "")).isdigit()]
+            both = [r for r in rows if r.get("NumericValue") is not None and (r.get("Dim1") in (None, "", "SEX_BTSX", "BTSX")) and str(r.get("TimeDim", "")).isdigit() and int(r["TimeDim"]) <= THIS_YEAR]
             got = {}
             for r in both:
                 got.setdefault((r["SpatialDim"], int(r["TimeDim"])), []).append(r["NumericValue"])
@@ -421,9 +429,7 @@ def who():
             if len(clean) < 200 or len(clean) < 0.95 * len(got):   # more than one figure for a country and year: the series has breakdowns we cannot pick from safely
                 raise ValueError(f"{len(clean)} single values of {len(got)}")
             label = J(base + "Indicator?$filter=" + urllib.parse.quote(f"IndicatorCode eq '{code}'"))["value"][0]["IndicatorName"]
-            t, u = split_unit(label)
-            col = slug(t)
-            meta[col] = dict(title=t + " (WHO)", unit=u, description=f"WHO Global Health Observatory indicator {code}: {label}. Both sexes.")
+            meta[col] = dict(title=title, unit=unit, description=f"WHO Global Health Observatory indicator {code}: {label}. Both sexes; rates for adults are age-standardized where WHO publishes them that way.")
             cols.append(col)
             for k, v in clean.items():
                 cell.setdefault(k, {})[col] = v
@@ -487,8 +493,10 @@ def owid_probe(slugs):
         try:
             rows = list(csv.DictReader(io.StringIO(text(f"https://ourworldindata.org/grapher/{s}.csv{q}", tries=1))))
             info = J(f"https://ourworldindata.org/grapher/{s}.metadata.json{q}", tries=1).get("columns", {})
-            fields = [c for c in rows[0] if c not in ("Entity", "Code", "Year")]
-            ents, yrs = {r["Entity"] for r in rows}, [int(r["Year"]) for r in rows if str(r["Year"]).lstrip("-").isdigit()]
+            print(f"OWID head {s}: {list(rows[0])[:8]}")
+            E, Y = ("Entity", "Year") if "Entity" in rows[0] else ("entity", "year")
+            fields = [c for c in rows[0] if c.lower() not in ("entity", "code", "year")]
+            ents, yrs = {r[E] for r in rows}, [int(r[Y]) for r in rows if str(r[Y]).lstrip("-").isdigit()]
             print(f"OWID ok   {s}: {len(rows)} rows, {len(ents)} entities, {min(yrs)}-{max(yrs)}")
             for f in fields[:14]:
                 m = info.get(f, {})
@@ -686,10 +694,11 @@ def us_climate():
 
 # ---------- research and the internet ----------
 def arxiv():
-    cell = {}
-    for r in csv.reader(io.StringIO(text("https://arxiv.org/stats/get_monthly_submissions"))):
-        if len(r) >= 2 and re.fullmatch(r"\d{4}-\d{2}", r[0]) and r[1].isdigit():
-            cell[r[0] + "-01"] = dict(submissions=int(r[1]))
+    cell, raw = {}, text("https://arxiv.org/stats/get_monthly_submissions")
+    for r in csv.reader(io.StringIO(raw)):
+        if len(r) >= 2 and re.fullmatch(r"\d{4}-\d{2}", r[0].strip()) and r[1].strip().isdigit():
+            cell[r[0].strip() + "-01"] = dict(submissions=int(r[1]))
+    assert cell, "arXiv reply not understood: " + raw[:160].replace("\n", " | ")
     last = max(cell)
     if last[:7] == date.today().strftime("%Y-%m"):
         del cell[last]                                      # the month in progress
@@ -717,7 +726,7 @@ def wikipedia():
             meta[col] = dict(title=title + ", monthly", unit="page views", description=f"Views by people (not bots) of {proj} in the month, all devices.")
         except Exception as e:
             print(f"  wikipedia {proj}: {str(e)[:70]}")
-        time.sleep(0.3)
+        time.sleep(2)
     cell.pop(date.today().strftime("%Y-%m-01"), None)
     return series("wikipedia-pageviews", "Wikipedia page views, monthly, by language", "How many pages people read on Wikipedia each month since July 2015, in total and for eleven languages.",
                   "World", "Science and technology", "Wikimedia Foundation, Pageviews API", "https://wikitech.wikimedia.org/wiki/Analytics/AQS/Pageviews", "CC0", cell, meta, cols, "month")
@@ -862,14 +871,25 @@ def yearly(id, first, count, cols, recent=2):
 def federal_register():
     kinds = dict(final_rules="conditions[type][]=RULE", proposed_rules="conditions[type][]=PRORULE", notices="conditions[type][]=NOTICE",
                  presidential_documents="conditions[type][]=PRESDOCU", executive_orders="conditions[presidential_document_type][]=executive_order")
+    api = "https://www.federalregister.gov/api/v1/documents.json?per_page=1&"
 
     def count(y, c):
-        return J(f"https://www.federalregister.gov/api/v1/documents.json?per_page=1&conditions[publication_date][year]={y}&{kinds[c]}")["count"]
-    cell = yearly("us-federal-register", 1994, count, list(kinds))
+        n = J(f"{api}conditions[publication_date][year]={y}&{kinds[c]}")["count"]
+        if n < 10000:
+            return n
+        total = 0                                           # the count is capped at 10,000: add the months up instead
+        for m in range(1, 13):
+            end = date(y + (m == 12), m % 12 + 1, 1).toordinal() - 1
+            k = J(f"{api}conditions[publication_date][gte]={y}-{m:02d}-01&conditions[publication_date][lte]={date.fromordinal(end).isoformat()}&{kinds[c]}")["count"]
+            assert k < 10000, "a month is capped too"
+            total += k
+            time.sleep(0.2)
+        return total
+    cell = yearly("us-federal-register", 1995, count, list(kinds))
     meta = dict(final_rules=dict(title="US federal final rules published in the year", unit="documents"), proposed_rules=dict(title="US federal proposed rules published in the year", unit="documents"),
                 notices=dict(title="US federal notices published in the year", unit="documents"), presidential_documents=dict(title="US presidential documents published in the year", unit="documents"),
                 executive_orders=dict(title="US executive orders published in the year", unit="orders"))
-    return series("us-federal-register", "US federal rules, notices and executive orders, by year", "How much the US government regulates and announces: documents published in the Federal Register each year since 1994. The current year is a count so far.",
+    return series("us-federal-register", "US federal rules, notices and executive orders, by year", "How much the US government regulates and announces: documents published in the Federal Register each year since 1995. The current year is a count so far.",
                   "US", "Government and finance", "US National Archives, Federal Register", "https://www.federalregister.gov", PD, cell, meta, list(kinds), "year")
 
 
@@ -882,7 +902,7 @@ def fda():
         try:
             for r in J("https://api.fda.gov/" + path)["results"]:
                 t = str(r["time"])
-                if len(t) == 8 and "1990" <= t[:4] <= str(THIS_YEAR) and f"{t[:4]}-{t[4:6]}" < this:
+                if len(t) == 8 and "2004" <= t[:4] <= str(THIS_YEAR) and f"{t[:4]}-{t[4:6]}" < this:   # the public record starts in 2004
                     k = f"{t[:4]}-{t[4:6]}-01"
                     cell.setdefault(k, {})[col] = cell.get(k, {}).get(col, 0) + r["count"]
             cols.append(col)
@@ -901,7 +921,7 @@ def clinical_trials():
         q = urllib.parse.quote(f"AREA[StartDate]RANGE[{y}-01-01,{y}-12-31]{kinds[c]}")
         return J(f"https://clinicaltrials.gov/api/v2/studies?countTotal=true&pageSize=1&fields=NCTId&filter.advanced={q}")["totalCount"]
     cell = yearly("clinical-trials-started", 2000, count, list(kinds), recent=4)
-    meta = dict(studies_started=dict(title="Clinical studies started in the year", unit="studies", description="Studies registered on ClinicalTrials.gov by the year they started, worldwide."),
+    meta = dict(studies_started=dict(title="Clinical studies started in the year", unit="studies", description="Studies registered on ClinicalTrials.gov by the year they started, worldwide. The current year includes studies registered to start before it ends."),
                 interventional_studies_started=dict(title="Clinical trials (interventional studies) started in the year", unit="trials"), phase_3_trials_started=dict(title="Phase 3 clinical trials started in the year", unit="trials"))
     return series("clinical-trials-started", "Clinical trials started each year", "How many medical studies begin each year, from the world's largest trial registry. The current year is a count so far.",
                   "World", "Health", "US National Library of Medicine, ClinicalTrials.gov", "https://clinicaltrials.gov", PD, cell, meta, list(kinds), "year")
@@ -1041,19 +1061,9 @@ def us_spending():
                       outlays=dict(title="Outlays", unit="current US$", description="What has actually been paid out."), share_of_federal_budget=dict(title="Share of total federal budget authority", unit="% of the total")))
 
 
-def datagov():
-    j = J("https://catalog.data.gov/api/3/action/package_search?rows=0&facet.field=[%22organization%22]&facet.limit=300")["result"]
-    items = j["search_facets"]["organization"]["items"]
-    rows = sorted(([slug(i["name"], 60), i.get("display_name") or i["name"], THIS_YEAR, int(i["count"]), num(i["count"] / j["count"] * 100)] for i in items if i.get("count")), key=lambda r: -r[3])
-    return table("us-open-datasets-by-agency", "US government open datasets, by agency", f"How many datasets each agency lists on data.gov today, out of {j['count']:,} in all.",
-                 "US", "Government and finance", "US General Services Administration, data.gov catalog", "https://catalog.data.gov", PD, ["agency", "year"], "year", "year",
-                 dict(col="agency", label_col="agency_name", label="Agency"), ["agency", "agency_name", "year", "datasets", "share_of_catalog"], rows,
-                 dict(datasets=dict(title="Datasets listed on data.gov", unit="datasets"), share_of_catalog=dict(title="Share of the data.gov catalog", unit="% of all datasets")))
-
-
 BUILDERS = [(lambda s=s: wb_set(s[0], s[1], s[2], s[3], s[4], s[5], **s[6])) for s in WB_SETS] + [
     imf, un_population, undp, who, pwt, us_monthly, us_quarterly, us_daily, us_debt, us_climate, arxiv, wikipedia, research, gbif, github_activity,
-    federal_register, fda, clinical_trials, fema, fdic, flu, chicago, nyc, us_spending, datagov,
+    federal_register, fda, clinical_trials, fema, fdic, flu, chicago, nyc, us_spending,
 ]
 NAMES = [s[0] for s in WB_SETS] + ["imf", "un_population", "undp", "who", "pwt", "us_monthly", "us_quarterly", "us_daily", "us_debt", "us_climate", "arxiv", "wikipedia", "research", "gbif",
-                                    "github_activity", "federal_register", "fda", "clinical_trials", "fema", "fdic", "flu", "chicago", "nyc", "us_spending", "datagov"]
+                                    "github_activity", "federal_register", "fda", "clinical_trials", "fema", "fdic", "flu", "chicago", "nyc", "us_spending"]
