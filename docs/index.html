@@ -1,7 +1,7 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Open Data Company</title><meta name="description" content="Find, shape and download the world's open data in a few clicks. No scraping, no cleaning, no sign-up."><meta name="theme-color" content="#000000">
+<title>Open Data Company</title><meta name="description" content="Find, shape and download the world's open data in a few clicks. No scraping, no cleaning, no sign-up."><script>try{document.documentElement.dataset.theme=localStorage.getItem("theme")||"dark"}catch(e){document.documentElement.dataset.theme="dark"}</script>
 <link rel="preload" href="fonts/barlow-condensed-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="assets/site.css"></head>
-<body data-page="home"><header class="top"><div class="wrap"><a class="brand" href="index.html">Open Data<span class="wide"> Company</span></a><nav><a href="index.html#datasets" class="on">Datasets</a><a href="explore.html" class="wide ">Explorer</a><a href="catalog.html" class="">Sources</a><a href="scorecard.html" class="">Scorecard</a><a href="https://github.com/sahiljangra12/open-data-company" class="wide">GitHub</a></nav></div></header><main>
+<body data-page="home"><header class="top"><div class="wrap"><a class="brand" href="index.html">Open Data<span class="wide"> Company</span></a><nav><a href="index.html#datasets" class="on">Datasets</a><a href="explore.html" class="wide ">Explorer</a><a href="research.html" class="">Research</a><a href="catalog.html" class="wide ">Sources</a><a href="https://github.com/sahiljangra12/open-data-company" class="wide">GitHub</a><button class="theme" id="theme" type="button">Light</button></nav></div></header><main>
 
 <section class="hero">
 <div class="wrap"><div class="hero-in">
@@ -26,6 +26,14 @@
 <div class="sec-head"><div><h2>Datasets</h2><p>Take a whole dataset in one click, or customize it first: choose the variables, places and years you need.</p></div>
 <div class="seg" id="regions" role="group" aria-label="Show datasets for"><button type="button" data-r="" aria-pressed="true">All</button><button type="button" data-r="World" aria-pressed="false">World</button><button type="button" data-r="US" aria-pressed="false">United States</button></div></div>
 <div id="rows"></div>
+</div></section>
+
+<section class="sec" id="map"><div class="wrap">
+<div class="sec-head"><div><h2>The world at a glance</h2><p>The latest year with wide coverage, country by country. Hover for the number, click a country to open its data.</p></div>
+<div class="seg" id="layers" role="group" aria-label="What the map shows"></div></div>
+<div class="maphead"><div><h3 id="map-title"></h3><p id="map-note"></p></div><a class="link" id="map-table" href="explore.html">See these values as a table</a></div>
+<div class="mapbox" id="mapbox"></div>
+<div class="maplegend" id="maplegend"></div>
 </div></section>
 
 <section class="sec" id="now"><div class="wrap">
@@ -53,10 +61,11 @@
 <div><div class="n">04</div><h3>Download</h3><p>One click for CSV, Excel, JSON or TSV. Copy a link to share the same view.</p></div>
 </div>
 <div class="duo">
-<a href="scorecard.html"><h3>Load Forecast Scorecard</h3><p>How close were the power grid's demand forecasts to what happened? Our first analysis, zone by zone.</p><span class="btn">Read the scorecard</span></a>
+<a href="research.html"><h3>Researcher mode</h3><p>State a hypothesis. Get the right test with the reasoning behind it, run it, and read the result with charts.</p><span class="btn solid">Test a hypothesis</span></a>
 <a href="catalog.html"><h3><span id="n-src">136</span> sources mapped</h3><p>The open sources we are working through, each rated for licence, update frequency and API access.</p><span class="btn">See the sources</span></a>
 </div>
 </div></section>
 
-</main><footer><div class="wrap"><p>Open Data Company is a working name. Everything here is free to use. Each dataset keeps its own source and licence, shown beside it.</p>
-<p>Data from Our World in Data, the World Bank, NASA, NOAA, the US Geological Survey, the US Energy Information Administration and PJM. Land outline from Natural Earth. Code and methods are on <a href="https://github.com/sahiljangra12/open-data-company">GitHub</a>.</p></div></footer><script src="assets/home.js"></script></body></html>
+</main><footer><div class="wrap"><nav aria-label="Footer"><a href="index.html#datasets">Datasets</a><a href="explore.html">Explorer</a><a href="research.html">Researcher mode</a><a href="catalog.html">Sources</a><a href="scorecard.html">Case study: grid forecast scorecard</a><a href="https://github.com/sahiljangra12/open-data-company">GitHub</a></nav>
+<p>Open Data Company is a working name. Everything here is free to use. Each dataset keeps its own source and licence, shown beside it.</p>
+<p>Data from Our World in Data, the World Bank, NASA, NOAA, the US Geological Survey, the US Energy Information Administration and PJM. Map outlines from Natural Earth.</p></div></footer><script src="assets/core.js"></script><script src="assets/home.js"></script></body></html>

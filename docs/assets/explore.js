@@ -1,11 +1,10 @@
 /* Explorer: pick variables, places and time; add conditions or merge; check the table and chart; download. */
-const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
-const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-const PAL = ["#3987e5", "#d95926", "#199e70", "#c98500", "#d55181", "#0ca30c", "#9085e9", "#e66767"];   // fixed order, validated on black
+/* needs core.js */
+const PAL = [1, 2, 3, 4, 5, 6, 7, 8].map(i => `var(--s${i})`);   // series colours, fixed order; the theme supplies the values
 const OPS = { ">": (a, b) => a > b, ">=": (a, b) => a >= b, "<": (a, b) => a < b, "<=": (a, b) => a <= b, "=": (a, b) => a == b, "≠": (a, b) => a != b };
 const FMT = { csv: "CSV", xlsx: "Excel", json: "JSON", tsv: "TSV" };
 let M = [], S = null, R = null, timer = 0, P = {};
-const cache = {}, slots = new Map();   // a series keeps its colour while it stays on the chart
+const slots = new Map();   // a series keeps its colour while it stays on the chart
 
 function colorOf(keys) {
   for (const k of [...slots.keys()]) if (!keys.includes(k)) slots.delete(k);
@@ -13,42 +12,8 @@ function colorOf(keys) {
   return k => PAL[slots.get(k)];
 }
 
-function splitLine(line) {
-  if (line.indexOf('"') < 0) return line.split(",");
-  const out = []; let cur = "", q = false;
-  for (let i = 0; i < line.length; i++) {
-    const ch = line[i];
-    if (q) { if (ch === '"') { if (line[i + 1] === '"') { cur += '"'; i++; } else q = false; } else cur += ch; }
-    else if (ch === '"') q = true; else if (ch === ",") { out.push(cur); cur = ""; } else cur += ch;
-  }
-  out.push(cur); return out;
-}
-
-async function load(ds) {
-  if (cache[ds.id]) return cache[ds.id];
-  const text = await (await fetch(ds.file)).text();
-  const lines = text.split("\n"); if (!lines[lines.length - 1].trim()) lines.pop();
-  const head = splitLine(lines[0].replace(/\r$/, "")), n = lines.length - 1;
-  const type = {}; ds.columns.forEach(c => type[c.name] = c.type);
-  ds.keys.forEach(k => type[k] = k === ds.time.col && ds.time.type === "year" ? "num" : "str");
-  if (ds.entity) type[ds.entity.label_col] = "str";
-  const want = head.map(h => type[h]), c = {};
-  head.forEach((h, j) => { if (want[j]) c[h] = want[j] === "num" ? new Float64Array(n) : new Array(n); });
-  for (let i = 0; i < n; i++) {
-    const f = splitLine(lines[i + 1].replace(/\r$/, ""));
-    for (let j = 0; j < head.length; j++) {
-      if (want[j] === "num") c[head[j]][i] = f[j] === "" || f[j] === undefined ? NaN : +f[j];
-      else if (want[j]) c[head[j]][i] = f[j] ?? "";
-    }
-  }
-  return cache[ds.id] = { n, c, type };
-}
-
 const keyOf = (d, keys, i) => keys.length === 1 ? String(d.c[keys[0]][i]) : keys.map(k => d.c[k][i]).join("|");
 const sig = ds => ds.keys.join("+");
-const empty = v => v === "" || v === undefined || (typeof v === "number" && isNaN(v));
-const day = t => String(t).slice(0, 10);
-const size = b => b < 1e6 ? `${Math.max(1, Math.round(b / 1e3))} KB` : `${(b / 1e6).toFixed(1)} MB`;
 
 /* ---------- the table the visitor is building ---------- */
 function compute() {
@@ -118,6 +83,7 @@ function drawStats() {
 }
 
 function drawChart() {
+  if (!R) return;                                               // the table is still being built
   const ds = S.ds, nums = R.cols.filter(c => !c.key && c.type === "num"), sel = $("#chart-var"), box = $("#chart");
   const keep = sel.value; sel.innerHTML = nums.map(c => `<option value="${esc(c.name)}">${esc(c.title)}</option>`).join("");
   if (nums.some(c => c.name === keep)) sel.value = keep;
@@ -162,26 +128,26 @@ function drawChart() {
   const short = v => Math.abs(v) >= 1e9 ? +(v / 1e9).toPrecision(3) + "B" : Math.abs(v) >= 1e6 ? +(v / 1e6).toPrecision(3) + "M" : Math.abs(v) >= 1e4 ? +(v / 1e3).toPrecision(3) + "k" : String(+v.toPrecision(4));
   const xl = v => ds.time.type === "year" ? String(Math.round(v)) : new Date(v).toISOString().slice(0, 10);
   let g = "";
-  for (let v = y0; v <= y1 + step / 2; v += step) g += `<line x1="${m.l}" x2="${W - m.r}" y1="${sy(v)}" y2="${sy(v)}" stroke="rgba(240,240,250,${Math.abs(v) < step / 1e6 ? ".38" : ".13"})"/><text x="${m.l - 8}" y="${sy(v) + 4}" text-anchor="end" font-size="12" fill="#80808a">${short(v)}</text>`;
+  for (let v = y0; v <= y1 + step / 2; v += step) g += `<line x1="${m.l}" x2="${W - m.r}" y1="${sy(v)}" y2="${sy(v)}" class="${Math.abs(v) < step / 1e6 ? "g-zero" : "g-grid"}"/><text x="${m.l - 8}" y="${sy(v) + 4}" text-anchor="end" class="g-tick">${short(v)}</text>`;
   const yr = ds.time.type === "year", Y = v => yr ? v : new Date(v).getUTCFullYear() + (v - Date.UTC(new Date(v).getUTCFullYear(), 0, 1)) / 31557600000;
   const span = Y(x1) - Y(x0), ticks = [];
   if (span >= 3) {
     const st = [1, 2, 5, 10, 20, 25, 50, 100].find(s => span / s <= (W < 520 ? 5 : 9)) || 100;
     for (let y = Math.ceil(Y(x0) / st) * st; y <= Y(x1) + 1e-9; y += st) ticks.push([yr ? y : Date.UTC(y, 0, 1), String(y)]);
   } else for (let i = 0; i <= 4; i++) { const v = x0 + (x1 - x0) * i / 4; ticks.push([v, xl(v)]); }
-  ticks.forEach(([v, t]) => { g += `<line x1="${sx(v)}" x2="${sx(v)}" y1="${H - m.b}" y2="${H - m.b + 5}" stroke="rgba(240,240,250,.38)"/><text x="${sx(v)}" y="${H - 8}" text-anchor="middle" font-size="12" fill="#80808a">${t}</text>`; });
+  ticks.forEach(([v, t]) => { g += `<line x1="${sx(v)}" x2="${sx(v)}" y1="${H - m.b}" y2="${H - m.b + 5}" class="g-zero"/><text x="${sx(v)}" y="${H - 8}" text-anchor="middle" class="g-tick">${t}</text>`; });
   const paint = colorOf([...series.keys()]);
   let leg = "";
   series.forEach((pts, k) => {
     const col = paint(k);
-    if (dots) g += pts.map(p => `<circle cx="${sx(p[0]).toFixed(1)}" cy="${sy(p[1]).toFixed(1)}" r="2.6" fill="${col}" fill-opacity=".6"/>`).join("");
+    if (dots) g += pts.map(p => `<circle cx="${sx(p[0]).toFixed(1)}" cy="${sy(p[1]).toFixed(1)}" r="2.6" style="fill:${col}" fill-opacity=".6"/>`).join("");
     else {
-      g += `<path d="${pts.map((p, j) => (j ? "L" : "M") + sx(p[0]).toFixed(1) + " " + sy(p[1]).toFixed(1)).join("")}" fill="none" stroke="${col}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`;
-      const e = pts[pts.length - 1]; g += `<circle cx="${sx(e[0]).toFixed(1)}" cy="${sy(e[1]).toFixed(1)}" r="4.5" fill="${col}" stroke="#000" stroke-width="2"/>`;
+      g += `<path d="${pts.map((p, j) => (j ? "L" : "M") + sx(p[0]).toFixed(1) + " " + sy(p[1]).toFixed(1)).join("")}" class="g-line" style="stroke:${col}"/>`;
+      const e = pts[pts.length - 1]; g += `<circle cx="${sx(e[0]).toFixed(1)}" cy="${sy(e[1]).toFixed(1)}" r="4.5" class="g-ring" style="fill:${col}"/>`;
     }
     leg += `<span><b style="background:${col}"></b>${esc(k)}</span>`;
   });
-  box.innerHTML = `<svg viewBox="0 0 ${W} ${H}" width="100%" height="${H}" role="img" aria-label="Chart of the current selection. The Table tab has the same values.">${g}<line id="rule" y1="${m.t}" y2="${H - m.b}" stroke="rgba(240,240,250,.6)" visibility="hidden"/></svg>
+  box.innerHTML = `<svg viewBox="0 0 ${W} ${H}" width="100%" height="${H}" role="img" aria-label="Chart of the current selection. The Table tab has the same values.">${g}<line id="rule" y1="${m.t}" y2="${H - m.b}" class="g-rule" visibility="hidden"/></svg>
     <div class="legend chartleg">${leg}</div><div class="legend">${idx ? "Indexed: first value = 100. " : unit ? "Unit: " + esc(unit) + ". " : ""}${esc(note)}</div><div id="tip" class="tip" hidden></div>`;
   const svg = $("svg", box), tip = $("#tip"), rule = $("#rule");
   svg.onmousemove = ev => {
@@ -206,58 +172,6 @@ function refresh() {
     $("#dl-note").textContent = big ? "This table is too large for Excel here. Switch to CSV, or narrow the selection." : "";
     drawPreview(); drawStats(); if (!$("#pane-chart").hidden) drawChart(); saveHash();
   }, 90);
-}
-
-/* ---------- chip picker: search box, tick list, selected items as removable chips ---------- */
-const live = new Map();
-function picker(root, o) {
-  live.get(root.id)?.abort();
-  const ac = new AbortController(), on = { signal: ac.signal }; live.set(root.id, ac);
-  root.innerHTML = `<div class="chips"></div><div class="combo"><input type="search" role="combobox" aria-expanded="false" aria-autocomplete="list" autocomplete="off" placeholder="${esc(o.add)}" aria-label="${esc(o.add)}"><div class="menu" role="listbox" hidden></div></div>
-    <div class="pacts">${o.allText ? `<button type="button" class="link" data-a="all">${esc(o.allText)}</button>` : ""}<button type="button" class="link" data-a="none">${esc(o.clearText)}</button></div>`;
-  const chips = $(".chips", root), input = $("input", root), menu = $(".menu", root), by = new Map(o.items.map(i => [i.value, i]));
-  o.items.forEach(i => i.q = (i.label + " " + i.value + " " + (i.sub || "")).toLowerCase());
-  let act = -1, list = [], showAll = false;
-  const matches = () => { const q = input.value.trim().toLowerCase(); return o.items.filter(i => !q || i.q.includes(q)); };
-  function drawChips() {
-    const sel = [...o.set].filter(v => by.has(v));
-    if (!sel.length) { chips.innerHTML = `<span class="chip ghost">${esc(o.none)}</span>`; return; }
-    const lim = showAll ? sel.length : 10;
-    chips.innerHTML = sel.slice(0, lim).map(v => `<span class="chip">${esc(by.get(v).label)}<button type="button" data-v="${esc(v)}" aria-label="Remove ${esc(by.get(v).label)}">×</button></span>`).join("") +
-      (sel.length > lim ? `<button type="button" class="chip more" data-more="1">and ${sel.length - lim} more</button>` : "");
-  }
-  function drawMenu() {
-    const top = menu.scrollTop; list = matches().slice(0, 400);
-    menu.innerHTML = list.map((i, k) => `<div class="opt${k === act ? " act" : ""}" role="option" aria-selected="${o.set.has(i.value)}" data-v="${esc(i.value)}" title="${esc(i.tip || "")}"><span class="box"></span><span>${esc(i.label)}${i.sub ? ` <small>${esc(i.sub)}</small>` : ""}</span></div>`).join("") ||
-      `<div class="opt none">Nothing matches. Try a shorter word.</div>`;
-    menu.scrollTop = top;
-  }
-  const open = () => { if (menu.hidden) { menu.hidden = false; input.setAttribute("aria-expanded", "true"); act = -1; drawMenu(); } };
-  const close = () => { menu.hidden = true; input.setAttribute("aria-expanded", "false"); };
-  const toggle = v => { o.set.has(v) ? o.set.delete(v) : o.set.add(v); drawChips(); drawMenu(); o.onChange(); };
-  input.addEventListener("focus", open, on);
-  input.addEventListener("input", () => { act = -1; open(); menu.scrollTop = 0; drawMenu(); }, on);
-  input.addEventListener("keydown", e => {
-    if (e.key === "ArrowDown" || e.key === "ArrowUp") { open(); act = Math.max(0, Math.min(list.length - 1, act + (e.key === "ArrowDown" ? 1 : -1))); drawMenu(); $(".opt.act", menu)?.scrollIntoView({ block: "nearest" }); e.preventDefault(); }
-    else if (e.key === "Enter") { const it = list[act < 0 ? 0 : act]; if (it && !menu.hidden) { toggle(it.value); if (input.value) { input.value = ""; act = -1; drawMenu(); } } e.preventDefault(); }
-    else if (e.key === "Escape") { close(); input.blur(); }
-    else if (e.key === "Backspace" && !input.value && o.set.size) { const last = [...o.set].filter(v => by.has(v)).pop(); if (last !== undefined) toggle(last); }
-  }, on);
-  menu.addEventListener("mousedown", e => e.preventDefault(), on);       // keep focus in the box while ticking
-  menu.addEventListener("click", e => { const op = e.target.closest(".opt[data-v]"); if (op) toggle(op.dataset.v); }, on);
-  root.addEventListener("click", e => {
-    const b = e.target.closest("button"); if (!b) return;
-    if (b.dataset.v !== undefined) { o.set.delete(b.dataset.v); }
-    else if (b.dataset.more) { showAll = true; drawChips(); return; }
-    else if (b.dataset.a === "all") matches().forEach(i => o.set.add(i.value));
-    else if (b.dataset.a === "none") { o.set.clear(); showAll = false; }
-    else return;
-    drawChips(); if (!menu.hidden) drawMenu(); o.onChange();
-  }, on);
-  document.addEventListener("mousedown", e => { if (!root.contains(e.target)) close(); }, on);
-  input.addEventListener("blur", () => setTimeout(() => { if (!root.contains(document.activeElement)) close(); }, 0), on);
-  drawChips();
-  return { redraw: () => { drawChips(); if (!menu.hidden) drawMenu(); } };
 }
 
 /* ---------- time presets ---------- */
@@ -309,6 +223,8 @@ function saveHash() {
   if (S.merge) { p.set("m", S.merge.ds.id); p.set("mv", [...S.merge.vars].join(",")); p.set("how", S.merge.how); }
   if (S.filters.length) p.set("q", JSON.stringify(S.filters));
   history.replaceState(null, "", "#" + p.toString());
+  const nums = S.ds.columns.filter(c => S.vars.has(c.name) && c.type === "num").map(c => `${S.ds.id}::${c.name}`), r = new URLSearchParams({ k: nums.length > 1 ? "rel" : "trend", y: nums[0] || "", x: nums[1] || "", p: [...S.ents].slice(0, 8).join(","), f: S.from, t: S.to });
+  [...r].forEach(([k, v]) => { if (v === "") r.delete(k); }); const tr = $("#to-research"); if (tr) tr.href = "research.html#" + r.toString();
 }
 
 function download() {

@@ -8,8 +8,12 @@ check the table; download CSV, Excel, JSON or TSV. World data comes first. Site:
 |---|---|
 | `docs/index.html` | Home: search, quick picks, dataset list with one-click download, live globe, ticker, counters, featured charts |
 | `docs/explore.html` | Explorer: chip pickers for variables and places, time presets, conditions, merging, table, chart, summary, download bar |
+| `docs/research.html` | Researcher mode: state a hypothesis, get a recommended test with reasons, run it, read results and charts |
 | `docs/catalog.html` | Source catalog: the open sources being worked through |
-| `docs/scorecard.html` | Load Forecast Scorecard (PJM, summer 2025 preview) |
+| `docs/scorecard.html` | Case study: a US power-grid load forecast scorecard (PJM, summer 2025) |
+| `docs/assets/core.js` | Shared helpers: light/dark switch, dataset loader, chip picker |
+| `docs/assets/stats.js` | The statistics used by Researcher mode, in plain JavaScript |
+| `tests/check_stats.py` | Checks `stats.js` against scipy, statsmodels and pymannkendall |
 | `scripts/build_datasets.py` | Fetches each dataset and writes `docs/data/sets/*.csv` and `docs/data/datasets.json` |
 | `scripts/build_catalog.py` | Source list for the catalog |
 | `scripts/build_scorecard.py` | PJM forecast-versus-actual scorecard |
@@ -24,6 +28,29 @@ controls from it, so it needs no code changes when a dataset is added. Everythin
 visitor's browser; there is no server.
 
 Two datasets can be merged when they share the same key columns (for example `code + year`).
+
+## Researcher mode
+
+A visitor picks (or types) a hypothesis of one of three kinds: a relationship, a trend, or a difference between groups.
+The page loads the data, looks at its shape (how many places and years, skew, sample size) and recommends a method with
+its reasons, for example fixed effects with errors clustered by country for a panel, a regression on changes for two
+trending series, or a rank-based test for small or skewed groups. Alternatives are one click away. Running it gives a
+plain-language result, the numbers, charts, checks on the method's assumptions and a list of what the result does not show.
+
+The recommendations are rules written in `docs/assets/research.js`, not a language model. The typed-sentence reader
+matches words to variables with a fixed list of synonyms.
+
+Every statistic is computed in the browser by `docs/assets/stats.js`. Run the check after changing it:
+
+```
+pip install numpy scipy statsmodels pymannkendall
+python tests/check_stats.py
+```
+
+It compares about 5,800 numbers with the reference libraries; they agree to better than one part in a billion.
+
+Country groups (region, income group) come from the World Bank's country list (CC BY 4.0), fetched by the workflow into
+`docs/data/countries.json`. The same list is used to leave regional totals out of cross-country analyses.
 
 ## What is live, and what is not
 
@@ -59,5 +86,5 @@ Error = (forecast - normalized actual) / normalized actual. Positive means the f
 ## Third-party code
 
 `docs/vendor/xlsx.mini.min.js` is SheetJS Community Edition 0.18.5 (Apache 2.0), used only to write Excel files.
-The globe's land outline comes from Natural Earth (public domain) through the `world-atlas` package.
+The globe's land outline and the world map's country shapes come from Natural Earth (public domain) through the `world-atlas` package.
 The typefaces are Barlow and Barlow Condensed (SIL Open Font License), served from `docs/fonts/`.

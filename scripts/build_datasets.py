@@ -12,6 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SETS = ROOT / "docs" / "data" / "sets"
 MANIFEST = ROOT / "docs" / "data" / "datasets.json"
 PULSE = ROOT / "docs" / "data" / "pulse.json"
+COUNTRIES = ROOT / "docs" / "data" / "countries.json"
 RAW = "https://raw.githubusercontent.com/"
 UA = {"User-Agent": "open-data-company-pipeline (github.com/sahiljangra12/open-data-company)"}
 
@@ -310,9 +311,9 @@ def temperature():
                 "World", "Climate and emissions", "NASA GISTEMP and NOAA Climate at a Glance, via DataHub",
                 "https://github.com/datasets/global-temp", "CC BY 4.0 packaging of US federal data", ["month"], "month", "date", None,
                 ["month"] + cols, rows,
-                dict(nasa_anomaly_c=dict(title="Temperature anomaly, NASA", unit="°C vs 1951-1980 average",
+                dict(nasa_anomaly_c=dict(title="Global temperature against the 1951-1980 average (NASA)", unit="°C",
                                          description="GISTEMP global land-ocean temperature index: difference from the 1951 to 1980 mean."),
-                     noaa_anomaly_c=dict(title="Temperature anomaly, NOAA", unit="°C vs 20th-century average",
+                     noaa_anomaly_c=dict(title="Global temperature against the 20th-century average (NOAA)", unit="°C",
                                          description="NOAA global land and ocean temperature anomaly: difference from the 20th-century average.")))
 
 
@@ -349,6 +350,38 @@ BUILDERS = [
                  "Energy"),
     worldbank, temperature, co2ppm, quakes, oil, gas, pjm,
 ]
+
+
+# ---------- country reference: World Bank regions and income groups ----------
+
+def build_countries():
+    """The World Bank's list of economies with region and income group (CC BY 4.0).
+    Used to leave out regional totals in cross-country work and to compare groups of countries."""
+    old = json.loads(COUNTRIES.read_text()) if COUNTRIES.exists() else {"countries": {}}
+    try:
+        j = json.loads(get("https://api.worldbank.org/v2/country?format=json&per_page=400"))
+        out = {}
+        for c in j[1]:
+            region = ((c.get("region") or {}).get("value") or "").strip()
+            if not region or region == "Aggregates":
+                continue
+            row = dict(name=c["name"], region=region)
+            income = ((c.get("incomeLevel") or {}).get("value") or "").strip()
+            if income and income not in ("Not classified", "Aggregates"):
+                row["income"] = income
+            out[c["id"]] = row
+        if len(out) < 150:
+            raise ValueError(f"only {len(out)} countries returned")
+        if "XKX" in out:
+            out["OWID_KOS"] = dict(out["XKX"])                 # Our World in Data's code for Kosovo
+    except Exception as e:
+        print("  country list not refreshed:", str(e)[:100])
+        return old["countries"]
+    new = dict(source="World Bank country and lending groups, CC BY 4.0", countries=out)
+    if {k: v for k, v in old.items() if k != "built"} != new:
+        COUNTRIES.write_text(json.dumps(dict(new, built=date.today().isoformat()), separators=(",", ":"), ensure_ascii=False))
+        print(f"countries: {len(out)} listed, {sum(1 for v in out.values() if v.get('income'))} with an income group")
+    return out
 
 
 # ---------- home page data: latest values, sparklines and featured series ----------
@@ -395,7 +428,28 @@ def nice(v, kind):
     return f"{v:,.0f}"
 
 
-def build_pulse():
+def map_layer(ds, col, title, unit, real, decimals=1):
+    """Latest year in which at least 140 real countries have a value."""
+    path = SETS / f"{ds}.csv"
+    if not path.exists() or not real:
+        return None
+    by = {}
+    with open(path, encoding="utf-8") as f:
+        r = csv.reader(f)
+        h = {c: i for i, c in enumerate(next(r))}
+        if col not in h:
+            return None
+        for row in r:
+            if row[h[col]] != "" and row[h["code"]] in real:
+                by.setdefault(row[h["year"]], {})[row[h["code"]]] = round(float(row[h[col]]), 3)
+    good = [y for y in sorted(by) if len(by[y]) >= 140]
+    if not good:
+        return None
+    y = good[-1]
+    return dict(id=col, dataset=ds, title=title, unit=unit, year=y, decimals=decimals, values=by[y])
+
+
+def build_pulse(real=None):
     W = "WLD"
     co2 = pull("co2-and-greenhouse-gases", [(W, "co2")])
     en = pull("energy", [(W, c) for c in ("solar_share_elec", "wind_share_elec", "coal_share_elec", "electricity_generation", "primary_energy_consumption")])
@@ -501,6 +555,14 @@ def build_pulse():
         counters["population"] = dict(year=int(y1), value=v1, growth=v1 / v0 - 1)  # mid-year estimate
 
     out = dict(built=datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"), tickers=tickers, stories=stories, sparks=sparks, counters=counters)
+    real = set(real or {})                                                       # real countries only, no regional totals
+    out["maps"] = [m for m in (
+        map_layer("world-bank-development", "life_expectancy", "Life expectancy", "years", real),
+        map_layer("co2-and-greenhouse-gases", "co2_per_capita", "CO2 per person", "tonnes a year", real),
+        map_layer("world-bank-development", "gdp_per_capita", "GDP per person", "US$", real, 0),
+        map_layer("energy", "renewables_share_elec", "Renewable electricity", "% of generation", real),
+        map_layer("world-bank-development", "internet_users", "People online", "% of population", real),
+    ) if m]
 
     qpath = SETS / "earthquakes-past-30-days.csv"
     if qpath.exists():
@@ -520,7 +582,7 @@ def build_pulse():
     if {k: v for k, v in old.items() if k != "built"} == {k: v for k, v in out.items() if k != "built"}:
         return                                                                   # nothing changed; keep the old stamp
     PULSE.write_text(json.dumps(out, separators=(",", ":"), ensure_ascii=False))
-    print(f"pulse: {len(tickers)} tickers, {len(stories)} stories, {len(sparks)} sparklines, quakes: {'yes' if 'quakes' in out else 'no'}")
+    print(f"pulse: {len(tickers)} tickers, {len(stories)} stories, {len(sparks)} sparklines, {len(out['maps'])} maps, quakes: {'yes' if 'quakes' in out else 'no'}")
 
 
 def main():
@@ -551,7 +613,7 @@ def main():
                 ci, li = h.index(d["entity"]["col"]), h.index(d["entity"]["label_col"])
                 d["places"] = sorted({(row[ci], row[li]) for row in r}, key=lambda p: p[1])
     MANIFEST.write_text(json.dumps({"datasets": out}, indent=1, ensure_ascii=False))
-    build_pulse()
+    build_pulse(build_countries())
     sys.exit(1 if failed and not out else 0)
 
 

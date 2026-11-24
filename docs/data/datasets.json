@@ -5582,16 +5582,16 @@
    "columns": [
     {
      "name": "nasa_anomaly_c",
-     "title": "Temperature anomaly, NASA",
-     "unit": "°C vs 1951-1980 average",
+     "title": "Global temperature against the 1951-1980 average (NASA)",
+     "unit": "°C",
      "description": "GISTEMP global land-ocean temperature index: difference from the 1951 to 1980 mean.",
      "type": "num",
      "filled": 1752
     },
     {
      "name": "noaa_anomaly_c",
-     "title": "Temperature anomaly, NOAA",
-     "unit": "°C vs 20th-century average",
+     "title": "Global temperature against the 20th-century average (NOAA)",
+     "unit": "°C",
      "description": "NOAA global land and ocean temperature anomaly: difference from the 20th-century average.",
      "type": "num",
      "filled": 2119

@@ -1,0 +1,25 @@
+name: Check statistics
+
+on:
+  push:
+    branches: [main]
+    paths: ["docs/assets/stats.js", "tests/**", ".github/workflows/check-stats.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: pip install numpy scipy statsmodels pymannkendall
+      - run: python tests/check_stats.py

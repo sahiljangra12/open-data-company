@@ -1,5 +1,4 @@
-const $ = (s, r = document) => r.querySelector(s);
-const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+/* needs core.js */
 const COMM = { yes: "Commercial use OK", check: "Check terms", restricted: "Restricted" };
 const fmt = n => Number(n).toLocaleString("en-US");
 const sign = n => (n > 0 ? "+" : "") + n.toFixed(1) + "%";

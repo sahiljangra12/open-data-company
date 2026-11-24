@@ -1,0 +1,44 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Researcher mode | Open Data Company</title><meta name="description" content="State a hypothesis, get the right statistical test with the reasoning, run it and read the result."><script>try{document.documentElement.dataset.theme=localStorage.getItem("theme")||"dark"}catch(e){document.documentElement.dataset.theme="dark"}</script>
+<link rel="preload" href="fonts/barlow-condensed-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="assets/site.css"></head>
+<body data-page="research"><header class="top"><div class="wrap"><a class="brand" href="index.html">Open Data<span class="wide"> Company</span></a><nav><a href="index.html#datasets" class="">Datasets</a><a href="explore.html" class="wide ">Explorer</a><a href="research.html" class="on">Research</a><a href="catalog.html" class="wide ">Sources</a><a href="https://github.com/sahiljangra12/open-data-company" class="wide">GitHub</a><button class="theme" id="theme" type="button">Light</button></nav></div></header><main>
+<div class="wrap">
+<div class="xhead">
+<h1>Researcher mode</h1>
+<p>State a hypothesis. We look at the data, recommend the right test and explain why. Run it and read the result in plain words, with charts and the checks behind it.</p>
+</div>
+<label class="fl" for="hyp">Your hypothesis</label>
+<div class="hyp"><input id="hyp" type="text" autocomplete="off" placeholder="For example: richer countries live longer"><button type="button" class="btn solid" id="read">Read it</button></div>
+<div class="quick" id="examples"><span class="up">Or try</span></div>
+<p class="note" id="reading" hidden></p>
+
+<div class="build" style="margin-top:30px">
+<div class="brow"><div class="bl"><span>1</span>Question</div><div><div class="kinds" id="kind" role="group" aria-label="Kind of question">
+<button type="button" data-k="rel" aria-pressed="true"><b>A relationship</b><span>Does one thing move with another?</span></button>
+<button type="button" data-k="trend" aria-pressed="false"><b>A trend</b><span>Has something changed over time?</span></button>
+<button type="button" data-k="diff" aria-pressed="false"><b>A difference</b><span>Do groups differ?</span></button></div></div></div>
+<div class="brow"><div class="bl"><span>2</span>Variables</div><div class="rgrid">
+<div><span class="fl" id="y-label">Outcome</span><div class="pick" id="p-y"></div></div>
+<div id="x-box"><span class="fl">Explained by</span><div class="pick" id="p-x"></div></div>
+<div id="c-box"><span class="fl">Holding constant (optional, up to 3)</span><div class="pick" id="p-c"></div></div>
+</div></div>
+<div class="brow" id="row-groups" hidden><div class="bl"><span>3</span>Groups</div><div>
+<select id="groupby" aria-label="How to form the groups"></select>
+<div class="rgrid" id="sets" style="margin-top:12px" hidden><div><span class="fl">Group A</span><div class="pick" id="p-a"></div></div><div><span class="fl">Group B</span><div class="pick" id="p-b"></div></div></div>
+<div class="time" id="periods" style="margin-top:12px" hidden><span>Before:</span><input id="pa-from" type="number" aria-label="First period from"><span>to</span><input id="pa-to" type="number" aria-label="First period to"><span>After:</span><input id="pb-from" type="number" aria-label="Second period from"><span>to</span><input id="pb-to" type="number" aria-label="Second period to"></div>
+<p class="hint" id="group-hint"></p></div></div>
+<div class="brow"><div class="bl"><span id="n-scope">3</span>Places and time</div><div>
+<div id="place-box"><div class="pick" id="p-places"></div>
+<label class="tick" id="only-box"><input type="checkbox" id="only" checked> Countries only: leave out the world and regional totals</label></div>
+<div class="time" style="margin-top:14px"><input id="t-from" aria-label="From"><span>to</span><input id="t-to" aria-label="To"><div class="presets" id="presets"></div></div>
+<label class="tick" id="yearly-box" hidden><input type="checkbox" id="yearly" checked> Use yearly averages</label>
+</div></div>
+</div>
+
+<section class="rec" id="rec" aria-live="polite"><h2>Pick an outcome to begin</h2><p class="hint">Choose what you want to explain. The recommendation appears here and updates as you change things.</p></section>
+<section class="out" id="out" hidden></section>
+</div>
+</main>
+<footer><div class="wrap"><nav aria-label="Footer"><a href="index.html#datasets">Datasets</a><a href="explore.html">Explorer</a><a href="research.html">Researcher mode</a><a href="catalog.html">Sources</a><a href="scorecard.html">Case study: grid forecast scorecard</a><a href="https://github.com/sahiljangra12/open-data-company">GitHub</a></nav>
+<p>Open Data Company is a working name. Everything here is free to use. Each dataset keeps its own source and licence, shown beside it.</p>
+<p>Data from Our World in Data, the World Bank, NASA, NOAA, the US Geological Survey, the US Energy Information Administration and PJM. Map outlines from Natural Earth.</p></div></footer><script src="assets/core.js"></script><script src="assets/stats.js"></script><script src="assets/research.js"></script></body></html>

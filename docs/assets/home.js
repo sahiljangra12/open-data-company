@@ -1,10 +1,9 @@
 /* Home page: live earthquake globe, value ticker, running counters, self-drawing charts, dataset tiles. */
-const $ = (s, r = document) => r.querySelector(s);
-const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
-const svg = (tag, attrs = {}) => { const e = document.createElementNS("http://www.w3.org/2000/svg", tag); for (const k in attrs) e.setAttribute(k, attrs[k]); return e; };
+/* needs core.js */
+const svg = svgEl;
 const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const FEED = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson";
-const DARK = ["#3987e5", "#d95926", "#199e70", "#c98500", "#d55181", "#0ca30c", "#9085e9", "#e66767"];   // chart series on black, fixed order
+const SERIES = [1, 2, 3, 4, 5, 6, 7, 8].map(i => `var(--s${i})`);   // chart series, fixed order; the theme supplies the values
 const ago = ms => { const m = Math.max(0, Math.round((Date.now() - ms) / 60000)); return m < 1 ? "just now" : m < 60 ? `${m} min ago` : m < 1440 ? `${Math.round(m / 60)} h ago` : `${Math.round(m / 1440)} d ago`; };
 const onScreen = (node, cb) => new IntersectionObserver(es => cb(es[0].isIntersecting), { rootMargin: "80px" }).observe(node);
 
@@ -191,7 +190,7 @@ function stories(list) {
   function draw(st, animate) {
     const W = plot.clientWidth || 900, small = W < 600, H = Math.round(Math.max(280, Math.min(460, W * 0.5)));
     const m = { l: 4, r: small ? 58 : 124, t: 22, b: 30 };
-    const S = st.series.map((s, i) => ({ name: s.name, color: DARK[i], pts: s.pts.map(p => [X(st, p[0]), p[1], p[0]]) }));
+    const S = st.series.map((s, i) => ({ name: s.name, color: SERIES[i], pts: s.pts.map(p => [X(st, p[0]), p[1], p[0]]) }));
     const all = S.flatMap(s => s.pts), x0 = Math.min(...all.map(p => p[0])), x1 = Math.max(...all.map(p => p[0]));
     let y1 = Math.max(...all.map(p => p[1])), y0 = Math.min(0, ...all.map(p => p[1]));
     const raw = (y1 - y0) / 4, pw = Math.pow(10, Math.floor(Math.log10(raw))), f = raw / pw, step = (f < 1.5 ? 1 : f < 3 ? 2 : f < 7 ? 5 : 10) * pw;
@@ -201,33 +200,33 @@ function stories(list) {
       "aria-label": `${st.title}. ${S.map(s => `${s.name}: ${withUnit(st, s.pts[s.pts.length - 1][1])} in ${xText(st, s.pts[s.pts.length - 1][2])}`).join(". ")}. Use the left and right arrow keys to read values.` });
     for (let k = Math.round(y0 / step); k * step <= y1 + step / 2; k++) {
       const v = k * step;
-      root.append(svg("line", { x1: m.l, x2: W - m.r, y1: sy(v), y2: sy(v), stroke: k ? "rgba(240,240,250,.13)" : "rgba(240,240,250,.4)" }));
-      const tx = svg("text", { x: m.l, y: sy(v) - 6, fill: "#80808a", "font-size": 12 }); tx.textContent = val({ ...st, decimals: step < 1 ? 1 : 0 }, v); if (k || y0 < 0) root.append(tx);
+      root.append(svg("line", { x1: m.l, x2: W - m.r, y1: sy(v), y2: sy(v), class: k ? "g-grid" : "g-zero" }));
+      const tx = svg("text", { x: m.l, y: sy(v) - 6, class: "g-tick" }); tx.textContent = val({ ...st, decimals: step < 1 ? 1 : 0 }, v); if (k || y0 < 0) root.append(tx);
     }
     const yr = v => st.x === "year" ? v : new Date(v).getUTCFullYear() + (v - Date.UTC(new Date(v).getUTCFullYear(), 0, 1)) / 31557600000;
     const span = yr(x1) - yr(x0), ys = [1, 2, 5, 10, 20, 25, 50].find(s => span / s <= (small ? 4 : 8)) || 50;
     for (let y = Math.ceil(yr(x0) / ys) * ys; y <= yr(x1) + 1e-9; y += ys) {
       const px = sx(st.x === "year" ? y : Date.UTC(y, 0, 1));
-      root.append(svg("line", { x1: px, x2: px, y1: H - m.b, y2: H - m.b + 5, stroke: "rgba(240,240,250,.4)" }));
-      const tx = svg("text", { x: px, y: H - 8, fill: "#80808a", "font-size": 12, "text-anchor": px < 24 ? "start" : "middle" }); tx.textContent = y; root.append(tx);
+      root.append(svg("line", { x1: px, x2: px, y1: H - m.b, y2: H - m.b + 5, class: "g-zero" }));
+      const tx = svg("text", { x: px, y: H - 8, class: "g-tick", "text-anchor": px < 24 ? "start" : "middle" }); tx.textContent = y; root.append(tx);
     }
     const ends = S.map(s => sy(s.pts[s.pts.length - 1][1])), sorted = [...ends].sort((a, b) => a - b);
     const clash = sorted.some((y, i) => i && y - sorted[i - 1] < 34);
     const late = [];
     S.forEach((s, i) => {
       const d = s.pts.map((p, j) => (j ? "L" : "M") + sx(p[0]).toFixed(1) + " " + sy(p[1]).toFixed(1)).join("");
-      const path = svg("path", { d, fill: "none", stroke: s.color, "stroke-width": 2, "stroke-linejoin": "round", "stroke-linecap": "round" });
+      const path = svg("path", { d, class: "g-line", style: `stroke:${s.color}` });
       root.append(path);
       const lastP = s.pts[s.pts.length - 1], ex = sx(lastP[0]), ey = ends[i];
-      const g = svg("g"); g.append(svg("circle", { cx: ex, cy: ey, r: 5, fill: s.color, stroke: "#000", "stroke-width": 2 }));
+      const g = svg("g"); g.append(svg("circle", { cx: ex, cy: ey, r: 5, class: "g-ring", style: `fill:${s.color}` }));
       if (!clash) {
-        const v = svg("text", { x: ex + 12, y: ey + (S.length > 1 && !small ? -1 : 5), fill: "#f0f0fa", "font-size": 15, "font-weight": 600 }); v.textContent = val(st, lastP[1]); g.append(v);
-        if (S.length > 1 && !small) { const n = svg("text", { x: ex + 12, y: ey + 15, fill: "#b4b4be", "font-size": 12 }); n.textContent = s.name; g.append(n); }
+        const v = svg("text", { x: ex + 12, y: ey + (S.length > 1 && !small ? -1 : 5), class: "g-val" }); v.textContent = val(st, lastP[1]); g.append(v);
+        if (S.length > 1 && !small) { const n = svg("text", { x: ex + 12, y: ey + 15, class: "g-name" }); n.textContent = s.name; g.append(n); }
       }
       root.append(g); late.push(g);
       if (animate) { path.dataset.anim = "1"; g.style.opacity = 0; }
     });
-    const rule = svg("line", { y1: m.t - 8, y2: H - m.b, stroke: "rgba(255,255,255,.55)", visibility: "hidden" }); root.append(rule);
+    const rule = svg("line", { y1: m.t - 8, y2: H - m.b, class: "g-rule", visibility: "hidden" }); root.append(rule);
     const tip = el("div", "tip"); tip.hidden = true;
     plot.replaceChildren(root, tip);
     if (animate) {
@@ -283,12 +282,13 @@ function stories(list) {
 }
 
 /* ---------- dataset list ---------- */
+const DOMAIN = { "Economy and development": "var(--s1)", "Energy": "var(--s4)", "Climate and emissions": "var(--s3)", "Natural hazards": "var(--s8)" };   // identity colours for the four topics
 function rows(D, sparks) {
   const box = $("#rows"); let region = "";
   const spark = sp => {
     const w = el("div", "spark"), lo = Math.min(...sp.pts), hi = Math.max(...sp.pts), n = sp.pts.length, y = v => 6 + (1 - (v - lo) / (hi - lo || 1)) * 88;
     const sv = svg("svg", { viewBox: "0 0 100 100", preserveAspectRatio: "none", role: "img", "aria-label": sp.label });
-    sv.append(svg("path", { d: sp.pts.map((v, i) => (i ? "L" : "M") + (i / (n - 1) * 100).toFixed(2) + " " + y(v).toFixed(2)).join(""), fill: "none", stroke: "#80808a", "stroke-width": 1.5, "vector-effect": "non-scaling-stroke", "stroke-linejoin": "round" }));
+    sv.append(svg("path", { d: sp.pts.map((v, i) => (i ? "L" : "M") + (i / (n - 1) * 100).toFixed(2) + " " + y(v).toFixed(2)).join(""), fill: "none", style: "stroke:var(--ink3)", "stroke-width": 1.5, "vector-effect": "non-scaling-stroke", "stroke-linejoin": "round" }));
     const dot = el("b"); dot.style.left = "100%"; dot.style.top = y(sp.pts[n - 1]) + "%"; w.title = sp.label;
     w.append(sv, dot); return w;
   };
@@ -297,11 +297,13 @@ function rows(D, sparks) {
     box.replaceChildren(...list.map(d => {
       const row = el("article", "ds"), main = el("div"), h = el("h3"), a = el("a", "", d.title), href = `explore.html#d=${encodeURIComponent(d.id)}`;
       a.href = href; h.append(a);
-      main.append(el("div", "where up", `${d.region === "US" ? "United States" : "World"}, ${d.domain}`), h, el("p", "", d.description));
+      const where = el("div", "where up", `${d.region === "US" ? "United States" : "World"}, ${d.domain}`);
+      where.style.setProperty("--dc", DOMAIN[d.domain] || "var(--ink3)");
+      main.append(where, h, el("p", "", d.description));
       const dl = el("dl", "facts");
       [["Variables", d.columns.length], ["Rows", d.rows.toLocaleString("en-US")], ["Coverage", d.coverage || `${String(d.time.min).slice(0, 4)} to ${String(d.time.max).slice(0, 4)}`]]
         .forEach(([k, v]) => { const x = el("div"); x.append(el("dt", "", k), el("dd", "", v)); dl.append(x); });
-      const go = el("div", "go"), c = el("a", "btn solid", "Customize"), f = el("a", "btn", "Download CSV");
+      const go = el("div", "go"), c = el("a", "btn solid", "Customize"), f = el("a", "btn get", "Download CSV");
       c.href = href; f.href = d.file; f.setAttribute("download", ""); f.append(el("small", "", d.bytes < 1e6 ? `${Math.max(1, Math.round(d.bytes / 1e3))} KB` : `${(d.bytes / 1e6).toFixed(1)} MB`));
       c.setAttribute("aria-label", `Customize ${d.title}`); f.setAttribute("aria-label", `Download all of ${d.title} as CSV`);
       go.append(c, f);
@@ -368,15 +370,51 @@ function search(D) {
   $("#scope").textContent = `${D.length} datasets, ${nv} variables, ${nr.toLocaleString("en-US")} rows. Refreshed every day.`;
 }
 
+/* ---------- world map ---------- */
+function worldMap(shape, layers, D) {
+  if (!shape || !layers.length) { $("#map").hidden = true; return; }
+  const box = $("#mapbox"), seg = $("#layers"), tip = el("div", "tip"); tip.hidden = true;
+  const names = new Map(); D.forEach(d => (d.places || []).forEach(([c, l]) => { if (!names.has(c)) names.set(c, l); }));
+  const root = svgEl("svg", { viewBox: `0 0 ${shape.w} ${shape.h}`, role: "img" });
+  root.append(svgEl("path", { d: shape.sphere, class: "sphere" }));
+  const paths = shape.countries.map(c => { const p = svgEl("path", { d: c.d }); p.dataset.code = c.code; p.dataset.name = names.get(c.code) || c.name; root.append(p); return p; });
+  box.append(root, tip);
+  let cur = layers[0];
+  const show = v => (cur.decimals ? v.toFixed(cur.decimals) : Math.round(v).toLocaleString("en-US"));
+  function draw() {
+    const vals = Object.values(cur.values).sort((a, b) => a - b), cut = [1, 2, 3, 4, 5].map(i => vals[Math.floor(vals.length * i / 6)]);   // six equal-count classes
+    const cls = v => cut.findIndex(c => v < c) + 1 || 6;
+    paths.forEach(p => { const v = cur.values[p.dataset.code]; if (v === undefined) { p.setAttribute("class", "none"); p.style.fill = ""; } else { p.removeAttribute("class"); p.style.fill = `var(--q${cls(v)})`; } });
+    [...seg.children].forEach(b => b.setAttribute("aria-pressed", b.dataset.id === cur.id));
+    $("#map-title").textContent = `${cur.title}, ${cur.year}`; $("#map-note").textContent = `Measured in ${cur.unit}. ${vals.length} countries have data. The colours split them into six equal-sized groups.`;
+    $("#map-table").href = `explore.html#d=${encodeURIComponent(cur.dataset)}&v=${encodeURIComponent(cur.id)}&e=&f=${cur.year}&t=${cur.year}`;
+    root.setAttribute("aria-label", `World map of ${cur.title.toLowerCase()} in ${cur.year}. Lowest ${show(vals[0])}, median ${show(vals[vals.length >> 1])}, highest ${show(vals[vals.length - 1])} ${cur.unit}. The link above the map opens the values as a table.`);
+    const edges = [vals[0], ...cut, vals[vals.length - 1]], lg = $("#maplegend"); lg.replaceChildren();
+    for (let i = 0; i < 6; i++) { const s = el("span"), sw = el("i"); sw.style.background = `var(--q${i + 1})`; s.append(sw, document.createTextNode(`${show(edges[i])} to ${show(edges[i + 1])}`)); lg.append(s); }
+    const nd = el("span"), sw = el("i"); sw.style.background = "var(--nodata)"; nd.append(sw, document.createTextNode("No data")); lg.append(nd);
+  }
+  layers.forEach(l => { const b = el("button", "", l.title); b.type = "button"; b.dataset.id = l.id; b.onclick = () => { cur = l; draw(); }; seg.append(b); });
+  root.addEventListener("pointermove", e => {
+    const p = e.target.closest("path[data-code]"); if (!p) { tip.hidden = true; return; }
+    const v = cur.values[p.dataset.code], rc = box.getBoundingClientRect();
+    tip.replaceChildren(el("strong", "", p.dataset.name), el("div", "nm", v === undefined ? "No data" : `${show(v)} ${cur.unit}`));
+    tip.hidden = false; tip.style.left = Math.min(rc.width - 200, Math.max(0, e.clientX - rc.left + 14)) + "px"; tip.style.top = (e.clientY - rc.top + 14) + "px";
+  });
+  root.addEventListener("pointerleave", () => { tip.hidden = true; });
+  root.addEventListener("click", e => { const p = e.target.closest("path[data-code]"); if (p && p.dataset.code && cur.values[p.dataset.code] !== undefined) location.href = `explore.html#d=${encodeURIComponent(cur.dataset)}&v=${encodeURIComponent(cur.id)}&e=${encodeURIComponent(p.dataset.code)}`; });
+  draw();
+}
+
 /* ---------- start ---------- */
 (async () => {
   const get = u => fetch(u).then(r => { if (!r.ok) throw new Error(u); return r.json(); });
-  const [land, pulse, sets, cat] = await Promise.all([get("data/land.json"), get("data/pulse.json").catch(() => ({})), get("data/datasets.json"), get("data/catalog.json").catch(() => null)]);
+  const [land, pulse, sets, cat, shape] = await Promise.all([get("data/land.json"), get("data/pulse.json").catch(() => ({})), get("data/datasets.json"), get("data/catalog.json").catch(() => null), get("data/worldmap.json").catch(() => null)]);
   liveFeed(makeGlobe($("#globe"), land), pulse.quakes);
   ticker(pulse.tickers || []);
   counters(pulse.counters || {});
   stories(pulse.stories || []);
   rows(sets.datasets, pulse.sparks || {});
   search(sets.datasets);
+  worldMap(shape, pulse.maps || [], sets.datasets);
   if (cat) $("#n-src").textContent = cat.count;
 })().catch(e => { console.error(e); $("#live-text").textContent = "This page could not load its data. Reload to try again."; });
