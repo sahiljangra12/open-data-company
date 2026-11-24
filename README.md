@@ -97,6 +97,13 @@ that change nothing in `ai/`, so the daily data refresh costs no deploys).
 | `tests/check_ai_service.mjs` | The real function and the real Anthropic SDK against a stand-in model server: request shape, input checks, budget guard. Spends nothing. |
 | `tests/check_ai_live.py` | The real page in a headless browser against the live service: health, cross-site rules, and a set of questions answered end to end. Spends a fraction of a cent. |
 
+**Site search for the other sites.** The same function also serves the "Ask" box on Sahil's other websites
+(`https://sahiljangra12.github.io/ask/ask.js`, kept in the `sahiljangra12.github.io` repository). That box finds the
+passages of its own site that fit a question inside the visitor's browser, which is free and has no limit, and shows the
+best one. When this service reports allowance left (`"site_search": true` and `"ai": true` on a GET), the box posts
+`{mode: "site", site, question, passages}` and shows the model's short answer instead. One answer is one small call with no
+tools, paid from the same daily and monthly budget; when the budget is used the box keeps answering from the passages.
+
 ## Your data
 
 `mydata.html` reads a file in the visitor's browser. Nothing is sent anywhere. `readers.js` reads CSV and other
