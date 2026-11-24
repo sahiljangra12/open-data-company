@@ -663,3 +663,62 @@ table.xtab td.num{padding-left:12px}
   select{min-height:44px}
   h3 a,main b>a{display:inline-block;padding:9px 0}
 }
+
+/* ---------- Data AI: a conversation, a microphone, and the ask bar that follows it ---------- */
+.mic{flex:0 0 auto;position:relative;width:56px;height:56px;display:grid;place-items:center;border:2px solid var(--line2);background:var(--bg);color:var(--ink);cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.mic:hover{border-color:var(--accent-text);color:var(--accent-text)}
+.mic.live{background:var(--bad);border-color:var(--bad);color:#fff}
+.mic.live::after{content:"";position:absolute;inset:-6px;border:2px solid var(--bad);opacity:0;animation:micring 1.4s ease-out infinite}
+.mic.off{color:var(--ink3);border-style:dashed}
+@keyframes micring{0%{opacity:.7;transform:scale(.9)}100%{opacity:0;transform:scale(1.18)}}
+.search .mic{height:60px;width:60px;border-color:var(--ink);margin-left:-2px}
+.voice-note{margin:10px 0 0;padding:10px 14px;border-left:3px solid var(--warn);background:var(--wash);font-size:15px;color:var(--ink);max-width:660px}
+.ai .xhead{padding-bottom:10px}
+.ai-state{font-size:14.5px!important;color:var(--ink3)!important;margin-top:12px!important;display:flex;align-items:center;gap:9px}
+.ai-state::before{content:"";flex:0 0 auto;width:9px;height:9px;border-radius:50%;background:var(--ink3)}
+.ai-state.on::before{background:var(--go)}
+.askbar{padding:14px 0 6px}
+.askbar .hyp{margin-top:0;flex-wrap:nowrap}
+.askbar .hyp input{flex:1 1 auto;min-width:0}
+.askbar.docked{position:sticky;bottom:0;z-index:5;background:var(--bg);border-top:1px solid var(--line2);margin-top:34px;padding:14px 0 max(12px,env(safe-area-inset-bottom))}
+.askbar.docked .hyp{max-width:none}
+.barfoot{margin:26px 0 0}
+.barfoot:has([hidden]){display:none}
+.barfoot+.askbar.docked{margin-top:18px}
+.turn{padding:26px 0 8px;border-top:2px solid var(--ink);margin-top:30px;scroll-margin-top:calc(var(--nav) + 12px)}
+.turn:first-child{margin-top:18px}
+.turn .up{display:block;color:var(--ink3);font-size:13px;margin-bottom:4px}
+.you{font:500 clamp(19px,1.9vw,24px)/1.35 var(--body);margin:0 0 22px;max-width:60ch;overflow-wrap:anywhere}
+.reply>.up{color:var(--accent-text)}
+.aitext{font-size:clamp(17px,1.35vw,19px);line-height:1.62;max-width:72ch}
+.aitext p{margin:0 0 12px}
+.aitext ul,.aitext ol{margin:0 0 12px;padding-left:22px}
+.aitext li{margin:5px 0}
+.aitext strong{font-weight:600}
+.aitext .lead-line{font-weight:600}
+.aitext .quick{margin:14px 0 4px;max-width:none}
+p.aitext{margin:0}
+.acts.small{margin-top:12px;gap:8px 22px}
+.ainote{font-size:14px;color:var(--ink3);margin:14px 0 0;max-width:80ch;padding-left:12px;border-left:2px solid var(--line2)}
+.readas{font-size:14.5px;color:var(--ink3);margin:0;max-width:96ch}
+.readas .plain{font:inherit;letter-spacing:0;text-transform:none;color:var(--accent-text)}
+.more-ai{margin:18px 0 0}
+.more-ai .link{color:var(--accent-text)}
+.thinking{color:var(--ink2);font-size:16px;margin:0;display:flex;align-items:baseline;gap:2px}
+.thinking::after{content:"...";display:inline-block;overflow:hidden;width:0;vertical-align:bottom;animation:dots 1.2s steps(4,end) infinite}
+@keyframes dots{to{width:1.1em}}
+.turn .answer{border-top:1px solid var(--line2);margin-top:24px;padding:24px 0 20px}
+.turn .readas+.answer{border-top:0;margin-top:0;padding-top:14px}
+.askhelp .grid.five{grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+.howai{margin-top:44px;max-width:92ch}
+.howai h2{margin-bottom:14px}
+.howai ol{margin:0;padding-left:22px}
+.howai li{margin:10px 0;color:var(--ink2)}
+.howai li b{color:var(--ink)}
+.howai .hint{margin-top:18px;max-width:92ch}
+@media(max-width:640px){
+  .mic,.askbar .hyp .btn{height:52px}.mic{width:52px}
+  .askbar .hyp{gap:6px}.askbar .hyp input{height:52px;padding:0 12px;font-size:16px}.askbar .hyp .btn{padding:0 16px}
+  .search .mic{width:54px}
+}
+@media(prefers-reduced-motion:reduce){.mic.live::after,.thinking::after{animation:none}.thinking::after{width:1.1em}.mic.live::after{opacity:.6}}

@@ -1,0 +1,14 @@
+# The Data AI service: one serverless function behind https://open-data-ai.netlify.app/api/data-ai.
+# The website itself is served by GitHub Pages from docs/; Netlify hosts only this folder.
+# If this project is ever linked to the GitHub repository, set its base directory to "ai" in Netlify:
+# Netlify then skips the build whenever a commit changes nothing in here, so the daily data refresh costs no deploys.
+[build]
+  publish = "public"
+  command = "echo 'Nothing to build: Netlify bundles the function'"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"

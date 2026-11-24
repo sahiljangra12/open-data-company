@@ -1,0 +1,11 @@
+{
+  "name": "open-data-ai",
+  "private": true,
+  "type": "module",
+  "description": "The Data AI service for Open Data Company: one Netlify Function that talks to a Claude model through Netlify AI Gateway.",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^1.13.0",
+    "@netlify/blobs": "^11.1.10",
+    "@netlify/functions": "^6.1.1"
+  }
+}

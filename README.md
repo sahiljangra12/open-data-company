@@ -5,7 +5,7 @@ file they can use, in a few clicks. Light theme by default, dark on request. Sit
 
 Five things a visitor can do:
 
-1. **Ask** for a number in plain words and get the value, its year and its source (`ask.html`).
+1. **Ask Data AI** in plain words, typed or spoken, and get the answer with its year and its source (`ask.html`).
 2. **Take a dataset**: choose variables, places and years, check the table, download CSV, Excel, JSON or TSV (`datasets.html`, `explore.html`).
 3. **Test an idea** in Researcher mode: a recommended test with reasons, then the result with charts (`research.html`).
 4. **Analyse their own file** in the browser, without uploading it (`mydata.html`).
@@ -14,7 +14,7 @@ Five things a visitor can do:
 | Path | What it is |
 |---|---|
 | `docs/index.html` | Home: ask box, live Earth with today's daylight and earthquakes, ticker, the four ways in, datasets by topic, world map, counters, featured charts, update clock |
-| `docs/ask.html` | Ask the data: one number, a comparison, a ranking or a world series, each with source, chart and citation |
+| `docs/ask.html` | Data AI: questions by typing or voice, answered from the datasets with source, chart and citation, and explained by an AI model |
 | `docs/datasets.html` | Every dataset and every variable. Generated; readable without JavaScript; carries schema.org Dataset markup |
 | `docs/explore.html` | Explorer: chip pickers for variables and places, time presets, conditions, merging, table, chart, summary, download bar |
 | `docs/research.html` | Researcher mode: state a hypothesis, get a recommended test with reasons, run it, read results and charts |
@@ -27,7 +27,7 @@ Five things a visitor can do:
 | `docs/assets/core.js` | Shared helpers: light/dark switch, phone menu, dataset loader, chip picker |
 | `docs/assets/earth.js` | The home page Earth: NASA day and night imagery with the real day/night line, one WebGL shader |
 | `docs/assets/charts.js` | Small chart kit: lines, ranked bars, histogram, scatter, group strips, correlation grid |
-| `docs/assets/concepts.js` | Plain words mapped to variables and country nicknames, shared by Ask and Researcher mode |
+| `docs/assets/concepts.js` | Plain words mapped to variables and country nicknames, shared by Data AI and Researcher mode |
 | `docs/assets/readers.js` | File readers: delimited text, JSON, SPSS, Stata (own code); spreadsheets and Parquet (via `docs/vendor`) |
 | `docs/assets/stats.js` | The statistics used by Researcher mode and Your data, in plain JavaScript |
 | `tests/check_stats.py` | Checks `stats.js` against scipy, statsmodels and pymannkendall |
@@ -49,17 +49,42 @@ visitor's browser; there is no server.
 
 Two datasets can be merged when they share the same key columns (for example `code + year`).
 
-## Ask the data
+## Data AI
 
-The ask box matches the words of a question to a variable (a fixed list of synonyms in `docs/assets/concepts.js`, then a
-word search over every variable title) and to places, then reads the value from the data. It handles one number
-("India life expectancy"), comparisons ("Germany vs France unemployment"), rankings ("top 10 CO2 emitters"), a year
-("Brazil forest area 1995"), world series (oil price, global temperature, CO2 in the air) and recent earthquakes.
-Nothing is generated: when no variable matches, the page says so. Every answer shows how the question was read,
-names the source and licence, and offers a citation to copy.
+`docs/ask.html` answers questions typed or spoken (the microphone uses the browser's speech recognition). Two engines
+share the page:
 
-For speed, `scripts/build_datasets.py` writes `docs/data/latest/<dataset>.json`: the newest value of every variable for
-every country, plus the value ten years earlier. The full history loads only when an answer is shown.
+- **The built-in lookup** matches the words of a question to a variable (a fixed list of synonyms in
+  `docs/assets/concepts.js`, then a word search over every variable title) and to places, then reads the value from the
+  data. It handles one number ("India life expectancy"), comparisons, rankings, a year, world series (oil price, global
+  temperature, CO2 in the air) and recent earthquakes. It is instant and involves no AI.
+- **The AI** takes everything else: why and how questions, follow-ups, unclear wording, topics outside the data. It is a
+  Claude model behind one small serverless function in `ai/` (hosted on Netlify, credentials supplied by Netlify AI
+  Gateway, so no key is stored anywhere). The model never holds the data. When it needs a figure it asks for a tool
+  (`find_variables`, `get_values`, `rank`, `get_series`, `recent_earthquakes`); the visitor's browser runs the tool
+  against the same files the rest of the site uses and sends the result back. The answer cards under an AI reply show
+  what was read.
+
+If the service is unreachable or its allowance is used up, the built-in lookup answers alone and offers the closest
+variables, so a question always gets a way forward. Text the AI writes from general knowledge is labelled as such.
+
+**Cost guard.** The function has a per-visitor rate limit, a cap on reply length, and a daily and monthly budget kept as
+an append-only log in Netlify Blobs. Defaults: 0.03 USD a day and 0.25 USD a month (45 Netlify credits). Change them with
+the environment variables `DATA_AI_DAILY_USD` and `DATA_AI_MONTHLY_USD` on the Netlify project; `DATA_AI_MODEL`,
+`DATA_AI_PRICE_IN` and `DATA_AI_PRICE_OUT` switch the model. Setting `DATA_AI_URL` to an empty string in
+`docs/assets/core.js` turns AI answers off.
+
+**Deploying the service.** Everything Netlify needs is in `ai/` (`netlify.toml`, the function, a one-line landing page).
+The workflow `.github/workflows/deploy-ai.yml` checks the function, uploads `ai/` to the Netlify project `open-data-ai`
+when it is given a one-time upload address, and then tests the live service from a real browser. The same workflow run
+without an address only tests the live service. Other ways to deploy: run `npx netlify deploy --prod` inside `ai/`, or
+link the repository to the project in Netlify with the base directory set to `ai` (Netlify then skips builds for commits
+that change nothing in `ai/`, so the daily data refresh costs no deploys).
+
+| Check | What it covers |
+|---|---|
+| `tests/check_ai_service.mjs` | The real function and the real Anthropic SDK against a stand-in model server: request shape, input checks, budget guard. Spends nothing. |
+| `tests/check_ai_live.py` | The real page in a headless browser against the live service: health, cross-site rules, and a set of questions answered end to end. Spends a fraction of a cent. |
 
 ## Your data
 

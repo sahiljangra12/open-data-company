@@ -28,6 +28,28 @@ const cssVar = name => getComputedStyle(document.documentElement).getPropertyVal
   }
 })();
 const SITE = "https://sahiljangra12.github.io/open-data-company/";
+const DATA_AI_URL = "https://open-data-ai.netlify.app/api/data-ai";      // the assistant's service (ai/ in the repo). Empty string turns AI answers off.
+
+/* Voice input for a text box. btn: the microphone button; note: where problems are explained; onFinal(text) runs when the visitor stops speaking. */
+function voiceInput(btn, input, note, onFinal) {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition, hint = input.placeholder;
+  const tell = t => { if (note) { note.textContent = t || ""; note.hidden = !t; } };
+  if (!SR) { btn.classList.add("off"); btn.title = "Voice input is not available in this browser"; btn.onclick = () => tell("Voice input works in Chrome, Edge and Safari. This browser does not offer it, so please type your question."); return; }
+  let rec = null, live = false, heard = "";
+  const WHY = { "not-allowed": "The microphone is blocked for this site. Allow it from the icon in the address bar, then click the microphone again.", "service-not-allowed": "The browser is not allowed to use voice recognition. Check its privacy settings.",
+    "no-speech": "I did not hear anything. Click the microphone and speak.", "audio-capture": "No microphone was found on this device.", network: "Voice recognition needs an internet connection and did not get one." };
+  const idle = () => { live = false; btn.classList.remove("live"); btn.setAttribute("aria-pressed", "false"); btn.title = "Ask by voice"; input.placeholder = hint; };
+  btn.onclick = () => {
+    if (live) { rec.stop(); return; }
+    tell(""); heard = ""; rec = new SR(); rec.lang = navigator.language || "en-US"; rec.interimResults = true; rec.continuous = false; rec.maxAlternatives = 1;
+    rec.onstart = () => { live = true; btn.classList.add("live"); btn.setAttribute("aria-pressed", "true"); btn.title = "Listening. Click to stop."; input.value = ""; input.placeholder = "Listening. Speak your question."; };
+    rec.onresult = e => { let t = ""; for (let i = 0; i < e.results.length; i++) t += e.results[i][0].transcript; input.value = heard = t.trim(); };
+    rec.onerror = e => { if (e.error !== "aborted") tell(WHY[e.error] || "Voice input stopped unexpectedly. Please try again or type your question."); };
+    rec.onend = () => { idle(); if (heard) onFinal(heard); };
+    try { rec.start(); } catch (e) { idle(); tell("Voice input could not start. Please try again."); }
+  };
+  idle();
+}
 const plural = (n, w) => `${n.toLocaleString("en-US")} ${w}${n === 1 ? "" : "s"}`;
 /* one entry of the change log as a sentence */
 function changeLine(c) {

@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DOCS = ROOT / "docs"
 SITE = "https://sahiljangra12.github.io/open-data-company/"
 REPO = "https://github.com/sahiljangra12/open-data-company"
-NAV = [("ask.html", "Ask", "ask"), ("datasets.html", "Datasets", "datasets"), ("explore.html", "Explorer", "explore"), ("research.html", "Research", "research"),
+NAV = [("ask.html", "Data AI", "ask"), ("datasets.html", "Datasets", "datasets"), ("explore.html", "Explorer", "explore"), ("research.html", "Research", "research"),
        ("mydata.html", "Your data", "mydata"), ("updates.html", "Updates", "updates"), ("guide.html", "Guide", "guide")]
 THEME = '<script>try{document.documentElement.dataset.theme=localStorage.getItem("theme")==="dark"?"dark":"light"}catch(e){document.documentElement.dataset.theme="light"}</script>'
 e = html.escape
@@ -27,7 +27,7 @@ def header(page):
             f'<nav id="nav" aria-label="Main">{links}</nav><button class="theme" id="theme" type="button">Dark</button></div></header>')
 
 
-FOOTER = ('<footer><div class="wrap"><nav aria-label="Footer"><a href="ask.html">Ask</a><a href="datasets.html">Datasets</a><a href="explore.html">Explorer</a>'
+FOOTER = ('<footer><div class="wrap"><nav aria-label="Footer"><a href="ask.html">Data AI</a><a href="datasets.html">Datasets</a><a href="explore.html">Explorer</a>'
           '<a href="research.html">Researcher mode</a><a href="mydata.html">Your data</a><a href="updates.html">Updates</a><a href="guide.html">Guide</a>'
           '<a href="catalog.html">Sources we are working through</a><a href="scorecard.html">Case study: grid forecast scorecard</a>'
           f'<a href="llms.txt">Plain-text index for AI systems</a><a href="{REPO}">GitHub</a></nav>'
@@ -171,7 +171,7 @@ def llms(man):
                 f"- Source: {d['source']} ({d['source_url']}). Licence: {d['licence']}.",
                 "- Variables: " + "; ".join(f"`{c['name']}` {c['title']}" + (f" ({c['unit']})" if c.get("unit") else "") for c in d["columns"]), ""]
     out += ["## Pages for people", "",
-            f"- [Ask]({SITE}ask.html): type a question, get the number with its year and source",
+            f"- [Data AI]({SITE}ask.html): ask a question by typing or by voice; the answer gives the number with its year and source",
             f"- [Datasets]({SITE}datasets.html): every dataset and variable",
             f"- [Explorer]({SITE}explore.html): choose variables, places and years, then download",
             f"- [Researcher mode]({SITE}research.html): test a hypothesis on the data",

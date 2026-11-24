@@ -1,2 +1,5 @@
-__pycache__/
 .DS_Store
+.netlify/
+__pycache__/
+ai/node_modules/
+deploy-*.zip

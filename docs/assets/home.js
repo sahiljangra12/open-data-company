@@ -370,7 +370,7 @@ function search(D) {
   function draw() {
     const text = input.value.trim();
     if (!text) { close(); return; }
-    list = [{ main: `Answer: ${text}`, side: "The number, its year and its source", href: askUrl(text), ask: true }, ...find(text).map(r => ({ ...r, side: `Open the data: ${r.side}` }))];
+    list = [{ main: `Ask Data AI: ${text}`, side: "An answer with its year and its source", href: askUrl(text), ask: true }, ...find(text).map(r => ({ ...r, side: `Open the data: ${r.side}` }))];
     act = Math.min(act, list.length - 1);
     box.replaceChildren(...list.map((r, i) => { const a = el("a", "res" + (i === act ? " act" : "") + (r.ask ? " ask" : "")); a.href = r.href; a.setAttribute("role", "option"); a.append(el("b", "", r.main), el("small", "", r.side)); return a; }));
     box.hidden = false; input.setAttribute("aria-expanded", "true");
@@ -385,6 +385,7 @@ function search(D) {
   document.addEventListener("mousedown", e => { if (!e.target.closest(".search")) close(); });
 
   $("#askform").addEventListener("submit", e => { if (!input.value.trim()) e.preventDefault(); });
+  voiceInput($("#hmic"), input, $("#hvoice"), t => { close(); location.href = askUrl(t); });                 // a spoken question goes straight to Data AI
   ["India life expectancy", "Top CO2 emitters", "China vs India solar power", "World population", "Oil price", "Which country is richest?", "Earthquakes today"]
     .forEach(q => { const a = el("a", "", q); a.href = askUrl(q); $("#quick").append(a); });
   const nv = D.reduce((n, d) => n + d.columns.length, 0), nr = D.reduce((n, d) => n + d.rows, 0);

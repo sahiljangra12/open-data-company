@@ -1,0 +1,56 @@
+name: Deploy and check Data AI
+
+# Run by hand from the Actions tab.
+# With an upload address: checks the function, uploads ai/ to the Netlify project open-data-ai, then tests the live service.
+# Without one: only tests the live service.
+# The address is a one-time link issued by Netlify that expires after 30 minutes and can only start a build of this one
+# project. It is read from the run's event data and masked, so it never appears in a log.
+on:
+  workflow_dispatch:
+    inputs:
+      upload:
+        description: "One-time Netlify upload address (leave empty to only test the live service)"
+        required: false
+        type: string
+      live:
+        description: "Test the live service afterwards"
+        required: false
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+concurrency: deploy-ai
+
+jobs:
+  data-ai:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Check the function against a stand-in model
+        run: |
+          cd ai && npm ci --no-audit --no-fund && cd ..
+          node tests/check_ai_service.mjs
+      - name: Upload to Netlify and build
+        run: |
+          UPLOAD=$(jq -r '.inputs.upload // ""' "$GITHUB_EVENT_PATH")
+          if [ -z "$UPLOAD" ]; then echo "No upload address given, so nothing is deployed."; exit 0; fi
+          echo "::add-mask::$UPLOAD"
+          echo "::add-mask::${UPLOAD##*/}"
+          cd ai
+          npx -y @netlify/mcp@1.22.1 --site-id 468f3fdf-49e6-405c-b06e-bdf1814e1059 --proxy-path "$UPLOAD"
+      - uses: actions/setup-python@v5
+        if: ${{ inputs.live }}
+        with:
+          python-version: "3.12"
+      - name: Test the live service from a real browser
+        if: ${{ inputs.live }}
+        run: |
+          pip install --quiet playwright
+          python -m playwright install --with-deps chromium > /dev/null
+          python tests/check_ai_live.py

@@ -1,5 +1,8 @@
-/* Ask: a question in plain words -> the number, its year and its source, read from the datasets.
-   Nothing is generated: the page matches words to a variable and a place by fixed rules, then looks the value up.
+/* Data AI: questions in plain words or by voice, answered from the datasets.
+   Two engines share this page. A plain lookup ("India life expectancy") is matched by fixed rules and read straight from the
+   data: instant, exact, no AI involved. Anything else goes to a Claude model behind a small service (see ai/ in the repo);
+   when it needs a figure it asks for a tool and this page reads the value from the same data. If the AI is unavailable the
+   built-in engine answers alone, so a question is never left without a way forward.
    Needs core.js, concepts.js (word lists) and charts.js. */
 let M = [], V = new Map(), C = {}, PULSE = {}, NAMES = [], LABEL = new Map(), ticket = 0;
 const latestCache = {};
@@ -30,6 +33,7 @@ const ASK_FIRST = [
   [/farmland|agricultural land/, "world-bank-development::agricultural_land_share"], [/women (working|in work|in the labou?r force)|female labou?r/, "world-bank-development::female_labor_participation"],
 ];
 const STOP = new Set("what whats is are was were the of in for how many much does do did has have had a an which country countries nation nations by to and vs versus compare compared comparison between with than show me give tell latest current currently now today right this year s on at about there it its their any all please can you i want need know number numbers figure figures data value values level levels stats statistics rate total".split(" "));
+const FILLER = new Set("use used uses usage live lives living people rate rates level levels number numbers amount total data figure figures stats statistics value values average annual yearly recent recently big large high low size long ago".split(" "));
 const TOP = /\b(top|highest|most|largest|biggest|greatest|leading|richest|maximum|ranking|rank|ranked|leaders?)\b/, BOTTOM = /\b(lowest|least|smallest|fewest|bottom|poorest|minimum)\b/;
 const WHICH = /\b(which|what) (country|countries|nation|nations)\b|\bcountries (with|by|ranked)\b|\bby country\b|\bemitters\b/;
 
@@ -56,16 +60,22 @@ function parse(text) {
   const found = [];
   [ASK_FIRST, CONCEPTS].forEach(listOf => listOf.forEach(([re, id]) => {
     if (!V.has(id)) return; const m = re.exec(s);
-    if (m && !found.some(f => f.id === id)) { found.push({ id, at: m.index }); s = s.replace(new RegExp(re.source, "g"), x => " ".repeat(x.length)); }      // every mention of the same idea is used up, so "CO2 emitters" is one variable, not two
+    if (m && !found.some(f => f.id === id)) { found.push({ id, at: m.index, text: m[0].trim() }); s = s.replace(new RegExp(`[a-z0-9]*(?:${re.source})[a-z0-9]*`, "g"), x => " ".repeat(x.length)); }      // every mention of the same idea is used up, so "CO2 emitters" is one variable, not two
   }));
   const words = s.replace(TOP, " ").replace(BOTTOM, " ").split(/\s+/).filter(w => w && !STOP.has(w) && !/^\d+$/.test(w));
   let fuzzy = [];
   if (!found.length && words.length && !quake) {
     fuzzy = [...V.values()].filter(v => v.d.id !== "earthquakes-past-30-days" && v.c.type === "num" && words.every(w => v.q.includes(w))).sort((a, b) => a.c.title.length - b.c.title.length);
-    if (fuzzy.length) found.push({ id: fuzzy[0].id, at: 0 });
+    if (fuzzy.length) found.push({ id: fuzzy[0].id, at: 0, text: "" });
   }
+  /* "methane emissions" is one idea: drop a variable that was only matched by a word already in another match's title */
+  const stem = w => w.replace(/(ies|es|s)$/, ""), inTitle = (id, w) => V.get(id).q.includes(stem(w));
+  const keep = found.filter(f => !found.some(g => g !== f && f.text && !f.text.includes(" ") && inTitle(g.id, f.text) && !(g.text && inTitle(f.id, g.text))));
+  found.length = 0; found.push(...keep);
   found.sort((a, b) => a.at - b.at);
-  return { vars: found.map(f => f.id).slice(0, 2), places: codes.slice(0, 8), year, rank, n, quake, words, others: fuzzy.slice(1, 7).map(v => v.id) };
+  /* words the match does not explain: a question with any of these is more than a plain lookup */
+  const left = fuzzy.length ? [] : words.filter(w => w.length > 1 && !FILLER.has(w) && !/quake|seismic|tremor/.test(w) && !found.some(f => inTitle(f.id, w)));
+  return { vars: found.map(f => f.id).slice(0, 2), places: codes.slice(0, 8), year, rank, n, quake, words, left, weak: fuzzy.length > 0 && words.length < 2 && !codes.length && !rank, others: fuzzy.slice(1, 7).map(v => v.id) };
 }
 
 /* ---------- numbers and sentences ---------- */
@@ -243,46 +253,211 @@ async function answerQuakes(q, box) {
 
 const note = (text, extra) => { const p = el("p", "note", text); if (extra) p.append(" ", extra); return p; };
 
-/* ---------- run ---------- */
-async function ask(text) {
-  const q = text.trim(), box = $("#answers"), read = $("#read"), me = ++ticket;
-  box.replaceChildren(); read.hidden = true; $("#help").hidden = !!q;
-  if (!q) return;
-  const P = parse(q), vs = P.vars.map(id => V.get(id));
-  if (P.quake) { read.textContent = "Read as: recent earthquakes worldwide."; read.hidden = false; await answerQuakes(q, box); return; }
-  if (!vs.length) {
-    const p = note(P.places.length ? `Found ${P.places.map(placeName).join(", ")}, but no variable in the rest of the question. Add what you want to know, for example "${placeName(P.places[0])} life expectancy".`
-      : "Nothing in the datasets matches that. This page looks numbers up in the data it holds; it does not search the web or write an answer of its own. Try naming a measure and a place.");
-    box.append(p, Object.assign(el("p", "hint"), { innerHTML: `<a href="datasets.html?q=${encodeURIComponent(P.words.join(" "))}">Search the list of every variable</a> for those words, or pick an example above.` }));
-    return;
+/* ---------- the tools the AI can ask for: each reads the site's own data, here in the browser ---------- */
+let PLACE = new Map();
+const r6 = x => (x === null || x === undefined || !isFinite(x) ? null : +(+x).toPrecision(6));
+const codeOf = name => { const raw = String(name || "").trim(); if (/^[A-Za-z]{3}$/.test(raw) && LABEL.has(raw.toUpperCase())) return raw.toUpperCase(); const n = norm(raw); return PLACE.get(n) || PLACE.get(n.replace(/^the /, "")) || null; };
+const TOOLS = {
+  async find_variables({ query }) {
+    const q = norm(query || ""), words = q.split(" ").filter(w => w && !STOP.has(w)), hits = new Map();
+    [ASK_FIRST, CONCEPTS].forEach(list => list.forEach(([re, id]) => { if (V.has(id) && re.test(` ${q} `) && !hits.has(id)) hits.set(id, 3); }));
+    if (words.length) V.forEach(v => { if (v.c.type !== "num") return; const n = words.filter(w => v.q.includes(w)).length; if (n >= Math.ceil(words.length * 0.6)) hits.set(v.id, Math.max(hits.get(v.id) || 0, n / words.length + 1 / (20 + v.c.title.length))); });
+    return { matches: [...hits].sort((a, b) => b[1] - a[1]).slice(0, 8).map(([id]) => { const v = V.get(id); return { id, title: v.c.title, unit: v.c.unit || "", source: v.d.source, covers: v.d.coverage, by: v.d.entity ? v.d.entity.label.toLowerCase() + " and year" : "one world series over time" }; }) };
+  },
+  async get_values({ variable, places, year }, used) {
+    const v = V.get(variable); if (!v) return { error: "Unknown variable id. Call find_variables to get the right one." };
+    if (!v.d.entity || v.d.keys.join("+") !== "code+year") return { error: "This variable is one world series, not by country. Call get_series without a place." };
+    const L = await latest(v.d.id), rec = L.vars[v.c.name]; if (!rec) return { error: "That variable has no numbers." };
+    const want = (Array.isArray(places) ? places : [places]).filter(Boolean).slice(0, 8).map(n => [n, codeOf(n)]), codes = [...new Set(want.map(w => w[1]).filter(c => c && L.pos.has(c)))];
+    const yr = Number.isInteger(year) ? year : null, S = yr ? await seriesOf(v, [...new Set([...codes, "WLD"])]) : null;
+    const one = c => { if (yr) { const s = S.get(c) || [], hit = s.find(x => x[0] === yr); if (hit) return { place: placeName(c), year: yr, value: r6(hit[1]) }; const near = s.reduce((a, b) => (!a || Math.abs(b[0] - yr) < Math.abs(a[0] - yr) ? b : a), null); return near ? { place: placeName(c), year: near[0], value: r6(near[1]), note: `No value for ${yr}; this is the nearest year` } : { place: placeName(c), error: "No data" }; }
+      const i = L.pos.get(c); return rec.v[i] === null ? { place: placeName(c), error: "No data" } : { place: placeName(c), year: rec.y[i], value: r6(rec.v[i]), ...(rec.p[i] !== null ? { value_ten_years_earlier: r6(rec.p[i]) } : {}) }; };
+    const out = { variable: v.c.title, unit: v.c.unit || "", source: v.d.source, values: want.map(([name, c]) => (c && L.pos.has(c) ? one(c) : { place: name, error: "This place is not in the dataset" })) };
+    if (L.pos.has("WLD") && !codes.includes("WLD")) { const w = one("WLD"); if (!w.error) out.world = w; }
+    if (codes.length) used.push({ kind: "places", v, places: codes, year: yr });
+    return out;
+  },
+  async rank({ variable, order, n, year }, used) {
+    const v = V.get(variable); if (!v) return { error: "Unknown variable id. Call find_variables to get the right one." };
+    if (!v.d.entity || v.d.keys.join("+") !== "code+year") return { error: "This variable is one world series, so it cannot be ranked by country." };
+    const L = await latest(v.d.id), rec = L.vars[v.c.name]; if (!rec) return { error: "That variable has no numbers." };
+    const k = Math.max(1, Math.min(20, n || 10)), yr = Number.isInteger(year) ? year : null; let table = [];
+    if (yr) { const T = await load(v.d), col = T.c[v.c.name]; for (let i = 0; i < T.n; i++) if (T.c.year[i] === yr && !isNaN(col[i]) && isReal(T.c.code[i])) table.push({ c: T.c.code[i], v: col[i], y: yr }); }
+    else { table = L.codes.map((c, i) => ({ c, v: rec.v[i], y: rec.y[i] })).filter(r => isReal(r.c) && r.v !== null); const newest = Math.max(...table.map(r => r.y)); table = table.filter(r => r.y >= newest - 6); }
+    if (!table.length) return { error: yr ? `No country has a value for ${yr}.` : "No country values." };
+    table.sort((a, b) => (order === "bottom" ? a.v - b.v : b.v - a.v));
+    used.push({ kind: "rank", v, order: order === "bottom" ? "bottom" : "top", n: k, year: yr });
+    return { variable: v.c.title, unit: v.c.unit || "", source: v.d.source, order: order === "bottom" ? "lowest first" : "highest first", countries_compared: table.length, rows: table.slice(0, k).map((r, i) => ({ rank: i + 1, place: placeName(r.c), year: r.y, value: r6(r.v) })) };
+  },
+  async get_series({ variable, place, from, to }, used) {
+    const v = V.get(variable); if (!v) return { error: "Unknown variable id. Call find_variables to get the right one." };
+    let pts, label = "";
+    if (v.d.entity && v.d.keys.join("+") === "code+year") { const c = codeOf(place || "World"); if (!c) return { error: "This place is not in the dataset" }; pts = (await seriesOf(v, [c])).get(c) || []; label = placeName(c); used.push({ kind: "places", v, places: [c], year: null }); }
+    else if (!v.d.entity) { const T = await load(v.d), t = T.c[v.d.time.col], col = T.c[v.c.name]; pts = []; for (let i = 0; i < T.n; i++) if (!isNaN(col[i])) pts.push([t[i], col[i]]); used.push({ kind: "series", v }); }
+    else return { error: "This variable cannot be read as a series here." };
+    const yearOf = x => +String(x).slice(0, 4); if (from) pts = pts.filter(p => yearOf(p[0]) >= from); if (to) pts = pts.filter(p => yearOf(p[0]) <= to);
+    if (!pts.length) return { error: "No values in that period." };
+    const step = Math.max(1, (pts.length - 1) / 23), thin = []; for (let i = 0; i < pts.length - 1; i += step) thin.push(pts[Math.floor(i)]); thin.push(pts[pts.length - 1]);
+    const lo = pts.reduce((a, b) => (b[1] < a[1] ? b : a)), hi = pts.reduce((a, b) => (b[1] > a[1] ? b : a)), f = p => ({ when: p[0], value: r6(p[1]) });
+    return { variable: v.c.title, unit: v.c.unit || "", source: v.d.source, place: label || "World series", points_in_period: pts.length, first: f(pts[0]), last: f(pts[pts.length - 1]), lowest: f(lo), highest: f(hi), points: [...new Set(thin)].map(p => [p[0], r6(p[1])]) };
+  },
+  async recent_earthquakes(_, used) {
+    const d = M.find(x => x.id === "earthquakes-past-30-days"); if (!d) return { error: "No earthquake data." };
+    const T = await load(d), rows = []; for (let i = 0; i < T.n; i++) rows.push({ t: T.c.time[i], m: T.c.magnitude[i], place: T.c.place[i] });
+    const end = rows.reduce((a, r) => (r.t > a ? r.t : a), ""), cut = new Date(Date.parse(end) - 864e5).toISOString().slice(0, 19) + "Z", day = rows.filter(r => r.t >= cut), top = a => [...a].sort((x, y) => y.m - x.m).slice(0, 5).map(r => ({ magnitude: r.m, place: r.place, time: r.t }));
+    used.push({ kind: "quakes" });
+    return { source: d.source, note: "Magnitude 2.5 and above, worldwide", data_as_of: end, past_24_hours: { count: day.length, strongest: top(day) }, past_30_days: { count: rows.length, strongest: top(rows) } };
+  },
+};
+
+/* ---------- the AI: a Claude model behind a small service; it asks for tools, the browser runs them ---------- */
+const AI = { url: typeof DATA_AI_URL === "string" ? DATA_AI_URL : "", state: null, memory: [] };
+function aiReady() {
+  if (!AI.url) return Promise.resolve(false);
+  return AI.state || (AI.state = (async () => { try { const c = new AbortController(), t = setTimeout(() => c.abort(), 5000), r = await fetch(AI.url, { signal: c.signal }); clearTimeout(t); const j = await r.json(); return !!(j && j.ok && j.ai); } catch (e) { return false; } })());
+}
+const TOOL_SAYS = { find_variables: i => `Searching the variables for "${i.query || ""}"`, get_values: i => `Reading ${(V.get(i.variable) || { c: { title: "the data" } }).c.title.toLowerCase()} for ${[].concat(i.places || []).join(", ")}`, rank: i => `Ranking countries by ${(V.get(i.variable) || { c: { title: "that measure" } }).c.title.toLowerCase()}`,
+  get_series: i => `Reading the history of ${(V.get(i.variable) || { c: { title: "that measure" } }).c.title.toLowerCase()}${i.place ? " for " + i.place : ""}`, recent_earthquakes: () => "Reading the latest earthquakes" };
+async function aiTurn(question, say) {
+  const messages = [...AI.memory, { role: "user", content: question }], used = [];
+  for (let round = 0; round < 4; round++) {                             // 4 rounds is 13 messages at most, inside the service's limit
+    const c = new AbortController(), t = setTimeout(() => c.abort(), 60000);
+    let body = JSON.stringify({ messages });
+    for (let i = 0; body.length > 52000 && i < messages.length - 1; i++) { const m = messages[i]; if (m.role === "user" && Array.isArray(m.content)) { m.content = m.content.map(b => ({ ...b, content: '{"note":"left out to save space; ask again if needed"}' })); body = JSON.stringify({ messages }); } }
+    let r, j; try { r = await fetch(AI.url, { method: "POST", headers: { "content-type": "application/json" }, body, signal: c.signal }); j = await r.json(); } finally { clearTimeout(t); }
+    if (!r.ok || !j || !j.ok) throw Object.assign(new Error("The AI service did not answer"), { reason: (j && j.reason) || "error" });
+    messages.push({ role: "assistant", content: j.content });
+    const calls = j.content.filter(b => b.type === "tool_use");
+    if (j.stop_reason !== "tool_use" || !calls.length) {
+      const text = j.content.filter(b => b.type === "text").map(b => b.text).join("\n\n").trim(); if (!text) throw Object.assign(new Error("Empty answer"), { reason: "error" });
+      AI.memory = [...AI.memory, { role: "user", content: question }, { role: "assistant", content: text }].slice(-6);
+      return { text, used };
+    }
+    say(calls.map(k => (TOOL_SAYS[k.name] || (() => "Reading the data"))(k.input || {})).join(". ") + ".");
+    const results = await Promise.all(calls.map(async k => { let out; try { out = TOOLS[k.name] ? await TOOLS[k.name](k.input || {}, used) : { error: "No such tool" }; } catch (e) { console.warn(e); out = { error: "The data could not be read just now." }; } return { type: "tool_result", tool_use_id: k.id, content: JSON.stringify(out).slice(0, 5000) }; }));
+    messages.push({ role: "user", content: results });
   }
-  const bits = vs.map(v => `"${v.c.title}" from ${v.d.source}`);
-  const byPlace = vs.some(v => v.d.entity);
-  read.replaceChildren(document.createTextNode(`Read as: ${bits.join(" and ")}${!byPlace ? "" : P.places.length ? `, for ${P.places.map(placeName).join(", ")}` : P.rank ? ", ranked by country" : ""}${P.year ? `, in ${P.year}` : ""}. `));
-  if (P.others.length) { read.append("Not what you meant? Try "); P.others.slice(0, 4).forEach((id, i) => { const o = V.get(id), a = el("a", "", o.c.title); a.href = `ask.html?q=${encodeURIComponent(o.c.title + (P.places.length ? " " + P.places.map(placeName).join(" ") : "")).replace(/%20/g, "+")}`; read.append(i ? ", " : "", a); }); read.append("."); }
-  read.hidden = false;
+  throw Object.assign(new Error("Too many steps"), { reason: "error" });
+}
+/* the model writes plain text with **bold** and "-" lists: turn that into elements, never into raw HTML */
+function mdLite(text) {
+  const out = document.createDocumentFragment(), inline = (node, s) => { String(s).split(/(\*\*[^*]+\*\*)/g).forEach(part => { if (/^\*\*[^*]+\*\*$/.test(part)) node.append(el("strong", "", part.slice(2, -2))); else if (part) node.append(document.createTextNode(part.replace(/(^|\s)[*_]([^*_\s][^*_]*)[*_](?=\s|[.,;:!?]|$)/g, "$1$2"))); }); return node; };
+  String(text).replace(/\r/g, "").split(/\n{2,}/).forEach(block => {
+    const lines = block.split("\n").filter(l => l.trim() !== ""); if (!lines.length) return;
+    let list = null;
+    lines.forEach(line => { const b = /^\s*(?:[-*•]|\d+[.)])\s+(.*)$/.exec(line), h = /^\s*#{1,6}\s+(.*)$/.exec(line);
+      if (b) { if (!list) { list = el(/^\s*\d/.test(line) ? "ol" : "ul"); out.append(list); } list.append(inline(el("li"), b[1])); }
+      else { list = null; out.append(inline(el("p", h ? "lead-line" : ""), h ? h[1] : line)); } });
+  });
+  return out;
+}
+function speak(btn, text) {
+  if (!("speechSynthesis" in window)) return; const s = speechSynthesis;
+  if (s.speaking) { s.cancel(); btn.textContent = "Read it aloud"; return; }
+  const u = new SpeechSynthesisUtterance(text.replace(/\*\*/g, "")); u.lang = document.documentElement.lang || "en"; u.onend = u.onerror = () => { btn.textContent = "Read it aloud"; }; btn.textContent = "Stop reading"; s.speak(u);
+}
+
+/* ---------- the conversation ---------- */
+const EXPLAIN = /\b(why|how come|explain|reasons?|causes?|caused|because|should|could|would|will|predict\w*|forecast\w*|future|means?|meaning|define|definition|impact|effects?|affects?|relationship|correlat\w*|better|worse|good|bad|summar\w*|describe|tell me about|think|opinion|recommend\w*|advice|trend|changed?|changing|grow\w*|increas\w*|decreas\w*|fall\w*|ris\w+)\b/i;
+/* questions the datasets cannot hold an answer to: these need the AI, never a lucky word match */
+const GENERAL = /^(who|whom|whose|when|where)\b|\b(capital( city)? of|president|prime minister|king|queen|currency|languages?|invented|inventor|founded|founder|born|died|weather|recipe|joke|poem|story|translate|wrote|written by|author|meaning of|stands? for)\b/i;
+const last = { v: null, places: [], ai: false };
+let busy = false;
+function newTurn(q) {
+  const root = el("article", "turn"), you = el("p", "you"), reply = el("div", "reply"), status = el("p", "thinking", "Thinking");
+  you.append(el("span", "up", "You"), document.createTextNode(q)); reply.append(el("span", "up", "Data AI"), status); root.append(you, reply); $("#thread").append(root);
+  $("#askbar").classList.add("docked"); $("#examples").hidden = true; $("#help").hidden = true; $("#fresh-chat").hidden = false;
+  root.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+  return { root, box: reply, say: t => { status.textContent = t; }, done: () => status.remove() };
+}
+const SMALL = [[/^(hi|hello|hey|hola|namaste|good (morning|afternoon|evening))\b/i, "Hello. I'm Data AI. Ask me for a number, a comparison or a ranking, for example \"India life expectancy\" or \"top 10 CO2 emitters\", and I'll answer with the year and the source."],
+  [/\b(who are you|what are you|what can you do|what do you do|help me|how do (you|i) (work|use))\b/i, "I'm Data AI, the assistant for this site's open data. I can give you a single figure, compare countries, rank them, show how something changed over time, and report today's earthquakes, oil prices, global temperature and CO2 in the air. Every figure comes with its year and source."],
+  [/^(thanks|thank you|thx|great|nice|ok|okay|cool)\b/i, "You're welcome. Ask me anything else about the data."]];
+
+async function lookup(q, P, turn) {                                    // the built-in engine: exact, instant, no AI needed
+  const box = turn.box, vs = P.vars.map(id => V.get(id));
+  if (P.quake) { box.append(el("p", "readas", "Read as: recent earthquakes worldwide.")); await answerQuakes(q, box); return true; }
+  if (!vs.length) return false;
+  const byPlace = vs.some(v => v.d.entity), read = el("p", "readas");
+  read.append(document.createTextNode(`Read as: ${vs.map(v => `"${v.c.title}" from ${v.d.source}`).join(" and ")}${!byPlace ? "" : P.places.length ? `, for ${P.places.map(placeName).join(", ")}` : P.rank ? ", ranked by country" : ""}${P.year ? `, in ${P.year}` : ""}. `));
+  if (P.others.length) { read.append("Not what you meant? Try "); P.others.slice(0, 4).forEach((id, i) => { const o = V.get(id), b = el("button", "link plain", o.c.title); b.type = "button"; b.onclick = () => respond(o.c.title + (P.places.length ? " " + P.places.map(placeName).join(" ") : "")); read.append(i ? ", " : "", b); }); read.append("."); }
+  box.append(read);
   for (const v of vs) {
-    if (me !== ticket) return;
     try {
       if (!v.d.entity) await answerSeries(q, v, { ...P }, box);
-      else if (v.d.keys.join("+") !== "code+year") box.append(note(`"${v.c.title}" is broken down by ${v.d.entity.label.toLowerCase()}, which this page does not read yet.`, linkBtn("Open it in the explorer", `explore.html#d=${v.d.id}&v=${v.c.name}`, "link")));
+      else if (v.d.keys.join("+") !== "code+year") box.append(note(`"${v.c.title}" is broken down by ${v.d.entity.label.toLowerCase()}, which is best seen in the explorer.`, linkBtn("Open it in the explorer", `explore.html#d=${v.d.id}&v=${v.c.name}`, "link")));
       else if (P.places.length) await answerPlaces(q, v, { ...P }, box);
       else if (P.rank) await answerRank(q, v, { ...P }, box);
       else await answerWorld(q, v, { ...P }, box);
     } catch (e) { console.error(e); box.append(note("That answer could not be loaded. Check the connection and ask again.")); }
   }
+  last.v = vs[0].id; if (P.places.length) last.places = P.places;
+  return true;
 }
+function closest(words) {                                              // when nothing matches exactly: the nearest variables, so there is always a way forward
+  const hits = []; V.forEach(v => { if (v.c.type !== "num" || v.d.id === "earthquakes-past-30-days") return; const n = words.filter(w => w.length > 2 && v.q.includes(w.replace(/(ies|es|s)$/, ""))).length; if (n) hits.push([n - v.c.title.length / 500, v]); });
+  return hits.sort((a, b) => b[0] - a[0]).slice(0, 5).map(h => h[1]);
+}
+async function respond(text, opt = {}) {
+  const q = String(text).trim(); if (!q || busy) return;
+  busy = true; $("#q").value = ""; $("#ask-go").disabled = true;
+  const turn = newTurn(q), box = turn.box;
+  history.replaceState(null, "", `ask.html?q=${encodeURIComponent(q).replace(/%20/g, "+")}`); document.title = `${q} | Data AI`;
+  try {
+    const P = parse(q), short = q.split(/\s+/).length <= 4, follow = /^(and|what about|how about|same for|for|in|versus|vs|compared (to|with))\b/i.test(q);
+    if (!P.vars.length && !P.quake && P.places.length && last.v && (short || follow)) P.vars = [last.v];              // "and China?" keeps the measure
+    if (P.vars.length && !P.places.length && !P.rank && last.places.length && follow && V.get(P.vars[0]).d.entity) P.places = last.places;   // "and its population?" keeps the places
+    const wordy = q.split(/\s+/).length, small = wordy <= 6 && !P.vars.length && !P.places.length && !P.quake && SMALL.find(([re]) => re.test(q));
+    if (small && !opt.force) { turn.done(); box.append(el("p", "aitext", small[1])); return; }                       // a greeting needs no model
+    const general = GENERAL.test(q), ai = await aiReady(), simple = (P.quake || P.vars.length > 0) && !EXPLAIN.test(q) && !general && !P.weak && P.left.length === 0 && !(follow && last.ai);   // a follow-up to an AI answer stays with the AI
+    if (ai && (opt.force || !simple)) {
+      try {
+        const a = await aiTurn(opt.prompt || q, turn.say); turn.done(); last.ai = true;
+        const ans = el("div", "aitext"); ans.append(mdLite(a.text)); box.append(ans);
+        const tools = el("div", "acts small"), cp = el("button", "link", "Copy the answer"), rd = el("button", "link", "Read it aloud"); cp.type = rd.type = "button";
+        cp.onclick = () => copy(cp, `${a.text.replace(/\*\*/g, "")}\n\nFrom Data AI, Open Data Company: ${SITE}ask.html?q=${encodeURIComponent(q).replace(/%20/g, "+")}`); rd.onclick = () => speak(rd, a.text);
+        tools.append(cp); if ("speechSynthesis" in window) tools.append(rd); box.append(tools);
+        box.append(el("p", "ainote", a.used.length ? "Written by an AI model. The figures were read from the datasets shown below; any explanation around them is general knowledge and can be wrong." : "Written by an AI model from general knowledge, not from this site's data. It can be wrong or out of date, so check anything that matters."));
+        const seen = new Set(); let cards = 0;
+        for (const u of a.used) {
+          const key = u.kind + (u.v ? u.v.id : "") + (u.places || []).join() + (u.order || ""); if (seen.has(key) || cards >= 2) continue; seen.add(key); cards++;
+          try { if (u.kind === "places") await answerPlaces(q, u.v, { places: u.places, year: u.year, rank: null, n: 10 }, box); else if (u.kind === "rank") await answerRank(q, u.v, { places: [], year: u.year, rank: u.order, n: Math.min(u.n, 15) }, box); else if (u.kind === "series") await answerSeries(q, u.v, { year: null }, box); else if (u.kind === "quakes") await answerQuakes(q, box); } catch (e) { console.warn(e); }
+          if (u.v) { last.v = u.v.id; if (u.places && u.places.length) last.places = u.places; }
+        }
+        return;
+      } catch (e) {
+        console.warn("AI unavailable, using the built-in lookup", e); if (e.reason === "budget" || e.reason === "off") AI.state = Promise.resolve(false); aiBadge();
+        box.append(el("p", "ainote", e.reason === "budget" ? "The AI's allowance for now is used up, so this answer comes straight from the data." : "The AI could not be reached just now, so this answer comes straight from the data."));
+      }
+    }
+    turn.done(); last.ai = false;
+    if (general || P.weak) { P.vars = []; P.quake = false; }                                                            // without the AI, say so instead of answering a different question
+    if (await lookup(q, P, turn)) { if (ai && !opt.force) { const b = el("button", "link", "Ask Data AI to explain this"); b.type = "button"; b.onclick = () => respond(q, { force: true, prompt: `${q}\n\nGive the figures, then explain briefly what is behind them.` }); const w = el("p", "more-ai"); w.append(b); box.append(w); } return; }
+    const hello = SMALL.find(([re]) => re.test(q)); if (hello) { box.append(el("p", "aitext", hello[1])); return; }
+    /* nothing matched and no AI to hand it to: say what was understood and offer the nearest things that can be answered */
+    const near = general ? [] : closest(P.words), p = el("div", "aitext");
+    p.append(el("p", "", general ? "That is a general question rather than one the datasets hold, so it needs the AI part, which is resting right now. I can still answer from the data straight away, for example:" : P.places.length ? `I found ${P.places.map(placeName).join(", ")} in your question, but not which measure you want. Pick one below, or add it to the question, for example "${placeName(P.places[0])} life expectancy".`
+      : near.length ? "I could not match that to one measure in the data, but these are close. Pick one, or say it another way." : "That is outside the datasets I can read right now. I answer from open data on climate, energy, economy, development and natural hazards. Here are things I can answer straight away."));
+    const picks = el("div", "quick"); (near.length ? near.map(v => [v.c.title, v.c.title + (P.places.length ? " " + P.places.map(placeName).join(" ") : "")]) : ["World population", "Top 10 CO2 emitters", "Oil price", "Global temperature", "Earthquakes today"].map(t => [t, t]))
+      .forEach(([label, ask]) => { const b = el("button", "", label); b.type = "button"; b.onclick = () => respond(ask); picks.append(b); });
+    p.append(picks); const more = el("p", "hint"); more.append("Or ", Object.assign(el("a", "", "search the list of every variable"), { href: `datasets.html?q=${encodeURIComponent(P.words.join(" "))}` }), "."); p.append(more); box.append(p);
+  } catch (e) { console.error(e); turn.done(); box.append(note("Something went wrong while answering. Please ask again.")); }
+  finally { busy = false; $("#ask-go").disabled = false; if (matchMedia("(pointer:fine)").matches) $("#q").focus({ preventScroll: true }); }
+}
+async function aiBadge() { const on = await aiReady(), b = $("#ai-state"); b.textContent = on ? "AI answers are on. Figures come from the datasets, with their sources." : "Answers come straight from the datasets right now. The AI part is resting."; b.classList.toggle("on", on); }
 
 (async () => {
   const [man, countries, pulse] = await Promise.all([getJSON("data/datasets.json"), getJSON("data/countries.json").catch(() => ({ countries: {} })), getJSON("data/pulse.json").catch(() => ({}))]);
   M = man.datasets; M.checked = man.checked; C = countries.countries || {}; PULSE = pulse;
   M.forEach(d => d.columns.forEach(c => V.set(`${d.id}::${c.name}`, { id: `${d.id}::${c.name}`, d, c, q: norm(`${c.title} ${c.name.replace(/_/g, " ")} ${c.unit || ""}`) })));
-  buildPlaces();
+  buildPlaces(); PLACE = new Map(NAMES);
   const input = $("#q"), form = $("#askform");
-  const go = (text, push) => { input.value = text; const u = text.trim() ? `ask.html?q=${encodeURIComponent(text.trim()).replace(/%20/g, "+")}` : "ask.html"; if (push) history.pushState(null, "", u); document.title = text.trim() ? `${text.trim()} | Ask the data` : "Ask the data | Open Data Company"; ask(text); };
-  form.addEventListener("submit", e => { e.preventDefault(); go(input.value, true); });
-  ["India life expectancy", "Top 10 CO2 emitters", "China vs India vs United States solar power", "Which country is richest?", "World population", "Lowest child mortality", "Brazil forest area 1995", "Oil price", "Global temperature", "Earthquakes today"]
-    .forEach(t => { const b = el("button", "", t); b.type = "button"; b.onclick = () => go(t, true); $("#examples").append(b); });
-  addEventListener("popstate", () => go(new URLSearchParams(location.search).get("q") || "", false));
-  go(new URLSearchParams(location.search).get("q") || "", false);
-})().catch(e => { console.error(e); $("#answers").append(el("p", "note", "This page could not load its data. Reload to try again.")); });
+  form.addEventListener("submit", e => { e.preventDefault(); respond(input.value); });
+  ["India life expectancy", "Top 10 CO2 emitters", "China vs India vs United States solar power", "Why is the world getting warmer?", "Which country is richest?", "Brazil forest area 1995", "Oil price", "Earthquakes today"]
+    .forEach(t => { const b = el("button", "", t); b.type = "button"; b.onclick = () => respond(t); $("#examples").append(b); });
+  $("#fresh-chat").onclick = () => { $("#thread").replaceChildren(); AI.memory = []; last.v = null; last.places = []; last.ai = false; $("#askbar").classList.remove("docked"); $("#examples").hidden = false; $("#help").hidden = false; $("#fresh-chat").hidden = true; history.replaceState(null, "", "ask.html"); document.title = "Data AI | Open Data Company"; if ("speechSynthesis" in window) speechSynthesis.cancel(); input.focus(); };
+  voiceInput($("#mic"), input, $("#voice-note"), t => respond(t));
+  $("#thread").addEventListener("click", e => { const a = e.target.closest('a[href^="ask.html?q="]'); if (!a || e.metaKey || e.ctrlKey || e.shiftKey) return; e.preventDefault(); respond(new URL(a.href).searchParams.get("q") || ""); });
+  aiBadge();
+  const first = new URLSearchParams(location.search).get("q"); if (first) respond(first);
+})().catch(e => { console.error(e); $("#thread").append(el("p", "note", "This page could not load its data. Reload to try again.")); });
