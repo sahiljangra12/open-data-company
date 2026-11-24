@@ -1,5 +1,5 @@
 {
- "checked": "2026-11-24T06:30:50Z",
+ "checked": "2026-11-24T07:38:15Z",
  "cron": "23 5 * * *",
  "datasets": [
   {
@@ -654,6 +654,7 @@
     "BRA",
     "NGA"
    ],
+   "cadence": "Revised by Our World in Data a few times a year",
    "places": [
     [
      "AFG",
@@ -1691,8 +1692,7 @@
      "ZWE",
      "Zimbabwe"
     ]
-   ],
-   "cadence": "Revised by Our World in Data a few times a year"
+   ]
   },
   {
    "id": "energy",
@@ -2754,6 +2754,7 @@
     "BRA",
     "NGA"
    ],
+   "cadence": "Revised by Our World in Data a few times a year",
    "places": [
     [
      "OWID_ASEAN_EMBER",
@@ -4011,8 +4012,7 @@
      "ZWE",
      "Zimbabwe"
     ]
-   ],
-   "cadence": "Revised by Our World in Data a few times a year"
+   ]
   },
   {
    "id": "world-bank-development",
@@ -4515,6 +4515,7 @@
     "BRA",
     "NGA"
    ],
+   "cadence": "Revised by the World Bank a few times a year",
    "places": [
     [
      "AFG",
@@ -5560,8 +5561,7 @@
      "ZWE",
      "Zimbabwe"
     ]
-   ],
-   "cadence": "Revised by the World Bank a few times a year"
+   ]
   },
   {
    "id": "global-temperature",
@@ -5684,11 +5684,11 @@
    "time": {
     "col": "time",
     "type": "date",
-    "min": "2026-10-25T06:31:37Z",
-    "max": "2026-11-24T05:45:58Z"
+    "min": "2026-10-25T07:40:00Z",
+    "max": "2026-11-24T06:24:08Z"
    },
    "entity": null,
-   "rows": 1818,
+   "rows": 1813,
    "columns": [
     {
      "name": "magnitude",
@@ -5696,7 +5696,7 @@
      "unit": "",
      "description": "",
      "type": "num",
-     "filled": 1818
+     "filled": 1813
     },
     {
      "name": "place",
@@ -5704,7 +5704,7 @@
      "unit": "",
      "description": "",
      "type": "str",
-     "filled": 1818
+     "filled": 1813
     },
     {
      "name": "latitude",
@@ -5712,7 +5712,7 @@
      "unit": "degrees",
      "description": "",
      "type": "num",
-     "filled": 1818
+     "filled": 1813
     },
     {
      "name": "longitude",
@@ -5720,7 +5720,7 @@
      "unit": "degrees",
      "description": "",
      "type": "num",
-     "filled": 1818
+     "filled": 1813
     },
     {
      "name": "depth_km",
@@ -5728,7 +5728,7 @@
      "unit": "km",
      "description": "",
      "type": "num",
-     "filled": 1818
+     "filled": 1813
     },
     {
      "name": "magnitude_type",
@@ -5736,7 +5736,7 @@
      "unit": "",
      "description": "",
      "type": "str",
-     "filled": 1818
+     "filled": 1813
     },
     {
      "name": "event_type",
@@ -5744,7 +5744,7 @@
      "unit": "",
      "description": "",
      "type": "str",
-     "filled": 1818
+     "filled": 1813
     },
     {
      "name": "significance",
@@ -5752,7 +5752,7 @@
      "unit": "0-1000",
      "description": "USGS score combining magnitude, felt reports and estimated impact.",
      "type": "num",
-     "filled": 1818
+     "filled": 1813
     },
     {
      "name": "tsunami_flag",
@@ -5760,7 +5760,7 @@
      "unit": "",
      "description": "1 if the event was in an oceanic region and may warrant tsunami information; not a warning.",
      "type": "num",
-     "filled": 1818
+     "filled": 1813
     },
     {
      "name": "felt_reports",
@@ -5776,10 +5776,10 @@
      "unit": "",
      "description": "",
      "type": "str",
-     "filled": 1818
+     "filled": 1813
     }
    ],
-   "bytes": 317920,
+   "bytes": 317050,
    "built": "2026-11-24",
    "coverage": "Rolling 30 days",
    "default_vars": [
@@ -5942,6 +5942,7 @@
     "AEP",
     "COMED"
    ],
+   "cadence": "Once a year, in January",
    "places": [
     [
      "AE",
@@ -6051,8 +6052,7 @@
      "UGI",
      "UGI"
     ]
-   ],
-   "cadence": "Once a year, in January"
+   ]
   }
  ]
 }
