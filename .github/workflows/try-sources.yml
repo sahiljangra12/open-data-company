@@ -39,6 +39,7 @@ jobs:
           DATA_GOV_API_KEY: ${{ secrets.DATA_GOV_API_KEY }}
           CENSUS_API_KEY: ${{ secrets.CENSUS_API_KEY }}
           NASS_API_KEY: ${{ secrets.NASS_API_KEY }}
+          COMTRADE_API_KEY: ${{ secrets.COMTRADE_API_KEY }}
           ONLY: ${{ inputs.only }}
           PROBE: ${{ inputs.probe }}
         run: |
@@ -51,6 +52,7 @@ jobs:
           DATA_GOV_API_KEY: ${{ secrets.DATA_GOV_API_KEY }}
           CENSUS_API_KEY: ${{ secrets.CENSUS_API_KEY }}
           NASS_API_KEY: ${{ secrets.NASS_API_KEY }}
+          COMTRADE_API_KEY: ${{ secrets.COMTRADE_API_KEY }}
         run: |
           python scripts/build_datasets.py
           python scripts/build_catalog.py

@@ -194,6 +194,7 @@ STATUS = {
     "USGS Water Data": ("live", ["us-river-flow-monthly"], "Monthly flow of eight major rivers."),
     "Maryland Open Data": ("live", ["maryland-crime"], "Statewide crime, 1975 to 2020. Other tables are added one at a time."),
     "CDC PLACES": ("live", ["us-states-health"], "State figures built up from its county estimates."),
+    "UN Comtrade": ("live", ["world-trade-in-goods"], "Total exports and imports of goods for every reporting country, from its public service."),
     "Climate TRACE": ("live", ["climate-trace-emissions"], "Country totals."),
     "HMDA mortgage records": ("live", ["us-mortgage-lending"], "Yearly national totals. The loan-by-loan files are too large to host."),
 
@@ -232,7 +233,7 @@ STATUS = {
 }
 KEY = """data.gov|SAM.gov contract opportunities|Census American Community Survey|Census County Business Patterns|HUD User datasets|USPTO patents and trademarks|NREL data (NSRDB, ATB)|
 EPA Air Quality System|NASA Earthdata|USDA NASS Quick Stats|USDA FoodData Central|FMCSA carrier safety data|College Scorecard|O*NET|Congress.gov|Regulations.gov|FEC campaign finance|
-FBI Crime Data Explorer|CourtListener|India data.gov.in|UN Comtrade|WTO Stats|DHS Program surveys|ENTSO-E Transparency Platform|Copernicus ERA5 reanalysis|eBird|ACLED|
+FBI Crime Data Explorer|CourtListener|India data.gov.in|WTO Stats|DHS Program surveys|ENTSO-E Transparency Platform|Copernicus ERA5 reanalysis|eBird|ACLED|
 Global Energy Monitor trackers|Google Earth Engine catalog"""
 IMAGES = "Landsat (USGS)|Sentinel (Copernicus)|MODIS and VIIRS (NASA)|VIIRS night lights (EOG)|WorldPop|JRC Global Surface Water|USDA Cropland Data Layer"
 BULK = """SBA loan data|Hospital price transparency files|BTS airline on-time data|DOL H-1B and PERM disclosures|NOAA Storm Events|OpenStreetMap|GDELT|GH Archive|
