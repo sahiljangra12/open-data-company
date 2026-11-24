@@ -1,11 +1,4 @@
 id,time,magnitude,place,latitude,longitude,depth_km,magnitude_type,event_type,significance,tsunami_flag,felt_reports,url
-us7000tvzl,2026-10-25T07:40:00Z,4.6,"55 km WSW of Langsa, Indonesia",4.2586,97.5175,10,mb,earthquake,326,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us7000tvzl
-us6000u4t8,2026-10-25T07:44:33Z,4.2,"71 km SE of Akutan, Alaska",53.6335,-165.0954,38.281,mwr,earthquake,271,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us6000u4t8
-us6000u4t9,2026-10-25T07:45:48Z,4.3,"79 km SSE of Akutan, Alaska",53.5348,-165.1058,35,mb,earthquake,284,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us6000u4t9
-aka2026vdeazf,2026-10-25T07:46:12Z,2.9,"35 km WNW of Kalifornsky, Alaska",60.482,-151.915,80.5,ml,earthquake,129,0,1,https://earthquake.usgs.gov/earthquakes/eventpage/aka2026vdeazf
-us7000tvzn,2026-10-25T07:52:42Z,4.5,South Sandwich Islands region,-57.9319,-25.9035,10,mb,earthquake,312,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us7000tvzn
-us7000tvzq,2026-10-25T08:15:13Z,4.4,"160 km NW of Port-Olry, Vanuatu",-14.154,165.8893,10,mb,earthquake,298,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us7000tvzq
-us6000u4tc,2026-10-25T08:40:59Z,5.4,"203 km NW of Port-Olry, Vanuatu",-13.9038,165.5871,10,mww,earthquake,449,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us6000u4tc
 us7000tvzr,2026-10-25T08:43:43Z,4.9,"225 km W of Sola, Vanuatu",-13.7303,165.4694,10,mb,earthquake,369,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us7000tvzr
 us6000u4tf,2026-10-25T09:11:18Z,4.5,"Volcano Islands, Japan region",22.6557,142.9508,136.953,mb,earthquake,312,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us6000u4tf
 us6000u4tj,2026-10-25T09:38:10Z,2.5,"14 km NNW of Powell, Wyoming",44.8716,-108.829,11.51,ml,earthquake,96,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us6000u4tj
@@ -632,7 +625,7 @@ ci41571032,2026-11-02T07:50:10Z,3.16,"9 km NNE of Delta, B.C., MX",32.4323,-115.
 us7000tuuy,2026-11-02T08:13:14Z,5.1,"19 km WNW of Tomohon, Indonesia",1.392,124.6476,196.646,mb,earthquake,400,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us7000tuuy
 us7000tuv5,2026-11-02T08:42:45Z,4.9,"105 km SW of Basco, Philippines",19.702,121.34,35,mb,earthquake,369,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us7000tuv5
 aka2026vsaibi,2026-11-02T08:49:03Z,2.8,"92 km SSE of Akutan, Alaska",53.399,-165.124,20.5,ml,earthquake,121,0,,https://earthquake.usgs.gov/earthquakes/eventpage/aka2026vsaibi
-us7000tuv8,2026-11-02T08:59:22Z,4.7,"100 km SSE of Palekastro, Greece",34.3232,26.528,40.168,mb,earthquake,340,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us7000tuv8
+us7000tuv8,2026-11-02T08:59:22Z,4.9,"107 km SSE of Palekastro, Greece",34.2603,26.5404,36.96,mb,earthquake,369,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us7000tuv8
 nc75461312,2026-11-02T09:23:36Z,2.48,"2 km N of Pleasant Hill, CA",37.9667,-122.0627,12.61,md,earthquake,107,0,39,https://earthquake.usgs.gov/earthquakes/eventpage/nc75461312
 aka2026vsceom,2026-11-02T09:44:57Z,3.2,"170 km NE of Dawson City, Canada",65.146,-136.926,0,ml,earthquake,158,0,,https://earthquake.usgs.gov/earthquakes/eventpage/aka2026vsceom
 us7000tuw2,2026-11-02T10:11:26Z,4.3,"7 km ENE of Aíyira, Greece",38.1819,22.4254,10,mb,earthquake,284,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us7000tuw2
@@ -707,7 +700,7 @@ us7000tv4c,2026-11-03T07:43:53Z,4.5,"56 km NW of Finschhafen, Papua New Guinea",
 aka2026vtvtat,2026-11-03T08:31:06Z,2.5,"9 km N of Susitna, Alaska",61.628,-150.513,51.5,ml,earthquake,96,0,,https://earthquake.usgs.gov/earthquakes/eventpage/aka2026vtvtat
 us7000tv4i,2026-11-03T09:13:14Z,5.4,"24 km NNW of Rioblanco, Colombia",3.7386,-75.7198,10,mww,earthquake,513,0,134,https://earthquake.usgs.gov/earthquakes/eventpage/us7000tv4i
 aka2026vtzcyv,2026-11-03T10:12:27Z,2.5,"80 km ENE of Port Alsworth, Alaska",60.413,-152.926,124.8,ml,earthquake,96,0,,https://earthquake.usgs.gov/earthquakes/eventpage/aka2026vtzcyv
-us7000tv51,2026-11-03T11:03:47Z,4.9,"101 km SSE of Palekastro, Greece",34.3254,26.5713,45.662,mb,earthquake,369,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us7000tv51
+us7000tv51,2026-11-03T11:03:47Z,4.9,"98 km SSE of Palekastro, Greece",34.3443,26.563,43.832,mb,earthquake,369,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us7000tv51
 aka2026vuaxrh,2026-11-03T11:06:20Z,2.8,"87 km SE of Akutan, Alaska",53.484,-165.024,15.3,ml,earthquake,121,0,,https://earthquake.usgs.gov/earthquakes/eventpage/aka2026vuaxrh
 aka2026vudflk,2026-11-03T12:15:23Z,2.5,"29 km NNW of Beluga, Alaska",61.395,-151.208,70.5,ml,earthquake,96,0,1,https://earthquake.usgs.gov/earthquakes/eventpage/aka2026vudflk
 aka2026vudyyh,2026-11-03T12:37:46Z,2.6,"54 km WNW of Nanwalek, Alaska",59.539,-152.813,98.3,ml,earthquake,104,0,,https://earthquake.usgs.gov/earthquakes/eventpage/aka2026vudyyh
@@ -773,8 +766,8 @@ pr71538438,2026-11-04T06:11:30Z,2.81,"8 km SSE of Maria Antonia, Puerto Rico",17
 aka2026vvnqhu,2026-11-04T06:30:30Z,2.5,"102 km ENE of Chignik, Alaska",56.506,-156.794,21.5,ml,earthquake,96,0,,https://earthquake.usgs.gov/earthquakes/eventpage/aka2026vvnqhu
 aka2026vvoqoh,2026-11-04T06:57:35Z,3,"53 km ENE of Pedro Bay, Alaska",59.894,-153.179,132,ml,earthquake,138,0,,https://earthquake.usgs.gov/earthquakes/eventpage/aka2026vvoqoh
 aka2026vvpjkz,2026-11-04T07:19:22Z,2.6,"82 km S of Perryville, Alaska",55.175,-159.227,16.6,ml,earthquake,104,0,,https://earthquake.usgs.gov/earthquakes/eventpage/aka2026vvpjkz
-us7000tvwj,2026-11-04T07:40:12Z,5,"207 km ESE of Sarangani, Philippines",4.3895,127.0325,49.074,mb,earthquake,385,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us7000tvwj
-aka2026vvqqoe,2026-11-04T07:57:42Z,3.2,"98 km SSW of Nikolski, Alaska",52.102,-169.314,10.1,ml,earthquake,158,0,,https://earthquake.usgs.gov/earthquakes/eventpage/aka2026vvqqoe
+us7000tvwj,2026-11-04T07:40:13Z,4.9,"226 km ESE of Sarangani, Philippines",4.5954,127.3448,65.248,mb,earthquake,369,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us7000tvwj
+us7000tx05,2026-11-04T07:57:42Z,2.8,"94 km SSW of Nikolski, Alaska",52.1393,-169.3284,10,ml,earthquake,121,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us7000tx05
 aka2026vvrwqb,2026-11-04T08:34:34Z,3.2,"74 km E of Cantwell, Alaska",63.503,-147.48,5,ml,earthquake,158,0,1,https://earthquake.usgs.gov/earthquakes/eventpage/aka2026vvrwqb
 tx2026vsikdc,2026-11-04T10:17:33Z,2.5,"24 km W of Garden City, Texas",31.88,-101.738,7.1045,ml,earthquake,96,0,,https://earthquake.usgs.gov/earthquakes/eventpage/tx2026vsikdc
 us7000ty5e,2026-11-04T10:46:21Z,2.6,"65 km SE of Adak, Alaska",51.4425,-175.9888,35,ml,earthquake,104,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us7000ty5e
@@ -1641,7 +1634,7 @@ us6000uc8p,2026-11-20T10:52:55Z,4.4,Fiji region,-19.4364,-178.0132,622.356,mb,ea
 aka2026wzlaba,2026-11-20T10:57:55Z,2.9,"70 km SSE of Kokhanok, Alaska",58.846,-154.35,128.7,ml,earthquake,129,0,,https://earthquake.usgs.gov/earthquakes/eventpage/aka2026wzlaba
 us6000ucfc,2026-11-20T11:01:12Z,3.8,"76 km E of Adak, Alaska",51.7517,-175.5411,66.248,mb,earthquake,222,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us6000ucfc
 hv75073642,2026-11-20T11:12:31Z,2.77,"16 km SSW of Volcano, Hawaii",19.3073,-155.2975,30.18,ml,earthquake,118,0,1,https://earthquake.usgs.gov/earthquakes/eventpage/hv75073642
-ci41364111,2026-11-20T11:25:35Z,3.94,"1 km NW of Commerce, CA",34.0063,-118.1665,15.45,mw,earthquake,639,1,14807,https://earthquake.usgs.gov/earthquakes/eventpage/ci41364111
+ci41364111,2026-11-20T11:25:35Z,3.94,"1 km NW of Commerce, CA",34.0063,-118.1665,15.45,mw,earthquake,639,1,14809,https://earthquake.usgs.gov/earthquakes/eventpage/ci41364111
 us6000uc96,2026-11-20T13:09:04Z,5.1,"15 km SSW of Balangonan, Philippines",5.4441,125.2986,73.392,mb,earthquake,402,0,6,https://earthquake.usgs.gov/earthquakes/eventpage/us6000uc96
 tx2026wvzici,2026-11-20T13:57:37Z,2.9,"18 km ENE of Tilden, Texas",28.539,-98.387,6.7691,ml,earthquake,129,0,,https://earthquake.usgs.gov/earthquakes/eventpage/tx2026wvzici
 aka2026wzreib,2026-11-20T14:02:14Z,3,"202 km S of Akhiok, Alaska",55.131,-154.01,5,ml,earthquake,138,0,,https://earthquake.usgs.gov/earthquakes/eventpage/aka2026wzreib
@@ -1754,7 +1747,7 @@ us6000ucw1,2026-11-23T03:07:52Z,4.9,Vanuatu region,-13.5634,172.2236,595.973,mb,
 aka2026xekfce,2026-11-23T03:32:00Z,2.7,"48 km NE of Chase, Alaska",62.796,-149.517,69.3,ml,earthquake,112,0,,https://earthquake.usgs.gov/earthquakes/eventpage/aka2026xekfce
 us6000ucwd,2026-11-23T04:18:19Z,5,"159 km ESE of Kokopo, Papua New Guinea",-4.7591,153.6467,98.944,mb,earthquake,385,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us6000ucwd
 us6000ucwk,2026-11-23T05:15:43Z,4.3,"218 km ENE of Lospalos, Timor Leste",-7.4528,128.6698,116.42,mb,earthquake,284,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us6000ucwk
-ci41365223,2026-11-23T05:17:41Z,3.2,"6 km W of Hermosa Beach, CA",33.8528,-118.4602,13.12,ml,earthquake,498,0,2584,https://earthquake.usgs.gov/earthquakes/eventpage/ci41365223
+ci41365223,2026-11-23T05:17:41Z,3.2,"6 km W of Hermosa Beach, CA",33.8528,-118.4602,13.12,ml,earthquake,498,0,2585,https://earthquake.usgs.gov/earthquakes/eventpage/ci41365223
 us6000ucwm,2026-11-23T05:22:28Z,4.6,"158 km SE of Severo-Kuril’sk, Russia",49.834,157.92,18.644,mb,earthquake,326,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us6000ucwm
 us6000ucws,2026-11-23T06:28:32Z,4.7,"109 km E of Bitung, Indonesia",1.3824,126.1133,69.131,mb,earthquake,340,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us6000ucws
 aka2026xeqfmq,2026-11-23T06:32:26Z,2.7,"96 km WSW of Karluk, Alaska",57.147,-155.851,54.9,ml,earthquake,112,0,,https://earthquake.usgs.gov/earthquakes/eventpage/aka2026xeqfmq
@@ -1812,3 +1805,4 @@ aka2026xgiywm,2026-11-24T04:54:14Z,2.7,"51 km SSE of Port Graham, Alaska",58.952
 aka2026xgjcfp,2026-11-24T04:57:59Z,2.5,"51 km NW of Beluga, Alaska",61.475,-151.759,0.3,ml,earthquake,96,0,,https://earthquake.usgs.gov/earthquakes/eventpage/aka2026xgjcfp
 pr71539868,2026-11-24T05:45:58Z,2.57,"5 km S of Guánica, Puerto Rico",17.921,-66.9098,9.01,md,earthquake,102,0,,https://earthquake.usgs.gov/earthquakes/eventpage/pr71539868
 tx2026xctesx,2026-11-24T06:24:08Z,2.7,"17 km S of Nixon, Texas",29.111,-97.775,5.0499,ml,earthquake,112,0,,https://earthquake.usgs.gov/earthquakes/eventpage/tx2026xctesx
+aka2026xgpqpn,2026-11-24T08:14:29Z,2.6,"7 km ESE of Portage Creek, Alaska",58.871,-157.603,0.3,ml,earthquake,104,0,,https://earthquake.usgs.gov/earthquakes/eventpage/aka2026xgpqpn

@@ -1,5 +1,5 @@
 {
- "checked": "2026-11-24T07:38:15Z",
+ "checked": "2026-11-24T08:42:03Z",
  "cron": "23 5 * * *",
  "datasets": [
   {
@@ -5684,11 +5684,11 @@
    "time": {
     "col": "time",
     "type": "date",
-    "min": "2026-10-25T07:40:00Z",
-    "max": "2026-11-24T06:24:08Z"
+    "min": "2026-10-25T08:43:43Z",
+    "max": "2026-11-24T08:14:29Z"
    },
    "entity": null,
-   "rows": 1813,
+   "rows": 1807,
    "columns": [
     {
      "name": "magnitude",
@@ -5696,7 +5696,7 @@
      "unit": "",
      "description": "",
      "type": "num",
-     "filled": 1813
+     "filled": 1807
     },
     {
      "name": "place",
@@ -5704,7 +5704,7 @@
      "unit": "",
      "description": "",
      "type": "str",
-     "filled": 1813
+     "filled": 1807
     },
     {
      "name": "latitude",
@@ -5712,7 +5712,7 @@
      "unit": "degrees",
      "description": "",
      "type": "num",
-     "filled": 1813
+     "filled": 1807
     },
     {
      "name": "longitude",
@@ -5720,7 +5720,7 @@
      "unit": "degrees",
      "description": "",
      "type": "num",
-     "filled": 1813
+     "filled": 1807
     },
     {
      "name": "depth_km",
@@ -5728,7 +5728,7 @@
      "unit": "km",
      "description": "",
      "type": "num",
-     "filled": 1813
+     "filled": 1807
     },
     {
      "name": "magnitude_type",
@@ -5736,7 +5736,7 @@
      "unit": "",
      "description": "",
      "type": "str",
-     "filled": 1813
+     "filled": 1807
     },
     {
      "name": "event_type",
@@ -5744,7 +5744,7 @@
      "unit": "",
      "description": "",
      "type": "str",
-     "filled": 1813
+     "filled": 1807
     },
     {
      "name": "significance",
@@ -5752,7 +5752,7 @@
      "unit": "0-1000",
      "description": "USGS score combining magnitude, felt reports and estimated impact.",
      "type": "num",
-     "filled": 1813
+     "filled": 1807
     },
     {
      "name": "tsunami_flag",
@@ -5760,7 +5760,7 @@
      "unit": "",
      "description": "1 if the event was in an oceanic region and may warrant tsunami information; not a warning.",
      "type": "num",
-     "filled": 1813
+     "filled": 1807
     },
     {
      "name": "felt_reports",
@@ -5768,7 +5768,7 @@
      "unit": "reports",
      "description": "",
      "type": "num",
-     "filled": 305
+     "filled": 304
     },
     {
      "name": "url",
@@ -5776,10 +5776,10 @@
      "unit": "",
      "description": "",
      "type": "str",
-     "filled": 1813
+     "filled": 1807
     }
    ],
-   "bytes": 317050,
+   "bytes": 316011,
    "built": "2026-11-24",
    "coverage": "Rolling 30 days",
    "default_vars": [
