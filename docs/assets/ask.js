@@ -304,9 +304,10 @@ const TOOLS = {
   async recent_earthquakes(_, used) {
     const d = M.find(x => x.id === "earthquakes-past-30-days"); if (!d) return { error: "No earthquake data." };
     const T = await load(d), rows = []; for (let i = 0; i < T.n; i++) rows.push({ t: T.c.time[i], m: T.c.magnitude[i], place: T.c.place[i] });
-    const end = rows.reduce((a, r) => (r.t > a ? r.t : a), ""), cut = new Date(Date.parse(end) - 864e5).toISOString().slice(0, 19) + "Z", day = rows.filter(r => r.t >= cut), top = a => [...a].sort((x, y) => y.m - x.m).slice(0, 5).map(r => ({ magnitude: r.m, place: r.place, time: r.t }));
+    const end = rows.reduce((a, r) => (r.t > a ? r.t : a), ""), cut = new Date(Date.parse(end) - 864e5).toISOString().slice(0, 19) + "Z", day = rows.filter(r => r.t >= cut), utc = t => new Date(t).toLocaleString("en-GB", { timeZone: "UTC", day: "numeric", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit" }) + " UTC",      // spelled out, so a date cannot be misread
+      top = a => [...a].sort((x, y) => y.m - x.m).slice(0, 5).map(r => ({ magnitude: r.m, place: r.place, when: utc(r.t), hours_before_data_end: Math.round((Date.parse(end) - Date.parse(r.t)) / 36e5) }));
     used.push({ kind: "quakes" });
-    return { source: d.source, note: "Magnitude 2.5 and above, worldwide", data_as_of: end, past_24_hours: { count: day.length, strongest: top(day) }, past_30_days: { count: rows.length, strongest: top(rows) } };
+    return { source: d.source, note: "Magnitude 2.5 and above, worldwide", data_as_of: utc(end), past_24_hours: { count: day.length, strongest: top(day) }, past_30_days: { count: rows.length, strongest: top(rows) } };
   },
 };
 

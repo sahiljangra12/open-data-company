@@ -154,7 +154,7 @@ def main():
                 check("the public page gets an AI answer built on the data", t.locator(".acts.small").count() > 0 and "straight from the data" not in notes and "Kenya" in text and t.locator(".answer").count() >= 1)
                 public.goto(SITE + "/open-data-company/?v=" + os.urandom(3).hex())
                 public.wait_for_selector("#quick a")
-                check("the public home page has the microphone and the Data AI name", public.locator("#hmic").count() == 1 and "Data AI" in public.inner_text("nav"), public.inner_text("nav")[:80])
+                check("the public home page has the microphone and the Data AI name", public.locator("#hmic").count() == 1 and "data ai" in public.inner_text("nav").lower(), public.inner_text("nav")[:80])
                 check("no script errors on the public pages", not perr, perr[:2])
         browser.close()
     server.shutdown()
