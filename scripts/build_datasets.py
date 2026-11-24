@@ -57,7 +57,7 @@ CADENCE = {  # how often each source itself changes; the site checks all of them
     "us-nih-research-projects": "Every week",
     "europe-eurostat": "Revised by Eurostat through the year", "world-leading-indicators-and-exchange-rates": "A new month about once a month", "uk-economy-monthly": "A new month every month",
     "climate-trace-emissions": "A few times a year", "us-river-flow-monthly": "A new month every month", "us-drug-overdose-deaths": "A new month every month, about four months behind",
-    "maryland-crime": "Rarely; the state's file ends in 2020", "us-mortgage-lending": "Once a year", "us-grid-demand-daily": "Every day", "us-congress-and-rulemaking": "Every day", "us-states-census": "Once a year, in September",
+    "maryland-crime": "Rarely; the state's file ends in 2020", "us-mortgage-lending": "Once a year", "us-grid-demand-daily": "Every day", "us-congress-and-rulemaking": "Every day", "us-states-census": "Once a year, in September", "fao-food-price-index": "A new month at the start of each month", "us-states-health": "Once a year",
     "us-crop-production": "A few times a year", "us-election-candidates": "Every day", "us-crime-monthly": "A new month every month", "us-colleges": "Once or twice a year",
     "us-ev-charging-stations": "Every day", "food-nutrients": "Twice a year", "us-data-gov-catalog": "Every day",
     "chicago-crime-monthly": "Every day, about a week behind", "nyc-traffic-crashes-monthly": "Every day", "us-federal-spending-by-agency": "Once a month",
@@ -77,9 +77,9 @@ ORDER = ["co2-and-greenhouse-gases", "energy", "world-bank-development", "global
          "trade-and-finance", "food-and-agriculture", "food-supply", "penn-world-table", "technology-and-transport", "environment-indicators", "emissions-by-sector",
          "climate-trace-emissions", "forests-wildlife-and-plastic", "natural-disasters", "conflict-and-security", "renewable-capacity", "space-and-ai", "research-papers-by-year", "research-papers-by-country",
          "wikipedia-pageviews", "github-activity-by-country", "biodiversity-records-by-year", "biodiversity-records-by-country", "clinical-trials-started",
-         "world-leading-indicators-and-exchange-rates", "uk-economy-monthly", "imf-projections", "un-population-projections",
+         "fao-food-price-index", "world-leading-indicators-and-exchange-rates", "uk-economy-monthly", "imf-projections", "un-population-projections",
          "crude-oil-prices", "natural-gas-prices", "us-economy-monthly", "us-economy-quarterly", "us-rates-and-currencies-daily", "us-national-debt", "us-mortgage-lending", "us-grid-demand-daily", "us-states-census", "us-crop-production", "us-ev-charging-stations", "us-colleges", "food-nutrients",
-         "us-climate-monthly", "us-flu-hospital-admissions", "us-drug-overdose-deaths", "us-nih-research-projects", "us-river-flow-monthly", "us-fda-reports", "us-disaster-declarations", "us-disaster-declarations-list", "us-federal-register", "us-congress-and-rulemaking", "us-election-candidates", "us-crime-monthly", "us-data-gov-catalog",
+         "us-climate-monthly", "us-flu-hospital-admissions", "us-drug-overdose-deaths", "us-states-health", "us-nih-research-projects", "us-river-flow-monthly", "us-fda-reports", "us-disaster-declarations", "us-disaster-declarations-list", "us-federal-register", "us-congress-and-rulemaking", "us-election-candidates", "us-crime-monthly", "us-data-gov-catalog",
          "us-federal-spending-by-agency", "us-bank-failures", "us-bank-failures-list", "chicago-crime-monthly", "nyc-traffic-crashes-monthly", "maryland-crime", "pjm-summer-peak-forecasts"]
 
 
