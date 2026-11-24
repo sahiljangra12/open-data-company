@@ -1596,7 +1596,12 @@ def census_states():
     have = {y for _, y in cell}
 
     def grab(url):
-        rows = J(url, tries=2)
+        raw = fetch(url, tries=2)
+        try:
+            rows = json.loads(raw)
+        except ValueError:
+            said = " ".join(re.sub(r"<[^>]+>", " ", raw[:1500].decode("utf-8", "replace")).split()).replace(k, "[key]")
+            raise ValueError("the Census service answered: " + said[:160])
         return [dict(zip(rows[0], r)) for r in rows[1:]]
 
     def val(x):
@@ -1795,12 +1800,15 @@ def us_crime():
                     n += 1
             if n < 24:
                 raise ValueError(f"{n} months")
-            meta[col] = dict(title=title, unit="offences", description="FBI Crime Data Explorer, from the police agencies that report. Not every agency reports every month, so recent months rise as reports arrive.")
+            meta[col] = dict(title=title, unit="offences", description="FBI Crime Data Explorer, from the police agencies that report. The three newest months are left out, because agencies are still sending their reports for them.")
             cols.append(col)
         except Exception as e:
             print(f"  us_crime {slug_}: {str(e)[:200]}")
         time.sleep(0.5)
     assert cols, "us_crime: nothing loaded"
+    print("  us_crime newest months:", [(d, v.get("violent_crimes")) for d, v in sorted(cell.items())[-8:]])
+    for d in sorted(cell)[-3:]:
+        del cell[d]
     return series("us-crime-monthly", "US crime reported to police, monthly", "Violent crime, property crime, homicides and vehicle thefts reported by US police agencies each month.",
                   "US", "Government and finance", "US Federal Bureau of Investigation, Crime Data Explorer", "https://cde.ucr.cjis.gov", PD, cell, meta, cols, "month")
 
@@ -1832,7 +1840,14 @@ def us_colleges():
 
 def us_ev_charging():
     k = key("DATA_GOV_API_KEY")
-    raw = text(f"https://developer.nrel.gov/api/alt-fuel-stations/v1.csv?api_key={k}&fuel_type=ELEC&status=E&access=public", tries=2, timeout=400)
+    raw, why = None, ""
+    for host in ("developer.nlr.gov", "developer.nrel.gov"):        # the laboratory was renamed in 2025 and its address moved with it
+        try:
+            raw = text(f"https://{host}/api/alt-fuel-stations/v1.csv?api_key={k}&fuel_type=ELEC&status=E&access=public", tries=2, timeout=400)
+            break
+        except Exception as e:
+            why += f" {host}: {str(e)[:70]};"
+    assert raw, "us_ev_charging:" + why.replace(k, "[key]")
     rows = list(csv.DictReader(io.StringIO(raw)))
     assert len(rows) > 5000, f"us_ev_charging: {len(rows)} stations: {raw[:150]}"
     norm = {h: re.sub(r"[^a-z0-9]+", "_", h.lower()).strip("_") for h in rows[0]}
@@ -1890,7 +1905,14 @@ def foods():
 
 def datagov():
     k = key("DATA_GOV_API_KEY")
-    j = J("https://api.gsa.gov/technology/datagov/v3/action/package_search?rows=0&facet.limit=80&facet.field=" + urllib.parse.quote('["organization"]'), headers={"x-api-key": k}, tries=2)
+    q, j, why = "action/package_search?rows=0&facet.limit=80&facet.field=" + urllib.parse.quote('["organization"]'), None, ""
+    for base in ("https://api.gsa.gov/technology/datagov/v3/", "https://catalog.data.gov/api/3/"):
+        try:
+            j = J(base + q, headers={"x-api-key": k}, tries=2)
+            break
+        except Exception as e:
+            why += f" {base[8:30]}: {str(e)[:60]};"
+    assert j, "datagov:" + why
     res = j["result"]
     items = (res.get("search_facets") or {}).get("organization", {}).get("items") or []
     assert res.get("count") and len(items) >= 10, "datagov: " + json.dumps(j)[:200]
