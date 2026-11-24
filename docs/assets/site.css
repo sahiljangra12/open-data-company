@@ -795,3 +795,7 @@ details.evidence[open] summary{margin-bottom:12px}
 }
 @media(max-height:560px){.composer-note{display:none}}
 @media(prefers-reduced-motion:reduce){.mic.live::after,.thinking .dots i{animation:none}.mic.live::after{opacity:.6}.msgs{scroll-behavior:auto}}
+
+/* ---------- home: the dataset list opens short ---------- */
+.morerows{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:22px 0;border-top:1px solid var(--line);margin:0}
+.morerows span{color:var(--ink2);font-size:14.5px}

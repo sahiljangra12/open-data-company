@@ -54,12 +54,13 @@ CADENCE = {  # how often each source itself changes; the site checks all of them
     "us-federal-register": "Every business day", "us-fda-reports": "Every week or so", "clinical-trials-started": "Every day",
     "us-disaster-declarations": "Whenever a disaster is declared", "us-disaster-declarations-list": "Whenever a disaster is declared",
     "us-bank-failures": "Whenever a bank fails", "us-bank-failures-list": "Whenever a bank fails", "us-flu-hospital-admissions": "A new week every week",
+    "us-states-census": "Once a year, in September", "us-nih-research-projects": "Every week",
     "chicago-crime-monthly": "Every day, about a week behind", "nyc-traffic-crashes-monthly": "Every day", "us-federal-spending-by-agency": "Once a month",
 }
 WORLD_BANK_SETS = ["governance-indicators", "health-indicators", "education-indicators", "gender-indicators", "poverty-and-inequality", "environment-indicators",
                    "trade-and-finance", "technology-and-transport", "labour-indicators", "food-and-agriculture"]
 OWID_SETS = ["democracy-and-rights", "conflict-and-security", "emissions-by-sector", "wellbeing-and-schooling", "forests-wildlife-and-plastic", "natural-disasters",
-             "food-supply", "top-incomes", "space-and-ai"]
+             "food-supply", "top-incomes", "space-and-ai", "renewable-capacity"]
 CADENCE.update({i: "Revised by the World Bank a few times a year" for i in WORLD_BANK_SETS})
 CADENCE.update({i: "Revised by Our World in Data about once a year" for i in OWID_SETS})
 
@@ -69,11 +70,11 @@ ORDER = ["co2-and-greenhouse-gases", "energy", "world-bank-development", "global
          "imf-world-economic-outlook", "un-population", "health-indicators", "who-health-observatory", "human-development-index", "democracy-and-rights",
          "governance-indicators", "education-indicators", "poverty-and-inequality", "gender-indicators", "labour-indicators", "wellbeing-and-schooling", "top-incomes",
          "trade-and-finance", "food-and-agriculture", "food-supply", "penn-world-table", "technology-and-transport", "environment-indicators", "emissions-by-sector",
-         "forests-wildlife-and-plastic", "natural-disasters", "conflict-and-security", "space-and-ai", "research-papers-by-year", "research-papers-by-country",
+         "forests-wildlife-and-plastic", "natural-disasters", "conflict-and-security", "renewable-capacity", "space-and-ai", "research-papers-by-year", "research-papers-by-country",
          "wikipedia-pageviews", "github-activity-by-country", "biodiversity-records-by-year", "biodiversity-records-by-country", "clinical-trials-started",
          "imf-projections", "un-population-projections",
          "crude-oil-prices", "natural-gas-prices", "us-economy-monthly", "us-economy-quarterly", "us-rates-and-currencies-daily", "us-national-debt",
-         "us-climate-monthly", "us-flu-hospital-admissions", "us-fda-reports", "us-disaster-declarations", "us-disaster-declarations-list", "us-federal-register",
+         "us-states-census", "us-climate-monthly", "us-flu-hospital-admissions", "us-nih-research-projects", "us-fda-reports", "us-disaster-declarations", "us-disaster-declarations-list", "us-federal-register",
          "us-federal-spending-by-agency", "us-bank-failures", "us-bank-failures-list", "chicago-crime-monthly", "nyc-traffic-crashes-monthly", "pjm-summer-peak-forecasts"]
 
 
@@ -603,6 +604,25 @@ def build_pulse(real=None):
         "natural-gas-prices": spark("Henry Hub, past year", gas[(None, "henry_hub_usd_per_mmbtu")][-250:]),
         "pjm-summer-peak-forecasts": spark("PJM forecast peak to 2046", pj[("PJM RTO", "forecast_jan2026_mw")]),
     }.items() if v}
+
+    for d in (json.loads(MANIFEST.read_text())["datasets"] if MANIFEST.exists() else []):   # every other dataset: its first measure, for the world or as its one series
+        nums = [c for c in d["columns"] if c["type"] == "num"]
+        if d["id"] in sparks or not nums:
+            continue
+        c = next((x for x in nums if x["name"] in (d.get("default_vars") or [])), nums[0])
+        try:
+            if d.get("entity") and d["keys"] == ["code", "year"]:
+                pts, label = pull(d["id"], [(W, c["name"])])[(W, c["name"])], f"World: {c['title']}"
+            elif not d.get("entity") and d["keys"] == [d["time"]["col"]]:
+                pts, label = pull(d["id"], [(None, c["name"])])[(None, c["name"])], c["title"]
+                pts = pts[:-1] if d.get("partial") else pts                       # the year in progress would look like a collapse
+            else:
+                continue
+            s = spark(label, pts[-720:])
+            if s:
+                sparks[d["id"]] = s
+        except Exception as e:
+            print(f"  no sparkline for {d['id']}: {str(e)[:80]}")
 
     counters = {}
     if co2[(W, "co2")]:

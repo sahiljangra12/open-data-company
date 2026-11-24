@@ -295,11 +295,16 @@ function stories(list) {
 }
 
 /* ---------- dataset list ---------- */
-const DOMAIN = { "Economy and development": "var(--s1)", "Energy": "var(--s4)", "Climate and emissions": "var(--s3)", "Natural hazards": "var(--s8)" };   // identity colours for the four topics
-const TOPIC = { "Climate and emissions": ["topic-climate.svg", "Factory chimneys sending smoke into a hot sky"], "Energy": ["topic-energy.svg", "Wind turbines and solar panels on green hills"],
-  "Economy and development": ["topic-economy.svg", "A city skyline with a construction crane and a rising line"], "Natural hazards": ["topic-hazards.svg", "An earthquake: waves spreading from a crack in the ground, and the trace it leaves on a seismograph"] };
+const DOMAIN = { "Economy and development": "var(--s1)", "Energy": "var(--s4)", "Climate and environment": "var(--s3)", "Natural hazards": "var(--s8)",
+  "Health": "var(--s6)", "People and society": "var(--s5)", "Government and finance": "var(--s2)", "Science and technology": "var(--s7)" };   // one identity colour per topic
+const TOPIC = { "Climate and environment": ["topic-climate.svg", "Factory chimneys sending smoke into a hot sky"], "Energy": ["topic-energy.svg", "Wind turbines and solar panels on green hills"],
+  "Economy and development": ["topic-economy.svg", "A city skyline with a construction crane and a rising line"], "Health": ["topic-health.svg", "A hospital with an ambulance outside and a heartbeat line across the sky"],
+  "People and society": ["topic-people.svg", "A crowd of people in front of a row of houses at sunset"], "Government and finance": ["topic-government.svg", "A columned government building with a flag, beside stacks of coins"],
+  "Science and technology": ["topic-science.svg", "A rocket, a satellite circling the Earth and a radio dish under a night sky"],
+  "Natural hazards": ["topic-hazards.svg", "An earthquake: waves spreading from a crack in the ground, and the trace it leaves on a seismograph"] };
+const FIRST_SHOWN = 9;                                                   // the list opens short; one button shows the rest
 function rows(D, sparks) {
-  const box = $("#rows"), topics = $("#topics"); let region = "", topic = "";
+  const box = $("#rows"), topics = $("#topics"); let region = "", topic = "", all = false;
   Object.keys(TOPIC).forEach(name => {
     const mine = D.filter(d => d.domain === name); if (!mine.length) return;
     const b = el("button"), img = new Image(), cap = el("span"); b.type = "button"; b.dataset.t = name; b.setAttribute("aria-pressed", "false");
@@ -307,7 +312,7 @@ function rows(D, sparks) {
     cap.append(el("b", "", name), el("small", "", `${mine.length} dataset${mine.length > 1 ? "s" : ""}, ${mine.reduce((n, d) => n + d.columns.length, 0)} variables`));
     b.append(img, cap); topics.append(b);
   });
-  topics.onclick = e => { const b = e.target.closest("button"); if (!b) return; topic = topic === b.dataset.t ? "" : b.dataset.t; [...topics.children].forEach(x => x.setAttribute("aria-pressed", x.dataset.t === topic)); draw(); };
+  topics.onclick = e => { const b = e.target.closest("button"); if (!b) return; topic = topic === b.dataset.t ? "" : b.dataset.t; all = false; [...topics.children].forEach(x => x.setAttribute("aria-pressed", x.dataset.t === topic)); draw(); };
   const spark = sp => {
     const w = el("div", "spark"), lo = Math.min(...sp.pts), hi = Math.max(...sp.pts), n = sp.pts.length, y = v => 6 + (1 - (v - lo) / (hi - lo || 1)) * 88;
     const sv = svg("svg", { viewBox: "0 0 100 100", preserveAspectRatio: "none", role: "img", "aria-label": sp.label });
@@ -317,7 +322,7 @@ function rows(D, sparks) {
   };
   function draw() {
     const list = D.filter(d => (!region || d.region === region) && (!topic || d.domain === topic));
-    box.replaceChildren(...list.map(d => {
+    box.replaceChildren(...(all ? list : list.slice(0, FIRST_SHOWN)).map(d => {
       const row = el("article", "ds"), main = el("div"), h = el("h3"), a = el("a", "", d.title), href = `explore.html#d=${encodeURIComponent(d.id)}`;
       a.href = href; h.append(a);
       const where = el("div", "where up", `${d.region === "US" ? "United States" : "World"}, ${d.domain}`);
@@ -334,8 +339,13 @@ function rows(D, sparks) {
       return row;
     }));
     if (!list.length) box.append(el("p", "empty", "No datasets match both choices yet. Clear one of them."));
+    if (!all && list.length > FIRST_SHOWN) {
+      const more = el("p", "morerows"), b = el("button", "btn", `Show all ${list.length} datasets${topic ? " on this topic" : region ? (region === "US" ? " for the United States" : " for the world") : ""}`);
+      b.type = "button"; b.onclick = () => { all = true; draw(); const next = box.children[FIRST_SHOWN], a = next && $("a", next); if (a) a.focus({ preventScroll: true }); };
+      more.append(b, el("span", "", `Showing ${FIRST_SHOWN} of ${list.length}.`)); box.append(more);
+    }
   }
-  $("#regions").onclick = e => { const b = e.target.closest("button"); if (!b) return; region = b.dataset.r; [...$("#regions").children].forEach(x => x.setAttribute("aria-pressed", x === b)); draw(); };
+  $("#regions").onclick = e => { const b = e.target.closest("button"); if (!b) return; region = b.dataset.r; all = false; [...$("#regions").children].forEach(x => x.setAttribute("aria-pressed", x === b)); draw(); };
   draw();
 }
 
