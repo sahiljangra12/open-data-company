@@ -67,9 +67,10 @@ const placeName = code => LABEL.get(code) || code;
 /* the same measure in a table of projections, for questions about years that have not happened yet */
 const FUTURE = { "world-bank-development::population": "un-population-projections::population", "world-bank-development::life_expectancy": "un-population-projections::life_expectancy", "world-bank-development::fertility_rate": "un-population-projections::total_fertility_rate",
   "world-bank-development::gdp_growth": "imf-projections::real_gdp_growth", "world-bank-development::inflation": "imf-projections::inflation", "world-bank-development::unemployment": "imf-projections::unemployment_rate", "world-bank-development::gdp_current_usd": "imf-projections::gdp", "world-bank-development::gdp_per_capita": "imf-projections::gdp_per_person" };
-/* For the United States alone, the monthly and quarterly series say more than a yearly figure. A follow-up about another country goes back to the yearly one. */
-const US_SERIES = { "world-bank-development::unemployment": "us-economy-monthly::unemployment_rate", "world-bank-development::inflation": "us-economy-monthly::inflation", "world-bank-development::gdp_growth": "us-economy-quarterly::real_gdp_growth" };
-const US_BACK = Object.fromEntries(Object.entries(US_SERIES).map(([a, b]) => [b, a]));
+/* For a country that has its own monthly or quarterly series here, those say more than a yearly figure. A follow-up about another country goes back to the yearly one. */
+const PLACE_SERIES = { USA: { "world-bank-development::unemployment": "us-economy-monthly::unemployment_rate", "world-bank-development::inflation": "us-economy-monthly::inflation", "world-bank-development::gdp_growth": "us-economy-quarterly::real_gdp_growth" },
+  GBR: { "world-bank-development::unemployment": "uk-economy-monthly::unemployment_rate", "world-bank-development::inflation": "uk-economy-monthly::inflation" } };
+const SERIES_BACK = {}; Object.entries(PLACE_SERIES).forEach(([code, m]) => Object.entries(m).forEach(([a, b]) => { SERIES_BACK[b] = { id: a, code }; }));
 function futureOf(id) { const [d, c] = id.split("::"), twin = FUTURE[id] || (d === "un-population" ? `un-population-projections::${c}` : d === "imf-world-economic-outlook" ? `imf-projections::${c}` : null); return twin && V.has(twin) ? twin : null; }
 
 function parse(text) {
@@ -99,7 +100,7 @@ function parse(text) {
   found.length = 0; found.push(...keep);
   found.sort((a, b) => a.at - b.at);
   if (year && year > thisYear()) found.forEach(f => { const twin = futureOf(f.id); if (twin) f.id = twin; });                // "population in 2050" is a projection
-  else if (codes.length === 1 && codes[0] === "USA" && !rank) found.forEach(f => { const twin = US_SERIES[f.id]; if (twin && V.has(twin) && (!year || year >= +String(V.get(twin).d.time.min).slice(0, 4))) f.id = twin; });
+  else if (codes.length === 1 && PLACE_SERIES[codes[0]] && !rank) found.forEach(f => { const twin = PLACE_SERIES[codes[0]][f.id]; if (twin && V.has(twin) && (!year || year >= +String(V.get(twin).d.time.min).slice(0, 4))) f.id = twin; });
   /* the corruption index runs from 0 (highly corrupt) to 100 (very clean), so "least corrupt" asks for the top of the scale */
   let order = rank; if (found.some(f => f.id.endsWith("::corruption_perceptions_index")) && /corrupt/.test(s0)) order = /\b(least|lowest|less|cleanest|not)\b/.test(s0) ? "top" : /\b(most|highest|more|worst)\b/.test(s0) ? "bottom" : rank;
   /* words the match does not explain: a question with any of these is more than a plain lookup */
@@ -641,7 +642,7 @@ async function respond(text, opt = {}) {
   try {
     const P = parse(q), count = q.split(/\s+/).length, follow = /^(and|what about|how about|same for|for|in|versus|vs|compared (to|with))\b/i.test(q), wantsVis = VIS.test(q);
     const bare = P.left.every(w => VISFILL.has(w));                                                                    // nothing in the words but "chart", "it", "since 2000" and the like
-    if (!P.vars.length && !P.quake && last.v && ((wantsVis && bare) || (P.places.length && (count <= 4 || follow)))) { P.vars = [P.places.some(c => c !== "USA") && US_BACK[last.v] ? US_BACK[last.v] : last.v]; if (!P.places.length && wantsVis) P.places = last.places; }   // "and China?" or "chart it" keeps the measure
+    if (!P.vars.length && !P.quake && last.v && ((wantsVis && bare) || (P.places.length && (count <= 4 || follow)))) { const back = SERIES_BACK[last.v]; P.vars = [back && P.places.some(c => c !== back.code) ? back.id : last.v]; if (!P.places.length && wantsVis) P.places = last.places; }   // "and China?" or "chart it" keeps the measure
     if (P.vars.length && !P.places.length && !P.rank && last.places.length && follow && isCountry(V.get(P.vars[0]))) P.places = last.places;   // "and its population?" keeps the places
     const small = count <= 6 && !P.vars.length && !P.places.length && !P.quake && SMALL.find(([re]) => re.test(q));
     if (small && !opt.force) { turn.done(); box.append(el("p", "aitext", small[1])); return; }                       // a greeting needs no model

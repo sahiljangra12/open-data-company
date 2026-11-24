@@ -190,6 +190,18 @@ STATUS = {
     "Crossref": ("live", ["research-papers-by-year"], "Records registered each year."),
     "Wikipedia pageviews": ("live", ["wikipedia-pageviews"], "Monthly views for nine languages and all projects."),
 
+    "Eurostat": ("live", ["europe-eurostat"], "Twelve headline tables for every European country."),
+    "USGS Water Data": ("live", ["us-river-flow-monthly"], "Monthly flow of eight major rivers."),
+    "Maryland Open Data": ("live", ["maryland-crime"], "Statewide crime, 1975 to 2020. Other tables are added one at a time."),
+    "Climate TRACE": ("live", ["climate-trace-emissions"], "Country totals."),
+    "HMDA mortgage records": ("live", ["us-mortgage-lending"], "Yearly national totals. The loan-by-loan files are too large to host."),
+    "Stack Exchange data dump": ("live", ["stack-overflow-activity"], "Questions asked each year, from its API. The full dump is too large to host."),
+
+    "EU Open Data Portal": ("via", ["europe-eurostat"], "A catalog; Eurostat's tables are its core."),
+    "data.gov.uk": ("via", ["uk-economy-monthly"], "A catalog; the main UK economic series come from the Office for National Statistics."),
+    "OECD Data Explorer": ("via", ["world-leading-indicators-and-exchange-rates"], "Its leading indicators, through FRED."),
+    "BIS statistics": ("via", ["world-leading-indicators-and-exchange-rates"], "Real exchange rates, through FRED."),
+    "CDC WONDER": ("via", ["us-drug-overdose-deaths", "us-flu-hospital-admissions"], "Its query tool cannot be automated. The same death-certificate counts for drug overdoses come from CDC's open data site."),
     "Bureau of Economic Analysis": ("via", ["us-economy-quarterly", "us-economy-monthly"], "GDP, income and spending, through FRED."),
     "Bureau of Labor Statistics": ("via", ["us-economy-monthly"], "Jobs, unemployment, wages and prices, through FRED."),
     "Census Building Permits Survey": ("via", ["us-economy-monthly"], "National permits and housing starts, through FRED."),
@@ -223,15 +235,15 @@ EPA Air Quality System|NASA Earthdata|USDA NASS Quick Stats|USDA FoodData Centra
 FBI Crime Data Explorer|CourtListener|India data.gov.in|UN Comtrade|WTO Stats|DHS Program surveys|ENTSO-E Transparency Platform|Copernicus ERA5 reanalysis|eBird|ACLED|
 Global Energy Monitor trackers|Google Earth Engine catalog"""
 IMAGES = "Landsat (USGS)|Sentinel (Copernicus)|MODIS and VIIRS (NASA)|VIIRS night lights (EOG)|WorldPop|JRC Global Surface Water|USDA Cropland Data Layer"
-BULK = """HMDA mortgage records|SBA loan data|Hospital price transparency files|BTS airline on-time data|DOL H-1B and PERM disclosures|NOAA Storm Events|OpenStreetMap|GDELT|GH Archive|
-Stack Exchange data dump|Common Crawl|Wikidata"""
+BULK = """SBA loan data|Hospital price transparency files|BTS airline on-time data|DOL H-1B and PERM disclosures|NOAA Storm Events|OpenStreetMap|GDELT|GH Archive|
+Common Crawl|Wikidata"""
 LATER = {  # open, with a reason it is not loaded yet
-    "Maryland Open Data": "A catalog of many tables; single tables are added one at a time.", "Open Baltimore": "A catalog of many tables; single tables are added one at a time.",
-    "EU Open Data Portal": "A catalog of other publishers' files.", "data.gov.uk": "A catalog of other publishers' files.", "Humanitarian Data Exchange": "A catalog of other publishers' files.",
+    "Open Baltimore": "A catalog of many tables; single tables are added one at a time.",
+    "Humanitarian Data Exchange": "A catalog of other publishers' files.",
     "SEC EDGAR": "Company filings rather than one table.", "FERC eLibrary and forms": "Documents and forms rather than one table.", "GTFS transit feeds (Mobility Database)": "Thousands of timetable files rather than one table.",
-    "CDC WONDER": "Its query service limits automatic use. A different CDC feed, weekly flu hospital admissions, is on the site.",
+    "CFPB Consumer Complaints": "Its service turned away this site's automatic requests.", "FAO Food Price Index": "Published as a file whose address changes every month.",
 }
-RELATED = {"CDC WONDER": ["us-flu-hospital-admissions"], "GH Archive": ["github-activity-by-country"], "Census American Community Survey": [], "NASA Earthdata": ["global-temperature"]}
+RELATED = {"GH Archive": ["github-activity-by-country"], "Census American Community Survey": [], "NASA Earthdata": ["global-temperature"]}
 NOTES = {"GH Archive": "The full event archive is hundreds of gigabytes. GitHub's own country summary is on the site.", "Wikidata": "A database of facts rather than a table; nothing to load as one file.",
          "Census American Community Survey": "The Census service turned away this site's requests without a key.", "Census County Business Patterns": "The Census service turned away this site's requests without a key.",
          "NASA Earthdata": "Needs a NASA login. NASA's global temperature record is on the site from another NASA file.", "data.gov": "Its catalog search now asks for a key.",
@@ -241,6 +253,16 @@ for group, state, note in ((KEY, "key", "Free, but the source asks for a key or 
                            (BULK, "bulk", "Published as whole-archive downloads far larger than a free static site can hold or refresh.")):
     for name in group.replace("\n", "").split("|"):
         STATUS[name] = (state, RELATED.get(name, []), NOTES.get(name, note))
+# Loaders that are written and wait only for a free key, added by the owner as a GitHub secret: name -> (datasets, secret, standing once loaded, note once loaded)
+GRID_NOTE = "Daily demand, through the US Energy Information Administration."
+KEY_READY = {
+    "Census American Community Survey": (["us-states-census"], "CENSUS_API_KEY", "live", "Population, income, housing, poverty and education for every state."),
+    "Census County Business Patterns": (["us-states-census"], "CENSUS_API_KEY", "live", "Businesses, employees and payroll for every state."),
+    "Congress.gov": (["us-congress-and-rulemaking"], "DATA_GOV_API_KEY", "live", "Bills introduced and laws enacted by each Congress."),
+    "Regulations.gov": (["us-congress-and-rulemaking"], "DATA_GOV_API_KEY", "live", "Documents and public comments posted each year."),
+    "ERCOT data": (["us-grid-demand-daily"], "EIA_API_KEY", "via", GRID_NOTE), "CAISO OASIS": (["us-grid-demand-daily"], "EIA_API_KEY", "via", GRID_NOTE), "MISO market data": (["us-grid-demand-daily"], "EIA_API_KEY", "via", GRID_NOTE),
+    "NYISO market data": (["us-grid-demand-daily"], "EIA_API_KEY", "via", GRID_NOTE), "ISO New England data": (["us-grid-demand-daily"], "EIA_API_KEY", "via", GRID_NOTE), "SPP data": (["us-grid-demand-daily"], "EIA_API_KEY", "via", GRID_NOTE),
+}
 LABEL = {"live": "On the site", "via": "On the site, through another publisher", "key": "Needs a free key", "images": "Satellite images", "bulk": "Too large to host",
          "terms": "Licence does not allow it", "later": "Not loaded yet"}
 
@@ -255,6 +277,11 @@ def main():
         assert p[1] in ("US", "World") and p[5] in ("yes", "check", "restricted") and p[7] in ("yes", "no"), line
         assert p[6] in ("realtime", "daily", "weekly", "monthly", "quarterly", "annual", "varies"), line
         state, sets, note = STATUS.get(p[0]) or ("later", RELATED.get(p[0], []), LATER.get(p[0], "Open to load; its loader has not been written yet."))
+        ready = KEY_READY.get(p[0])
+        if ready and any(i in titles for i in ready[0]):
+            state, sets, note = ready[2], ready[0], ready[3]
+        elif ready:
+            state, sets, note = "key", [], f"Its loader is written and waits only for a free key, added as the GitHub secret {ready[1]}."
         if state in ("live", "via"):
             assert sets, p[0]
         have = [dict(id=i, title=titles[i]) for i in sets if i in titles]      # only datasets that were actually built

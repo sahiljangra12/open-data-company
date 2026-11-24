@@ -65,6 +65,12 @@ const CONCEPTS_MORE = [
   [/federal (rules|regulations)|new regulations/, "us-federal-register::final_rules"], [/disaster declarations?/, "us-disaster-declarations::all_declarations"], [/clinical (trials?|studies)|medical trials?/, "clinical-trials-started::studies_started"],
   [/drug side effects?|adverse (drug )?events?|side effects?/, "us-fda-reports::drug_side_effect_reports"], [/food recalls?/, "us-fda-reports::food_recalls"], [/drug recalls?/, "us-fda-reports::drug_recalls"],
   [/(traffic|car|vehicle|road) (crash\w*|collisions?)/, "nyc-traffic-crashes-monthly::crashes"], [/nih|medical research (projects|grants)/, "us-nih-research-projects::projects_funded"],
+  [/fentanyl|synthetic opioids?/, "us-drug-overdose-deaths::synthetic_opioid_deaths"], [/opioids?/, "us-drug-overdose-deaths::opioid_deaths"], [/overdoses?|drug deaths?/, "us-drug-overdose-deaths::all_drug_overdose_deaths"],
+  [/mortgages?|home loans?/, "us-mortgage-lending::mortgages_made"], [/mississippi/, "us-river-flow-monthly::mississippi_at_st_louis"], [/colorado river/, "us-river-flow-monthly::colorado_at_lees_ferry"],
+  [/potomac/, "us-river-flow-monthly::potomac_near_washington"], [/hudson/, "us-river-flow-monthly::hudson_at_green_island"], [/river flows?|rivers?/, "us-river-flow-monthly::mississippi_at_st_louis"],
+  [/leading indicators?/, "world-leading-indicators-and-exchange-rates::leading_indicator_usa"], [/real exchange rate/, "world-leading-indicators-and-exchange-rates::real_exchange_rate_united_states"],
+  [/stack ?overflow/, "stack-overflow-activity::questions_asked"], [/maryland/, "maryland-crime::violent_crime_rate"], [/electricity demand|power demand|grid demand/, "us-grid-demand-daily::demand_us48"],
+  [/bills? (introduced|in congress)|congress/, "us-congress-and-rulemaking::bills_introduced"], [/laws? (passed|enacted)/, "us-congress-and-rulemaking::laws_enacted"], [/public comments?/, "us-congress-and-rulemaking::public_comments_posted"],
   [/rainfall|precipitation/, "environment-indicators::average_precipitation_in_depth"], [/protected (areas?|land)/, "environment-indicators::terrestrial_and_marine_protected_areas"],
 ];
 const PLACE_ALIAS = { usa: "USA", us: "USA", "u s": "USA", america: "USA", "united states of america": "USA", "the states": "USA", uk: "GBR", "u k": "GBR", britain: "GBR", "great britain": "GBR", england: "GBR",

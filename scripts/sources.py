@@ -1256,7 +1256,7 @@ EUROSTAT = [  # (table, filters that leave one figure for a country and a year, 
     ("demo_mlexpec", "sex=T&age=Y_LT1", "life_expectancy", "Life expectancy at birth (Eurostat)", "years"),
     ("demo_pjan", "sex=T&age=TOTAL", "population", "Population on 1 January (Eurostat)", "people"),
     ("ilc_peps01n", "unit=PC&sex=T&age=TOTAL", "at_risk_of_poverty", "People at risk of poverty or social exclusion (Eurostat)", "% of people"),
-    ("ilc_di12", "", "gini_coefficient", "Gini coefficient of disposable income (Eurostat)", "0 (equal) to 100"),
+    ("ilc_di12", "age=TOTAL", "gini_coefficient", "Gini coefficient of disposable income (Eurostat)", "0 (equal) to 100"),
     ("isoc_ci_ifp_iu", "indic_is=I_IU3&unit=PC_IND&ind_type=IND_TOTAL", "internet_users", "People who used the internet in the past three months (Eurostat)", "% of people aged 16 to 74"),
 ]
 
@@ -1330,37 +1330,6 @@ def world_monthly():
                   "World", "Economy and development", "OECD and Bank for International Settlements, via FRED", "https://fred.stlouisfed.org", "Free reuse with the source named (OECD and BIS terms), retrieved from FRED", cell, meta, cols, "month")
 
 
-# ---------- US Consumer Financial Protection Bureau: complaints ----------
-def buckets(j):
-    """The first list of dated counts anywhere inside a search reply."""
-    if isinstance(j, dict):
-        b = j.get("buckets")
-        if isinstance(b, list) and b and isinstance(b[0], dict) and "key_as_string" in b[0] and "doc_count" in b[0]:
-            return b
-        for v in j.values():
-            r = buckets(v)
-            if r:
-                return r
-    elif isinstance(j, list):
-        for v in j:
-            r = buckets(v)
-            if r:
-                return r
-    return None
-
-
-def cfpb():
-    j = J("https://www.consumerfinance.gov/data-research/consumer-complaints/search/api/v1/trends?lens=overview&trend_interval=month&trend_depth=5&date_received_min=2011-12-01", tries=2)
-    b = buckets(j)
-    assert b, "no monthly counts in the reply: " + json.dumps(j)[:200]
-    this = date.today().strftime("%Y-%m")
-    cell = {x["key_as_string"][:7] + "-01": {"complaints": x["doc_count"]} for x in b if x["key_as_string"][:7] < this}
-    meta = dict(complaints=dict(title="US consumer complaints about financial companies received in the month", unit="complaints",
-                                description="Complaints sent to the Consumer Financial Protection Bureau about banks, lenders, credit reporting and debt collection. Counts for recent months still rise as complaints are published."))
-    return series("us-consumer-finance-complaints", "US consumer complaints about financial companies, monthly", "How many complaints about banks, lenders, credit bureaus and debt collectors reach the US consumer watchdog each month.",
-                  "US", "Government and finance", "US Consumer Financial Protection Bureau, Consumer Complaint Database", "https://www.consumerfinance.gov/data-research/consumer-complaints/", PD, cell, meta, ["complaints"], "month")
-
-
 # ---------- US Geological Survey: river flow ----------
 RIVERS = [("07010000", "mississippi_at_st_louis", "Mississippi River at St. Louis"), ("06934500", "missouri_at_hermann", "Missouri River at Hermann"), ("03294500", "ohio_at_louisville", "Ohio River at Louisville"),
           ("14105700", "columbia_at_the_dalles", "Columbia River at The Dalles"), ("09380000", "colorado_at_lees_ferry", "Colorado River at Lees Ferry"), ("01646500", "potomac_near_washington", "Potomac River near Washington, DC"),
@@ -1370,19 +1339,23 @@ RIVERS = [("07010000", "mississippi_at_st_louis", "Mississippi River at St. Loui
 def usgs_water():
     cell, meta, cols = {}, {}, []
     this = date.today().strftime("%Y-%m")
+    _, old = prior("us-river-flow-monthly")
     for site, col, label in RIVERS:
         try:
-            j = J(f"https://waterservices.usgs.gov/nwis/dv/?format=json&sites={site}&parameterCd=00060&statCd=00003&startDT=1950-01-01", tries=2, timeout=300)
+            kept = {d: float(r[col]) for d, r in old.items() if r.get(col, "") != ""}
+            start = f"{THIS_YEAR - 1}-01-01" if len(kept) >= 60 else "1950-01-01"        # earlier months do not change
+            j = J(f"https://waterservices.usgs.gov/nwis/dv/?format=json&sites={site}&parameterCd=00060&statCd=00003&startDT={start}", tries=2, timeout=300)
             months = {}
             for x in j["value"]["timeSeries"][0]["values"][0]["value"]:
                 v = float(x["value"])
                 if v >= 0:
                     months.setdefault(x["dateTime"][:7], []).append(v)
-            good = {m: sum(v) / len(v) for m, v in months.items() if len(v) >= 25 and m < this}
+            good = {m + "-01": round(sum(v) / len(v)) for m, v in months.items() if len(v) >= 25 and m < this}
+            good = {**{d: v for d, v in kept.items() if d < start}, **good}
             if len(good) < 60:
                 raise ValueError(f"{len(good)} months")
-            for m, v in good.items():
-                cell.setdefault(m + "-01", {})[col] = round(v)
+            for d, v in good.items():
+                cell.setdefault(d, {})[col] = v
             meta[col] = dict(title=f"Flow of the {label}, monthly average", unit="cubic feet per second", description=f"US Geological Survey stream gauge {site}: the average of the daily mean flow in each month with at least 25 days recorded.")
             cols.append(col)
         except Exception as e:
@@ -1480,24 +1453,31 @@ def uk():
 def climate_trace():
     cell, names = {}, {}
     known = iso()["name"]
+    codes = sorted(c for c in known if len(c) == 3)
+    groups = [codes[i:i + 50] for i in range(0, len(codes), 50)]
+    _, old = prior("climate-trace-emissions", key=None) if False else (None, {})
+    shown = False
     for y in range(2015, THIS_YEAR):
-        try:
-            j = J(f"https://api.climatetrace.org/v6/country/emissions?since={y}&to={y}", tries=2)
-            rows = j if isinstance(j, list) else j.get("countries") or j.get("data") or []
-            if y == 2015 or not rows:
-                print(f"  climate_trace {y}: {json.dumps(j)[:260]}")
-            for r in rows:
-                c, e = r.get("country"), r.get("emissions") or {}
-                v = e.get("co2e_100yr")
-                if c and len(c) == 3 and v:
-                    cell.setdefault((c, y), {})["greenhouse_gas_emissions"] = v
-                    names[c] = known.get(c, c)
-                    for g in ("co2", "ch4", "n2o"):
-                        if e.get(g):
-                            cell[(c, y)][g] = e[g]
-        except Exception as e:
-            print(f"  climate_trace {y}: {str(e)[:80]}")
-        time.sleep(0.4)
+        for g in [None] + groups:
+            try:
+                j = J(f"https://api.climatetrace.org/v6/country/emissions?since={y}&to={y}" + (f"&countries={','.join(g)}" if g else ""), tries=2)
+                rows = j if isinstance(j, list) else [j]
+                if g and not shown:
+                    print(f"  climate_trace sample: {json.dumps(j)[:300]}")
+                    shown = True
+                for r in rows:
+                    c, e = r.get("country"), r.get("emissions") or {}
+                    c = "WLD" if c == "all" else c
+                    if c and len(c) == 3 and e.get("co2e_100yr"):
+                        cell.setdefault((c, y), {})["greenhouse_gas_emissions"] = e["co2e_100yr"]
+                        names[c] = "World" if c == "WLD" else known.get(c, c)
+                        for gas in ("co2", "ch4", "n2o"):
+                            if e.get(gas):
+                                cell[(c, y)][gas] = e[gas]
+            except Exception as e:
+                print(f"  climate_trace {y}: {str(e)[:80]}")
+            time.sleep(0.3)
+    assert len(names) >= 100, f"climate_trace: only {len(names)} places"
     meta = dict(greenhouse_gas_emissions=dict(title="Greenhouse gas emissions (Climate TRACE)", unit="tonnes of CO2 equivalent", description="All greenhouse gases over 100 years, estimated independently from satellites and other sensors rather than from what countries report."),
                 co2=dict(title="Carbon dioxide emissions (Climate TRACE)", unit="tonnes"), ch4=dict(title="Methane emissions (Climate TRACE)", unit="tonnes of methane"), n2o=dict(title="Nitrous oxide emissions (Climate TRACE)", unit="tonnes of nitrous oxide"))
     return country_year("climate-trace-emissions", "Emissions measured independently (Climate TRACE)", "Greenhouse gas emissions for every country, estimated from satellites and sensors rather than from national reports.",
@@ -1532,12 +1512,13 @@ def hmda():
 def stackoverflow():
     def count(y, c):
         a, b = int(datetime(y, 1, 1, tzinfo=timezone.utc).timestamp()), int(datetime(y + 1, 1, 1, tzinfo=timezone.utc).timestamp())
-        return J(f"https://api.stackexchange.com/2.3/{'questions' if c == 'questions_asked' else 'answers'}?fromdate={a}&todate={b}&site=stackoverflow&filter=total", tries=2)["total"]
-    cell = yearly("stack-overflow-activity", 2008, count, ["questions_asked", "answers_posted"], recent=2)
-    meta = dict(questions_asked=dict(title="Questions asked on Stack Overflow in the year", unit="questions", description="Questions still on the site, by the year they were asked. The current year is not complete."),
-                answers_posted=dict(title="Answers posted on Stack Overflow in the year", unit="answers"))
-    out = series("stack-overflow-activity", "Stack Overflow: questions and answers each year", "How much programmers ask and answer on the largest question-and-answer site for code.",
-                 "World", "Science and technology", "Stack Exchange API", "https://api.stackexchange.com", "CC BY-SA 4.0", cell, meta, ["questions_asked", "answers_posted"], "year", min_rows=8)
+        time.sleep(3)                                       # the service turns away callers that ask quickly
+        return J(f"https://api.stackexchange.com/2.3/questions?fromdate={a}&todate={b}&site=stackoverflow&filter=total", tries=1)["total"]
+    cell = yearly("stack-overflow-activity", 2008, count, ["questions_asked"], recent=2)
+    assert len(cell) == THIS_YEAR - 2008 + 1, f"stack-overflow-activity: {len(cell)} of {THIS_YEAR - 2008 + 1} years answered"   # a run with gaps would make an old year look like the latest
+    meta = dict(questions_asked=dict(title="Questions asked on Stack Overflow in the year", unit="questions", description="Questions still on the site, by the year they were asked. The current year is not complete."))
+    out = series("stack-overflow-activity", "Stack Overflow: questions asked each year", "How much programmers ask on the largest question-and-answer site for code.",
+                 "World", "Science and technology", "Stack Exchange API", "https://api.stackexchange.com", "CC BY-SA 4.0", cell, meta, ["questions_asked"], "year", min_rows=8)
     out["partial"] = True
     return out
 
@@ -1699,9 +1680,9 @@ def census_states():
 
 BUILDERS = [(lambda s=s: wb_set(s[0], s[1], s[2], s[3], s[4], s[5], **s[6])) for s in WB_SETS] + [(lambda s=s: owid_charts(*s)) for s in OWID_SETS] + [
     imf, un_population, undp, who, pwt, us_monthly, us_quarterly, us_daily, us_debt, us_climate, wikipedia, research, gbif, github_activity,
-    federal_register, fda, clinical_trials, fema, fdic, flu, chicago, nyc, us_spending, nih, eurostat, world_monthly, cfpb, usgs_water, cdc_overdose, maryland, uk, climate_trace, hmda, stackoverflow,
+    federal_register, fda, clinical_trials, fema, fdic, flu, chicago, nyc, us_spending, nih, eurostat, world_monthly, usgs_water, cdc_overdose, maryland, uk, climate_trace, hmda, stackoverflow,
     eia_grid, us_lawmaking, census_states,
 ]
 NAMES = [s[0] for s in WB_SETS] + [s[0] for s in OWID_SETS] + ["imf", "un_population", "undp", "who", "pwt", "us_monthly", "us_quarterly", "us_daily", "us_debt", "us_climate", "wikipedia", "research", "gbif",
-                                    "github_activity", "federal_register", "fda", "clinical_trials", "fema", "fdic", "flu", "chicago", "nyc", "us_spending", "nih", "eurostat", "world_monthly", "cfpb", "usgs_water", "cdc_overdose", "maryland", "uk", "climate_trace", "hmda", "stackoverflow",
+                                    "github_activity", "federal_register", "fda", "clinical_trials", "fema", "fdic", "flu", "chicago", "nyc", "us_spending", "nih", "eurostat", "world_monthly", "usgs_water", "cdc_overdose", "maryland", "uk", "climate_trace", "hmda", "stackoverflow",
                                     "eia_grid", "us_lawmaking", "census_states"]
