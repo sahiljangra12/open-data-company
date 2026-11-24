@@ -1972,6 +1972,7 @@
    ],
    "bytes": 4711854,
    "built": "2026-11-24",
+   "coverage": "1960 to 2025",
    "default_vars": [
     "population",
     "gdp_current_usd"
@@ -1983,6 +1984,130 @@
     "WLD"
    ],
    "entities": 261
+  },
+  {
+   "id": "earthquakes-past-30-days",
+   "title": "Earthquakes, past 30 days",
+   "description": "Every earthquake of magnitude 2.5 or greater recorded worldwide in the past 30 days, with location, depth and magnitude.",
+   "region": "World",
+   "domain": "Natural hazards",
+   "source": "US Geological Survey, Earthquake Hazards Program",
+   "source_url": "https://earthquake.usgs.gov/earthquakes/feed/",
+   "licence": "Public domain (US federal data)",
+   "file": "data/sets/earthquakes-past-30-days.csv",
+   "keys": [
+    "id",
+    "time"
+   ],
+   "time": {
+    "col": "time",
+    "type": "date",
+    "min": "2026-10-25T05:33:21Z",
+    "max": "2026-11-24T04:57:59Z"
+   },
+   "entity": null,
+   "rows": 1817,
+   "columns": [
+    {
+     "name": "magnitude",
+     "title": "Magnitude",
+     "unit": "",
+     "description": "",
+     "type": "num",
+     "filled": 1817
+    },
+    {
+     "name": "place",
+     "title": "Nearest place",
+     "unit": "",
+     "description": "",
+     "type": "str",
+     "filled": 1817
+    },
+    {
+     "name": "latitude",
+     "title": "Latitude",
+     "unit": "degrees",
+     "description": "",
+     "type": "num",
+     "filled": 1817
+    },
+    {
+     "name": "longitude",
+     "title": "Longitude",
+     "unit": "degrees",
+     "description": "",
+     "type": "num",
+     "filled": 1817
+    },
+    {
+     "name": "depth_km",
+     "title": "Depth",
+     "unit": "km",
+     "description": "",
+     "type": "num",
+     "filled": 1817
+    },
+    {
+     "name": "magnitude_type",
+     "title": "Magnitude type",
+     "unit": "",
+     "description": "",
+     "type": "str",
+     "filled": 1817
+    },
+    {
+     "name": "event_type",
+     "title": "Event type",
+     "unit": "",
+     "description": "",
+     "type": "str",
+     "filled": 1817
+    },
+    {
+     "name": "significance",
+     "title": "Significance score",
+     "unit": "0-1000",
+     "description": "USGS score combining magnitude, felt reports and estimated impact.",
+     "type": "num",
+     "filled": 1817
+    },
+    {
+     "name": "tsunami_flag",
+     "title": "Tsunami flag",
+     "unit": "",
+     "description": "1 if the event was in an oceanic region and may warrant tsunami information; not a warning.",
+     "type": "num",
+     "filled": 1817
+    },
+    {
+     "name": "felt_reports",
+     "title": "Felt reports",
+     "unit": "reports",
+     "description": "",
+     "type": "num",
+     "filled": 305
+    },
+    {
+     "name": "url",
+     "title": "USGS event page",
+     "unit": "",
+     "description": "",
+     "type": "str",
+     "filled": 1817
+    }
+   ],
+   "bytes": 317752,
+   "built": "2026-11-24",
+   "coverage": "Rolling 30 days",
+   "default_vars": [
+    "magnitude",
+    "place",
+    "depth_km",
+    "latitude",
+    "longitude"
+   ],
+   "chart": "points"
   },
   {
    "id": "crude-oil-prices",
