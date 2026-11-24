@@ -1,4 +1,4 @@
-/* Statistics for Researcher Mode. Plain JavaScript, no dependencies.
+/* Statistics for Researcher mode and the Your data page. Plain JavaScript, no dependencies.
    Every function here is checked against scipy / statsmodels / pymannkendall in tests/check_stats.py. */
 (function (root) {
   "use strict";
@@ -203,6 +203,15 @@
     h = 12 / (N * (N + 1)) * h - 3 * (N + 1);
     h /= 1 - ties.reduce((s, t) => s + t * t * t - t, 0) / (N * N * N - N);
     return { H: h, df: groups.length - 1, p: S.chi2Sf(h, groups.length - 1) };
+  };
+
+  /* ---------- two categorical variables ---------- */
+  S.chiSquare = function (table) {                             // rows of counts; test of independence, no continuity correction
+    const r = table.length, c = table[0].length, rs = table.map(row => S.sum(row)), cs = table[0].map((_, j) => table.reduce((s, row) => s + row[j], 0)), N = S.sum(rs);
+    let chi2 = 0, small = 0;
+    const expected = table.map((row, i) => row.map((o, j) => { const e = rs[i] * cs[j] / N; chi2 += (o - e) * (o - e) / e; if (e < 5) small++; return e; }));
+    const df = (r - 1) * (c - 1);
+    return { chi2, df, p: S.chi2Sf(chi2, df), n: N, cramersV: Math.sqrt(chi2 / (N * Math.min(r - 1, c - 1))), expected, smallShare: small / (r * c) };
   };
 
   /* ---------- trend ---------- */

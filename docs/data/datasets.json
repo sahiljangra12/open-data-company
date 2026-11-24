@@ -1,4 +1,6 @@
 {
+ "checked": "2026-11-24T06:30:50Z",
+ "cron": "23 5 * * *",
  "datasets": [
   {
    "id": "co2-and-greenhouse-gases",
@@ -1689,7 +1691,8 @@
      "ZWE",
      "Zimbabwe"
     ]
-   ]
+   ],
+   "cadence": "Revised by Our World in Data a few times a year"
   },
   {
    "id": "energy",
@@ -4008,7 +4011,8 @@
      "ZWE",
      "Zimbabwe"
     ]
-   ]
+   ],
+   "cadence": "Revised by Our World in Data a few times a year"
   },
   {
    "id": "world-bank-development",
@@ -5556,7 +5560,8 @@
      "ZWE",
      "Zimbabwe"
     ]
-   ]
+   ],
+   "cadence": "Revised by the World Bank a few times a year"
   },
   {
    "id": "global-temperature",
@@ -5599,7 +5604,8 @@
    ],
    "bytes": 51341,
    "built": "2026-11-24",
-   "coverage": "1850 to 2026"
+   "coverage": "1850 to 2026",
+   "cadence": "A new month about once a month"
   },
   {
    "id": "atmospheric-co2",
@@ -5658,7 +5664,8 @@
    ],
    "bytes": 29965,
    "built": "2026-11-24",
-   "coverage": "1958 to 2026"
+   "coverage": "1958 to 2026",
+   "cadence": "A new month about once a month"
   },
   {
    "id": "earthquakes-past-30-days",
@@ -5782,7 +5789,8 @@
     "latitude",
     "longitude"
    ],
-   "chart": "points"
+   "chart": "points",
+   "cadence": "Every day here; the globe on the home page is live"
   },
   {
    "id": "crude-oil-prices",
@@ -5825,7 +5833,8 @@
    ],
    "bytes": 235846,
    "built": "2026-11-24",
-   "coverage": "1986 to 2026"
+   "coverage": "1986 to 2026",
+   "cadence": "New trading days about once a week"
   },
   {
    "id": "natural-gas-prices",
@@ -5860,7 +5869,8 @@
    ],
    "bytes": 96874,
    "built": "2026-11-24",
-   "coverage": "1997 to 2026"
+   "coverage": "1997 to 2026",
+   "cadence": "New trading days about once a week"
   },
   {
    "id": "pjm-summer-peak-forecasts",
@@ -6041,7 +6051,8 @@
      "UGI",
      "UGI"
     ]
-   ]
+   ],
+   "cadence": "Once a year, in January"
   }
  ]
 }

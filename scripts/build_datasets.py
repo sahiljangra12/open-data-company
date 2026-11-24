@@ -4,7 +4,8 @@ Each dataset is one tidy CSV in docs/data/sets/ plus a manifest entry describing
 time column and every variable. To add a dataset: write a function that returns a spec
 (see `spec()`), and add it to BUILDERS. A builder that fails keeps the previous file.
 """
-import csv, io, json, re, sys, time, urllib.request
+import csv, hashlib, io, json, re, shutil, sys, tempfile, time, urllib.request
+from collections import Counter
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
@@ -13,6 +14,10 @@ SETS = ROOT / "docs" / "data" / "sets"
 MANIFEST = ROOT / "docs" / "data" / "datasets.json"
 PULSE = ROOT / "docs" / "data" / "pulse.json"
 COUNTRIES = ROOT / "docs" / "data" / "countries.json"
+LATEST = ROOT / "docs" / "data" / "latest"                 # newest value of every variable for every place: instant answers
+CHANGELOG = ROOT / "docs" / "data" / "changelog.json"      # what each refresh changed
+SAMPLE = ROOT / "docs" / "data" / "sample-countries.csv"   # demo file for the "Your data" page
+CRON = "23 5 * * *"                                        # keep in step with .github/workflows/refresh.yml
 RAW = "https://raw.githubusercontent.com/"
 UA = {"User-Agent": "open-data-company-pipeline (github.com/sahiljangra12/open-data-company)"}
 
@@ -25,6 +30,19 @@ DEFAULTS = {  # what the explorer selects first, and which places its chart show
     "pjm-summer-peak-forecasts": dict(chart_entities=["PJM RTO", "DOM", "AEP", "COMED"]),
     "earthquakes-past-30-days": dict(default_vars=["magnitude", "place", "depth_km", "latitude", "longitude"],
                                      coverage="Rolling 30 days", chart="points"),
+}
+
+
+CADENCE = {  # how often each source itself changes; the site checks all of them every day
+    "co2-and-greenhouse-gases": "Revised by Our World in Data a few times a year",
+    "energy": "Revised by Our World in Data a few times a year",
+    "world-bank-development": "Revised by the World Bank a few times a year",
+    "global-temperature": "A new month about once a month",
+    "atmospheric-co2": "A new month about once a month",
+    "earthquakes-past-30-days": "Every day here; the globe on the home page is live",
+    "crude-oil-prices": "New trading days about once a week",
+    "natural-gas-prices": "New trading days about once a week",
+    "pjm-summer-peak-forecasts": "Once a year, in January",
 }
 
 
@@ -555,6 +573,11 @@ def build_pulse(real=None):
         counters["population"] = dict(year=int(y1), value=v1, growth=v1 / v0 - 1)  # mid-year estimate
 
     out = dict(built=datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"), tickers=tickers, stories=stories, sparks=sparks, counters=counters)
+    ea = pull("world-bank-development", [(W, "electricity_access")])[(W, "electricity_access")]
+    if len(ea) > 5:                                                              # the fact shown on the night-lights photo
+        by, y1 = dict(ea), ea[-1][0]
+        y0 = str(int(y1) - 20) if str(int(y1) - 20) in by else ea[0][0]
+        out["band"] = dict(value=round(ea[-1][1], 1), year=y1, before=round(by[y0], 1), before_year=y0)
     real = set(real or {})                                                       # real countries only, no regional totals
     out["maps"] = [m for m in (
         map_layer("world-bank-development", "life_expectancy", "Life expectancy", "years", real),
@@ -585,14 +608,211 @@ def build_pulse(real=None):
     print(f"pulse: {len(tickers)} tickers, {len(stories)} stories, {len(sparks)} sparklines, {len(out['maps'])} maps, quakes: {'yes' if 'quakes' in out else 'no'}")
 
 
+# ---------- change log: what a refresh changed, dataset by dataset ----------
+
+def same(a, b):
+    if a == b:
+        return True
+    try:
+        x, y = float(a), float(b)
+    except ValueError:
+        return False
+    return abs(x - y) <= 1e-9 * max(1.0, abs(x), abs(y))
+
+
+def show(v):
+    """A value as a person would write it."""
+    try:
+        x = float(v)
+    except ValueError:
+        return str(v)[:80]
+    if x != x:
+        return ""
+    if x == int(x) and abs(x) < 1e15:
+        return f"{int(x):,}" if abs(x) >= 10000 else str(int(x))
+    return f"{x:,.0f}" if abs(x) >= 10000 else f"{x:.4g}"
+
+
+def read_rows(path):
+    with open(path, encoding="utf-8", newline="") as f:
+        r = csv.reader(f)
+        return next(r), list(r)
+
+
+def diff_dataset(d, old_path, new_path):
+    """Compare two builds of one dataset. Returns None when nothing changed, else a summary a person can read."""
+    if hashlib.sha1(Path(old_path).read_bytes()).digest() == hashlib.sha1(Path(new_path).read_bytes()).digest():
+        return None
+    oh, orows = read_rows(old_path)
+    nh, nrows = read_rows(new_path)
+    oi, ni = {c: i for i, c in enumerate(oh)}, {c: i for i, c in enumerate(nh)}
+    keys, tcol = d["keys"], d["time"]["col"]
+    titles = {c["name"]: c["title"] for c in d["columns"]}
+    out = dict(id=d["id"], title=d["title"], rows=len(nrows), added=0, removed=0, revised_cells=0, revised_rows=0,
+               cols_added=[titles.get(c, c) for c in nh if c not in oi], cols_removed=[c for c in oh if c not in ni])
+    if any(k not in oi or k not in ni for k in keys):
+        return dict(out, note="The table was rebuilt with a new layout.")
+    lab = d["entity"]["label_col"] if d.get("entity") else ("place" if "place" in ni else None)
+
+    def where(r, idx):
+        t = r[idx[tcol]]
+        t = t[:16].replace("T", " ") + " UTC" if "T" in t else t
+        return f"{r[idx[lab]]}, {t}" if lab and lab in idx and r[idx[lab]] else t
+
+    old = {tuple(r[oi[k]] for k in keys): r for r in orows}
+    shared = [c for c in nh if c in oi and c not in keys and c != lab]
+    lead = [c for c in (d.get("default_vars") or []) + [c["name"] for c in d["columns"] if c["type"] == "num"] if c in ni]
+    per_col, revised, fresh = Counter(), [], []
+    for r in nrows:
+        o = old.pop(tuple(r[ni[k]] for k in keys), None)
+        if o is None:
+            out["added"] += 1
+            fresh.append(r)
+            continue
+        hit = False
+        for c in shared:
+            a, b = o[oi[c]], r[ni[c]]
+            if not same(a, b):
+                out["revised_cells"] += 1
+                per_col[c] += 1
+                hit = True
+                if len(revised) < 5000:
+                    revised.append((r[ni[tcol]], c, a, b, where(r, ni)))
+        out["revised_rows"] += hit
+    out["removed"] = len(old)
+    ot, nt = [r[oi[tcol]] for r in orows], [r[ni[tcol]] for r in nrows]
+    if ot and nt and max(ot) != max(nt):
+        out["latest_from"], out["latest_to"] = max(ot), max(nt)
+    out["top"] = [[titles.get(c, c), n] for c, n in per_col.most_common(4)]
+    ex = []
+    for r in sorted(fresh, key=lambda r: r[ni[tcol]], reverse=True)[:3]:        # newest added rows
+        c = next((c for c in lead if r[ni[c]] != ""), None)
+        if c:
+            ex.append(dict(where=where(r, ni), what=titles.get(c, c), new=show(r[ni[c]])))
+    seen = set()
+    for t, c, a, b, w in sorted(revised, key=lambda x: (c_rank(x[1], lead), x[0]), reverse=True):   # newest revisions, lead variables first
+        if c in seen or len(ex) >= 6:
+            continue
+        seen.add(c)
+        ex.append(dict(where=w, what=titles.get(c, c), old=show(a), new=show(b)))
+    out["examples"] = ex
+    if not (out["added"] or out["removed"] or out["revised_cells"] or out["cols_added"] or out["cols_removed"]):
+        return None                                                             # same data, different bytes
+    return out
+
+
+def c_rank(col, lead):
+    return -lead.index(col) if col in lead else -len(lead) - 1
+
+
+def log_run(manifest, old_dir, failed, at=None):
+    """Append one entry to the change log by comparing the fresh CSVs with the copies saved before the build."""
+    log = json.loads(CHANGELOG.read_text()) if CHANGELOG.exists() else {"runs": []}
+    changed, same_ids = [], []
+    for d in manifest:
+        new, old = ROOT / "docs" / d["file"], Path(old_dir) / f"{d['id']}.csv"
+        if not old.exists():
+            changed.append(dict(id=d["id"], title=d["title"], rows=d["rows"], new_dataset=True))
+            continue
+        x = diff_dataset(d, old, new)
+        if x:
+            changed.append(x)
+        else:
+            same_ids.append(d["id"])
+    run = dict(at=at or datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"), changed=changed, unchanged=same_ids)
+    if failed:
+        run["failed"] = failed
+    log = dict(cron=CRON, runs=([run] + log.get("runs", []))[:120])
+    CHANGELOG.write_text(json.dumps(log, separators=(",", ":"), ensure_ascii=False))
+    print(f"change log: {len(changed)} changed, {len(same_ids)} unchanged")
+    return run
+
+
+# ---------- newest value of every variable for every place ----------
+
+def sig(v, n=6):
+    x = float(f"{v:.{n}g}")
+    return int(x) if x == int(x) and abs(x) < 1e15 else x
+
+
+def build_latest(manifest):
+    """For country-and-year datasets: each place's newest value of each variable, and the value ten years before it."""
+    LATEST.mkdir(parents=True, exist_ok=True)
+    for d in manifest:
+        if d["keys"] != ["code", "year"]:
+            continue
+        h, rows = read_rows(ROOT / "docs" / d["file"])
+        i = {c: k for k, c in enumerate(h)}
+        codes = [p[0] for p in d["places"]]
+        pos = {c: k for k, c in enumerate(codes)}
+        out = {}
+        for c in d["columns"]:
+            if c["type"] != "num":
+                continue
+            by = {}
+            for r in rows:
+                if r[i[c["name"]]] != "":
+                    by.setdefault(r[i["code"]], {})[int(r[i["year"]])] = float(r[i[c["name"]]])
+            y, v, p = [None] * len(codes), [None] * len(codes), [None] * len(codes)
+            for code, s in by.items():
+                yy = max(s)
+                y[pos[code]], v[pos[code]] = yy, sig(s[yy])
+                if yy - 10 in s:
+                    p[pos[code]] = sig(s[yy - 10])
+            out[c["name"]] = dict(y=y, v=v, p=p)
+        text = json.dumps(dict(dataset=d["id"], built=d["built"], codes=codes, vars=out), separators=(",", ":"))
+        path = LATEST / f"{d['id']}.json"
+        if not path.exists() or path.read_text() != text:
+            path.write_text(text)
+    print("latest values written for", ", ".join(d["id"] for d in manifest if d["keys"] == ["code", "year"]))
+
+
+def build_sample(real):
+    """A small, real table for trying the 'Your data' page: one row per country for one recent year."""
+    wants = [("world-bank-development", c) for c in ("population", "gdp_per_capita", "life_expectancy", "under_5_mortality", "internet_users", "urban_population_share")] + \
+            [("co2-and-greenhouse-gases", "co2_per_capita"), ("energy", "renewables_share_elec")]
+    if not real:
+        return
+    data = {}
+    for ds in {w[0] for w in wants}:
+        path = SETS / f"{ds}.csv"
+        if not path.exists():
+            return
+        h, rows = read_rows(path)
+        i = {c: k for k, c in enumerate(h)}
+        for _, c in [w for w in wants if w[0] == ds]:
+            if c not in i:
+                return
+            for r in rows:
+                if r[i[c]] != "" and r[i["code"]] in real:
+                    data.setdefault(c, {}).setdefault(r[i["year"]], {})[r[i["code"]]] = r[i[c]]
+    years = [y for y in sorted(data["gdp_per_capita"]) if len(data["gdp_per_capita"][y]) >= 150 and len(data["life_expectancy"].get(y, {})) >= 150]
+    if not years:
+        return
+    y = years[-1]
+    with open(SAMPLE, "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["country", "code", "region", "income_group", "year"] + [c for _, c in wants])
+        for code, c in sorted(real.items(), key=lambda kv: kv[1]["name"]):
+            if code.startswith("OWID_"):
+                continue
+            w.writerow([c["name"], code, c["region"], c.get("income", ""), y] + [data[v].get(y, {}).get(code, "") for _, v in wants])
+    print("sample table written for", y)
+
+
 def main():
+    derive_only = "--derive" in sys.argv                    # rebuild only the derived files from the CSVs already on disk
     SETS.mkdir(parents=True, exist_ok=True)
-    old = {d["id"]: d for d in json.loads(MANIFEST.read_text())["datasets"]} if MANIFEST.exists() else {}
+    before = tempfile.mkdtemp()
+    for f in SETS.glob("*.csv"):
+        shutil.copy(f, before)
+    was = json.loads(MANIFEST.read_text()) if MANIFEST.exists() else {"datasets": []}
+    old = {d["id"]: d for d in was["datasets"]}
     out, failed = [], []
-    for b in BUILDERS:
+    for b in ([] if derive_only else BUILDERS):
         try:
             d = b()
-            skip = ("built", "places", "default_vars", "chart_entities", "coverage", "chart", "default_entities")
+            skip = ("built", "places", "default_vars", "chart_entities", "coverage", "chart", "default_entities", "cadence")
             if old.get(d["id"]) and {k: v for k, v in old[d["id"]].items() if k not in skip} == {k: v for k, v in d.items() if k not in skip}:
                 d["built"] = old[d["id"]]["built"]          # unchanged data keeps its date
             out.append(d)
@@ -605,6 +825,7 @@ def main():
     out.sort(key=lambda d: ORDER.index(d["id"]) if d["id"] in ORDER else len(ORDER))
     for d in out:
         d.update(DEFAULTS.get(d["id"], {}))
+        d["cadence"] = CADENCE.get(d["id"], "")
         d.pop("default_entities", None)
         if d.get("entity"):
             with open(ROOT / "docs" / d["file"], encoding="utf-8") as f:
@@ -612,8 +833,18 @@ def main():
                 h = next(r)
                 ci, li = h.index(d["entity"]["col"]), h.index(d["entity"]["label_col"])
                 d["places"] = sorted({(row[ci], row[li]) for row in r}, key=lambda p: p[1])
-    MANIFEST.write_text(json.dumps({"datasets": out}, indent=1, ensure_ascii=False))
-    build_pulse(build_countries())
+    now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    if derive_only:                                         # nothing was fetched, so the time of the last real check stands
+        log = json.loads(CHANGELOG.read_text()) if CHANGELOG.exists() else {}
+        now = was.get("checked") or (log.get("runs") or [{}])[0].get("at") or now
+    MANIFEST.write_text(json.dumps({"checked": now, "cron": CRON, "datasets": out}, indent=1, ensure_ascii=False))
+    real = (json.loads(COUNTRIES.read_text())["countries"] if COUNTRIES.exists() else {}) if derive_only else build_countries()
+    build_pulse(real)
+    build_latest(out)
+    build_sample(real)
+    if not derive_only:
+        log_run(out, before, failed, now)
+    shutil.rmtree(before, ignore_errors=True)
     sys.exit(1 if failed and not out else 0)
 
 

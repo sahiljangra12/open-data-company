@@ -90,6 +90,14 @@ for i, (n, kind) in enumerate([(15, "normal"), (60, "ties"), (146, "normal"), (4
     r = mk.original_test(y); ts = st.theilslopes(y, t, 0.95, method="separate")
     ref[f"trend{i}"] = dict(mk=dict(s=r.s, varS=r.var_s, z=r.z, p=r.p, tau=r.Tau), sen=dict(slope=ts.slope, intercept=ts.intercept, lo=ts.low_slope, hi=ts.high_slope))
 
+# --- two-way tables of counts ---
+from scipy.stats.contingency import association
+for i, (r, c, scale) in enumerate([(2, 2, 40), (3, 4, 25), (5, 2, 8), (6, 6, 300), (2, 7, 3)]):
+    tb = rng.poisson(scale, (r, c)) + 1 + (np.arange(r)[:, None] * np.arange(c)[None, :]) * (scale // 6)
+    cases[f"table{i}"] = dict(kind="table", table=tb.tolist())
+    ch = st.chi2_contingency(tb, correction=False)
+    ref[f"table{i}"] = dict(chi2=ch.statistic, df=ch.dof, p=ch.pvalue, cramersV=association(tb, method="cramer"), expected=ch.expected_freq.tolist())
+
 out = json.loads(subprocess.run(["node", str(Path(__file__).with_name("run_stats.js"))], input=json.dumps(cases), capture_output=True, text=True, check=True).stdout)
 
 worst, bad, checked = 0.0, [], 0

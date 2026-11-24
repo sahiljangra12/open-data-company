@@ -1,5 +1,5 @@
-/* Home page: live earthquake globe, value ticker, running counters, self-drawing charts, dataset tiles. */
-/* needs core.js */
+/* Home page: the live Earth, value ticker, running counters, self-drawing charts, dataset list, world map, update clock. */
+/* needs core.js and earth.js */
 const svg = svgEl;
 const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const FEED = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson";
@@ -9,17 +9,18 @@ const onScreen = (node, cb) => new IntersectionObserver(es => cb(es[0].isInterse
 
 /* ---------- globe ---------- */
 function makeGlobe(box, land) {
-  const cv = $("canvas", box), ctx = cv.getContext("2d"), tip = $("#gtip"), RAD = Math.PI / 180;
+  const cv = $("canvas.marks", box), ctx = cv.getContext("2d"), tip = $("#gtip"), RAD = Math.PI / 180;
+  const ecv = $("canvas.earth", box), earth = makeEarth(ecv);       // the photo Earth; if it cannot start, the dotted globe below is drawn instead
   const vec = (lon, lat) => [Math.cos(lat * RAD) * Math.sin(lon * RAD), Math.sin(lat * RAD), Math.cos(lat * RAD) * Math.cos(lon * RAD)];
   const L = new Float32Array(land.length / 2 * 3);
   for (let i = 0; i < land.length; i += 2) L.set(vec(land[i], land[i + 1]), i / 2 * 3);
-  let rot = 100 * RAD, tilt = 20 * RAD, quakes = [], dpr = 1, visible = true, drag = null, last = 0, raf = 0, first = true;
+  let rot = -(sunNow().lon + 38) * RAD, tilt = 18 * RAD, quakes = [], dpr = 1, visible = true, drag = null, last = 0, raf = 0, first = true;   // starts on the sunlit side, with dusk and the first city lights at the right edge
   const seen = new Set();
 
   function size() {
     dpr = Math.min(2, devicePixelRatio || 1);
     const w = Math.round(box.clientWidth * dpr);
-    if (w && cv.width !== w) { cv.width = w; cv.height = w; }
+    if (w && cv.width !== w) { cv.width = w; cv.height = w; ecv.width = w; ecv.height = w; }
     draw(performance.now());
   }
 
@@ -27,6 +28,12 @@ function makeGlobe(box, land) {
     const w = cv.width, R = w * 0.44, cx = w / 2, cy = w / 2;
     if (!w) return;
     ctx.clearRect(0, 0, w, w);
+    const photo = earth.ready; ecv.hidden = !photo;
+    if (photo) earth.draw(w, R, rot, tilt); else dots(w, R, cx, cy);
+    marks(now, R, cx, cy, photo);
+  }
+
+  function dots(w, R, cx, cy) {
     let g = ctx.createRadialGradient(cx, cy, R * 0.92, cx, cy, R * 1.13);
     g.addColorStop(0, "rgba(70,140,255,.30)"); g.addColorStop(1, "rgba(70,140,255,0)");
     ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx, cy, R * 1.13, 0, 7); ctx.fill();
@@ -47,7 +54,10 @@ function makeGlobe(box, land) {
       for (let i = 0; i < b.length; i += 2) { ctx.moveTo(b[i] + s, b[i + 1]); ctx.arc(b[i], b[i + 1], s, 0, 6.2832); }
       ctx.fill();
     });
+  }
 
+  function marks(now, R, cx, cy, photo) {
+    const ca = Math.cos(rot), sa = Math.sin(rot), ct = Math.cos(tilt), st = Math.sin(tilt);
     const t = Date.now(), u = Math.max(0.75 * dpr, R / 330);     // marker unit: scales with the globe
     for (const q of quakes) {
       const z1 = q.v[2] * ca - q.v[0] * sa, z = q.v[1] * st + z1 * ct;
@@ -63,6 +73,7 @@ function makeGlobe(box, land) {
       }
       ctx.fillStyle = `rgba(255,150,46,${0.08 + k * 0.2})`; ctx.beginPath(); ctx.arc(q.x, q.y, r * 1.9, 0, 7); ctx.fill();
       ctx.fillStyle = `hsla(${30 + k * 16},100%,${50 + k * 34}%,${0.72 + k * 0.28})`; ctx.beginPath(); ctx.arc(q.x, q.y, r, 0, 7); ctx.fill();
+      if (photo) { ctx.strokeStyle = "rgba(60,20,0,.75)"; ctx.lineWidth = Math.max(1, u * 0.7); ctx.stroke(); }      // an edge, so a dot reads over bright cloud and desert too
     }
   }
 
@@ -92,6 +103,7 @@ function makeGlobe(box, land) {
   const end = () => { drag = null; };
   cv.addEventListener("pointerup", end); cv.addEventListener("pointercancel", end);
   cv.addEventListener("pointerleave", () => { tip.hidden = true; });
+  earth.onready = () => { if (reduce) draw(performance.now()); };
   new ResizeObserver(size).observe(box);
   onScreen(box, v => { visible = v; if (v) kick(); });
   document.addEventListener("visibilitychange", kick);
@@ -113,10 +125,9 @@ function liveFeed(globe, snapshot) {
   let list = [], mode = "";
   function readouts() {
     if (!list.length) return;
-    const strong = list.reduce((a, b) => (b.mag > a.mag ? b : a)), recent = list.reduce((a, b) => (b.time > a.time ? b : a));
+    const strong = list.reduce((a, b) => (b.mag > a.mag ? b : a));
     $("#q-count").textContent = list.length.toLocaleString("en-US");
     $("#q-max").textContent = `M ${strong.mag.toFixed(1)}`; $("#q-max-s").textContent = `strongest: ${strong.place}, ${ago(strong.time)}`;
-    $("#q-last").textContent = `M ${recent.mag.toFixed(1)}`; $("#q-last-s").textContent = `most recent: ${recent.place}, ${ago(recent.time)}`;
   }
   function show(qs, how, label) { list = qs; mode = how; globe.set(qs); dot.classList.toggle("on", how === "live"); text.textContent = label; readouts(); }
   async function poll() {
@@ -136,6 +147,8 @@ function liveFeed(globe, snapshot) {
       } else text.textContent = "The live earthquake feed is not reachable from this network right now";
     }
   }
+  const sun = () => { $("#sun-note").textContent = `Day and night shown as they are now, ${new Date().toISOString().slice(11, 16)} UTC. Photos: NASA.`; };
+  sun(); setInterval(sun, 30000);
   poll(); setInterval(poll, 60000); setInterval(readouts, 30000);
   document.addEventListener("visibilitychange", () => { if (!document.hidden) poll(); });
 }
@@ -283,8 +296,18 @@ function stories(list) {
 
 /* ---------- dataset list ---------- */
 const DOMAIN = { "Economy and development": "var(--s1)", "Energy": "var(--s4)", "Climate and emissions": "var(--s3)", "Natural hazards": "var(--s8)" };   // identity colours for the four topics
+const TOPIC = { "Climate and emissions": ["topic-climate.jpg", "Greenland and the North Atlantic, seen from orbit"], "Energy": ["topic-energy.jpg", "Europe at night, seen from orbit"],
+  "Economy and development": ["topic-economy.jpg", "Africa, Europe and the Middle East, seen from orbit"], "Natural hazards": ["topic-hazards.jpg", "East Asia and the western Pacific, seen from orbit"] };
 function rows(D, sparks) {
-  const box = $("#rows"); let region = "";
+  const box = $("#rows"), topics = $("#topics"); let region = "", topic = "";
+  Object.keys(TOPIC).forEach(name => {
+    const mine = D.filter(d => d.domain === name); if (!mine.length) return;
+    const b = el("button"), img = new Image(), cap = el("span"); b.type = "button"; b.dataset.t = name; b.setAttribute("aria-pressed", "false");
+    img.src = "img/" + TOPIC[name][0]; img.alt = TOPIC[name][1]; img.loading = "lazy"; img.width = 720; img.height = 480;
+    cap.append(el("b", "", name), el("small", "", `${mine.length} dataset${mine.length > 1 ? "s" : ""}, ${mine.reduce((n, d) => n + d.columns.length, 0)} variables`));
+    b.append(img, cap); topics.append(b);
+  });
+  topics.onclick = e => { const b = e.target.closest("button"); if (!b) return; topic = topic === b.dataset.t ? "" : b.dataset.t; [...topics.children].forEach(x => x.setAttribute("aria-pressed", x.dataset.t === topic)); draw(); };
   const spark = sp => {
     const w = el("div", "spark"), lo = Math.min(...sp.pts), hi = Math.max(...sp.pts), n = sp.pts.length, y = v => 6 + (1 - (v - lo) / (hi - lo || 1)) * 88;
     const sv = svg("svg", { viewBox: "0 0 100 100", preserveAspectRatio: "none", role: "img", "aria-label": sp.label });
@@ -293,7 +316,7 @@ function rows(D, sparks) {
     w.append(sv, dot); return w;
   };
   function draw() {
-    const list = D.filter(d => !region || d.region === region);
+    const list = D.filter(d => (!region || d.region === region) && (!topic || d.domain === topic));
     box.replaceChildren(...list.map(d => {
       const row = el("article", "ds"), main = el("div"), h = el("h3"), a = el("a", "", d.title), href = `explore.html#d=${encodeURIComponent(d.id)}`;
       a.href = href; h.append(a);
@@ -310,7 +333,7 @@ function rows(D, sparks) {
       row.append(main, dl, sparks[d.id] ? spark(sparks[d.id]) : el("div", "spark"), go);
       return row;
     }));
-    if (!list.length) box.append(el("p", "empty", "No datasets for that region yet."));
+    if (!list.length) box.append(el("p", "empty", "No datasets match both choices yet. Clear one of them."));
   }
   $("#regions").onclick = e => { const b = e.target.closest("button"); if (!b) return; region = b.dataset.r; [...$("#regions").children].forEach(x => x.setAttribute("aria-pressed", x === b)); draw(); };
   draw();
@@ -343,31 +366,29 @@ function search(D) {
   }
   let act = -1, list = [];
   const close = () => { box.hidden = true; input.setAttribute("aria-expanded", "false"); };
+  const askUrl = t => `ask.html?q=${encodeURIComponent(t.trim()).replace(/%20/g, "+")}`;
   function draw() {
-    if (!input.value.trim()) { close(); return; }
-    list = find(input.value); act = Math.min(act, list.length - 1);
-    box.replaceChildren(...(list.length ? list.map((r, i) => { const a = el("a", "res" + (i === act ? " act" : "")); a.href = r.href; a.setAttribute("role", "option"); a.append(el("b", "", r.main), el("small", "", r.side)); return a; })
-      : [el("div", "res none", "Nothing matches. Try one simpler word, or browse the datasets below.")]));
+    const text = input.value.trim();
+    if (!text) { close(); return; }
+    list = [{ main: `Answer: ${text}`, side: "The number, its year and its source", href: askUrl(text), ask: true }, ...find(text).map(r => ({ ...r, side: `Open the data: ${r.side}` }))];
+    act = Math.min(act, list.length - 1);
+    box.replaceChildren(...list.map((r, i) => { const a = el("a", "res" + (i === act ? " act" : "") + (r.ask ? " ask" : "")); a.href = r.href; a.setAttribute("role", "option"); a.append(el("b", "", r.main), el("small", "", r.side)); return a; }));
     box.hidden = false; input.setAttribute("aria-expanded", "true");
   }
   input.addEventListener("input", () => { act = -1; draw(); });
   input.addEventListener("focus", draw);
   input.addEventListener("keydown", e => {
     if (e.key === "ArrowDown" || e.key === "ArrowUp") { act = Math.max(0, Math.min(list.length - 1, act + (e.key === "ArrowDown" ? 1 : -1))); draw(); $(".res.act", box)?.scrollIntoView({ block: "nearest" }); e.preventDefault(); }
-    else if (e.key === "Enter") { const r = list[act < 0 ? 0 : act]; if (r && input.value.trim()) location.href = r.href; e.preventDefault(); }
+    else if (e.key === "Enter") { const r = list[act < 0 ? 0 : act]; if (r && input.value.trim()) location.href = r.href; e.preventDefault(); }       // no row picked: the first row is the answer
     else if (e.key === "Escape") { close(); }
   });
   document.addEventListener("mousedown", e => { if (!e.target.closest(".search")) close(); });
 
-  const QUICK = [["CO2 by country", "co2-and-greenhouse-gases", "co2,co2_per_capita"], ["GDP per person", "world-bank-development", "gdp_per_capita"], ["Population", "world-bank-development", "population"],
-    ["Solar and wind", "energy", "solar_share_elec,wind_share_elec"], ["Life expectancy", "world-bank-development", "life_expectancy"], ["Global temperature", "global-temperature", ""],
-    ["Earthquakes", "earthquakes-past-30-days", ""], ["Oil prices", "crude-oil-prices", ""]];
-  QUICK.forEach(([label, id, v]) => {
-    const d = D.find(x => x.id === id); if (!d || (v && !v.split(",").every(n => d.columns.some(c => c.name === n)))) return;
-    const a = el("a", "", label); a.href = link(d, v, null); $("#quick").append(a);
-  });
+  $("#askform").addEventListener("submit", e => { if (!input.value.trim()) e.preventDefault(); });
+  ["India life expectancy", "Top CO2 emitters", "China vs India solar power", "World population", "Oil price", "Which country is richest?", "Earthquakes today"]
+    .forEach(q => { const a = el("a", "", q); a.href = askUrl(q); $("#quick").append(a); });
   const nv = D.reduce((n, d) => n + d.columns.length, 0), nr = D.reduce((n, d) => n + d.rows, 0);
-  $("#scope").textContent = `${D.length} datasets, ${nv} variables, ${nr.toLocaleString("en-US")} rows. Refreshed every day.`;
+  $("#scope").textContent = `Answers come from ${D.length} datasets with ${nv} variables and ${nr.toLocaleString("en-US")} rows, checked every day.`;
 }
 
 /* ---------- world map ---------- */
@@ -405,10 +426,36 @@ function worldMap(shape, layers, D) {
   draw();
 }
 
+/* ---------- photo band: one fact that belongs to the picture ---------- */
+function band(b) {
+  if (!b) return;
+  $("#band-text").textContent = `Every light is electricity reaching someone. In ${b.year}, ${b.value}% of the world's people had it at home, up from ${b.before}% in ${b.before_year}. The dark stretches are oceans, deserts and the places still waiting.`;
+  $("#band").hidden = false;
+}
+
+/* ---------- update clock ---------- */
+function fresh(man, log) {
+  if (!man.checked) return;
+  const last = Date.parse(man.checked), list = $("#f-list"), run = (log && log.runs || [])[0];
+  const local = t => new Date(t).toLocaleString([], { weekday: "short", hour: "numeric", minute: "2-digit" });
+  function tick() {
+    const next = nextRun(man.cron), left = Math.max(0, next - Date.now()), h = Math.floor(left / 36e5), m = Math.floor(left % 36e5 / 6e4);
+    $("#f-last").textContent = timeAgo(last); $("#f-last-s").textContent = `${local(last)}, your time`;
+    $("#f-next").textContent = h ? `in ${h} h ${m} min` : `in ${m} min`; $("#f-next-s").textContent = `${local(next)}, your time. It can start a few minutes late.`;
+  }
+  tick(); setInterval(tick, 30000);
+  if (run) {
+    run.changed.slice(0, 4).forEach(c => { const li = el("li"), a = el("a", "", c.title); a.href = `updates.html#${c.id}`; li.append(a, document.createTextNode(`: ${changeLine(c)}`)); list.append(li); });
+    if (!run.changed.length) list.append(el("li", "", "Nothing changed at the sources since the check before."));
+    if (run.unchanged.length && run.changed.length) list.append(el("li", "same", `${run.unchanged.length} other dataset${run.unchanged.length > 1 ? "s" : ""} checked, no change.`));
+  }
+  $("#fresh").hidden = false;
+}
+
 /* ---------- start ---------- */
 (async () => {
-  const get = u => fetch(u).then(r => { if (!r.ok) throw new Error(u); return r.json(); });
-  const [land, pulse, sets, cat, shape] = await Promise.all([get("data/land.json"), get("data/pulse.json").catch(() => ({})), get("data/datasets.json"), get("data/catalog.json").catch(() => null), get("data/worldmap.json").catch(() => null)]);
+  const get = getJSON;
+  const [land, pulse, sets, log, shape] = await Promise.all([get("data/land.json"), get("data/pulse.json").catch(() => ({})), get("data/datasets.json"), get("data/changelog.json").catch(() => null), get("data/worldmap.json").catch(() => null)]);
   liveFeed(makeGlobe($("#globe"), land), pulse.quakes);
   ticker(pulse.tickers || []);
   counters(pulse.counters || {});
@@ -416,5 +463,5 @@ function worldMap(shape, layers, D) {
   rows(sets.datasets, pulse.sparks || {});
   search(sets.datasets);
   worldMap(shape, pulse.maps || [], sets.datasets);
-  if (cat) $("#n-src").textContent = cat.count;
+  band(pulse.band); fresh(sets, log);
 })().catch(e => { console.error(e); $("#live-text").textContent = "This page could not load its data. Reload to try again."; });

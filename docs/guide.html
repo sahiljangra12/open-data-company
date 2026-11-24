@@ -1,0 +1,82 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Guide: how to use Open Data Company</title><meta name="description" content="How to ask for a number, download a dataset, test a hypothesis, analyse your own file and use the data from code or an AI system. Short steps with pictures."><!--seo--><link rel="canonical" href="https://sahiljangra12.github.io/open-data-company/guide.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Open Data Company"><meta property="og:title" content="Guide: how to use Open Data Company"><meta property="og:description" content="How to ask for a number, download a dataset, test a hypothesis, analyse your own file and use the data from code or an AI system. Short steps with pictures."><meta property="og:url" content="https://sahiljangra12.github.io/open-data-company/guide.html"><meta property="og:image" content="https://sahiljangra12.github.io/open-data-company/img/share.jpg"><meta name="twitter:card" content="summary_large_image"><link rel="alternate" type="text/plain" href="https://sahiljangra12.github.io/open-data-company/llms.txt" title="Plain-text index of the data"><!--/seo--><script>try{document.documentElement.dataset.theme=localStorage.getItem("theme")==="dark"?"dark":"light"}catch(e){document.documentElement.dataset.theme="light"}</script>
+<link rel="preload" href="fonts/barlow-condensed-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="assets/site.css"></head>
+<body data-page="guide"><header class="top"><div class="wrap"><a class="brand" href="index.html">Open Data<span class="wide"> Company</span></a><button class="menu-btn" id="menu" type="button" aria-expanded="false" aria-controls="nav">Menu</button><nav id="nav" aria-label="Main"><a href="ask.html">Ask</a><a href="datasets.html">Datasets</a><a href="explore.html">Explorer</a><a href="research.html">Research</a><a href="mydata.html">Your data</a><a href="updates.html">Updates</a><a href="guide.html" class="on" aria-current="page">Guide</a></nav><button class="theme" id="theme" type="button">Dark</button></div></header><main>
+<div class="wrap">
+<div class="xhead"><h1>How to use it</h1>
+<p>Five things you can do here, each in a few steps. Everything is free, nothing needs an account, and every number tells you where it came from.</p></div>
+<nav class="toc" aria-label="On this page"><a href="#ask">Ask for a number</a><a href="#take">Take a dataset</a><a href="#test">Test an idea</a><a href="#own">Analyse your own file</a><a href="#fresh">Check how fresh it is</a><a href="#code">Use it from code or AI</a><a href="#faq">Questions</a></nav>
+
+<section class="gstep" id="ask"><div class="gtext"><h2>Ask for a number</h2>
+<ol><li><b>Type a measure and a place</b> in the box on the home page or on Ask: <em>Kenya internet users</em>, <em>top 5 wind power</em>, <em>oil price</em>.</li>
+<li><b>Read the answer.</b> You get the value, its year, how it ranks, how it has moved in ten years and the full history as a chart.</li>
+<li><b>Check the "Read as" line</b> under the box. It says which variable and place your words were matched to, and offers others if it guessed wrong.</li>
+<li><b>Take it with you:</b> copy the answer with its source, download the numbers, or open the same slice in the explorer.</li></ol>
+<a class="btn solid" href="ask.html">Ask a question</a>
+<p>Answers are looked up, never written by a model. If the data does not hold it, the page says so.</p></div>
+<img src="img/shot-ask.jpg" width="1200" height="680" loading="lazy" alt="The Ask page answering India life expectancy with 72.2 years, the ten-year change, the rank among countries and the world figure"></section>
+
+<section class="gstep" id="take"><div class="gtext"><h2>Take a dataset</h2>
+<ol><li><b>Pick a dataset</b> from the <a href="datasets.html">full list</a>. One click on Download CSV takes the whole file.</li>
+<li><b>Or customize it first.</b> In the explorer, choose the variables, the countries and the years. Each choice is a chip you can remove.</li>
+<li><b>Check before you take it:</b> the Table tab shows the exact rows, Chart draws them, Summary gives the key figures.</li>
+<li><b>Choose a format</b> in the bar at the bottom (CSV, Excel, JSON or TSV) and download. Copy link gives a link that reopens the same view.</li></ol>
+<a class="btn get" href="datasets.html">Browse the datasets</a>
+<p>Under "Conditions and merging" you can keep only rows that meet a rule, or join a second dataset that shares the same countries and years.</p></div>
+<img src="img/shot-explore.jpg" width="1200" height="680" loading="lazy" alt="The explorer with solar electricity chosen for the world, China, India and Germany since 2005, shown as a chart with the download bar below"></section>
+
+<section class="gstep" id="test"><div class="gtext"><h2>Test an idea</h2>
+<ol><li><b>State a hypothesis</b> in Researcher mode, such as <em>richer countries live longer</em>, or pick an example.</li>
+<li><b>Check how it was read:</b> a relationship, a trend or a difference between groups, and which variables. Change anything that is off.</li>
+<li><b>Read the recommendation.</b> The page looks at the shape of the data and proposes a method, with its reasons. Other suitable methods are one click away.</li>
+<li><b>Run it.</b> You get the result in plain words, the numbers, charts, checks on the method, and a list of what the result does not show.</li></ol>
+<a class="btn" href="research.html">Open Researcher mode</a>
+<p>The statistics are checked against scipy and statsmodels on every change, and agree to better than one part in a billion.</p></div>
+<img src="img/shot-research.jpg" width="1200" height="680" loading="lazy" alt="Researcher mode recommending a linear regression with robust errors and stating the result in a sentence"></section>
+
+<section class="gstep" id="own"><div class="gtext"><h2>Analyse your own file</h2>
+<ol><li><b>Drop a file</b> on the Your data page: CSV or other text tables, Excel, OpenDocument, Numbers, JSON, Parquet, SPSS or Stata. It is read by your browser and never uploaded.</li>
+<li><b>Look at the picture:</b> rows, columns, empty cells, and one line per column with its type, its spread and anything worth checking.</li>
+<li><b>Pick a first look</b> the page suggests, or choose one of nine tools: summaries, group comparisons, relationships, correlations, trends, count tables and more.</li>
+<li><b>Keep going.</b> Results stay on the page so you can compare them. Copy any result, download its table, or save the whole file in another format.</li></ol>
+<a class="btn" href="mydata.html">Open a file</a>
+<p>No file to hand? The page has two samples to try.</p></div>
+<img src="img/shot-mydata.jpg" width="1200" height="680" loading="lazy" alt="The Your data page showing 217 rows and 13 columns, notes on what is worth a look, and one line for each column"></section>
+
+<section class="gstep" id="fresh"><div class="gtext"><h2>Check how fresh it is</h2>
+<ol><li><b>Every source is checked once a day.</b> The Updates page shows when the last check ran and counts down to the next.</li>
+<li><b>See what changed.</b> For each check: rows added, rows dropped, values revised, with examples of old and new values.</li>
+<li><b>Follow one dataset</b> by clicking its name; the log then shows only its changes.</li></ol>
+<a class="btn" href="updates.html">See the update log</a>
+<p>Earthquakes are the exception: the globe on the home page reads the US Geological Survey feed every minute.</p></div>
+<img src="img/shot-updates.jpg" width="1200" height="680" loading="lazy" alt="The Updates page with the time of the last check, a countdown to the next and a table of each dataset's newest entry"></section>
+
+<section id="code" style="border-top:1px solid var(--line2);padding-top:clamp(34px,6vh,64px)"><h2>Use it from code or with an AI system</h2>
+<p class="lead">Every file has a fixed address that keeps working after each refresh, and the site allows other pages and programs to read it.</p>
+<pre><code># Python: one dataset straight into a table
+import pandas as pd
+df = pd.read_csv("https://sahiljangra12.github.io/open-data-company/data/sets/world-bank-development.csv")
+india = df[df["code"] == "IND"][["year", "life_expectancy", "gdp_per_capita"]]
+
+# R
+df &lt;- read.csv("https://sahiljangra12.github.io/open-data-company/data/sets/energy.csv")</code></pre>
+<div class="grid">
+<div class="card"><h3>The manifest</h3><p><a href="data/datasets.json">data/datasets.json</a> lists every dataset and variable with its unit, description, source and licence.</p></div>
+<div class="card"><h3>Latest values</h3><p><code>data/latest/&lt;dataset&gt;.json</code> holds the newest value of every variable for every country, in one small file.</p></div>
+<div class="card"><h3>For AI systems</h3><p><a href="llms.txt">llms.txt</a> describes all of it in plain text. Give that address to a chatbot and ask it to answer from the files, citing them.</p></div>
+<div class="card"><h3>Change log</h3><p><a href="data/changelog.json">data/changelog.json</a> records what each daily check changed, so a program can tell whether to fetch again.</p></div>
+</div></section>
+
+<section id="faq"><h2>Questions</h2>
+<div class="faq" style="margin-top:18px">
+<details><summary>Is it free? Do I need an account?</summary><p>It is free and there is no account. Each dataset carries the licence of its source, shown beside it; most are Creative Commons Attribution or public domain, which allow reuse with credit.</p></details>
+<details><summary>Where do the numbers come from?</summary><p>From the publishers named on each dataset: Our World in Data, the World Bank, NASA, NOAA, the US Geological Survey, the US Energy Information Administration and PJM. The site reshapes their files into tidy tables. It does not estimate, fill gaps or adjust values.</p></details>
+<details><summary>How is this different from searching the web or asking a chatbot?</summary><p>A search gives you links to read and reconcile. A chatbot gives you a figure you cannot easily check, and it can be out of date or simply wrong. Here an answer is a lookup in a named dataset: you see the value, its year, its source and licence, and one click shows the rows behind it. The trade-off is scope: it only knows what is in the datasets listed on the site.</p></details>
+<details><summary>How do I cite a number?</summary><p>Use "Copy the answer with its source" on the Ask page. It gives the value, the year, the original publisher and a link back to the answer. In formal work, cite the original publisher as the source and this site as where you retrieved it.</p></details>
+<details><summary>Is my file uploaded when I use Your data?</summary><p>No. The file is opened by your own browser on your own computer. Nothing is sent to a server, and nothing is kept after you close the page. You can check this by turning off your internet connection after the page has loaded: it keeps working. Excel and Parquet files need a small helper that the page fetches the first time you open one.</p></details>
+<details><summary>Which file types can it open?</summary><p>Text tables separated by commas, tabs, semicolons, pipes or spaces; Excel (.xlsx, .xls, .xlsb), OpenDocument (.ods), Apple Numbers and dBase (.dbf); JSON, JSON Lines and GeoJSON; Parquet; SPSS (.sav, .zsav) and Stata (.dta, version 8 onward); and any of these packed with gzip. SAS and R data files are not supported yet: export them to one of the above.</p></details>
+<details><summary>Can I trust the statistics?</summary><p>The calculations are tested against the standard scientific libraries each time the code changes. What no tool can do is choose the right question for you: every result lists what it does not show, such as cause and effect.</p></details>
+<details><summary>What can it not do?</summary><p>It does not hold every dataset in the world, it does not forecast, and Ask understands a limited set of words rather than free conversation. When it cannot answer, it says so and points you to the list of variables.</p></details>
+</div></section>
+</div>
+</main><footer><div class="wrap"><nav aria-label="Footer"><a href="ask.html">Ask</a><a href="datasets.html">Datasets</a><a href="explore.html">Explorer</a><a href="research.html">Researcher mode</a><a href="mydata.html">Your data</a><a href="updates.html">Updates</a><a href="guide.html">Guide</a><a href="catalog.html">Sources we are working through</a><a href="scorecard.html">Case study: grid forecast scorecard</a><a href="llms.txt">Plain-text index for AI systems</a><a href="https://github.com/sahiljangra12/open-data-company">GitHub</a></nav><p>Open Data Company is a working name. Everything here is free to use. Each dataset keeps its own source and licence, shown beside it.</p><p>Data from Our World in Data, the World Bank, NASA, NOAA, the US Geological Survey, the US Energy Information Administration and PJM. Earth imagery from NASA Earth Observatory (Blue Marble and Black Marble). Map outlines from Natural Earth.</p></div></footer><script src="assets/core.js"></script></body></html>

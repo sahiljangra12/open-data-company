@@ -11,14 +11,42 @@ const cssVar = name => getComputedStyle(document.documentElement).getPropertyVal
 /* ---------- light / dark ---------- */
 (function () {
   const root = document.documentElement, btn = $("#theme");
-  const label = () => { if (!btn) return; const dark = root.dataset.theme !== "light"; btn.textContent = dark ? "Light" : "Dark"; btn.setAttribute("aria-label", `Switch to ${dark ? "light" : "dark"} mode`); };
+  const label = () => { if (!btn) return; const dark = root.dataset.theme === "dark"; btn.textContent = dark ? "Light" : "Dark"; btn.setAttribute("aria-label", `Switch to ${dark ? "light" : "dark"} mode`); };
   if (btn) btn.onclick = () => {
-    root.dataset.theme = root.dataset.theme === "light" ? "dark" : "light";
+    root.dataset.theme = root.dataset.theme === "dark" ? "light" : "dark";
     try { localStorage.setItem("theme", root.dataset.theme); } catch (e) { /* private mode: the choice lasts for this page only */ }
     label(); document.dispatchEvent(new Event("themechange"));
   };
   label();
+  // the menu button that replaces the row of links on narrow screens
+  const menu = $("#menu"), nav = $("#nav");
+  if (menu && nav) {
+    const set = open => { nav.classList.toggle("open", open); menu.setAttribute("aria-expanded", open); menu.textContent = open ? "Close" : "Menu"; };
+    menu.onclick = () => set(!nav.classList.contains("open"));
+    document.addEventListener("keydown", e => { if (e.key === "Escape") set(false); });
+    document.addEventListener("click", e => { if (!e.target.closest("header.top")) set(false); });
+  }
 })();
+const SITE = "https://sahiljangra12.github.io/open-data-company/";
+const plural = (n, w) => `${n.toLocaleString("en-US")} ${w}${n === 1 ? "" : "s"}`;
+/* one entry of the change log as a sentence */
+function changeLine(c) {
+  if (c.new_dataset) return `new dataset with ${plural(c.rows, "row")}`;
+  if (c.note) return c.note;
+  const bits = [];
+  if (c.added) bits.push(`${plural(c.added, "row")} added`);
+  if (c.removed) bits.push(`${plural(c.removed, "row")} dropped`);
+  if (c.revised_cells) bits.push(`${plural(c.revised_cells, "value")} revised`);
+  if (c.cols_added && c.cols_added.length) bits.push(`${plural(c.cols_added.length, "variable")} added`);
+  if (c.cols_removed && c.cols_removed.length) bits.push(`${plural(c.cols_removed.length, "variable")} removed`);
+  return bits.join(", ") || "rebuilt, same values";
+}
+const getJSON = u => fetch(u).then(r => { if (!r.ok) throw new Error(`${u}: ${r.status}`); return r.json(); });
+/* numbers as a person would write them */
+const fmtN = (v, d = 3) => { if (v === null || v === undefined || !isFinite(v)) return "–"; const a = Math.abs(v); return a >= 1e12 ? `${+(v / 1e12).toPrecision(3)} trillion` : a >= 1e9 ? `${+(v / 1e9).toPrecision(3)} billion` : a >= 1e6 ? `${+(v / 1e6).toPrecision(3)} million` : a >= 10000 ? Math.round(v).toLocaleString("en-US") : a >= 100 ? String(+v.toFixed(1)).replace(/\B(?=(\d{3})+(?!\d))/g, ",") : String(+v.toPrecision(d)); };
+const timeAgo = ms => { const m = Math.max(0, Math.round((Date.now() - ms) / 60000)); return m < 1 ? "just now" : m < 60 ? `${m} min ago` : m < 2880 ? `${Math.round(m / 60)} h ago` : `${Math.round(m / 1440)} days ago`; };
+/* next run of a daily "minute hour * * *" schedule, in UTC */
+const nextRun = (cron, from = Date.now()) => { const [mi, h] = String(cron || "23 5 * * *").split(" ").map(Number), d = new Date(from); const t = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), h, mi); return t > from ? t : t + 864e5; };
 
 /* ---------- datasets ---------- */
 function splitLine(line) {

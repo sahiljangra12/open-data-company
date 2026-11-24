@@ -1,30 +1,42 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Open Data Company</title><meta name="description" content="Find, shape and download the world's open data in a few clicks. No scraping, no cleaning, no sign-up."><script>try{document.documentElement.dataset.theme=localStorage.getItem("theme")||"dark"}catch(e){document.documentElement.dataset.theme="dark"}</script>
-<link rel="preload" href="fonts/barlow-condensed-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="assets/site.css"></head>
-<body data-page="home"><header class="top"><div class="wrap"><a class="brand" href="index.html">Open Data<span class="wide"> Company</span></a><nav><a href="index.html#datasets" class="on">Datasets</a><a href="explore.html" class="wide ">Explorer</a><a href="research.html" class="">Research</a><a href="catalog.html" class="wide ">Sources</a><a href="https://github.com/sahiljangra12/open-data-company" class="wide">GitHub</a><button class="theme" id="theme" type="button">Light</button></nav></div></header><main>
+<title>Open Data Company: the world's open data, ready to use</title><meta name="description" content="Ask for a number and get it with its year and source, or take a whole dataset, shape it and download it. Climate, energy, economy and more. Free, no sign-up."><!--seo--><link rel="canonical" href="https://sahiljangra12.github.io/open-data-company/"><meta property="og:type" content="website"><meta property="og:site_name" content="Open Data Company"><meta property="og:title" content="Open Data Company: the world&#x27;s open data, ready to use"><meta property="og:description" content="Ask for a number and get it with its year and source, or take a whole dataset, shape it and download it. Climate, energy, economy and more. Free, no sign-up."><meta property="og:url" content="https://sahiljangra12.github.io/open-data-company/"><meta property="og:image" content="https://sahiljangra12.github.io/open-data-company/img/share.jpg"><meta name="twitter:card" content="summary_large_image"><link rel="alternate" type="text/plain" href="https://sahiljangra12.github.io/open-data-company/llms.txt" title="Plain-text index of the data"><!--/seo--><script>try{document.documentElement.dataset.theme=localStorage.getItem("theme")==="dark"?"dark":"light"}catch(e){document.documentElement.dataset.theme="light"}</script>
+<link rel="preload" href="fonts/barlow-condensed-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="assets/site.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Open Data Company","url":"https://sahiljangra12.github.io/open-data-company/","description":"Open datasets on climate, energy, economy, development and natural hazards, refreshed every day and free to download.","potentialAction":{"@type":"SearchAction","target":"https://sahiljangra12.github.io/open-data-company/ask.html?q={search_term_string}","query-input":"required name=search_term_string"}}</script></head>
+<body data-page="home"><header class="top"><div class="wrap"><a class="brand" href="index.html">Open Data<span class="wide"> Company</span></a><button class="menu-btn" id="menu" type="button" aria-expanded="false" aria-controls="nav">Menu</button><nav id="nav" aria-label="Main"><a href="ask.html">Ask</a><a href="datasets.html">Datasets</a><a href="explore.html">Explorer</a><a href="research.html">Research</a><a href="mydata.html">Your data</a><a href="updates.html">Updates</a><a href="guide.html">Guide</a></nav><button class="theme" id="theme" type="button">Dark</button></div></header><main>
 
 <section class="hero">
 <div class="wrap"><div class="hero-in">
 <h1>The world's open data</h1>
-<p class="lede">Find it, shape it and download it in a few clicks. No scraping, no cleaning, no sign-up.</p>
-<div class="search"><input id="sq" type="search" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="sres" aria-label="Search every dataset, variable and country" placeholder="Search, for example India GDP, solar or earthquakes"><div class="results" id="sres" role="listbox" hidden></div></div>
-<div class="quick" id="quick"><span class="up">Popular</span></div>
+<p class="lede">Ask for a number and get it with its year and its source. Or take a whole dataset, shape it and download it. No scraping, no cleaning, no sign-up.</p>
+<form class="search" id="askform" action="ask.html" method="get" role="search"><input id="sq" name="q" type="search" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="sres" aria-label="Ask a question or search the data" placeholder="Ask, for example: India life expectancy"><button class="btn solid" type="submit">Ask</button><div class="results" id="sres" role="listbox" hidden></div></form>
+<div class="quick" id="quick"><span class="up">Try</span></div>
 <p class="scope" id="scope"></p>
 </div></div>
-<div class="hero-art"><div class="globe" id="globe"><canvas role="img" aria-label="Rotating globe. Each dot marks an earthquake from the past 24 hours."></canvas><div class="tip" id="gtip" hidden></div></div></div>
+<div class="hero-art"><div class="globe" id="globe"><canvas class="earth" aria-hidden="true"></canvas><canvas class="marks" role="img" aria-label="The Earth as it is now: daylight and night-time lights, with a dot for each earthquake of the past 24 hours. Drag to turn it."></canvas><div class="tip" id="gtip" hidden></div></div></div>
 <div class="wrap"><div class="hero-foot">
 <span class="status" aria-live="polite"><span class="dot" id="live-dot"></span><span id="live-text">Connecting to the US Geological Survey earthquake feed.</span></span>
 <span class="rd"><b id="q-count">–</b>earthquakes in the past 24 hours</span>
 <span class="rd"><b id="q-max">–</b><span id="q-max-s">strongest</span></span>
-<span class="rd"><b id="q-last">–</b><span id="q-last-s">most recent</span></span>
+<span class="rd" id="sun-note"></span>
 </div></div>
 </section>
 
 <div class="ticker" id="ticker" role="region" aria-label="Latest values from the datasets"><div class="track" id="track"></div></div>
 
+<section class="sec" id="how"><div class="wrap">
+<div class="sec-head"><div><h2>Four ways to use it</h2><p>Start with the one that matches what you came for. <a href="guide.html">The guide</a> walks through each of them with examples.</p></div></div>
+<div class="ways">
+<a class="way" href="ask.html"><img src="img/shot-ask.jpg" width="960" height="600" loading="lazy" alt="The Ask page answering a question with a number, its year, its source and a chart"><div><h3>Ask for a number</h3><p>Type what you want to know. You get the value, its year, its source, a chart and a citation you can paste.</p><span class="btn solid">Ask a question</span></div></a>
+<a class="way" href="datasets.html"><img src="img/shot-explore.jpg" width="960" height="600" loading="lazy" alt="The explorer with variables, countries and years chosen and a table ready to download"><div><h3>Take a dataset</h3><p>Choose the variables, places and years. Check the table and the chart. Download CSV, Excel or JSON.</p><span class="btn get">Browse the datasets</span></div></a>
+<a class="way" href="research.html"><img src="img/shot-research.jpg" width="960" height="600" loading="lazy" alt="Researcher mode recommending a statistical test and showing its result with a chart"><div><h3>Test an idea</h3><p>State a hypothesis. Get the right test with the reasons for it, then the result in plain words with charts.</p><span class="btn">Open Researcher mode</span></div></a>
+<a class="way" href="mydata.html"><img src="img/shot-mydata.jpg" width="960" height="600" loading="lazy" alt="The Your data page showing a profile of an opened file, column by column"><div><h3>Analyse your own file</h3><p>Open a CSV, Excel, JSON, Parquet, SPSS or Stata file. It is read in your browser and never uploaded.</p><span class="btn">Open a file</span></div></a>
+</div>
+</div></section>
+
 <section class="sec" id="datasets"><div class="wrap">
-<div class="sec-head"><div><h2>Datasets</h2><p>Take a whole dataset in one click, or customize it first: choose the variables, places and years you need.</p></div>
+<div class="sec-head"><div><h2>Datasets</h2><p>Take a whole dataset in one click, or customize it first. <a href="datasets.html">See every variable in one list.</a></p></div>
 <div class="seg" id="regions" role="group" aria-label="Show datasets for"><button type="button" data-r="" aria-pressed="true">All</button><button type="button" data-r="World" aria-pressed="false">World</button><button type="button" data-r="US" aria-pressed="false">United States</button></div></div>
+<div class="topics" id="topics" role="group" aria-label="Show datasets on one topic"></div>
 <div id="rows"></div>
 </div></section>
 
@@ -35,6 +47,10 @@
 <div class="mapbox" id="mapbox"></div>
 <div class="maplegend" id="maplegend"></div>
 </div></section>
+
+<section class="band" id="band" hidden><img src="img/night-band.jpg" width="1991" height="683" loading="lazy" alt="Europe, North Africa and Asia at night, photographed from orbit. City lights trace where people live and where electricity reaches.">
+<div class="wrap"><div class="band-in"><h2>Electricity, seen from orbit</h2><p id="band-text"></p>
+<a class="btn" id="band-link" href="ask.html?q=access+to+electricity">See it by country</a><span class="credit">City lights from NASA Earth Observatory, Black Marble</span></div></div></section>
 
 <section class="sec" id="now"><div class="wrap">
 <div class="sec-head"><div><h2>The world this year</h2><p>Running estimates. Each one takes the latest full-year figure and spreads it evenly across the year.</p></div></div>
@@ -52,20 +68,14 @@
 </div>
 </div></section>
 
-<section class="sec" id="how"><div class="wrap">
-<div class="sec-head"><div><h2>How it works</h2></div></div>
-<div class="steps">
-<div><div class="n">01</div><h3>Find</h3><p>Search for a topic, a variable or a country, or pick a dataset from the list.</p></div>
-<div><div class="n">02</div><h3>Shape</h3><p>Choose the variables, places and years. Add conditions or merge a second dataset if you need to.</p></div>
-<div><div class="n">03</div><h3>Check</h3><p>See the exact table, a chart and a summary before you take anything.</p></div>
-<div><div class="n">04</div><h3>Download</h3><p>One click for CSV, Excel, JSON or TSV. Copy a link to share the same view.</p></div>
-</div>
-<div class="duo">
-<a href="research.html"><h3>Researcher mode</h3><p>State a hypothesis. Get the right test with the reasoning behind it, run it, and read the result with charts.</p><span class="btn solid">Test a hypothesis</span></a>
-<a href="catalog.html"><h3><span id="n-src">136</span> sources mapped</h3><p>The open sources we are working through, each rated for licence, update frequency and API access.</p><span class="btn">See the sources</span></a>
+<section class="sec" id="fresh" hidden><div class="wrap">
+<div class="sec-head"><div><h2>Kept fresh</h2><p>Every source is checked once a day, and each check records exactly what changed. Earthquakes on the globe above come straight from the US Geological Survey, minute by minute.</p></div>
+<a class="btn" href="updates.html">See the update log</a></div>
+<div class="clock">
+<div><span class="up">Last check</span><strong id="f-last">–</strong><small id="f-last-s"></small></div>
+<div><span class="up">Next check</span><strong id="f-next">–</strong><small id="f-next-s"></small></div>
+<div><span class="up">What the last check changed</span><ul id="f-list"></ul></div>
 </div>
 </div></section>
 
-</main><footer><div class="wrap"><nav aria-label="Footer"><a href="index.html#datasets">Datasets</a><a href="explore.html">Explorer</a><a href="research.html">Researcher mode</a><a href="catalog.html">Sources</a><a href="scorecard.html">Case study: grid forecast scorecard</a><a href="https://github.com/sahiljangra12/open-data-company">GitHub</a></nav>
-<p>Open Data Company is a working name. Everything here is free to use. Each dataset keeps its own source and licence, shown beside it.</p>
-<p>Data from Our World in Data, the World Bank, NASA, NOAA, the US Geological Survey, the US Energy Information Administration and PJM. Map outlines from Natural Earth.</p></div></footer><script src="assets/core.js"></script><script src="assets/home.js"></script></body></html>
+</main><footer><div class="wrap"><nav aria-label="Footer"><a href="ask.html">Ask</a><a href="datasets.html">Datasets</a><a href="explore.html">Explorer</a><a href="research.html">Researcher mode</a><a href="mydata.html">Your data</a><a href="updates.html">Updates</a><a href="guide.html">Guide</a><a href="catalog.html">Sources we are working through</a><a href="scorecard.html">Case study: grid forecast scorecard</a><a href="llms.txt">Plain-text index for AI systems</a><a href="https://github.com/sahiljangra12/open-data-company">GitHub</a></nav><p>Open Data Company is a working name. Everything here is free to use. Each dataset keeps its own source and licence, shown beside it.</p><p>Data from Our World in Data, the World Bank, NASA, NOAA, the US Geological Survey, the US Energy Information Administration and PJM. Earth imagery from NASA Earth Observatory (Blue Marble and Black Marble). Map outlines from Natural Earth.</p></div></footer><script src="assets/core.js"></script><script src="assets/earth.js"></script><script src="assets/home.js"></script></body></html>

@@ -25,14 +25,15 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install openpyxl
-      - run: python scripts/build_datasets.py
+      - run: python scripts/build_datasets.py     # datasets, latest values, change log
       - run: python scripts/build_catalog.py
       - run: python scripts/build_scorecard.py
+      - run: python scripts/build_site.py         # dataset list page, sitemap, plain-text index
       - name: Commit refreshed data
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/data
+          git add docs/data docs/*.html docs/llms.txt docs/sitemap.xml
           git diff --cached --quiet && echo "No changes" && exit 0
           git commit -m "Refresh datasets"
           git pull --rebase origin main

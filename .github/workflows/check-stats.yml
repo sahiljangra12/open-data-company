@@ -1,9 +1,9 @@
-name: Check statistics
+name: Check statistics and file readers
 
 on:
   push:
     branches: [main]
-    paths: ["docs/assets/stats.js", "tests/**", ".github/workflows/check-stats.yml"]
+    paths: ["docs/assets/stats.js", "docs/assets/readers.js", "docs/vendor/**", "tests/**", ".github/workflows/check-stats.yml"]
   workflow_dispatch:
 
 permissions:
@@ -21,5 +21,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - run: pip install numpy scipy statsmodels pymannkendall
-      - run: python tests/check_stats.py
+      - run: pip install numpy scipy statsmodels pymannkendall pandas openpyxl pyarrow pyreadstat
+      - run: python tests/check_stats.py       # the statistics against scipy and statsmodels
+      - run: python tests/check_readers.py     # every file format against pandas, pyarrow and pyreadstat

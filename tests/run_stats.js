@@ -15,5 +15,6 @@ for (const [name, c] of Object.entries(cases)) {
   else if (k === "paired") out[name] = { t: S.pairedT(c.d), w: S.wilcoxon(c.d) };
   else if (k === "groups") out[name] = { anova: S.anova(c.g), kw: S.kruskal(c.g) };
   else if (k === "trend") out[name] = { mk: S.mannKendall(c.y), sen: S.senSlope(c.t, c.y) };
+  else if (k === "table") out[name] = pick(S.chiSquare(c.table), ["chi2", "df", "p", "cramersV", "expected"]);
 }
 process.stdout.write(JSON.stringify(out));
