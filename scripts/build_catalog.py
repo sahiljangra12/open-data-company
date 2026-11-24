@@ -193,6 +193,8 @@ STATUS = {
     "Eurostat": ("live", ["europe-eurostat"], "Twelve headline tables for every European country."),
     "USGS Water Data": ("live", ["us-river-flow-monthly"], "Monthly flow of eight major rivers."),
     "Maryland Open Data": ("live", ["maryland-crime"], "Statewide crime, 1975 to 2020. Other tables are added one at a time."),
+    "FAO Food Price Index": ("live", ["fao-food-price-index"], "The monthly index and its five parts."),
+    "CDC PLACES": ("live", ["us-states-health"], "State figures built up from its county estimates."),
     "Climate TRACE": ("live", ["climate-trace-emissions"], "Country totals."),
     "HMDA mortgage records": ("live", ["us-mortgage-lending"], "Yearly national totals. The loan-by-loan files are too large to host."),
 

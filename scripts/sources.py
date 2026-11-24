@@ -1663,6 +1663,71 @@ def census_states():
 
 
 
+# ---------- FAO: the world food price index ----------
+def fao_food_prices():
+    raw = text("https://www.fao.org/fileadmin/templates/worldfood/Reports_and_docs/Food_price_indices_data.csv", tries=2)
+    base = (re.search(r"\((\d{4}-\d{4}) ?= ?100\)", raw[:300]) or [None, "base period"])[1]
+    mon = {m: i + 1 for i, m in enumerate("Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec".split())}
+    cols = ["food_price_index", "meat_price_index", "dairy_price_index", "cereals_price_index", "vegetable_oils_price_index", "sugar_price_index"]
+    cell = {}
+    for r in csv.reader(io.StringIO(raw)):
+        m = re.fullmatch(r"([A-Z][a-z]{2})-(\d{2})", r[0].strip()) if r else None
+        if m and m.group(1) in mon:
+            y = int(m.group(2)) + (1900 if int(m.group(2)) >= 90 else 2000)
+            vals = {c: float(v) for c, v in zip(cols, r[1:7]) if v.strip() not in ("", "-")}
+            if vals:
+                cell[f"{y}-{mon[m.group(1)]:02d}-01"] = vals
+    latest = max(cell)
+    assert latest >= f"{THIS_YEAR - 1}-06-01", f"fao_food_prices: the file stops at {latest[:7]}, so it is no longer kept up to date"
+    names = dict(food_price_index="World food price index (FAO)", meat_price_index="World meat price index (FAO)", dairy_price_index="World dairy price index (FAO)", cereals_price_index="World cereals price index (FAO)",
+                 vegetable_oils_price_index="World vegetable oils price index (FAO)", sugar_price_index="World sugar price index (FAO)")
+    meta = {c: dict(title=t, unit=f"index, {base} = 100", description="Food and Agriculture Organization of the United Nations: international prices of a basket of food commodities.") for c, t in names.items()}
+    return series("fao-food-price-index", "World food prices, monthly (FAO)", "How international prices of food have moved each month since 1990, overall and for meat, dairy, cereals, vegetable oils and sugar.",
+                  "World", "Economy and development", "Food and Agriculture Organization of the United Nations", "https://www.fao.org/worldfoodsituation/foodpricesindex/en/", "CC BY 4.0 (FAO open data)", cell, meta, cols, "month")
+
+
+# ---------- CDC PLACES: health in every US state, built up from its counties ----------
+def cdc_places():
+    found = J("https://api.us.socrata.com/api/catalog/v1?domains=data.cdc.gov&q=PLACES%20county%20data&limit=30", tries=2)["results"]
+    picks = []
+    for r in found:
+        m = re.search(r"PLACES: County Data \(GIS Friendly Format\), (\d{4}) release", r["resource"]["name"])
+        if m:
+            picks.append((int(m.group(1)), r["resource"]["id"], r["resource"].get("columns_field_name") or []))
+    assert picks, "cdc_places: the county file was not found in the CDC catalog"
+    year, rid, fields = max(picks)
+    want = [("obesity", "Adults with obesity"), ("diabetes", "Adults with diabetes"), ("csmoking", "Adults who smoke"), ("bphigh", "Adults with high blood pressure"), ("depression", "Adults ever told they have depression"),
+            ("lpa", "Adults with no physical activity in their free time"), ("access2", "Adults aged 18 to 64 with no health insurance"), ("sleep", "Adults who sleep less than seven hours"), ("binge", "Adults who binge drink"),
+            ("ghlth", "Adults in fair or poor health")]
+    have = [(k, t) for k, t in want if f"{k}_crudeprev" in fields]
+    pop = "totalpopulation" if "totalpopulation" in fields else "totalpop18plus"
+    assert len(have) >= 4 and pop in fields, f"cdc_places: unexpected columns {fields[:30]}"
+    rows = J(f"https://data.cdc.gov/resource/{rid}.json?$select=stateabbr,statedesc,{pop}," + ",".join(f"{k}_crudeprev" for k, _ in have) + "&$limit=6000", tries=2, timeout=200)
+    agg = {}
+    for r in rows:
+        try:
+            w = float(r[pop])
+        except (KeyError, TypeError, ValueError):
+            continue
+        a = agg.setdefault((r.get("stateabbr"), r.get("statedesc")), dict(pop=0.0))
+        a["pop"] += w
+        for k, _ in have:
+            try:
+                a[k] = a.get(k, 0.0) + float(r[f"{k}_crudeprev"]) * w
+                a["w_" + k] = a.get("w_" + k, 0.0) + w
+            except (KeyError, TypeError, ValueError):
+                pass
+    cols = ["population"] + [k for k, _ in have]
+    names = {"csmoking": "adults_who_smoke", "bphigh": "high_blood_pressure", "lpa": "no_leisure_physical_activity", "access2": "no_health_insurance", "sleep": "short_sleep", "binge": "binge_drinking", "ghlth": "fair_or_poor_health"}
+    out_cols = ["population"] + [names.get(k, k) for k, _ in have]
+    out = [[st, name, year, round(a["pop"])] + [num(a[k] / a["w_" + k]) if a.get("w_" + k) else "" for k, _ in have] for (st, name), a in sorted(agg.items()) if st and name]
+    meta = {names.get(k, k): dict(title=t, unit="% of adults", description="CDC PLACES model-based county estimates, averaged across each state's counties in proportion to their population. A guide, not an official state figure.") for k, t in have}
+    meta["population"] = dict(title="Population covered", unit="people")
+    return table("us-states-health", "Health in every US state", "How common obesity, diabetes, smoking, high blood pressure and other conditions are among adults in each state, built up from county estimates.",
+                 "US", "Health", "US Centers for Disease Control and Prevention, PLACES", "https://www.cdc.gov/places/", PD, ["state", "year"], "year", "year", dict(col="state", label_col="state_name", label="State"),
+                 ["state", "state_name", "year"] + out_cols, out, meta, min_rows=40)
+
+
 # ---------- more loaders that wait for a free key ----------
 def us_crops():
     k = key("NASS_API_KEY")
@@ -1889,9 +1954,9 @@ def probe_urls():
 
 BUILDERS = [(lambda s=s: wb_set(s[0], s[1], s[2], s[3], s[4], s[5], **s[6])) for s in WB_SETS] + [(lambda s=s: owid_charts(*s)) for s in OWID_SETS] + [
     imf, un_population, undp, who, pwt, us_monthly, us_quarterly, us_daily, us_debt, us_climate, wikipedia, research, gbif, github_activity,
-    federal_register, fda, clinical_trials, fema, fdic, flu, chicago, nyc, us_spending, nih, eurostat, world_monthly, usgs_water, cdc_overdose, maryland, uk, climate_trace, hmda,
+    federal_register, fda, clinical_trials, fema, fdic, flu, chicago, nyc, us_spending, nih, eurostat, world_monthly, usgs_water, cdc_overdose, maryland, uk, climate_trace, hmda, fao_food_prices, cdc_places,
     eia_grid, us_lawmaking, census_states, us_crops, us_elections, us_crime, us_colleges, us_ev_charging, foods, datagov,
 ]
 NAMES = [s[0] for s in WB_SETS] + [s[0] for s in OWID_SETS] + ["imf", "un_population", "undp", "who", "pwt", "us_monthly", "us_quarterly", "us_daily", "us_debt", "us_climate", "wikipedia", "research", "gbif",
-                                    "github_activity", "federal_register", "fda", "clinical_trials", "fema", "fdic", "flu", "chicago", "nyc", "us_spending", "nih", "eurostat", "world_monthly", "usgs_water", "cdc_overdose", "maryland", "uk", "climate_trace", "hmda",
+                                    "github_activity", "federal_register", "fda", "clinical_trials", "fema", "fdic", "flu", "chicago", "nyc", "us_spending", "nih", "eurostat", "world_monthly", "usgs_water", "cdc_overdose", "maryland", "uk", "climate_trace", "hmda", "fao_food_prices", "cdc_places",
                                     "eia_grid", "us_lawmaking", "census_states", "us_crops", "us_elections", "us_crime", "us_colleges", "us_ev_charging", "foods", "datagov"]
