@@ -1,0 +1,1001 @@
+id,college,year,city,state,undergraduates,admission_rate,tuition_in_state,tuition_out_of_state,graduation_rate,median_earnings_after_10_years
+183026,Southern New Hampshire University,2026,Manchester,NH,163164,99.5,18410,18410,42.6,56870
+433387,Western Governors University,2026,Salt Lake City,UT,155088,,8730,8730,48.4,76999
+484613,University of Phoenix-Arizona,2026,Phoenix,AZ,85991,,9552,9552,20.8,43584
+104717,Grand Canyon University,2026,Phoenix,AZ,73371,78.9,17900,17900,50.7,50609
+104151,Arizona State University Campus Immersion,2026,Tempe,AZ,64674,89.9,12975,35167,67.6,69111
+228723,Texas A&M University-College Station,2026,College Station,TX,59615,57.4,13154,39974,84.2,78159
+132903,University of Central Florida,2026,Orlando,FL,59146,40.1,6368,24076,77.9,63483
+150987,Ivy Tech Community College,2026,Indianapolis,IN,58267,,5154,9935,42.0,40802
+483124,Arizona State University Digital Immersion,2026,Scottsdale,AZ,53782,66.7,11974,14072,,69111
+232557,Liberty University,2026,Lynchburg,VA,50012,99.0,23171,23171,64.6,46945
+163204,University of Maryland Global Campus,2026,Adelphi,MD,49664,,8280,12336,33.8,68110
+135717,Miami Dade College,2026,Miami,FL,46182,,2838,9661,46.4,45444
+204796,Ohio State University-Main Campus,2026,Columbus,OH,45638,60.6,13641,42423,87.2,67080
+227182,Lone Star College System,2026,The Woodlands,TX,45188,,3330,9390,20.2,44187
+243780,Purdue University-Main Campus,2026,West Lafayette,IN,44503,49.9,9992,28794,83.6,80082
+142522,Brigham Young University-Idaho,2026,Rexburg,ID,44397,95.8,4944,4944,53.7,56190
+224615,Dallas College,2026,Dallas,TX,43869,,2970,7500,27.1,44572
+228778,The University of Texas at Austin,2026,Austin,TX,42855,26.6,11656,44816,89.0,81694
+104179,University of Arizona,2026,Tucson,AZ,42537,86.1,13906,43068,69.2,67414
+228547,Tarrant County College District,2026,Fort Worth,TX,42300,,1998,8505,31.9,45883
+214777,Pennsylvania State University-Main Campus,2026,University Park,PA,42284,60.6,21098,43490,85.8,71762
+486840,Kennesaw State University,2026,Kennesaw,GA,41254,69.2,5808,18072,51.0,62766
+171100,Michigan State University,2026,East Lansing,MI,40922,84.8,17256,44640,80.5,74168
+225423,Houston City College,2026,Houston,TX,40503,,2040,5460,17.0,42369
+449339,American Public University System,2026,Charles Town,WV,40074,,8400,8400,58.8,41320
+133951,Florida International University,2026,Miami,FL,39508,54.7,6565,20204,75.9,65722
+138187,Valencia College,2026,Orlando,FL,39486,,2664,9576,48.7,45388
+110565,California State University-Fullerton,2026,Fullerton,CA,38546,90.5,7952,21272,69.0,69015
+225511,University of Houston,2026,Houston,TX,38380,73.9,9717,22427,65.1,68423
+151351,Indiana University-Bloomington,2026,Bloomington,IN,37806,78.2,12144,42295,80.1,70105
+186380,Rutgers University-New Brunswick,2026,New Brunswick,NJ,37751,58.1,18824,39649,83.8,80490
+137351,University of South Florida,2026,Tampa,FL,37207,43.2,6410,18416,77.4,63660
+240444,University of Wisconsin-Madison,2026,Madison,WI,36902,45.2,12166,44191,89.7,80330
+145637,University of Illinois Urbana-Champaign,2026,Champaign,IL,36258,42.4,16354,36706,85.7,87599
+228459,Texas State University,2026,San Marcos,TX,36177,89.3,11481,22821,55.1,60523
+110583,California State University-Long Beach,2026,Long Beach,CA,35924,46.3,8338,21658,69.6,69554
+134130,University of Florida,2026,Gainesville,FL,35629,24.2,6381,30886,91.6,78456
+122409,San Diego State University,2026,San Diego,CA,35377,36.2,9180,25500,77.2,73494
+110680,University of California-San Diego,2026,La Jolla,CA,34948,26.7,17337,54939,86.0,96197
+227216,University of North Texas,2026,Denton,TX,34341,72.2,11309,21029,61.9,59434
+170976,University of Michigan-Ann Arbor,2026,Ann Arbor,MI,34177,15.6,18346,63962,93.2,92832
+129367,Connecticut State Community College,2026,New Britain,CT,33645,,5338,15596,24.6,46642
+110662,University of California-Los Angeles,2026,Los Angeles,CA,33475,9.0,15729,53331,92.7,88581
+100751,The University of Alabama,2026,Tuscaloosa,AL,33227,76.6,12484,35342,73.5,66081
+110635,University of California-Berkeley,2026,Berkeley,CA,33068,11.0,17198,54800,93.3,100212
+232946,Northern Virginia Community College,2026,Annandale,VA,33048,,6062,12656,34.0,56892
+230038,Brigham Young University,2026,Provo,UT,32952,67.8,6888,6888,80.9,80228
+110608,California State University-Northridge,2026,Northridge,CA,32691,93.5,7850,21170,56.9,63721
+229115,Texas Tech University,2026,Lubbock,TX,32394,72.7,11852,24451,69.3,67143
+228769,The University of Texas at Arlington,2026,Arlington,TX,32294,79.9,11950,29432,52.4,72508
+110644,University of California-Davis,2026,Davis,CA,32253,41.8,17346,54948,85.7,86999
+134097,Florida State University,2026,Tallahassee,FL,32212,24.2,5656,20116,85.7,68225
+139959,University of Georgia,2026,Athens,GA,32137,37.7,11492,32336,89.4,77246
+236948,University of Washington-Seattle Campus,2026,Seattle,WA,31942,39.1,13406,44640,85.2,83105
+126614,University of Colorado Boulder,2026,Boulder,CO,31939,78.1,17513,47142,74.2,77574
+174066,University of Minnesota-Twin Cities,2026,Minneapolis,MN,31855,79.8,18482,41368,85.2,74314
+233921,Virginia Polytechnic Institute and State University,2026,Blacksburg,VA,30923,54.8,16450,38914,86.0,88716
+489779,Purdue University Global,2026,West Lafayette,IN,30828,,10095,14406,43.5,42322
+163286,University of Maryland-College Park,2026,College Park,MD,30760,44.8,12290,42053,88.5,89228
+209542,Oregon State University,2026,Corvallis,OR,30743,77.3,15117,40077,68.9,67894
+159391,Louisiana State University and Agricultural & Mechanical College,2026,Baton Rouge,LA,30594,73.3,12551,29228,68.4,64338
+229027,The University of Texas at San Antonio,2026,San Antonio,TX,30580,86.8,9019,21939,52.2,60704
+221759,The University of Tennessee-Knoxville,2026,Knoxville,TN,30418,41.6,13812,33256,74.2,65090
+110653,University of California-Irvine,2026,Irvine,CA,30197,28.6,16235,53837,86.7,83432
+222992,Austin Community College District,2026,Austin,TX,30189,,2550,10590,19.6,47658
+201885,University of Cincinnati-Main Campus,2026,Cincinnati,OH,29882,85.3,14394,29728,75.0,60832
+218663,University of South Carolina-Columbia,2026,Columbia,SC,29820,60.2,12688,37376,78.7,69024
+242972,NUC University,2026,Bayamon,PR,28918,,15898,17327,53.2,30056
+106397,University of Arkansas,2026,Fayetteville,AR,28677,74.3,10496,31550,70.7,63588
+227368,The University of Texas Rio Grande Valley,2026,Edinburg,TX,28666,94.2,9993,19713,52.9,52947
+193900,New York University,2026,New York,NY,28663,9.2,65622,65622,87.7,90957
+230737,Utah Valley University,2026,Orem,UT,28453,,6674,18992,45.9,60162
+110617,California State University-Sacramento,2026,Sacramento,CA,28350,94.0,9014,22334,55.3,69014
+126827,Colorado Technical University-Colorado Springs,2026,Colorado Springs,CO,28086,,12752,12752,19.0,44720
+482477,DeVry University-Illinois,2026,Lisle,IL,27825,98.4,15992,15992,38.5,51716
+113856,East Los Angeles College,2026,Monterey Park,CA,27753,,1238,11040,,47339
+232186,George Mason University,2026,Fairfax,VA,27752,87.5,14316,39312,67.2,79923
+122755,San Jose State University,2026,San Jose,CA,27601,84.6,8846,22166,68.4,83493
+199193,North Carolina State University at Raleigh,2026,Raleigh,NC,27371,41.7,8815,33780,84.8,77810
+230764,University of Utah,2026,Salt Lake City,UT,27264,86.0,9832,31768,65.7,72729
+182005,College of Southern Nevada,2026,Las Vegas,NV,27252,,4575,13475,20.4,44658
+100858,Auburn University,2026,Auburn,AL,26816,45.9,13318,36022,82.0,73273
+139940,Georgia State University,2026,Atlanta,GA,26623,55.4,8664,25320,52.0,51903
+247834,Collin County Community College District,2026,McKinney,TX,26449,,2014,6064,20.7,50928
+119164,Mt San Antonio College,2026,Walnut,CA,26140,,1364,11136,44.9,49600
+134237,Full Sail University,2026,Winter Park,FL,25777,,27145,27145,42.9,40548
+109208,American River College,2026,Sacramento,CA,25621,,1288,12472,37.8,44544
+126818,Colorado State University-Fort Collins,2026,Fort Collins,CO,25538,88.5,13774,36113,67.1,66947
+153603,Iowa State University,2026,Ames,IA,25367,88.7,11092,30140,76.0,67568
+110529,California State Polytechnic University-Pomona,2026,Pomona,CA,25042,75.2,8147,21467,68.1,77464
+132709,Broward College,2026,Fort Lauderdale,FL,24922,,2830,8952,39.5,45986
+157085,University of Kentucky,2026,Lexington,KY,24763,92.9,13907,35164,71.6,63924
+182281,University of Nevada-Las Vegas,2026,Las Vegas,NV,24622,96.2,10279,28192,51.1,62536
+199139,University of North Carolina at Charlotte,2026,Charlotte,NC,24453,79.6,7317,23523,68.6,63486
+224642,El Paso Community College,2026,El Paso,TX,24214,,3274,5304,24.8,39679
+178396,University of Missouri-Columbia,2026,Columbia,MO,23929,78.5,15548,37820,75.8,69958
+133669,Florida Atlantic University,2026,Boca Raton,FL,23757,66.1,4879,17324,63.5,61062
+166629,University of Massachusetts-Amherst,2026,Amherst,MA,23671,59.7,18487,41759,82.2,80486
+217882,Clemson University,2026,Clemson,SC,23300,38.3,15854,42378,87.1,79064
+110705,University of California-Santa Barbara,2026,Santa Barbara,CA,23113,33.0,16989,54591,83.3,82568
+227979,San Jacinto Community College,2026,Pasadena,TX,22969,,2490,6690,29.5,47048
+105330,Northern Arizona University,2026,Flagstaff,AZ,22903,89.6,13439,30911,60.0,59083
+207500,University of Oklahoma-Norman Campus,2026,Norman,OK,22734,76.6,10181,28301,75.0,66905
+488846,University of the People,2026,Pasadena,CA,22688,,1400,1400,35.2,
+110671,University of California-Riverside,2026,Riverside,CA,22593,76.4,16103,53705,75.5,72974
+121619,Santa Ana College,2026,Santa Ana,CA,22485,,1188,11076,30.8,48917
+117645,Long Beach City College,2026,Long Beach,CA,22427,,1560,13336,30.3,44903
+153658,University of Iowa,2026,Iowa City,IA,22264,83.6,11622,33710,75.2,70727
+145600,University of Illinois Chicago,2026,Chicago,IL,22170,77.3,14652,30754,61.6,73666
+110422,California Polytechnic State University-San Luis Obispo,2026,San Luis Obispo,CA,21996,31.3,15039,37005,86.5,96304
+136358,Palm Beach State College,2026,Lake Worth,FL,21956,,3050,10910,41.6,46814
+139931,Georgia Southern University,2026,Statesboro,GA,21790,87.9,6022,18070,54.3,59167
+207388,Oklahoma State University-Main Campus,2026,Stillwater,OK,21773,75.0,10444,25964,68.8,60713
+228787,The University of Texas at Dallas,2026,Richardson,TX,21751,65.1,14664,40164,77.5,74762
+110556,California State University-Fresno,2026,Fresno,CA,21605,95.3,8224,21544,57.6,62756
+176017,University of Mississippi,2026,University,MS,21473,96.6,10150,30310,71.0,59112
+134495,Hillsborough College,2026,Tampa,FL,21472,,2506,9111,34.7,45697
+121044,Pasadena City College,2026,Pasadena,CA,21466,,1180,11380,47.7,47494
+122977,Santa Monica College,2026,Santa Monica,CA,21440,,1158,10710,29.2,46589
+114789,Fresno City College,2026,Fresno,CA,21251,,1334,10714,23.9,39674
+155317,University of Kansas,2026,Lawrence,KS,21217,93.5,12453,31332,69.6,67963
+236939,Washington State University,2026,Pullman,WA,21099,86.6,13888,30994,61.6,72280
+228796,The University of Texas at El Paso,2026,El Paso,TX,21005,99.9,9772,25110,50.5,54599
+216339,Temple University,2026,Philadelphia,PA,20970,80.4,23824,36887,73.9,71027
+232423,James Madison University,2026,Harrisonburg,VA,20888,71.5,14620,32230,79.7,75482
+234030,Virginia Commonwealth University,2026,Richmond,VA,20753,92.6,17490,40654,63.9,64442
+199120,University of North Carolina at Chapel Hill,2026,Chapel Hill,NC,20752,15.3,9095,45228,91.1,81094
+209551,University of Oregon,2026,Eugene,OR,20497,88.3,16755,46077,71.2,66990
+123961,University of Southern California,2026,Los Angeles,CA,20443,9.8,75162,75162,91.0,103420
+215293,University of Pittsburgh-Pittsburgh Campus,2026,Pittsburgh,PA,20370,58.1,22736,43432,85.6,73113
+230728,Utah State University,2026,Logan,UT,20272,92.5,9412,26259,59.8,59177
+154022,The University of Arizona Global Campus,2026,Chandler,AZ,20152,,11960,11960,11.3,39232
+196088,University at Buffalo,2026,Buffalo,NY,20112,74.2,11036,32466,74.0,75679
+198464,East Carolina University,2026,Greenville,NC,19896,89.2,7438,23715,63.0,60387
+129020,University of Connecticut,2026,Storrs,CT,19835,52.4,21334,44002,83.4,82098
+199856,Wake Technical Community College,2026,Raleigh,NC,19675,,2284,6892,34.1,45936
+133702,Florida State College at Jacksonville,2026,Jacksonville,FL,19648,,2878,9992,37.6,45388
+204857,Ohio University-Main Campus,2026,Athens,OH,19633,85.0,14582,25796,65.3,61938
+110592,California State University-Los Angeles,2026,Los Angeles,CA,19562,91.2,7530,20850,53.7,62555
+209746,Portland Community College,2026,Portland,OR,19531,,5430,10830,18.9,48571
+197869,Appalachian State University,2026,Boone,NC,19444,90.1,7642,25932,72.9,57488
+203517,Kent State University at Kent,2026,Kent,OH,19320,86.3,13628,23791,57.4,51178
+113980,El Camino Community College District,2026,Torrance,CA,19210,,1156,9436,40.8,47561
+181464,University of Nebraska-Lincoln,2026,Lincoln,NE,19178,87.5,11100,30330,68.1,61819
+130943,University of Delaware,2026,Newark,DE,19071,70.6,17660,43220,79.4,83800
+145813,Illinois State University,2026,Normal,IL,19057,88.1,16152,28218,66.0,67557
+137078,St Petersburg College,2026,St. Petersburg,FL,18950,,2682,9286,36.6,46150
+111887,Cerritos College,2026,Norwalk,CA,18870,,1364,12004,29.4,46657
+170082,Grand Valley State University,2026,Allendale,MI,18854,83.0,15872,22588,65.8,60120
+139755,Georgia Institute of Technology-Main Campus,2026,Atlanta,GA,18785,14.1,12008,35092,93.8,114210
+122597,San Francisco State University,2026,San Francisco,CA,18639,96.4,8324,21644,50.3,73299
+190521,CUNY Borough of Manhattan Community College,2026,New York,NY,18623,,5170,8050,24.2,47784
+123800,Southwestern College,2026,Chula Vista,CA,18614,,1356,12360,37.6,47535
+176080,Mississippi State University,2026,Mississippi State,MS,18397,77.6,10604,28736,67.6,54296
+185590,Montclair State University,2026,Montclair,NJ,18376,87.9,16854,27570,65.1,63846
+413413,Capella University,2026,Minneapolis,MN,18364,,14328,14328,21.6,51254
+121901,Riverside City College,2026,Riverside,CA,18346,,1428,12498,38.7,44956
+164988,Boston University,2026,Boston,MA,18248,11.1,71372,71372,89.1,89087
+230746,Salt Lake Community College,2026,Salt Lake City,UT,18136,,4543,14884,28.9,52441
+111939,Chaffey College,2026,Rancho Cucamonga,CA,18132,,1184,11120,34.8,45674
+196097,Stony Brook University,2026,Stony Brook,NY,18101,49.0,10931,34911,76.3,83232
+110714,University of California-Santa Cruz,2026,Santa Cruz,CA,17940,65.8,16585,54187,74.4,73362
+227881,Sam Houston State University,2026,Huntsville,TX,17743,90.3,9228,19068,55.1,56877
+120971,Palomar College,2026,San Marcos,CA,17712,,1356,11688,39.5,48110
+122205,Saddleback College,2026,Mission Viejo,CA,17684,,1156,11956,49.3,51222
+135081,Keiser University-Ft Lauderdale,2026,Fort Lauderdale,FL,17678,97.0,26016,26016,59.4,46472
+142115,Boise State University,2026,Boise,ID,17674,87.2,9364,28478,60.6,60091
+122180,Sacramento City College,2026,Sacramento,CA,17657,,1288,12472,34.0,45109
+234076,University of Virginia-Main Campus,2026,Charlottesville,VA,17597,16.8,22431,61457,95.0,96468
+202222,Columbus State Community College,2026,Columbus,OH,17549,,5788,11838,27.0,44592
+232982,Old Dominion University,2026,Norfolk,VA,17514,90.4,13250,34325,44.7,60482
+238032,West Virginia University,2026,Morgantown,WV,17385,89.0,10752,30432,65.3,62910
+112190,City College of San Francisco,2026,San Francisco,CA,17348,,1696,16096,39.9,53794
+167358,Northeastern University,2026,Boston,MA,17326,5.2,69289,69289,90.6,99371
+109819,Bakersfield College,2026,Bakersfield,CA,17280,,1450,11530,20.3,41011
+187985,University of New Mexico-Main Campus,2026,Albuquerque,NM,17244,95.2,10383,33532,54.2,50072
+114859,Fullerton College,2026,Fullerton,CA,17121,,1150,13279,38.0,49216
+240453,University of Wisconsin-Milwaukee,2026,Milwaukee,WI,16758,90.7,10916,23515,49.6,59268
+204024,Miami University-Oxford,2026,Oxford,OH,16656,75.4,18520,42042,80.5,63814
+227924,San Antonio College,2026,San Antonio,TX,16416,,3412,9952,23.2,43816
+230782,Weber State University,2026,Ogden,UT,16360,,6625,17745,48.1,60115
+220978,Middle Tennessee State University,2026,Murfreesboro,TN,16301,69.1,10932,33428,53.6,52702
+190594,CUNY Hunter College,2026,New York,NY,16289,53.8,7382,15332,57.9,70502
+190512,CUNY Bernard M Baruch College,2026,New York,NY,16154,47.5,7462,15412,70.7,83742
+482680,University of North Georgia,2026,Dahlonega,GA,16146,67.9,5434,17289,37.6,55822
+164076,Towson University,2026,Towson,MD,16136,82.0,12186,31332,68.3,70158
+144865,College of DuPage,2026,Glen Ellyn,IL,16114,,4680,12870,24.4,51188
+122375,San Diego Mesa College,2026,San Diego,CA,16098,,1154,10010,38.7,50947
+120342,Orange Coast College,2026,Costa Mesa,CA,16091,,1222,11926,48.4,53930
+190415,Cornell University,2026,Ithaca,NY,15995,8.8,72270,72270,95.0,113531
+409315,South Texas College,2026,McAllen,TX,15856,,4920,7620,25.0,39609
+184782,Rowan University,2026,Glassboro,NJ,15841,77.7,17428,28252,68.2,65776
+111461,College of the Canyons,2026,Santa Clarita,CA,15832,,1170,10938,43.0,52411
+122658,San Joaquin Delta College,2026,Stockton,CA,15781,,1180,9772,34.0,46256
+121886,Rio Hondo College,2026,Whittier,CA,15684,,1388,9884,23.8,48362
+182290,University of Nevada-Reno,2026,Reno,NV,15599,73.7,10300,28932,60.8,67303
+172644,Wayne State University,2026,Detroit,MI,15587,81.2,15862,33467,59.1,59525
+223427,Blinn College District,2026,Brenham,TX,15535,,4920,11370,11.3,50166
+196413,Syracuse University,2026,Syracuse,NY,15477,45.9,68429,68429,82.0,85054
+113634,Diablo Valley College,2026,Pleasant Hill,CA,15358,,1128,9216,52.1,56684
+113333,De Anza College,2026,Cupertino,CA,15264,,1577,12782,66.6,62175
+119216,Mt San Jacinto Community College District,2026,San Jacinto,CA,15259,,1451,12581,37.9,43175
+140951,Savannah College of Art and Design,2026,Savannah,GA,15243,83.0,42665,42665,69.8,51635
+187532,Central New Mexico Community College,2026,Albuquerque,NM,15203,,2136,9000,31.9,41174
+155399,Kansas State University,2026,Manhattan,KS,15142,81.7,11579,29533,71.2,61473
+118976,Modesto Junior College,2026,Modesto,CA,15109,,1276,8918,29.2,45551
+123013,Santa Rosa Junior College,2026,Santa Rosa,CA,15080,,1318,10930,36.3,52482
+198260,Central Piedmont Community College,2026,Charlotte,NC,15067,,2454,7062,33.7,43413
+141574,University of Hawaii at Manoa,2026,Honolulu,HI,15029,86.6,12402,34434,63.0,62422
+110510,California State University-San Bernardino,2026,San Bernardino,CA,15023,93.7,8524,21844,53.9,61951
+127565,Metropolitan State University of Denver,2026,Denver,CO,15002,98.8,11540,31784,31.5,57612
+199218,University of North Carolina Wilmington,2026,Wilmington,NC,14922,64.2,7266,25420,71.1,61019
+366711,California State University-San Marcos,2026,San Marcos,CA,14877,95.1,8454,21774,54.7,67217
+223232,Baylor University,2026,Waco,TX,14785,51.3,63620,63620,81.1,72408
+157289,University of Louisville,2026,Louisville,KY,14727,79.4,13390,29736,60.7,60032
+196079,Binghamton University,2026,Vestal,NY,14655,38.6,10567,32467,81.8,89136
+105154,Mesa Community College,2026,Mesa,AZ,14460,,2358,8958,15.0,47720
+180461,Montana State University,2026,Bozeman,MT,14451,82.1,8948,33783,58.2,59536
+105525,Pima Community College,2026,Tucson,AZ,14242,,2442,7758,26.9,44520
+366395,Suffolk County Community College,2026,Selden,NY,14218,,7340,13390,28.2,54024
+216764,West Chester University of Pennsylvania,2026,West Chester,PA,14164,78.4,11464,23876,69.2,66629
+123341,Sierra College,2026,Rocklin,CA,14122,,1448,1448,42.8,48499
+144740,DePaul University,2026,Chicago,IL,14090,75.9,47676,47676,67.5,75602
+199148,University of North Carolina at Greensboro,2026,Greensboro,NC,14062,88.5,7731,24705,57.1,53402
+454227,Chamberlain University-Illinois,2026,Addison,IL,14027,82.6,22243,22243,38.6,96897
+113096,Cosumnes River College,2026,Sacramento,CA,14023,,1288,12472,41.2,46541
+420398,Northwest Vista College,2026,San Antonio,TX,13993,,3412,9952,28.9,46534
+150136,Ball State University,2026,Muncie,IN,13988,85.5,11082,29630,61.9,56674
+170790,Macomb Community College,2026,Warren,MI,13876,,3745,8455,16.8,44976
+433660,Florida Gulf Coast University,2026,Fort Myers,FL,13874,63.4,6118,25162,57.2,59401
+434672,Community College of Baltimore County,2026,Baltimore,MD,13872,,4536,11114,20.3,46761
+151111,Indiana University-Indianapolis,2026,Indianapolis,IN,13830,76.4,10762,35227,54.4,58990
+163426,Montgomery College,2026,Rockville,MD,13773,,5394,14250,33.9,55378
+244437,Georgia State University-Perimeter College,2026,Atlanta,GA,13693,90.8,3200,10544,22.7,51903
+110538,California State University-Chico,2026,Chico,CA,13631,92.7,8896,22216,61.6,70012
+130183,Post University,2026,Waterbury,CT,13603,,16499,16499,28.9,44639
+190655,CUNY New York City College of Technology,2026,Brooklyn,NY,13580,80.3,7332,15282,20.4,57019
+237011,Western Washington University,2026,Bellingham,WA,13544,93.2,9924,29091,62.7,64305
+117706,Los Angeles Pierce College,2026,Woodland Hills,CA,13436,,1238,11040,46.8,47028
+202356,Cuyahoga Community College District,2026,Cleveland,OH,13382,,3249,7249,25.8,40817
+217484,University of Rhode Island,2026,Kingston,RI,13381,72.2,17476,38398,72.8,73439
+136172,University of North Florida,2026,Jacksonville,FL,13359,53.2,6389,20793,68.8,59626
+113236,Cypress College,2026,Cypress,CA,13354,,1150,12379,39.1,50380
+179566,Missouri State University-Springfield,2026,Springfield,MO,13313,90.5,10128,19760,58.5,52782
+205470,Sinclair Community College,2026,Dayton,OH,13308,,3675,8556,42.0,41580
+212054,Drexel University,2026,Philadelphia,PA,13233,79.4,64212,64212,78.0,92338
+195003,Rochester Institute of Technology,2026,Rochester,NY,13215,66.9,61804,61804,70.1,84700
+209807,Portland State University,2026,Portland,OR,13182,90.9,12315,32565,52.8,62447
+227854,St Philip's College,2026,San Antonio,TX,12914,,3412,9952,30.4,42639
+135726,University of Miami,2026,Coral Gables,FL,12913,18.9,65430,65430,83.6,84093
+137209,Seminole State College of Florida,2026,Sanford,FL,12864,,3122,11447,43.9,47074
+201441,Bowling Green State University-Main Campus,2026,Bowling Green,OH,12812,81.0,14892,22880,65.0,52269
+171535,Oakland Community College,2026,Auburn Hills,MI,12748,,3220,5880,20.8,40666
+220862,University of Memphis,2026,Memphis,TN,12701,72.0,11256,15960,51.9,52227
+228529,Tarleton State University,2026,Stephenville,TX,12673,89.5,8302,18019,48.7,56673
+117733,Los Angeles Valley College,2026,Valley Glen,CA,12601,,1238,11040,32.1,46096
+172699,Western Michigan University,2026,Kalamazoo,MI,12568,84.6,15954,19908,58.1,57828
+196060,University at Albany,2026,Albany,NY,12564,69.1,10881,32091,62.1,72751
+225432,University of Houston-Downtown,2026,Houston,TX,12555,90.0,7708,17428,31.7,57404
+190664,CUNY Queens College,2026,Queens,NY,12550,64.3,7538,15488,53.2,68324
+110547,California State University-Dominguez Hills,2026,Carson,CA,12538,93.3,7853,21173,42.2,62587
+190567,CUNY City College,2026,New York,NY,12505,60.0,7340,15290,53.0,69594
+160658,University of Louisiana at Lafayette,2026,Lafayette,LA,12428,87.0,11460,25188,52.4,52638
+171571,Oakland University,2026,Rochester Hills,MI,12351,87.8,16176,22950,57.8,63565
+156620,Eastern Kentucky University,2026,Richmond,KY,12318,77.6,10740,12300,50.5,50885
+123527,San Bernardino Valley College,2026,San Bernardino,CA,12234,,1185,11121,30.1,43912
+207935,Tulsa Community College,2026,Tulsa,OK,12228,,3717,9645,31.2,42811
+199102,North Carolina A & T State University,2026,Greensboro,NC,12182,49.9,6813,20873,56.6,50279
+450933,Columbia Southern University,2026,Orange Beach,AL,12176,,6472,6472,31.8,66855
+115296,Grossmont College,2026,El Cajon,CA,12163,,1332,10628,38.1,45404
+157951,Western Kentucky University,2026,Bowling Green,KY,12155,93.9,12072,27000,55.7,48408
+248934,ECPI University,2026,Virginia Beach,VA,12090,74.5,18484,18484,41.5,49806
+119137,Moorpark College,2026,Moorpark,CA,12082,,1416,11598,42.5,52317
+233772,Tidewater Community College,2026,Norfolk,VA,12082,,6012,12525,32.0,41596
+239248,Milwaukee Area Technical College,2026,Milwaukee,WI,12024,,5360,7652,28.3,44577
+104708,Glendale Community College,2026,Glendale,AZ,11975,,2358,8958,14.7,48189
+215239,Community College of Philadelphia,2026,Philadelphia,PA,11948,,4692,12804,23.5,44885
+188030,New Mexico State University-Main Campus,2026,Las Cruces,NM,11946,89.0,8226,25350,54.4,43922
+134608,Indian River State College,2026,Fort Pierce,FL,11822,,2764,10201,43.6,43542
+179308,Saint Louis Community College,2026,Bridgeton,MO,11788,,3660,6990,21.6,40196
+231174,University of Vermont,2026,Burlington,VT,11743,65.3,19514,47554,79.9,68368
+146719,Loyola University Chicago,2026,Chicago,IL,11737,81.6,56060,56060,72.6,78431
+173920,Minnesota State University-Mankato,2026,Mankato,MN,11703,88.4,10280,20400,54.8,61916
+158662,Delgado Community College,2026,New Orleans,LA,11668,,4422,4422,22.3,37973
+105668,Rio Salado College,2026,Tempe,AZ,11668,,2358,8958,9.3,42589
+100663,University of Alabama at Birmingham,2026,Birmingham,AL,11635,88.2,9812,23684,65.2,59631
+190600,CUNY John Jay College of Criminal Justice,2026,New York,NY,11590,57.1,7470,15420,54.8,65870
+123217,College of the Sequoias,2026,Visalia,CA,11562,,1394,9038,40.9,43147
+196680,Excelsior University,2026,Albany,NY,11550,,,,,81471
+109350,Antelope Valley Community College District,2026,Lancaster,CA,11534,,1124,9548,33.6,39944
+166638,University of Massachusetts-Boston,2026,Boston,MA,11512,83.8,16558,39365,50.2,70597
+181394,University of Nebraska at Omaha,2026,Omaha,NE,11488,87.0,9232,25342,49.1,59749
+127200,Front Range Community College,2026,Westminster,CO,11476,,4668,17708,34.4,50752
+166513,University of Massachusetts-Lowell,2026,Lowell,MA,11434,83.0,17664,37460,66.9,77989
+185262,Kean University,2026,Union,NJ,11433,75.9,15300,24017,47.5,62318
+111920,Chabot College,2026,Hayward,CA,11392,,1334,11414,49.0,53180
+447689,Georgia Gwinnett College,2026,Lawrenceville,GA,11344,95.5,4532,14108,21.6,48736
+155210,Johnson County Community College,2026,Overland Park,KS,11332,,2424,5688,32.2,49934
+147703,Northern Illinois University,2026,Dekalb,IL,11301,69.8,13792,13792,48.6,61351
+122384,San Diego Miramar College,2026,San Diego,CA,11271,,1154,10010,40.0,53737
+183044,University of New Hampshire-Main Campus,2026,Durham,NH,11261,88.2,19682,40844,76.4,71477
+190628,CUNY LaGuardia Community College,2026,Long Island City,NY,11254,,5254,8134,23.8,48879
+117788,Los Angeles City College,2026,Los Angeles,CA,11198,,1238,11040,30.6,42194
+131469,George Washington University,2026,Washington,DC,11182,47.1,70170,70170,83.3,96691
+217475,Community College of Rhode Island,2026,Warwick,RI,11171,,5868,15700,26.1,47965
+114716,Foothill College,2026,Los Altos Hills,CA,11137,,1580,12785,58.8,64467
+137096,Santa Fe College,2026,Gainesville,FL,11122,,2563,9189,53.1,46650
+137759,Tallahassee State College,2026,Tallahassee,FL,11053,,2622,10069,38.0,43089
+133508,Florida SouthWestern State College,2026,Fort Myers,FL,11052,,3401,12979,36.7,48404
+228875,Texas Christian University,2026,Fort Worth,TX,11026,44.5,63590,63590,85.5,77334
+130907,Delaware Technical Community College-Terry,2026,Dover,DE,10867,,5445,12308,23.9,45539
+119605,National University,2026,San Diego,CA,10794,,13284,13284,,73988
+156125,Wichita State University,2026,Wichita,KS,10780,94.0,9948,20613,51.7,56003
+163268,University of Maryland-Baltimore County,2026,Baltimore,MD,10701,72.4,13679,32735,69.0,74881
+170055,Grand Rapids Community College,2026,Grand Rapids,MI,10698,,4270,12520,20.6,43741
+190637,CUNY Lehman College,2026,Bronx,NY,10696,56.6,7410,15360,49.8,65181
+215062,University of Pennsylvania,2026,Philadelphia,PA,10650,5.4,71236,71236,96.7,121687
+177995,Metropolitan Community College-Kansas City,2026,Kansas City,MO,10649,,3630,9600,34.6,44475
+193478,Nassau Community College,2026,Garden City,NY,10630,,6545,12535,23.2,53866
+399212,Santiago Canyon College,2026,Orange,CA,10579,,1160,11384,47.6,52421
+137847,The University of Tampa,2026,Tampa,FL,10572,40.3,35744,35744,66.6,69272
+217819,College of Charleston,2026,Charleston,SC,10558,60.0,12978,38844,65.6,63018
+183743,Bergen Community College,2026,Paramus,NJ,10557,,5060,9576,21.2,52092
+190549,CUNY Brooklyn College,2026,Brooklyn,NY,10543,58.4,7450,15400,53.5,66519
+126562,University of Colorado Denver/Anschutz Medical Campus,2026,Denver,CO,10519,74.7,10835,30179,47.5,69387
+191241,Fordham University,2026,Bronx,NY,10512,59.3,67897,67897,81.4,92809
+218894,Trident Technical College,2026,Charleston,SC,10512,,4836,9108,31.1,42433
+115001,Glendale Community College,2026,Glendale,CA,10509,,1195,10939,39.4,46476
+132693,Eastern Florida State College,2026,Melbourne,FL,10490,,2496,9739,49.3,42223
+153214,Des Moines Area Community College,2026,Ankeny,IA,10446,,6030,6930,40.2,46331
+122339,San Diego City College,2026,San Diego,CA,10441,,1154,10010,23.7,44127
+218724,Coastal Carolina University,2026,Conway,SC,10377,75.3,11640,29926,51.3,54702
+116439,Irvine Valley College,2026,Irvine,CA,10286,,1156,11956,57.4,53719
+118912,MiraCosta College,2026,Oceanside,CA,10278,,1158,9750,40.8,49887
+180814,Bellevue University,2026,Bellevue,NE,10220,,10053,10053,31.1,65909
+113573,College of the Desert,2026,Palm Desert,CA,10207,,1326,10734,31.9,44228
+133386,Daytona State College,2026,Daytona Beach,FL,10176,,3106,11994,41.8,41756
+206941,University of Central Oklahoma,2026,Edmond,OK,10170,78.1,9043,19930,36.4,51263
+125028,Ventura College,2026,Ventura,CA,10150,,1416,11598,40.0,46592
+131520,Howard University,2026,Washington,DC,10108,41.3,38936,38936,72.0,69682
+164924,Boston College,2026,Chestnut Hill,MA,10085,16.4,73508,73508,90.3,112178
+176372,University of Southern Mississippi,2026,Hattiesburg,MS,10075,99.1,10394,12394,51.5,47355
+221740,The University of Tennessee-Chattanooga,2026,Chattanooga,TN,10074,81.1,10762,19068,53.1,56442
+238263,Madison Area Technical College,2026,Madison,WI,10073,,5103,7441,41.2,50548
+169798,Eastern Michigan University,2026,Ypsilanti,MI,10055,79.6,17004,17004,46.0,55390
+169248,Central Michigan University,2026,Mount Pleasant,MI,10035,89.8,15420,15420,58.9,59879
+200004,Western Carolina University,2026,Cullowhee,NC,10024,81.8,4685,8685,60.7,53764
+220075,East Tennessee State University,2026,Johnson City,TN,10004,86.2,10994,15194,54.2,48646
+118718,Merced College,2026,Merced,CA,10001,,1202,8882,35.2,43058
+117724,Los Angeles Trade Technical College,2026,Los Angeles,CA,9998,,1238,11040,34.0,42277
+200280,University of North Dakota,2026,Grand Forks,ND,9981,76.9,11645,16541,60.7,67456
+224554,East Texas A&M University,2026,Commerce,TX,9912,92.2,10026,22176,41.7,52631
+122889,Santa Barbara City College,2026,Santa Barbara,CA,9889,,1242,10674,33.0,53616
+110574,California State University-East Bay,2026,Hayward,CA,9809,97.4,7993,21313,48.5,73868
+102368,Troy University,2026,Troy,AL,9805,96.0,10704,20880,50.3,49010
+206084,University of Toledo,2026,Toledo,OH,9770,92.0,13122,22482,57.3,55537
+198154,Cape Fear Community College,2026,Wilmington,NC,9764,,2772,8916,37.6,41969
+207449,Oklahoma City Community College,2026,Oklahoma City,OK,9758,,4059,9810,24.1,41812
+443252,South Florida Institute of Technology,2026,Miami,FL,9747,,,,78.2,32239
+155061,Fort Hays State University,2026,Hays,KS,9733,90.3,6111,18433,50.2,53030
+190558,College of Staten Island CUNY,2026,Staten Island,NY,9657,92.3,7490,15440,34.8,59992
+127820,Pikes Peak State College,2026,Colorado Springs,CO,9595,,4662,17702,21.6,45162
+196042,Farmingdale State College,2026,Farmingdale,NY,9552,63.3,8626,19116,50.5,75278
+210605,Community College of Allegheny County,2026,Pittsburgh,PA,9544,,4962,12943,25.2,43286
+243197,University of Puerto Rico-Mayaguez,2026,Mayaguez,PR,9539,56.5,5954,5954,48.0,47912
+212878,Harrisburg Area Community College,2026,Harrisburg,PA,9533,,7193,13740,20.8,45834
+160612,Southeastern Louisiana University,2026,Hammond,LA,9514,99.3,9043,21521,45.9,49502
+224350,Del Mar College,2026,Corpus Christi,TX,9501,,3440,6050,13.0,42857
+195809,St. John's University-New York,2026,Queens,NY,9477,83.4,55640,55640,67.4,77281
+198534,Fayetteville Technical Community College,2026,Fayetteville,NC,9471,,2344,7720,25.1,37067
+200332,North Dakota State University-Main Campus,2026,Fargo,ND,9471,95.0,11738,16672,64.7,65925
+115393,Hartnell College,2026,Salinas,CA,9453,,1404,10398,39.7,49016
+487320,Texas State Technical College,2026,Waco,TX,9437,,8544,13144,49.3,44239
+146472,College of Lake County,2026,Grayslake,IL,9420,,4901,14792,38.3,47162
+444219,Folsom Lake College,2026,Folsom,CA,9414,,1288,12472,47.4,47048
+240189,University of Wisconsin-Whitewater,2026,Whitewater,WI,9405,85.7,9047,19147,57.3,59084
+459994,Strayer University-Global Region,2026,Washington,DC,9376,,13920,13920,20.8,44016
+460394,Moreno Valley College,2026,Moreno Valley,CA,9346,,1428,12498,36.2,45741
+138354,University of West Florida,2026,Pensacola,FL,9330,58.2,6360,19241,59.1,52902
+149842,William Rainey Harper College,2026,Palatine,IL,9313,,4038,12090,49.7,54357
+146296,Joliet Junior College,2026,Joliet,IL,9306,,4530,13800,21.4,47929
+230603,Southern Utah University,2026,Cedar City,UT,9289,81.8,7094,21646,61.2,53925
+240329,University of Wisconsin-La Crosse,2026,La Crosse,WI,9277,75.5,10534,20453,71.0,65850
+198622,Guilford Technical Community College,2026,Jamestown,NC,9260,,2334,7710,32.2,38309
+498562,Commonwealth University of Pennsylvania,2026,Bloomsburg,PA,9210,93.1,11610,23976,54.2,56416
+147767,Northwestern University,2026,Evanston,IL,9201,7.7,70589,70589,95.6,104255
+219356,South Dakota State University,2026,Brookings,SD,9198,98.3,9554,13166,62.3,58802
+426314,Embry-Riddle Aeronautical University-Worldwide,2026,Daytona Beach,FL,9139,57.9,12553,12553,25.8,92069
+125231,Walden University,2026,Minneapolis,MN,9136,,13140,13140,,54715
+106458,Arkansas State University,2026,Jonesboro,AR,9110,82.3,8354,15002,56.5,47220
+229355,Tyler Junior College,2026,Tyler,TX,9087,,2424,4536,27.2,41680
+200800,University of Akron Main Campus,2026,Akron,OH,9052,59.7,13530,21210,52.5,51221
+115126,Golden West College,2026,Huntington Beach,CA,9034,,1202,11906,49.8,50592
+163453,Morgan State University,2026,Baltimore,MD,9019,82.2,8346,19456,41.2,56585
+185828,New Jersey Institute of Technology,2026,Newark,NJ,9019,65.1,21162,39912,72.4,90769
+161767,Anne Arundel Community College,2026,Arnold,MD,8997,,4586,12074,28.5,51114
+190150,Columbia University in the City of New York,2026,New York,NY,8973,4.0,74180,74180,95.6,109430
+202134,Cleveland State University,2026,Cleveland,OH,8969,91.3,13262,18946,51.0,56979
+190673,CUNY Queensborough Community College,2026,Bayside,NY,8940,,5210,8090,23.0,50546
+441371,Ultimate Medical Academy,2026,Clearwater,FL,8932,,,,54.9,33775
+218113,Greenville Technical College,2026,Greenville,SC,8916,,5780,11060,18.8,43434
+240268,University of Wisconsin-Eau Claire,2026,Eau Claire,WI,8895,82.3,10207,20272,62.9,62438
+110246,Butte College,2026,Oroville,CA,8890,,1374,9534,45.9,44807
+102094,University of South Alabama,2026,Mobile,AL,8879,71.0,10476,19452,53.5,53069
+227526,Prairie View A & M University,2026,Prairie View,TX,8877,79.3,11299,26874,44.5,49183
+480091,Bryant & Stratton College-Online,2026,Orchard Park,NY,8841,,16540,16540,24.6,37469
+152080,University of Notre Dame,2026,Notre Dame,IN,8818,11.3,67607,67607,95.3,113124
+163657,Prince George's Community College,2026,Largo,MD,8815,,4034,8762,18.0,52882
+246354,Palo Alto College,2026,San Antonio,TX,8801,,3412,9952,29.0,41989
+460464,Norco College,2026,Norco,CA,8779,,1428,12498,40.8,48582
+181303,Metropolitan Community College Area,2026,Omaha,NE,8775,,3420,5018,30.9,46353
+229179,Texas Woman's University,2026,Denton,TX,8767,96.1,9000,18720,49.0,59216
+149231,Southern Illinois University Edwardsville,2026,Edwardsville,IL,8750,97.5,13299,13299,56.7,59436
+220552,South College,2026,Knoxville,TN,8745,,19360,19360,43.5,45099
+140012,Gwinnett Technical College,2026,Lawrenceville,GA,8728,,3524,6092,32.8,47903
+228431,Stephen F Austin State University,2026,Nacogdoches,TX,8728,94.0,11228,20948,54.2,54376
+140331,Chattahoochee Technical College,2026,Marietta,GA,8727,,3540,6108,41.8,41955
+221847,Tennessee Technological University,2026,Cookeville,TN,8698,76.1,11926,16126,56.9,52901
+126580,University of Colorado Colorado Springs,2026,Colorado Springs,CO,8697,97.4,10345,24771,46.4,61386
+170240,Henry Ford College,2026,Dearborn,MI,8643,,3652,8020,17.1,37939
+175014,Rasmussen University-Minnesota,2026,St. Cloud,MN,8617,,11843,11843,47.7,47524
+165112,Bunker Hill Community College,2026,Boston,MA,8612,,6288,11232,17.6,51734
+110486,California State University-Bakersfield,2026,Bakersfield,CA,8577,93.8,8496,21816,49.0,62381
+243221,University of Puerto Rico-Rio Piedras,2026,San Juan,PR,8572,54.6,5354,5354,50.0,38928
+105428,Phoenix College,2026,Phoenix,AZ,8555,,2358,8958,13.5,45012
+230171,Utah Tech University,2026,Saint George,UT,8552,,6480,18712,38.3,50285
+454810,Auguste Escoffier School of Culinary Arts-Boulder,2026,Boulder,CO,8504,,,,44.7,40330
+161253,University of Maine,2026,Orono,ME,8496,96.6,13760,37910,56.1,59140
+149222,Southern Illinois University-Carbondale,2026,Carbondale,IL,8494,86.9,13544,13544,60.9,57388
+185536,Middlesex College,2026,Edison,NJ,8469,,5004,7644,34.8,51345
+110495,California State University-Stanislaus,2026,Turlock,CA,8385,98.1,8690,22010,52.8,65560
+445188,University of California-Merced,2026,Merced,CA,8372,90.5,16271,53873,68.2,69352
+437103,Baton Rouge Community College,2026,Baton Rouge,LA,8362,,4419,4419,30.9,39556
+159647,Louisiana Tech University,2026,Ruston,LA,8312,86.4,10734,17475,62.3,58121
+112172,Citrus College,2026,Glendora,CA,8286,,1254,11334,45.6,46835
+157447,Northern Kentucky University,2026,Highland Heights,KY,8246,67.7,11496,22752,53.3,55024
+156392,Bluegrass Community and Technical College,2026,Lexington,KY,8244,,4952,6752,43.2,41266
+170657,Lansing Community College,2026,Lansing,MI,8207,,4100,11300,24.4,44318
+110361,California Baptist University,2026,Riverside,CA,8179,84.9,42788,42788,60.9,67633
+177472,Ozarks Technical Community College,2026,Springfield,MO,8165,,4372,7204,33.3,40171
+226091,Lamar University,2026,Beaumont,TX,8150,86.4,8905,18625,38.3,53857
+127556,Colorado Mesa University,2026,Grand Junction,CO,8143,82.0,10257,25986,41.9,51221
+169910,Ferris State University,2026,Big Rapids,MI,8106,91.4,15736,15736,45.5,60457
+197294,SUNY Westchester Community College,2026,Valhalla,NY,8078,,6270,12510,24.7,52109
+123563,Solano Community College,2026,Fairfield,CA,8061,,1172,9812,34.8,47449
+108807,Allan Hancock College,2026,Santa Maria,CA,8052,,1158,10038,30.4,46603
+224147,Texas A & M University-Corpus Christi,2026,Corpus Christi,TX,8034,88.6,9748,20673,39.2,55480
+110334,Cabrillo College,2026,Aptos,CA,8002,,1270,10870,39.3,48956
+117867,Los Angeles Mission College,2026,Sylmar,CA,7999,,1238,11040,21.9,45697
+122791,College of San Mateo,2026,San Mateo,CA,7977,,1332,11680,56.2,60507
+206695,Youngstown State University,2026,Youngstown,OH,7961,84.5,11444,11804,51.5,46691
+489201,Clovis Community College,2026,Fresno,CA,7956,,1334,10714,48.0,
+240727,University of Wyoming,2026,Laramie,WY,7944,96.9,8395,25015,60.1,62764
+187198,UCNJ Union College of Union County New Jersey,2026,Cranford,NJ,7939,,5390,10260,34.2,46869
+131113,Wilmington University,2026,New Castle,DE,7906,,12930,12930,21.9,60391
+183859,Brookdale Community College,2026,Lincroft,NJ,7901,,6863,10733,30.4,52151
+479956,Pennsylvania State University-World Campus,2026,University Park,PA,7877,91.1,15510,15510,43.6,71762
+243601,Universidad Ana G. Mendez-Gurabo Campus,2026,Gurabo,PR,7868,,8560,8560,31.5,30580
+133553,Embry-Riddle Aeronautical University-Daytona Beach,2026,Daytona Beach,FL,7860,64.8,46181,46181,67.1,92069
+179867,Washington University in St Louis,2026,St. Louis,MO,7857,12.1,69594,69594,93.5,91497
+234827,Central Washington University,2026,Ellensburg,WA,7833,90.6,9655,28362,52.2,65578
+165024,Bridgewater State University,2026,Bridgewater,MA,7829,87.8,12194,18334,52.7,61441
+128771,Central Connecticut State University,2026,New Britain,CT,7822,73.3,13050,16550,49.1,65779
+172617,Washtenaw Community College,2026,Ann Arbor,MI,7816,,2736,6696,31.0,45076
+160755,Tulane University of Louisiana,2026,New Orleans,LA,7767,14.0,71998,71998,86.5,68226
+106704,University of Central Arkansas,2026,Conway,AR,7762,89.5,10940,18746,53.7,49756
+142285,University of Idaho,2026,Moscow,ID,7747,75.5,9400,28636,58.9,58095
+156921,Jefferson Community and Technical College,2026,Louisville,KY,7744,,4872,6672,37.6,41786
+186399,Rutgers University-Newark,2026,Newark,NJ,7709,71.4,18112,38937,64.3,80490
+114266,Evergreen Valley College,2026,San Jose,CA,7688,,1366,10350,42.5,55874
+202480,University of Dayton,2026,Dayton,OH,7682,65.5,50610,50610,80.2,83775
+182500,Truckee Meadows Community College,2026,Reno,NV,7681,,3502,12402,31.2,48737
+190619,CUNY Kingsborough Community College,2026,Brooklyn,NY,7670,,5252,8132,27.8,48196
+214379,Northampton County Area Community College,2026,Bethlehem,PA,7667,,5850,15990,21.7,45789
+194310,Pace University,2026,New York,NY,7665,75.9,54875,54875,57.9,77411
+239105,Marquette University,2026,Milwaukee,WI,7660,81.3,53270,53270,81.4,83810
+115861,Imperial Valley College,2026,Imperial,CA,7652,,1148,8972,45.0,40691
+191126,Fashion Institute of Technology,2026,New York,NY,7637,60.2,6596,17576,81.0,72055
+193326,Monroe Community College,2026,Rochester,NY,7623,,6348,11548,27.0,45443
+123509,Skyline College,2026,San Bruno,CA,7620,,1332,11384,45.4,62578
+166027,Harvard University,2026,Cambridge,MA,7601,3.6,64796,64796,97.3,121957
+153737,Kirkwood Community College,2026,Cedar Rapids,IA,7591,,6288,8388,45.0,45413
+196264,Empire State University,2026,Saratoga Springs,NY,7585,,7648,17558,44.1,59509
+142276,Idaho State University,2026,Pocatello,ID,7583,,8914,28240,40.2,50919
+133650,Florida Agricultural and Mechanical University,2026,Tallahassee,FL,7582,20.6,5785,17734,57.2,52104
+131496,Georgetown University,2026,Washington,DC,7569,12.9,71338,71338,94.6,110516
+144050,University of Chicago,2026,Chicago,IL,7569,4.5,73962,73962,95.4,103872
+230418,Ensign College,2026,Salt Lake City,UT,7568,,4128,4128,39.6,56881
+218353,Midlands Technical College,2026,West Columbia,SC,7564,,5196,14988,16.0,41737
+219602,Austin Peay State University,2026,Clarksville,TN,7560,96.4,9456,15216,41.0,48900
+243744,Stanford University,2026,Stanford,CA,7554,3.6,68544,68544,91.8,125340
+136473,Pensacola State College,2026,Pensacola,FL,7538,,2363,9535,37.3,41050
+186876,Stockton University,2026,Galloway,NJ,7537,88.9,16754,25258,68.5,63648
+154095,University of Northern Iowa,2026,Cedar Falls,IA,7529,92.7,10201,22359,68.2,57187
+141334,University of West Georgia,2026,Carrollton,GA,7520,51.6,6088,18136,43.6,54320
+172200,Schoolcraft Community College District,2026,Livonia,MI,7511,,4736,8142,18.9,45652
+147378,Moraine Valley Community College,2026,Palos Hills,IL,7490,,3942,10086,40.2,47546
+180489,The University of Montana,2026,Missoula,MT,7488,95.9,9188,34312,48.3,48823
+111948,Chapman University,2026,Orange,CA,7478,65.4,67894,67894,82.4,80694
+164748,Berklee College of Music,2026,Boston,MA,7468,43.5,54000,54000,70.2,43451
+498571,Pennsylvania Western University,2026,California,PA,7451,94.3,12075,17006,51.6,51161
+228802,The University of Texas at Tyler,2026,Tyler,TX,7440,94.0,9736,25184,50.6,58622
+172635,Wayne County Community College District,2026,Detroit,MI,7423,,3112,4067,23.5,34732
+222576,Amarillo College,2026,Amarillo,TX,7399,,2136,4704,33.9,44820
+112385,Coastline Community College,2026,Fountain Valley,CA,7393,,1186,11890,35.4,51338
+135391,State College of Florida-Manatee-Sarasota,2026,Bradenton,FL,7379,,2540,9356,39.1,45866
+234669,Bellevue College,2026,Bellevue,WA,7364,,4580,10851,33.2,63508
+174233,University of Minnesota-Duluth,2026,Duluth,MN,7336,88.8,15200,20950,64.3,67944
+117894,Los Medanos College,2026,Pittsburg,CA,7320,,1128,9216,43.9,49834
+240480,University of Wisconsin-Stevens Point,2026,Stevens Point,WI,7306,91.8,9669,18689,52.0,54432
+211440,Carnegie Mellon University,2026,Pittsburgh,PA,7304,11.7,68776,68776,94.2,125257
+214111,Montgomery County Community College,2026,Blue Bell,PA,7301,,6900,17760,28.0,50286
+366401,Las Positas College,2026,Livermore,CA,7299,,1348,10420,53.7,57379
+139658,Emory University,2026,Atlanta,GA,7298,10.7,68056,68056,91.1,93897
+125471,West Los Angeles College,2026,Culver City,CA,7284,,1238,11040,26.3,45826
+228246,Southern Methodist University,2026,Dallas,TX,7277,63.3,69722,69722,83.5,90037
+179159,Saint Louis University,2026,Saint Louis,MO,7267,75.0,57960,57960,79.2,75998
+131159,American University,2026,Washington,DC,7266,62.0,62242,62242,75.1,85458
+237525,Marshall University,2026,Huntington,WV,7266,95.7,9388,20390,52.1,49444
+136215,Nova Southeastern University,2026,Fort Lauderdale,FL,7240,73.2,40360,40360,62.5,66144
+217156,Brown University,2026,Providence,RI,7226,5.4,74650,74650,95.7,99974
+102553,University of Alaska Anchorage,2026,Anchorage,AK,7212,,7966,22366,30.2,53994
+221999,Vanderbilt University,2026,Nashville,TN,7208,5.9,71226,71226,93.1,99080
+113193,Cuesta College,2026,San Luis Obispo,CA,7180,,1350,11010,50.9,53127
+136516,Polk State College,2026,Winter Haven,FL,7180,,2694,9817,34.1,44710
+113218,Cuyamaca College,2026,El Cajon,CA,7177,,1340,11504,37.1,45171
+219709,Belmont University,2026,Nashville,TN,7137,95.3,43750,43750,71.0,62789
+198552,Forsyth Technical Community College,2026,Winston-Salem,NC,7113,,2276,6884,38.5,40074
+445027,American InterContinental University System,2026,Chandler,AZ,7111,,12501,12501,9.1,42612
+122746,San Jose City College,2026,San Jose,CA,7105,,1366,10350,36.5,52460
+187134,The College of New Jersey,2026,Ewing,NJ,7105,62.3,20378,26742,85.5,79651
+120290,Ohlone College,2026,Fremont,CA,7099,,1202,8858,53.8,61853
+117946,Loyola Marymount University,2026,Los Angeles,CA,7094,45.1,65857,65857,78.8,86034
+130253,Sacred Heart University,2026,Fairfield,CT,7087,65.4,52410,52410,75.2,80896
+101514,John C Calhoun State Community College,2026,Tanner,AL,7070,,5540,9470,39.9,42337
+168148,Tufts University,2026,Medford,MA,7061,11.5,73616,73616,93.6,89187
+231624,William & Mary,2026,Williamsburg,VA,7055,34.1,26456,52725,88.9,83488
+174428,Normandale Community College,2026,Bloomington,MN,7044,,6567,6567,23.7,55051
+101480,Jacksonville State University,2026,Jacksonville,AL,7036,77.7,13224,23814,50.5,51004
+156541,University of the Cumberlands,2026,Williamsburg,KY,6941,98.8,9875,9875,50.2,47477
+216597,Villanova University,2026,Villanova,PA,6938,27.0,70826,70826,92.3,115382
+229814,West Texas A & M University,2026,Canyon,TX,6917,98.7,9664,24829,52.6,55024
+149532,Triton College,2026,River Grove,IL,6902,,5340,15900,36.6,47411
+136400,Pasco-Hernando State College,2026,New Port Richey,FL,6900,,3155,12032,40.3,44395
+240365,University of Wisconsin-Oshkosh,2026,Oshkosh,WI,6877,86.5,8993,17302,46.6,59275
+211927,Delaware County Community College,2026,Media,PA,6861,,7020,15780,23.6,50332
+229063,Texas Southern University,2026,Houston,TX,6844,96.9,9173,21473,23.0,46064
+117247,Laney College,2026,Oakland,CA,6842,,1258,10138,30.3,42812
+409698,California State University-Monterey Bay,2026,Seaside,CA,6819,97.4,8145,21465,60.9,63891
+178402,University of Missouri-Kansas City,2026,Kansas City,MO,6817,72.2,13216,31738,55.9,63110
+216038,Slippery Rock University of Pennsylvania,2026,Slippery Rock,PA,6788,71.5,10906,15162,66.9,57995
+181640,Southeast Community College Area,2026,Lincoln,NE,6773,,3000,3504,39.1,47090
+213020,Indiana University of Pennsylvania,2026,Indiana,PA,6764,90.8,11724,16804,53.7,57182
+206604,Wright State University-Main Campus,2026,Dayton,OH,6762,96.3,12268,22452,41.8,53497
+130794,Yale University,2026,New Haven,CT,6758,3.9,69900,69900,96.0,118356
+137032,Saint Leo University,2026,Saint Leo,FL,6721,78.4,30750,30750,43.4,53366
+221643,Pellissippi State Community College,2026,Knoxville,TN,6715,,4930,12874,32.8,42869
+187046,Thomas Edison State University,2026,Trenton,NJ,6707,,7044,9122,,75164
+117690,Los Angeles Harbor College,2026,Wilmington,CA,6694,,1238,11040,39.0,47368
+157401,Murray State University,2026,Murray,KY,6688,85.7,10320,20676,60.6,48482
+226152,Texas A & M International University,2026,Laredo,TX,6667,44.4,7893,19334,47.6,51325
+488679,Indiana Wesleyan University-National & Global,2026,Marion,IN,6656,,8448,8448,31.8,65692
+162779,Howard Community College,2026,Columbia,MD,6649,,4146,10002,23.9,53227
+144944,Elgin Community College,2026,Elgin,IL,6648,,3324,9516,43.5,51097
+183938,Camden County College,2026,Blackwood,NJ,6636,,4560,4656,30.7,43903
+184995,Hudson County Community College,2026,Jersey City,NJ,6626,,5854,9958,25.0,41407
+141264,Valdosta State University,2026,Valdosta,GA,6622,72.3,6124,18172,43.5,52334
+187444,William Paterson University of New Jersey,2026,Wayne,NJ,6614,90.1,16748,27014,44.1,61869
+208390,Chemeketa Community College,2026,Salem,OR,6610,,6570,14265,20.4,45297
+459949,Texas A&M University-San Antonio,2026,San Antonio,TX,6599,92.8,9760,23376,36.8,58747
+100706,University of Alabama in Huntsville,2026,Huntsville,AL,6591,68.6,12458,27148,63.3,72098
+482158,Middle Georgia State University,2026,Macon,GA,6574,99.7,5038,16702,25.9,48459
+169521,Delta College,2026,University Center,MI,6573,,4910,8030,26.7,41641
+476975,Colorado State University Global,2026,Denver,CO,6563,98.4,9000,9000,,82047
+193654,The New School,2026,New York,NY,6563,63.5,61558,61558,68.7,64471
+171456,Northern Michigan University,2026,Marquette,MI,6556,84.0,15012,20508,53.1,51936
+122931,Santa Clara University,2026,Santa Clara,CA,6552,48.0,63513,63513,87.6,117193
+130226,Quinnipiac University,2026,Hamden,CT,6531,72.2,57700,57700,77.0,87596
+191719,Hudson Valley Community College,2026,Troy,NY,6499,,6796,11852,33.9,50915
+191649,Hofstra University,2026,Hempstead,NY,6488,68.1,59960,59960,67.1,76540
+161572,Unity Environmental University,2026,New Gloucester,ME,6483,,12640,12640,23.6,46894
+488730,Northeast Lakeview College,2026,Universal City,TX,6471,,3412,9952,31.4,
+455114,College of Western Idaho,2026,Nampa,ID,6459,,3854,7790,26.6,46214
+198516,Elon University,2026,Elon,NC,6452,66.3,48723,48723,82.7,82524
+167534,Quinsigamond Community College,2026,Worcester,MA,6447,,6376,11320,22.4,51435
+198419,Duke University,2026,Durham,NC,6442,5.7,72795,72795,96.5,113937
+201645,Case Western Reserve University,2026,Cleveland,OH,6437,36.5,69270,69270,87.3,89865
+475121,South University-Savannah Online,2026,Savannah,GA,6433,,18145,18145,8.0,39314
+125499,West Valley College,2026,Saratoga,CA,6416,,0,11244,51.7,55251
+144166,City Colleges of Chicago-Malcolm X College,2026,Chicago,IL,6409,,4710,15540,18.6,39839
+175786,Hinds Community College,2026,Raymond,MS,6397,,4350,7400,39.5,34678
+104160,Arizona Western College,2026,Yuma,AZ,6374,,3150,9450,20.9,41638
+179557,Southeast Missouri State University,2026,Cape Girardeau,MO,6373,73.5,10194,10194,59.3,48748
+176071,Mississippi Gulf Coast Community College,2026,Perkinston,MS,6353,,4250,5250,47.0,38144
+240277,University of Wisconsin-Green Bay,2026,Green Bay,WI,6341,88.6,8985,17573,47.4,56401
+195030,University of Rochester,2026,Rochester,NY,6331,40.1,70306,70306,84.4,88358
+130493,Southern Connecticut State University,2026,New Haven,CT,6295,91.5,13438,27378,49.9,59695
+175315,Century College,2026,White Bear Lake,MN,6280,,6535,6535,30.8,52512
+218140,Horry-Georgetown Technical College,2026,Conway,SC,6274,,6702,13254,35.9,40257
+183877,Rowan College at Burlington County,2026,Mount Laurel,NJ,6267,,7530,10200,35.6,48107
+223816,Central Texas College,2026,Killeen,TX,6247,,3750,7500,14.0,46742
+174914,University of St Thomas,2026,Saint Paul,MN,6245,85.4,56460,56460,75.1,82322
+120421,Oxnard College,2026,Oxnard,CA,6240,,1416,11598,36.6,46485
+235097,Eastern Washington University,2026,Cheney,WA,6222,90.8,8886,26073,43.3,62463
+151324,Indiana State University,2026,Terre Haute,IN,6188,80.8,10258,22926,43.6,52316
+213349,Kutztown University of Pennsylvania,2026,Kutztown,PA,6180,90.8,11819,16665,54.5,57647
+483045,Central Georgia Technical College,2026,Warner Robins,GA,6174,,3448,6016,46.2,37095
+126775,Colorado School of Mines,2026,Golden,CO,6155,60.7,22658,47288,81.9,102077
+123299,Shasta College,2026,Redding,CA,6128,,1199,8927,23.5,43608
+100654,Alabama A & M University,2026,Normal,AL,6124,58.0,10558,19318,25.9,41266
+127158,Emily Griffith Technical College,2026,Denver,CO,6123,,,,97.0,39117
+191083,Erie Community College,2026,Buffalo,NY,6099,,6100,11300,27.7,46497
+196176,State University of New York at New Paltz,2026,New Paltz,NY,6086,61.6,8572,19172,70.2,65774
+165033,Bristol Community College,2026,Fall River,MA,6083,,5952,10896,22.9,47512
+199157,North Carolina Central University,2026,Durham,NC,6081,87.0,6733,19769,44.4,46956
+225414,University of Houston-Clear Lake,2026,Houston,TX,6078,90.5,7770,21114,48.4,61521
+147800,Oakton College,2026,Des Plaines,IL,6072,,3985,12462,33.0,53439
+209038,Lane Community College,2026,Eugene,OR,6064,,6484,13576,22.1,42854
+163851,Salisbury University,2026,Salisbury,MD,6057,87.5,11306,22810,64.5,68206
+233277,Radford University,2026,Radford,VA,6038,89.5,12952,26734,48.3,59134
+186584,Seton Hall University,2026,South Orange,NJ,6036,73.3,55040,55040,70.0,80035
+127060,University of Denver,2026,Denver,CO,6025,77.8,63246,63246,74.9,77205
+228158,South Plains College,2026,Levelland,TX,6005,,2733,5157,29.0,44226
+172051,Saginaw Valley State University,2026,University Center,MI,5989,72.1,13680,24000,49.4,55838
+444787,Nightingale College,2026,Salt Lake City,UT,5986,,,,20.8,79752
+190530,CUNY Bronx Community College,2026,Bronx,NY,5964,,5206,8086,15.9,46595
+138716,Albany State University,2026,Albany,GA,5956,,5666,17330,30.7,44975
+171128,Michigan Technological University,2026,Houghton,MI,5955,92.4,19982,44878,69.0,84681
+171137,University of Michigan-Dearborn,2026,Dearborn,MI,5952,55.6,16240,34168,59.2,66897
+139861,Georgia College & State University,2026,Milledgeville,GA,5947,78.2,9176,30062,61.9,64452
+196149,State University of New York at Cortland,2026,Cortland,NY,5901,59.8,8874,18984,70.1,67781
+213543,Lehigh University,2026,Bethlehem,PA,5898,25.9,67920,67920,86.5,116342
+224110,North Central Texas College,2026,Gainesville,TX,5863,,5088,5088,35.6,49533
+184481,Essex County College,2026,Newark,NJ,5855,,5631,9821,18.8,43365
+240417,University of Wisconsin-Stout,2026,Menomonie,WI,5842,87.7,11196,20188,53.6,62537
+240462,University of Wisconsin-Platteville,2026,Platteville,WI,5837,89.4,9031,18438,57.0,66166
+238722,Fox Valley Technical College,2026,Appleton,WI,5825,,4980,7269,60.9,49153
+226134,Laredo College,2026,Laredo,TX,5818,,3300,5784,33.6,37653
+101879,University of North Alabama,2026,Florence,AL,5811,87.3,12480,22680,55.2,50557
+232450,Brightpoint Community College,2026,Chester,VA,5792,,5230,11742,37.0,44471
+118930,Mission College,2026,Santa Clara,CA,5784,,1438,12230,41.8,56661
+196121,SUNY Brockport,2026,Brockport,NY,5784,70.7,8752,16242,52.9,60028
+198543,Fayetteville State University,2026,Fayetteville,NC,5762,82.2,4412,8412,37.7,47125
+205841,Stark State College,2026,North Canton,OH,5749,,4910,8006,20.1,37802
+193016,Mercy University,2026,Dobbs Ferry,NY,5735,85.8,23650,23650,45.4,57532
+214041,Millersville University of Pennsylvania,2026,Millersville,PA,5728,86.2,11592,23896,56.3,58443
+149727,Waubonsee Community College,2026,Sugar Grove,IL,5721,,3576,9131,41.4,48582
+194824,Rensselaer Polytechnic Institute,2026,Troy,NY,5714,63.5,66032,66032,82.0,113011
+186131,Princeton University,2026,Princeton,NJ,5709,4.6,65510,65510,97.5,133523
+239488,Northeast Wisconsin Technical College,2026,Green Bay,WI,5704,,5137,7429,51.9,48526
+193308,Monroe University,2026,Bronx,NY,5701,67.5,19024,19024,54.2,48327
+162928,Johns Hopkins University,2026,Baltimore,MD,5693,6.4,67170,67170,93.6,104590
+113111,Crafton Hills College,2026,Yucaipa,CA,5687,,1184,15584,32.5,47391
+161545,Southern Maine Community College,2026,South Portland,ME,5675,,4156,7036,25.1,48636
+143215,Southwestern Illinois College,2026,Belleville,IL,5675,,4590,7320,37.2,41059
+490805,Purdue University Northwest,2026,Hammond,IN,5671,72.4,8675,16577,43.6,58620
+122436,University of San Diego,2026,San Diego,CA,5671,52.4,62420,62420,82.5,93069
+226578,McLennan Community College,2026,Waco,TX,5668,,3660,5910,35.8,42245
+201928,Cincinnati State Technical and Community College,2026,Cincinnati,OH,5667,,5517,10044,16.6,43841
+178059,Maryville University of Saint Louis,2026,Saint Louis,MO,5658,95.1,27166,27166,64.0,67386
+225308,Trinity Valley Community College,2026,Athens,TX,5655,,2640,4920,26.9,41336
+221184,Nashville State Community College,2026,Nashville,TN,5653,,4876,8236,19.4,42096
+176965,University of Central Missouri,2026,Warrensburg,MO,5648,63.8,10457,19367,53.1,52739
+222831,Angelo State University,2026,San Angelo,TX,5643,83.0,8460,18180,44.5,51945
+159382,Louisiana State University at Alexandria,2026,Alexandria,LA,5632,92.1,7050,14650,31.7,46481
+139366,Columbus State University,2026,Columbus,GA,5625,99.1,5898,17946,41.9,49706
+119067,Monterey Peninsula College,2026,Monterey,CA,5624,,1188,10788,41.0,49579
+174020,Metropolitan State University,2026,Saint Paul,MN,5616,98.7,10382,10382,44.8,66336
+482149,Augusta University,2026,Augusta,GA,5613,86.4,8414,25202,48.5,52071
+115755,California State Polytechnic University-Humboldt,2026,Arcata,CA,5612,98.2,8824,22144,46.4,54882
+127741,University of Northern Colorado,2026,Greeley,CO,5598,85.9,12882,28370,50.3,56980
+232414,J Sargeant Reynolds Community College,2026,Richmond,VA,5586,,5427,11930,32.1,42629
+202806,Franklin University,2026,Columbus,OH,5562,,9552,9552,17.8,57435
+126669,Colorado Christian University,2026,Lakewood,CO,5549,,42758,42758,66.6,52025
+226806,Midland College,2026,Midland,TX,5542,,3180,6180,26.6,47203
+178411,Missouri University of Science and Technology,2026,Rolla,MO,5521,72.5,15746,34934,65.6,85917
+192448,Long Island University,2026,Brookville,NY,5520,86.2,43276,43276,58.4,65934
+160038,Northwestern State University of Louisiana,2026,Natchitoches,LA,5519,92.5,9370,20158,43.4,51238
+160621,Southern University and A & M College,2026,Baton Rouge,LA,5519,35.1,9958,17308,27.5,47186
+232195,Germanna Community College,2026,Locust Grove,VA,5508,,5406,11920,46.6,45438
+117052,Reedley College,2026,Reedley,CA,5504,,1334,9426,44.9,42903
+199847,Wake Forest University,2026,Winston-Salem,NC,5485,21.7,70332,70332,89.7,104443
+151102,Purdue University Fort Wayne,2026,Fort Wayne,IN,5484,83.9,9532,23573,38.2,51617
+196194,State University of New York at Oswego,2026,Oswego,NY,5473,80.5,8825,19255,59.3,63727
+436429,Los Angeles Film School,2026,Hollywood,CA,5472,,,,38.8,37849
+101505,Jefferson State Community College,2026,Birmingham,AL,5470,,5520,9450,24.9,43674
+377555,University of Washington-Bothell Campus,2026,Bothell,WA,5457,90.6,13472,44706,66.8,83105
+176178,Northwest Mississippi Community College,2026,Senatobia,MS,5452,,3940,3940,46.8,40980
+168421,Worcester Polytechnic Institute,2026,Worcester,MA,5447,60.2,63246,63246,89.8,113513
+219471,University of South Dakota,2026,Vermillion,SD,5439,98.8,9687,13299,59.9,58316
+488077,Sonoran Desert Institute,2026,Tempe,AZ,5435,,12200,12200,36.9,
+185873,Ocean County College,2026,Toms River,NJ,5424,,5334,7542,42.8,49461
+186645,Raritan Valley Community College,2026,Branchburg,NJ,5416,,5955,7875,32.6,54444
+166887,Middlesex Community College,2026,Bedford,MA,5412,,6168,12360,24.4,54021
+185509,Mercer County Community College,2026,West Windsor,NJ,5404,,5694,9846,22.5,46960
+232937,Norfolk State University,2026,Norfolk,VA,5392,87.8,10456,21806,36.8,49237
+106467,Arkansas Tech University,2026,Russellville,AR,5388,95.9,8901,15076,46.6,46008
+126289,Arapahoe Community College,2026,Littleton,CO,5383,,4626,17666,28.7,54779
+105747,Scottsdale Community College,2026,Scottsdale,AZ,5377,,2358,8958,19.7,51993
+129242,Fairfield University,2026,Fairfield,CT,5373,33.3,60810,60810,84.8,101587
+203748,Lorain County Community College,2026,Elyria,OH,5373,,4525,9120,34.0,42307
+144281,Columbia College Chicago,2026,Chicago,IL,5368,89.5,37344,37344,49.1,48427
+184180,County College of Morris,2026,Randolph,NJ,5360,,6480,14580,35.7,56266
+212106,Duquesne University,2026,Pittsburgh,PA,5350,83.6,51068,51068,76.9,81698
+222053,Volunteer State Community College,2026,Gallatin,TN,5339,,4900,8260,28.6,45291
+199281,University of North Carolina at Pembroke,2026,Pembroke,NC,5330,93.3,3611,7611,43.6,48029
+199333,Pitt Community College,2026,Winterville,NC,5317,,2680,8824,30.0,40921
+235237,Pierce College District,2026,Lakewood,WA,5313,,5578,6163,31.6,52562
+151306,University of Southern Indiana,2026,Evansville,IN,5292,95.8,10791,23632,49.9,52206
+211307,Bucks County Community College,2026,Newtown,PA,5289,,5683,13963,31.5,53416
+118772,Merritt College,2026,Oakland,CA,5288,,1258,10138,26.4,46743
+122612,University of San Francisco,2026,San Francisco,CA,5287,61.7,62462,62462,68.3,94613
+219824,Chattanooga State Community College,2026,Chattanooga,TN,5284,,4916,8276,27.3,43805
+188429,Adelphi University,2026,Garden City,NY,5276,65.9,52050,52050,68.9,80969
+174136,Minneapolis Community and Technical College,2026,Minneapolis,MN,5268,,6396,6396,20.5,45295
+169275,Mott Community College,2026,Flint,MI,5251,,7009,12013,30.6,37337
+167987,University of Massachusetts-Dartmouth,2026,North Dartmouth,MA,5221,90.6,16233,33782,50.7,68878
+112826,Contra Costa College,2026,San Pablo,CA,5203,,1128,9216,33.3,45857
+235316,Gonzaga University,2026,Spokane,WA,5198,81.7,57250,57250,85.9,89110
+192819,Marist University,2026,Poughkeepsie,NY,5182,56.5,49900,49900,80.1,84453
+187620,New Mexico State University-Dona Ana,2026,Las Cruces,NM,5177,,2322,6360,18.2,43922
+111434,Canada College,2026,Redwood City,CA,5175,,1332,11860,48.3,57796
+209074,Linn-Benton Community College,2026,Albany,OR,5174,,7733,16661,27.4,46525
+123572,Sonoma State University,2026,Rohnert Park,CA,5166,93.4,9062,22382,56.5,71264
+139278,West Georgia Technical College,2026,Waco,GA,5163,,3410,5978,37.4,41700
+210809,American College of Financial Services,2026,King of Prussia,PA,5144,,,,,
+175272,Winona State University,2026,Winona,MN,5144,75.5,11232,18401,58.0,63354
+198695,High Point University,2026,High Point,NC,5129,75.3,49146,49146,72.7,73547
+364016,Paradise Valley Community College,2026,Phoenix,AZ,5117,,2358,8958,17.1,52721
+226204,Lee College,2026,Baytown,TX,5116,,2520,5190,47.9,47125
+197887,Asheville-Buncombe Technical Community College,2026,Asheville,NC,5110,,2882,9026,42.4,41307
+154800,Butler Community College,2026,El Dorado,KS,5104,,3704,6569,32.4,44647
+196130,SUNY Buffalo State University,2026,Buffalo,NY,5097,73.0,8533,20273,33.7,55028
+126942,Community College of Denver,2026,Denver,CO,5096,,5218,18438,17.0,44120
+229799,Weatherford College,2026,Weatherford,TX,5094,,5250,10820,25.0,43944
+174783,Saint Cloud State University,2026,Saint Cloud,MN,5088,94.8,10858,10858,42.4,59509
+234155,Virginia State University,2026,Petersburg,VA,5074,88.6,10418,23404,38.2,49358
+218885,Tri-County Technical College,2026,Pendleton,SC,5071,,4599,12735,41.0,46048
+145682,Illinois Central College,2026,East Peoria,IL,5052,,4800,12150,51.1,41765
+364025,Chandler-Gilbert Community College,2026,Chandler,AZ,5051,,2358,8958,16.4,53568
+217420,Rhode Island College,2026,Providence,RI,5049,91.8,11709,28268,46.3,60399
+221485,Southwest Tennessee Community College,2026,Memphis,TN,5047,,5217,8246,19.0,38117
+162007,Bowie State University,2026,Bowie,MD,5043,72.4,9529,20464,37.4,61890
+434061,South Louisiana Community College,2026,Lafayette,LA,5035,,4210,4210,32.5,37569
+132851,College of Central Florida,2026,Ocala,FL,5033,,2710,10517,43.8,42070
+178420,University of Missouri-St Louis,2026,Saint Louis,MO,5024,62.7,14812,36876,59.4,59899
+159993,University of Louisiana at Monroe,2026,Monroe,LA,5022,84.8,9556,13467,52.6,49742
+262031,St Charles Community College,2026,Cottleville,MO,5017,,3048,6096,28.9,46866
+441937,California State University-Channel Islands,2026,Camarillo,CA,5013,94.8,7596,20916,53.0,66328
+218830,Spartanburg Community College,2026,Spartanburg,SC,5006,,5246,10310,29.7,40504
+159717,McNeese State University,2026,Lake Charles,LA,5005,78.3,9084,10584,47.2,50152
+170541,Kalamazoo Valley Community College,2026,Kalamazoo,MI,4997,,4242,9312,26.5,43182
+459204,Unitek College,2026,Fremont,CA,4972,,,,72.7,81243
+235343,Green River College,2026,Auburn,WA,4965,,5172,5752,39.7,54621
+208406,Clackamas Community College,2026,Oregon City,OR,4963,,6525,14875,24.1,49259
+240125,Waukesha County Technical College,2026,Pewaukee,WI,4955,,4952,7266,50.8,51528
+367459,NorthWest Arkansas Community College,2026,Bentonville,AR,4953,,4380,6750,34.0,44718
+207670,Rose State College,2026,Midwest City,OK,4953,,5144,11520,20.5,41703
+177065,Columbia College,2026,Columbia,MO,4950,,27404,27404,46.1,48161
+106245,University of Arkansas at Little Rock,2026,Little Rock,AR,4949,58.8,9808,22218,41.5,50640
+215770,Saint Joseph's University - Philadelphia,2026,Philadelphia,PA,4948,88.8,55380,55380,80.0,85980
+234933,Clark College,2026,Vancouver,WA,4945,,5366,11507,37.1,47832
+158431,Bossier Parish Community College,2026,Bossier City,LA,4935,,4339,4339,19.1,37382
+104346,Central Arizona College,2026,Coolidge,AZ,4912,,2250,4500,17.9,45193
+176239,Pearl River Community College,2026,Poplarville,MS,4903,,3800,6200,37.8,37204
+190585,CUNY Hostos Community College,2026,Bronx,NY,4900,,5254,8134,16.5,47280
+186201,Ramapo College of New Jersey,2026,Mahwah,NJ,4898,70.6,17615,29093,68.7,71282
+127909,Red Rocks Community College,2026,Lakewood,CO,4889,,5016,18056,33.2,50999
+221768,The University of Tennessee-Martin,2026,Martin,TN,4866,88.2,10824,16864,52.0,48116
+221838,Tennessee State University,2026,Nashville,TN,4848,70.1,9048,22848,34.0,47151
+129941,University of New Haven,2026,West Haven,CT,4841,60.4,49320,49320,63.3,69320
+212115,East Stroudsburg University of Pennsylvania,2026,East Stroudsburg,PA,4814,92.0,11692,20230,44.4,59893
+137564,Southeastern University,2026,Lakeland,FL,4813,53.0,33740,33740,42.9,49323
+497046,Madera Community College,2026,Madera,CA,4808,,1334,10714,35.8,
+156471,Galen College of Nursing-Louisville,2026,Louisville,KY,4801,,,,54.6,69188
+101161,Coastal Alabama Community College,2026,Bay Minette,AL,4798,,5760,9690,33.1,40539
+114938,Gavilan College,2026,Gilroy,CA,4786,,1444,12544,43.8,49087
+126119,Yuba College,2026,Marysville,CA,4779,,1128,8208,40.1,43464
+227757,Rice University,2026,Houston,TX,4776,8.0,67857,67857,95.0,90773
+207263,Northeastern State University,2026,Tahlequah,OK,4772,99.6,8041,17708,36.2,48728
+483595,Ana G. Mendez University,2026,Orlando,FL,4763,,13575,13575,13.3,
+139700,Georgia Highlands College,2026,Rome,GA,4761,,3216,10560,20.5,46880
+238759,Gateway Technical College,2026,Kenosha,WI,4759,,5108,7398,53.7,43084
+167905,Springfield Technical Community College,2026,Springfield,MA,4759,,6004,11212,34.1,45410
+228705,Texas A&M University-Kingsville,2026,Kingsville,TX,4748,90.9,9892,25806,43.3,55340
+159966,Nicholls State University,2026,Thibodaux,LA,4737,90.8,8741,9834,52.5,49144
+231651,Regent University,2026,Virginia Beach,VA,4729,38.1,22740,22740,54.5,51408
+235149,Everett Community College,2026,Everett,WA,4709,,4935,11283,35.9,51095
+147004,McHenry County College,2026,Crystal Lake,IL,4691,,4162,15945,38.4,50609
+236753,Tacoma Community College,2026,Tacoma,WA,4668,,5670,12017,30.6,52313
+227304,Odessa College,2026,Odessa,TX,4654,,2688,4926,38.0,47174
+196185,SUNY Oneonta,2026,Oneonta,NY,4643,69.6,8831,19781,67.4,66840
+234979,Columbia Basin College,2026,Pasco,WA,4640,,6744,8835,32.6,51967
+159939,University of New Orleans,2026,New Orleans,LA,4638,74.3,9472,14308,37.8,53518
+484473,University of Florida-Online,2026,Gainesville,FL,4627,61.3,3876,16579,83.5,78456
+177968,Lindenwood University,2026,Saint Charles,MO,4624,56.8,22794,22794,52.0,58321
+140243,Lanier Technical College,2026,Gainesville,GA,4613,,3980,7190,32.8,43529
+175856,Jackson State University,2026,Jackson,MS,4600,93.2,9635,13635,47.0,42075
+229841,Wharton County Junior College,2026,Wharton,TX,4585,,3204,5976,29.0,49217
+157386,Morehead State University,2026,Morehead,KY,4578,77.2,10444,15614,50.3,47134
+156082,Washburn University,2026,Topeka,KS,4562,,10256,10256,52.5,53102
+178721,Park University,2026,Parkville,MO,4555,,18000,18000,36.6,62154
+139463,Dalton State College,2026,Dalton,GA,4553,,3376,10888,27.4,46083
+182670,Dartmouth College,2026,Hanover,NH,4541,5.4,71525,71525,95.4,111162
+241739,Universidad Ana G. Mendez-Cupey Campus,2026,San Juan,PR,4540,,7910,7910,30.4,28331
+105145,GateWay Community College,2026,Phoenix,AZ,4538,,2358,8958,24.7,51029
+166683,Massachusetts Institute of Technology,2026,Cambridge,MA,4535,4.5,64730,64730,96.1,152553
+236692,Spokane Community College,2026,Spokane,WA,4533,,5625,7073,33.1,46919
+392257,The College of Health Care Professions-Northwest,2026,Houston,TX,4530,,,,47.9,37336
+162122,College of Southern Maryland,2026,La Plata,MD,4512,,4200,10050,32.7,49504
+384333,Estrella Mountain Community College,2026,Avondale,AZ,4512,,2358,8958,29.4,48307
+140447,Mercer University,2026,Macon,GA,4500,68.9,43570,43570,70.9,63469
+262086,University of Massachusetts Global,2026,Aliso Viejo,CA,4491,,12560,12560,,68286
+108667,College of Alameda,2026,Alameda,CA,4487,,1258,10138,31.9,47627
+455196,Jersey College,2026,Teterboro,NJ,4478,67.6,,,35.0,73055
+164739,Bentley University,2026,Waltham,MA,4474,45.1,63390,63390,87.3,126427
+164155,United States Naval Academy,2026,Annapolis,MD,4474,9.3,0,0,90.6,
+243346,Universidad Ana G. Mendez-Carolina Campus,2026,Carolina,PR,4468,,8560,8560,32.4,28770
+366252,Pennsylvania College of Technology,2026,Williamsport,PA,4464,,18690,26640,52.2,57348
+443650,Miller-Motte College-Chattanooga,2026,Chattanooga,TN,4462,,,,55.2,34579
+125170,Berkeley City College,2026,Berkeley,CA,4456,,1258,10138,39.8,48574
+194222,Onondaga Community College,2026,Syracuse,NY,4456,,6212,11612,28.1,46041
+243443,Universidad del Sagrado Corazon,2026,Santurce,PR,4442,58.0,6700,6700,47.0,35345
+225627,University of the Incarnate Word,2026,San Antonio,TX,4440,98.1,38650,38650,52.1,60110
+101295,George C Wallace State Community College-Hanceville,2026,Hanceville,AL,4423,,5640,9570,51.4,42807
+171146,University of Michigan-Flint,2026,Flint,MI,4411,70.5,15354,29630,41.5,58635
+149772,Western Illinois University,2026,Macomb,IL,4410,71.2,15466,15466,47.2,57175
+197036,United States Military Academy,2026,West  Point,NY,4408,12.4,0,0,86.6,
+147536,National Louis University,2026,Chicago,IL,4406,95.0,13020,13020,31.2,52883
+221908,Northeast State Community College,2026,Blountville,TN,4404,,4926,8286,34.2,39687
+137281,Saint Johns River State College,2026,Palatka,FL,4403,,2591,9335,47.2,45331
+130934,Delaware State University,2026,Dover,DE,4398,46.6,11214,21204,40.8,51864
+167312,North Shore Community College,2026,Danvers,MA,4393,,5448,11016,20.9,51866
+178624,Northwest Missouri State University,2026,Maryville,MO,4378,86.1,11037,18018,53.1,52028
+144218,City Colleges of Chicago-Wilbur Wright College,2026,Chicago,IL,4372,,4710,15540,31.9,47007
+231712,Christopher Newport University,2026,Newport News,VA,4365,86.0,17219,31440,73.2,65183
+204945,Owens Community College,2026,Perrysburg,OH,4361,,6109,10982,37.8,42005
+148380,Rock Valley College,2026,Rockford,IL,4359,,4324,7414,37.8,44656
+201955,University of Cincinnati-Blue Ash College,2026,Blue Ash,OH,4354,,7416,16214,15.3,60832
+139311,Clayton  State University,2026,Morrow,GA,4348,68.5,5240,16904,38.8,54701
+181002,Creighton University,2026,Omaha,NE,4348,79.8,50960,50960,83.3,80642
+190691,CUNY York College,2026,Jamaica,NY,4345,64.1,7358,15308,29.7,62351
+150163,Butler University,2026,Indianapolis,IN,4317,85.1,49890,49890,79.0,83535
+188100,San Juan College,2026,Farmington,NM,4304,,2315,6615,36.2,39336
+458919,Strayer University-Georgia,2026,Chamblee,GA,4299,,13920,13920,27.0,44016
+167729,Salem State University,2026,Salem,MA,4291,95.9,12708,20117,49.3,62762
+240116,Chippewa Valley Technical College,2026,Eau Claire,WI,4272,,4953,7245,47.0,50674
+168005,Suffolk University,2026,Boston,MA,4268,82.3,49556,49556,59.8,75345
+186034,Passaic County Community College,2026,Paterson,NJ,4260,,6660,11220,17.9,42497
+139384,Georgia Northwestern Technical College,2026,Rome,GA,4244,,4950,8802,46.4,39355
+191968,Ithaca College,2026,Ithaca,NY,4242,69.0,56752,56752,74.1,70258
+166823,Massasoit Community College,2026,Brockton,MA,4235,,5472,10416,22.0,50480
+184791,Rowan College of South Jersey-Gloucester Campus,2026,Sewell,NJ,4234,,5910,6750,36.5,47364
+217402,Providence College,2026,Providence,RI,4229,50.9,65960,65960,86.1,90260
+186867,Stevens Institute of Technology,2026,Hoboken,NJ,4222,47.6,65606,65606,87.8,118358
+161554,University of Southern Maine,2026,Portland,ME,4222,79.2,12630,31080,41.8,57989
+155681,Pittsburg State University,2026,Pittsburg,KS,4210,89.4,8599,19943,52.7,53785
+125091,Victor Valley College,2026,Victorville,CA,4210,,1449,10125,,39827
+144209,City Colleges of Chicago-Harold Washington College,2026,Chicago,IL,4207,,4710,15540,25.9,42885
+102614,University of Alaska Fairbanks,2026,Fairbanks,AK,4207,,8956,23352,37.5,52180
+206622,Xavier University,2026,Cincinnati,OH,4207,86.4,52680,52680,69.8,69118
+102049,Samford University,2026,Birmingham,AL,4206,82.4,41910,41910,77.4,66982
+240471,University of Wisconsin-River Falls,2026,River Falls,WI,4205,81.7,9436,18321,57.5,56914
+162557,Frederick Community College,2026,Frederick,MD,4203,,3958,10342,36.9,49535
+172963,Anoka-Ramsey Community College,2026,Coon Rapids,MN,4201,,6750,6750,30.4,53668
+144892,Eastern Illinois University,2026,Charleston,IL,4188,65.3,14654,17261,48.5,55885
+377564,University of Washington-Tacoma Campus,2026,Tacoma,WA,4185,82.5,13577,44811,61.9,83105
+135188,Lake-Sumter State College,2026,Leesburg,FL,4177,,3292,13276,46.5,44593
+251260,Southern Union State Community College,2026,Wadley,AL,4173,,5460,9390,31.7,41907
+199999,Winston-Salem State University,2026,Winston-Salem,NC,4170,78.3,6098,16754,47.0,52558
+175829,Itawamba Community College,2026,Fulton,MS,4167,,3420,5820,55.2,38047
+157711,Somerset Community College,2026,Somerset,KY,4166,,4872,6672,45.8,35006
+159009,Grambling State University,2026,Grambling,LA,4164,44.9,7783,16795,36.1,41535
+199494,Rowan-Cabarrus Community College,2026,Salisbury,NC,4164,,2080,6688,38.2,40125
+196237,SUNY Old Westbury,2026,Old Westbury,NY,4162,83.6,8422,19372,43.7,65583
+213525,Lehigh Carbon Community College,2026,Schnecksville,PA,4148,,5616,14048,33.6,46873
+129525,University of Hartford,2026,West Hartford,CT,4146,95.8,50445,50445,55.6,66020
+107664,University of Arkansas-Pulaski Technical College,2026,North Little Rock,AR,4118,,5208,8328,33.3,37075
+128328,United States Air Force Academy,2026,USAF Academy,CO,4114,14.1,0,0,85.7,
+139986,Southern Crescent Technical College,2026,Griffin,GA,4098,,3516,6084,59.1,39335
+108092,University of Arkansas-Fort Smith,2026,Fort Smith,AR,4091,80.5,7888,12208,39.8,44252
+156648,Elizabethtown Community and Technical College,2026,Elizabethtown,KY,4088,,4872,6672,59.1,40644
+181215,University of Nebraska at Kearney,2026,Kearney,NE,4088,89.5,8922,16134,59.6,55176
+226833,Midwestern State University,2026,Wichita Falls,TX,4087,93.5,10580,22730,42.3,59560
+216010,Shippensburg University of Pennsylvania,2026,Shippensburg,PA,4086,86.5,14068,16418,52.3,58077
+236595,Seattle University,2026,Seattle,WA,4062,76.9,58965,58965,73.3,84728
+118347,College of Marin,2026,Kentfield,CA,4042,,1558,9334,39.9,49787
+196592,Touro University,2026,New York,NY,4040,60.8,23100,23100,69.8,57553
+218742,University of South Carolina-Upstate,2026,Spartanburg,SC,4038,67.3,11588,23090,43.1,53988
+214713,Pennsylvania State University-Penn State Harrisburg,2026,Middletown,PA,4031,97.6,16004,27254,26.8,71762
+183804,Beth Medrash Govoha,2026,Lakewood,NJ,4027,,,,,55459
+201654,Cedarville University,2026,Cedarville,OH,4024,65.3,38258,38258,73.5,65805
+146612,Lewis University,2026,Romeoville,IL,4015,71.3,40700,40700,61.4,59389
+485111,Georgia Military College,2026,Milledgeville,GA,3992,,8112,8112,36.6,42152
+194240,Orange County Community College,2026,Middletown,NY,3989,,6706,12694,24.8,51507
+106148,Yavapai College,2026,Prescott,AZ,3988,,3104,9670,36.5,43839
+147776,Northeastern Illinois University,2026,Chicago,IL,3982,74.6,12743,22581,23.5,56278
+218520,Piedmont Technical College,2026,Greenwood,SC,3977,,4969,7117,32.8,38504
+146685,Lincoln Land Community College,2026,Springfield,IL,3976,,3828,10716,50.1,42248
+143118,Aurora University,2026,Aurora,IL,3974,80.8,29970,29970,60.4,64180
+221096,Motlow State Community College,2026,Tullahoma,TN,3962,,4882,8242,35.1,43171
+175810,Holmes Community College,2026,Goodman,MS,3958,,4530,7450,44.7,36492
+236513,Seattle Central College,2026,Seattle,WA,3953,,4935,5520,32.1,48906
+217518,Roger Williams University,2026,Bristol,RI,3946,87.7,45978,45978,68.0,77127
+233754,Virginia Peninsula Community College,2026,Hampton,VA,3941,,5235,11748,32.5,41835
+134343,Gulf Coast State College,2026,Panama City,FL,3934,,2370,8635,43.3,43513
+151342,Indiana University-South Bend,2026,South Bend,IN,3933,83.8,8424,23032,37.5,50051
+168430,Worcester State University,2026,Worcester,MA,3930,88.0,12344,18424,59.3,65784
+138956,Augusta Technical College,2026,Augusta,GA,3923,,4282,7492,33.5,37887
+166850,Merrimack College,2026,North Andover,MA,3916,70.0,55852,55852,69.6,74412
+229018,The University of Texas Permian Basin,2026,Odessa,TX,3911,94.9,9236,21836,40.3,61557
+141796,Kapiolani Community College,2026,Honolulu,HI,3910,,3284,8420,23.5,51907
+194578,Pratt Institute-Main,2026,Brooklyn,NY,3910,73.2,64238,64238,73.9,63115
+233949,Virginia Western Community College,2026,Roanoke,VA,3898,,5547,12060,36.9,44514
+219888,Columbia State Community College,2026,Columbia,TN,3897,,5104,8682,32.6,44553
+198455,Durham Technical Community College,2026,Durham,NC,3890,,1986,6594,37.2,40827
+211291,Bucknell University,2026,Lewisburg,PA,3876,28.9,70576,70576,85.6,109954
+138840,Atlanta Technical College,2026,Atlanta,GA,3875,,3382,5950,52.2,37957
+241410,Pontifical Catholic University of Puerto Rico-Ponce,2026,Ponce,PR,3874,98.1,6770,6770,45.9,30445
+165662,Emerson College,2026,Boston,MA,3870,51.3,59044,59044,78.8,67317
+163046,Loyola University Maryland,2026,Baltimore,MD,3869,75.5,59150,59150,77.2,90179
+196167,SUNY College at Geneseo,2026,Geneseo,NY,3869,66.5,9035,19935,70.9,70405
+217235,Johnson & Wales University-Providence,2026,Providence,RI,3868,88.4,44581,44581,52.3,53928
+203386,Hondros College of Nursing,2026,Columbus,OH,3857,85.3,15740,15740,31.7,61622
+209250,Mt Hood Community College,2026,Gresham,OR,3856,,5418,10134,23.0,46423
+235431,Highline College,2026,Des Moines,WA,3838,,4935,5520,36.8,54850
+166647,Massachusetts Bay Community College,2026,Wellesley Hills,MA,3837,,5976,10920,21.4,55472
+195058,Rockland Community College,2026,Suffern,NY,3834,,6924,6924,29.2,55553
+121707,College of the Redwoods,2026,Eureka,CA,3829,,1198,8950,34.5,40798
+236188,Olympic College,2026,Bremerton,WA,3826,,4202,9740,32.1,48582
+190840,Dutchess Community College,2026,Poughkeepsie,NY,3824,,5920,11170,30.1,48927
+218991,York Technical College,2026,Rock Hill,SC,3816,,8064,13560,34.4,42244
+119331,Napa Valley College,2026,Napa,CA,3813,,1156,12532,38.8,55399
+175041,Saint Paul College,2026,Saint Paul,MN,3813,,6556,6556,39.1,45627
+142559,College of Southern Idaho,2026,Twin Falls,ID,3810,,3528,7008,32.0,43774
+208318,Central Oregon Community College,2026,Bend,OR,3789,,5211,13959,26.2,43858
+227146,Navarro College,2026,Corsicana,TX,3781,,3008,6578,23.8,41527
+196246,State University of New York at Plattsburgh,2026,Plattsburgh,NY,3769,78.4,9035,18945,57.2,61867
+441900,Nevada State University,2026,Henderson,NV,3762,86.8,7290,22765,35.0,58648
+183655,Atlantic Cape Community College,2026,Mays Landing,NJ,3755,,6360,9360,28.5,41861
+216366,Thomas Jefferson University,2026,Philadelphia,PA,3755,81.0,49450,49450,70.0,78311
+186371,Rutgers University-Camden,2026,Camden,NJ,3753,66.3,18651,39476,64.0,80490
+168227,Wentworth Institute of Technology,2026,Boston,MA,3747,91.2,45460,45460,65.8,94995
+232265,Hampton University,2026,Hampton,VA,3727,62.3,31512,31512,60.7,63602
+117715,Los Angeles Southwest College,2026,Los Angeles,CA,3706,,1238,11040,30.6,37913
+215585,Reading Area Community College,2026,Reading,PA,3703,,6630,12840,34.2,45376
+161864,Baltimore City Community College,2026,Baltimore,MD,3700,,3314,7394,12.6,39370
+162706,Harford Community College,2026,Bel Air,MD,3696,,4152,9216,37.5,49245
+167376,Northern Essex Community College,2026,Haverhill,MA,3685,,7452,13236,23.6,49727
+185572,Monmouth University,2026,West Long Branch,NJ,3684,89.0,48299,48299,72.0,72737
+185129,New Jersey City University,2026,Jersey City,NJ,3681,98.4,15604,15604,36.5,59538
+117195,Lake Tahoe Community College,2026,South Lake Tahoe,CA,3660,,1131,10093,50.6,44569
+152637,Vincennes University,2026,Vincennes,IN,3657,,7126,16858,38.5,44999
+235103,Edmonds College,2026,Lynnwood,WA,3656,,4953,11225,26.1,54434
+105792,South Mountain Community College,2026,Phoenix,AZ,3645,,2358,8958,16.6,44724
+126207,Aims Community College,2026,Greeley,CO,3635,,2426,12266,34.0,47170
+127884,Pueblo Community College,2026,Pueblo,CO,3619,,5214,18254,32.6,41726
+165015,Brandeis University,2026,Waltham,MA,3618,40.5,70957,70957,83.6,85519
+168263,Westfield State University,2026,Westfield,MA,3615,81.4,12616,18696,51.4,63082
+138947,Clark Atlanta University,2026,Atlanta,GA,3603,64.2,30270,30270,44.2,46867
+243577,Universidad Politecnica de Puerto Rico,2026,Hato Rey,PR,3594,,10722,10722,28.2,50437
+166133,Holyoke Community College,2026,Holyoke,MA,3591,,6090,11034,32.0,44609
+222062,Walters State Community College,2026,Morristown,TN,3591,,4896,8256,36.5,40092
+231165,Vermont State University,2026,Randolph,VT,3590,81.7,12390,23094,44.5,54163
+108232,Academy of Art University,2026,San Francisco,CA,3587,,32224,32224,33.8,44567
+143358,Bradley University,2026,Peoria,IL,3574,76.8,43850,43850,74.9,76013
+232681,University of Mary Washington,2026,Fredericksburg,VA,3566,79.8,15304,28810,65.5,66028
+196006,SUNY College of Technology at Alfred,2026,Alfred,NY,3563,75.7,8892,16837,54.1,56988
+209940,Rogue Community College,2026,Grants Pass,OR,3559,,5328,6444,13.2,41327
+124113,Taft College,2026,Taft,CA,3556,,1108,10708,30.9,44265
+215929,University of Scranton,2026,Scranton,PA,3554,81.2,55713,55713,80.9,85590
+121150,Pepperdine University,2026,Malibu,CA,3553,62.9,72672,72672,81.0,89410
+230597,Snow College,2026,Ephraim,UT,3549,,4438,14638,45.5,45319
+101240,Gadsden State Community College,2026,Gadsden,AL,3548,,4608,7752,34.3,37485
+175883,Jones County Junior College,2026,Ellisville,MS,3535,,4885,6885,40.4,37426
+218964,Winthrop University,2026,Rock Hill,SC,3523,79.2,14680,28720,54.2,49727
+153311,Eastern Iowa Community College District,2026,Davenport,IA,3520,,5016,6624,45.1,43427
+198570,Gaston College,2026,Dallas,NC,3518,,3229,9373,61.4,39978
+207397,Oklahoma State University-Oklahoma City,2026,Oklahoma City,OK,3514,,3853,9638,13.2,44121
+207865,Southwestern Oklahoma State University,2026,Weatherford,OK,3514,,8683,8713,42.4,53203
+130776,Western Connecticut State University,2026,Danbury,CT,3511,87.0,13401,16901,51.5,62010
+207582,Oral Roberts University,2026,Tulsa,OK,3487,98.9,37350,37350,55.7,52658
+100724,Alabama State University,2026,Montgomery,AL,3477,97.5,11248,19576,30.5,40585
+242705,Inter American University of Puerto Rico-Bayamon,2026,Bayamon,PR,3476,39.6,5780,5780,35.4,32838
+110097,Biola University,2026,La Mirada,CA,3474,74.4,50904,50904,68.1,64126
+201973,Clark State College,2026,Springfield,OH,3456,,4633,8529,24.5,41670
+198774,Johnston Community College,2026,Smithfield,NC,3453,,2756,8900,36.5,41366
+166656,Massachusetts College of Pharmacy and Health Sciences,2026,Boston,MA,3451,85.2,42480,42480,61.7,103156
+174376,North Hennepin Community College,2026,Brooklyn Park,MN,3451,,5244,5244,20.1,55487
+194091,New York Institute of Technology,2026,Old Westbury,NY,3440,81.0,48600,48600,58.8,77833
+141811,Leeward Community College,2026,Pearl City,HI,3438,,3214,8350,34.3,45309
+170444,Jackson College,2026,Jackson,MI,3422,,7680,10650,32.1,41146
+459213,Gurnick Academy of Medical Arts,2026,San Jose,CA,3421,,,,72.0,75979
+129215,Eastern Connecticut State University,2026,Willimantic,CT,3418,83.0,14008,17508,56.0,60748
+141060,Spelman College,2026,Atlanta,GA,3414,24.9,32470,32470,77.6,65773
+195474,Siena University,2026,Loudonville,NY,3409,69.0,48895,48895,74.9,80879
+133881,Florida Institute of Technology,2026,Melbourne,FL,3404,57.7,46669,46669,61.6,50557
+218229,Lander University,2026,Greenwood,SC,3397,81.3,11700,21300,50.0,45360
+107044,Harding University,2026,Searcy,AR,3382,70.5,27282,27282,69.8,56146
+120953,Palo Verde College,2026,Blythe,CA,3381,,1288,1288,57.1,42518

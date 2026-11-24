@@ -1,5 +1,5 @@
 {
- "checked": "2026-11-24T13:54:18Z",
+ "checked": "2026-11-24T14:20:57Z",
  "cron": "23 5 * * *",
  "datasets": [
   {
@@ -5692,11 +5692,11 @@
    "time": {
     "col": "time",
     "type": "date",
-    "min": "2026-10-25T13:54:24Z",
-    "max": "2026-11-24T11:55:13Z"
+    "min": "2026-10-25T14:15:20Z",
+    "max": "2026-11-24T13:22:38Z"
    },
    "entity": null,
-   "rows": 1806,
+   "rows": 1805,
    "columns": [
     {
      "name": "magnitude",
@@ -5704,7 +5704,7 @@
      "unit": "",
      "description": "",
      "type": "num",
-     "filled": 1806
+     "filled": 1805
     },
     {
      "name": "place",
@@ -5712,7 +5712,7 @@
      "unit": "",
      "description": "",
      "type": "str",
-     "filled": 1806
+     "filled": 1805
     },
     {
      "name": "latitude",
@@ -5720,7 +5720,7 @@
      "unit": "degrees",
      "description": "",
      "type": "num",
-     "filled": 1806
+     "filled": 1805
     },
     {
      "name": "longitude",
@@ -5728,7 +5728,7 @@
      "unit": "degrees",
      "description": "",
      "type": "num",
-     "filled": 1806
+     "filled": 1805
     },
     {
      "name": "depth_km",
@@ -5736,7 +5736,7 @@
      "unit": "km",
      "description": "",
      "type": "num",
-     "filled": 1806
+     "filled": 1805
     },
     {
      "name": "magnitude_type",
@@ -5744,7 +5744,7 @@
      "unit": "",
      "description": "",
      "type": "str",
-     "filled": 1806
+     "filled": 1805
     },
     {
      "name": "event_type",
@@ -5752,7 +5752,7 @@
      "unit": "",
      "description": "",
      "type": "str",
-     "filled": 1806
+     "filled": 1805
     },
     {
      "name": "significance",
@@ -5760,7 +5760,7 @@
      "unit": "0-1000",
      "description": "USGS score combining magnitude, felt reports and estimated impact.",
      "type": "num",
-     "filled": 1806
+     "filled": 1805
     },
     {
      "name": "tsunami_flag",
@@ -5768,7 +5768,7 @@
      "unit": "",
      "description": "1 if the event was in an oceanic region and may warrant tsunami information; not a warning.",
      "type": "num",
-     "filled": 1806
+     "filled": 1805
     },
     {
      "name": "felt_reports",
@@ -5784,10 +5784,10 @@
      "unit": "",
      "description": "",
      "type": "str",
-     "filled": 1806
+     "filled": 1805
     }
    ],
-   "bytes": 315811,
+   "bytes": 315654,
    "built": "2026-11-24",
    "coverage": "Rolling 30 days",
    "default_vars": [
@@ -41029,6 +41029,99 @@
    "cadence": "Once a year"
   },
   {
+   "id": "us-grid-demand-daily",
+   "title": "US electricity demand by grid operator, daily",
+   "description": "How much electricity the main US power grids deliver each day, from the grid operators' own reports.",
+   "region": "US",
+   "domain": "Energy",
+   "source": "US Energy Information Administration, Hourly Electric Grid Monitor (data from PJM, MISO, ERCOT, CAISO, SPP, NYISO and ISO New England)",
+   "source_url": "https://www.eia.gov/electricity/gridmonitor/",
+   "licence": "Public domain (US federal data)",
+   "file": "data/sets/us-grid-demand-daily.csv",
+   "keys": [
+    "date"
+   ],
+   "time": {
+    "col": "date",
+    "type": "date",
+    "min": "2019-01-01",
+    "max": "2026-11-23"
+   },
+   "entity": null,
+   "rows": 2884,
+   "columns": [
+    {
+     "name": "demand_us48",
+     "title": "Electricity demand in the lower 48 states, daily",
+     "unit": "megawatt-hours in the day",
+     "description": "US Energy Information Administration, Hourly Electric Grid Monitor, balancing authority US48.",
+     "type": "num",
+     "filled": 2884
+    },
+    {
+     "name": "demand_pjm",
+     "title": "Electricity demand in PJM (mid-Atlantic and Midwest), daily",
+     "unit": "megawatt-hours in the day",
+     "description": "US Energy Information Administration, Hourly Electric Grid Monitor, balancing authority PJM.",
+     "type": "num",
+     "filled": 2883
+    },
+    {
+     "name": "demand_miso",
+     "title": "Electricity demand in MISO (Midwest and South), daily",
+     "unit": "megawatt-hours in the day",
+     "description": "US Energy Information Administration, Hourly Electric Grid Monitor, balancing authority MISO.",
+     "type": "num",
+     "filled": 2884
+    },
+    {
+     "name": "demand_erco",
+     "title": "Electricity demand in ERCOT (Texas), daily",
+     "unit": "megawatt-hours in the day",
+     "description": "US Energy Information Administration, Hourly Electric Grid Monitor, balancing authority ERCO.",
+     "type": "num",
+     "filled": 2884
+    },
+    {
+     "name": "demand_ciso",
+     "title": "Electricity demand in California ISO, daily",
+     "unit": "megawatt-hours in the day",
+     "description": "US Energy Information Administration, Hourly Electric Grid Monitor, balancing authority CISO.",
+     "type": "num",
+     "filled": 2884
+    },
+    {
+     "name": "demand_swpp",
+     "title": "Electricity demand in Southwest Power Pool, daily",
+     "unit": "megawatt-hours in the day",
+     "description": "US Energy Information Administration, Hourly Electric Grid Monitor, balancing authority SWPP.",
+     "type": "num",
+     "filled": 2884
+    },
+    {
+     "name": "demand_nyis",
+     "title": "Electricity demand in New York ISO, daily",
+     "unit": "megawatt-hours in the day",
+     "description": "US Energy Information Administration, Hourly Electric Grid Monitor, balancing authority NYIS.",
+     "type": "num",
+     "filled": 2884
+    },
+    {
+     "name": "demand_isne",
+     "title": "Electricity demand in ISO New England, daily",
+     "unit": "megawatt-hours in the day",
+     "description": "US Energy Information Administration, Hourly Electric Grid Monitor, balancing authority ISNE.",
+     "type": "num",
+     "filled": 2884
+    }
+   ],
+   "bytes": 209605,
+   "built": "2026-11-24",
+   "coverage": "2019 to 2026",
+   "step": "day",
+   "cadence": "Every day"
+  },
+  {
    "id": "us-crop-production",
    "title": "US crop production and yields, year by year",
    "description": "How much corn, soybeans, wheat, cotton and rice US farms grow each year, and how much they get from each acre.",
@@ -41120,6 +41213,5927 @@
    "coverage": "1866 to 2025",
    "step": "year",
    "cadence": "A few times a year"
+  },
+  {
+   "id": "us-ev-charging-stations",
+   "title": "US electric vehicle charging stations, monthly",
+   "description": "How the public network for charging electric cars has grown in the United States.",
+   "region": "US",
+   "domain": "Energy",
+   "source": "US Department of Energy and National Renewable Energy Laboratory, Alternative Fuels Data Center",
+   "source_url": "https://afdc.energy.gov/stations",
+   "licence": "Public domain (US federal data)",
+   "file": "data/sets/us-ev-charging-stations.csv",
+   "keys": [
+    "date"
+   ],
+   "time": {
+    "col": "date",
+    "type": "date",
+    "min": "2010-01-01",
+    "max": "2026-10-01"
+   },
+   "entity": null,
+   "rows": 199,
+   "columns": [
+    {
+     "name": "charging_stations",
+     "title": "US public electric vehicle charging stations",
+     "unit": "stations",
+     "description": "US Department of Energy, Alternative Fuels Data Center, kept by the National Renewable Energy Laboratory. Counts stations open to the public today by the month they opened, so stations that have since closed are not in earlier months.",
+     "type": "num",
+     "filled": 199
+    },
+    {
+     "name": "charging_ports",
+     "title": "US public electric vehicle charging ports",
+     "unit": "ports",
+     "description": "US Department of Energy, Alternative Fuels Data Center, kept by the National Renewable Energy Laboratory. Counts stations open to the public today by the month they opened, so stations that have since closed are not in earlier months.",
+     "type": "num",
+     "filled": 199
+    },
+    {
+     "name": "fast_charging_ports",
+     "title": "US public fast-charging ports",
+     "unit": "ports",
+     "description": "US Department of Energy, Alternative Fuels Data Center, kept by the National Renewable Energy Laboratory. Counts stations open to the public today by the month they opened, so stations that have since closed are not in earlier months.",
+     "type": "num",
+     "filled": 199
+    }
+   ],
+   "bytes": 5635,
+   "built": "2026-11-24",
+   "coverage": "2010 to 2026",
+   "step": "month",
+   "cadence": "Every day"
+  },
+  {
+   "id": "us-colleges",
+   "title": "US colleges: size, cost, graduation and earnings",
+   "description": "The thousand largest US colleges and universities: how many students, how hard to get in, what it costs, how many finish and what they earn later.",
+   "region": "US",
+   "domain": "People and society",
+   "source": "US Department of Education, College Scorecard",
+   "source_url": "https://collegescorecard.ed.gov/data/",
+   "licence": "Public domain (US federal data)",
+   "file": "data/sets/us-colleges.csv",
+   "keys": [
+    "id",
+    "year"
+   ],
+   "time": {
+    "col": "year",
+    "type": "year",
+    "min": "2026",
+    "max": "2026"
+   },
+   "entity": {
+    "col": "id",
+    "label_col": "college",
+    "label": "College"
+   },
+   "rows": 1000,
+   "columns": [
+    {
+     "name": "city",
+     "title": "City",
+     "unit": "",
+     "description": "",
+     "type": "str",
+     "filled": 1000
+    },
+    {
+     "name": "state",
+     "title": "State",
+     "unit": "",
+     "description": "",
+     "type": "str",
+     "filled": 1000
+    },
+    {
+     "name": "undergraduates",
+     "title": "Undergraduate students",
+     "unit": "students",
+     "description": "US Department of Education, College Scorecard, latest figures.",
+     "type": "num",
+     "filled": 1000
+    },
+    {
+     "name": "admission_rate",
+     "title": "Share of applicants admitted",
+     "unit": "% of applicants",
+     "description": "US Department of Education, College Scorecard, latest figures.",
+     "type": "num",
+     "filled": 526
+    },
+    {
+     "name": "tuition_in_state",
+     "title": "Tuition and fees for in-state students",
+     "unit": "US$ a year",
+     "description": "US Department of Education, College Scorecard, latest figures.",
+     "type": "num",
+     "filled": 985
+    },
+    {
+     "name": "tuition_out_of_state",
+     "title": "Tuition and fees for out-of-state students",
+     "unit": "US$ a year",
+     "description": "US Department of Education, College Scorecard, latest figures.",
+     "type": "num",
+     "filled": 985
+    },
+    {
+     "name": "graduation_rate",
+     "title": "Share of students who complete their course",
+     "unit": "% of students",
+     "description": "US Department of Education, College Scorecard, latest figures.",
+     "type": "num",
+     "filled": 989
+    },
+    {
+     "name": "median_earnings_after_10_years",
+     "title": "Median earnings ten years after starting",
+     "unit": "US$ a year",
+     "description": "US Department of Education, College Scorecard, latest figures. Former students who received federal aid.",
+     "type": "num",
+     "filled": 990
+    }
+   ],
+   "bytes": 84640,
+   "built": "2026-11-24",
+   "coverage": "2026",
+   "entities": 1000,
+   "cadence": "Once or twice a year",
+   "places": [
+    [
+     "108232",
+     "Academy of Art University"
+    ],
+    [
+     "188429",
+     "Adelphi University"
+    ],
+    [
+     "126207",
+     "Aims Community College"
+    ],
+    [
+     "100654",
+     "Alabama A & M University"
+    ],
+    [
+     "100724",
+     "Alabama State University"
+    ],
+    [
+     "138716",
+     "Albany State University"
+    ],
+    [
+     "108807",
+     "Allan Hancock College"
+    ],
+    [
+     "222576",
+     "Amarillo College"
+    ],
+    [
+     "210809",
+     "American College of Financial Services"
+    ],
+    [
+     "445027",
+     "American InterContinental University System"
+    ],
+    [
+     "449339",
+     "American Public University System"
+    ],
+    [
+     "109208",
+     "American River College"
+    ],
+    [
+     "131159",
+     "American University"
+    ],
+    [
+     "483595",
+     "Ana G. Mendez University"
+    ],
+    [
+     "222831",
+     "Angelo State University"
+    ],
+    [
+     "161767",
+     "Anne Arundel Community College"
+    ],
+    [
+     "172963",
+     "Anoka-Ramsey Community College"
+    ],
+    [
+     "109350",
+     "Antelope Valley Community College District"
+    ],
+    [
+     "197869",
+     "Appalachian State University"
+    ],
+    [
+     "126289",
+     "Arapahoe Community College"
+    ],
+    [
+     "104151",
+     "Arizona State University Campus Immersion"
+    ],
+    [
+     "483124",
+     "Arizona State University Digital Immersion"
+    ],
+    [
+     "104160",
+     "Arizona Western College"
+    ],
+    [
+     "106458",
+     "Arkansas State University"
+    ],
+    [
+     "106467",
+     "Arkansas Tech University"
+    ],
+    [
+     "197887",
+     "Asheville-Buncombe Technical Community College"
+    ],
+    [
+     "138840",
+     "Atlanta Technical College"
+    ],
+    [
+     "183655",
+     "Atlantic Cape Community College"
+    ],
+    [
+     "100858",
+     "Auburn University"
+    ],
+    [
+     "138956",
+     "Augusta Technical College"
+    ],
+    [
+     "482149",
+     "Augusta University"
+    ],
+    [
+     "454810",
+     "Auguste Escoffier School of Culinary Arts-Boulder"
+    ],
+    [
+     "143118",
+     "Aurora University"
+    ],
+    [
+     "222992",
+     "Austin Community College District"
+    ],
+    [
+     "219602",
+     "Austin Peay State University"
+    ],
+    [
+     "109819",
+     "Bakersfield College"
+    ],
+    [
+     "150136",
+     "Ball State University"
+    ],
+    [
+     "161864",
+     "Baltimore City Community College"
+    ],
+    [
+     "437103",
+     "Baton Rouge Community College"
+    ],
+    [
+     "223232",
+     "Baylor University"
+    ],
+    [
+     "234669",
+     "Bellevue College"
+    ],
+    [
+     "180814",
+     "Bellevue University"
+    ],
+    [
+     "219709",
+     "Belmont University"
+    ],
+    [
+     "164739",
+     "Bentley University"
+    ],
+    [
+     "183743",
+     "Bergen Community College"
+    ],
+    [
+     "125170",
+     "Berkeley City College"
+    ],
+    [
+     "164748",
+     "Berklee College of Music"
+    ],
+    [
+     "183804",
+     "Beth Medrash Govoha"
+    ],
+    [
+     "196079",
+     "Binghamton University"
+    ],
+    [
+     "110097",
+     "Biola University"
+    ],
+    [
+     "223427",
+     "Blinn College District"
+    ],
+    [
+     "156392",
+     "Bluegrass Community and Technical College"
+    ],
+    [
+     "142115",
+     "Boise State University"
+    ],
+    [
+     "158431",
+     "Bossier Parish Community College"
+    ],
+    [
+     "164924",
+     "Boston College"
+    ],
+    [
+     "164988",
+     "Boston University"
+    ],
+    [
+     "162007",
+     "Bowie State University"
+    ],
+    [
+     "201441",
+     "Bowling Green State University-Main Campus"
+    ],
+    [
+     "143358",
+     "Bradley University"
+    ],
+    [
+     "165015",
+     "Brandeis University"
+    ],
+    [
+     "165024",
+     "Bridgewater State University"
+    ],
+    [
+     "230038",
+     "Brigham Young University"
+    ],
+    [
+     "142522",
+     "Brigham Young University-Idaho"
+    ],
+    [
+     "232450",
+     "Brightpoint Community College"
+    ],
+    [
+     "165033",
+     "Bristol Community College"
+    ],
+    [
+     "183859",
+     "Brookdale Community College"
+    ],
+    [
+     "132709",
+     "Broward College"
+    ],
+    [
+     "217156",
+     "Brown University"
+    ],
+    [
+     "480091",
+     "Bryant & Stratton College-Online"
+    ],
+    [
+     "211291",
+     "Bucknell University"
+    ],
+    [
+     "211307",
+     "Bucks County Community College"
+    ],
+    [
+     "165112",
+     "Bunker Hill Community College"
+    ],
+    [
+     "154800",
+     "Butler Community College"
+    ],
+    [
+     "150163",
+     "Butler University"
+    ],
+    [
+     "110246",
+     "Butte College"
+    ],
+    [
+     "190512",
+     "CUNY Bernard M Baruch College"
+    ],
+    [
+     "190521",
+     "CUNY Borough of Manhattan Community College"
+    ],
+    [
+     "190530",
+     "CUNY Bronx Community College"
+    ],
+    [
+     "190549",
+     "CUNY Brooklyn College"
+    ],
+    [
+     "190567",
+     "CUNY City College"
+    ],
+    [
+     "190585",
+     "CUNY Hostos Community College"
+    ],
+    [
+     "190594",
+     "CUNY Hunter College"
+    ],
+    [
+     "190600",
+     "CUNY John Jay College of Criminal Justice"
+    ],
+    [
+     "190619",
+     "CUNY Kingsborough Community College"
+    ],
+    [
+     "190628",
+     "CUNY LaGuardia Community College"
+    ],
+    [
+     "190637",
+     "CUNY Lehman College"
+    ],
+    [
+     "190655",
+     "CUNY New York City College of Technology"
+    ],
+    [
+     "190664",
+     "CUNY Queens College"
+    ],
+    [
+     "190673",
+     "CUNY Queensborough Community College"
+    ],
+    [
+     "190691",
+     "CUNY York College"
+    ],
+    [
+     "110334",
+     "Cabrillo College"
+    ],
+    [
+     "110361",
+     "California Baptist University"
+    ],
+    [
+     "110422",
+     "California Polytechnic State University-San Luis Obispo"
+    ],
+    [
+     "115755",
+     "California State Polytechnic University-Humboldt"
+    ],
+    [
+     "110529",
+     "California State Polytechnic University-Pomona"
+    ],
+    [
+     "110486",
+     "California State University-Bakersfield"
+    ],
+    [
+     "441937",
+     "California State University-Channel Islands"
+    ],
+    [
+     "110538",
+     "California State University-Chico"
+    ],
+    [
+     "110547",
+     "California State University-Dominguez Hills"
+    ],
+    [
+     "110574",
+     "California State University-East Bay"
+    ],
+    [
+     "110556",
+     "California State University-Fresno"
+    ],
+    [
+     "110565",
+     "California State University-Fullerton"
+    ],
+    [
+     "110583",
+     "California State University-Long Beach"
+    ],
+    [
+     "110592",
+     "California State University-Los Angeles"
+    ],
+    [
+     "409698",
+     "California State University-Monterey Bay"
+    ],
+    [
+     "110608",
+     "California State University-Northridge"
+    ],
+    [
+     "110617",
+     "California State University-Sacramento"
+    ],
+    [
+     "110510",
+     "California State University-San Bernardino"
+    ],
+    [
+     "366711",
+     "California State University-San Marcos"
+    ],
+    [
+     "110495",
+     "California State University-Stanislaus"
+    ],
+    [
+     "183938",
+     "Camden County College"
+    ],
+    [
+     "111434",
+     "Canada College"
+    ],
+    [
+     "198154",
+     "Cape Fear Community College"
+    ],
+    [
+     "413413",
+     "Capella University"
+    ],
+    [
+     "211440",
+     "Carnegie Mellon University"
+    ],
+    [
+     "201645",
+     "Case Western Reserve University"
+    ],
+    [
+     "201654",
+     "Cedarville University"
+    ],
+    [
+     "104346",
+     "Central Arizona College"
+    ],
+    [
+     "128771",
+     "Central Connecticut State University"
+    ],
+    [
+     "483045",
+     "Central Georgia Technical College"
+    ],
+    [
+     "169248",
+     "Central Michigan University"
+    ],
+    [
+     "187532",
+     "Central New Mexico Community College"
+    ],
+    [
+     "208318",
+     "Central Oregon Community College"
+    ],
+    [
+     "198260",
+     "Central Piedmont Community College"
+    ],
+    [
+     "223816",
+     "Central Texas College"
+    ],
+    [
+     "234827",
+     "Central Washington University"
+    ],
+    [
+     "175315",
+     "Century College"
+    ],
+    [
+     "111887",
+     "Cerritos College"
+    ],
+    [
+     "111920",
+     "Chabot College"
+    ],
+    [
+     "111939",
+     "Chaffey College"
+    ],
+    [
+     "454227",
+     "Chamberlain University-Illinois"
+    ],
+    [
+     "364025",
+     "Chandler-Gilbert Community College"
+    ],
+    [
+     "111948",
+     "Chapman University"
+    ],
+    [
+     "140331",
+     "Chattahoochee Technical College"
+    ],
+    [
+     "219824",
+     "Chattanooga State Community College"
+    ],
+    [
+     "208390",
+     "Chemeketa Community College"
+    ],
+    [
+     "240116",
+     "Chippewa Valley Technical College"
+    ],
+    [
+     "231712",
+     "Christopher Newport University"
+    ],
+    [
+     "201928",
+     "Cincinnati State Technical and Community College"
+    ],
+    [
+     "112172",
+     "Citrus College"
+    ],
+    [
+     "112190",
+     "City College of San Francisco"
+    ],
+    [
+     "144209",
+     "City Colleges of Chicago-Harold Washington College"
+    ],
+    [
+     "144166",
+     "City Colleges of Chicago-Malcolm X College"
+    ],
+    [
+     "144218",
+     "City Colleges of Chicago-Wilbur Wright College"
+    ],
+    [
+     "208406",
+     "Clackamas Community College"
+    ],
+    [
+     "138947",
+     "Clark Atlanta University"
+    ],
+    [
+     "234933",
+     "Clark College"
+    ],
+    [
+     "201973",
+     "Clark State College"
+    ],
+    [
+     "139311",
+     "Clayton  State University"
+    ],
+    [
+     "217882",
+     "Clemson University"
+    ],
+    [
+     "202134",
+     "Cleveland State University"
+    ],
+    [
+     "489201",
+     "Clovis Community College"
+    ],
+    [
+     "101161",
+     "Coastal Alabama Community College"
+    ],
+    [
+     "218724",
+     "Coastal Carolina University"
+    ],
+    [
+     "112385",
+     "Coastline Community College"
+    ],
+    [
+     "108667",
+     "College of Alameda"
+    ],
+    [
+     "132851",
+     "College of Central Florida"
+    ],
+    [
+     "217819",
+     "College of Charleston"
+    ],
+    [
+     "144865",
+     "College of DuPage"
+    ],
+    [
+     "146472",
+     "College of Lake County"
+    ],
+    [
+     "118347",
+     "College of Marin"
+    ],
+    [
+     "122791",
+     "College of San Mateo"
+    ],
+    [
+     "142559",
+     "College of Southern Idaho"
+    ],
+    [
+     "162122",
+     "College of Southern Maryland"
+    ],
+    [
+     "182005",
+     "College of Southern Nevada"
+    ],
+    [
+     "190558",
+     "College of Staten Island CUNY"
+    ],
+    [
+     "455114",
+     "College of Western Idaho"
+    ],
+    [
+     "111461",
+     "College of the Canyons"
+    ],
+    [
+     "113573",
+     "College of the Desert"
+    ],
+    [
+     "121707",
+     "College of the Redwoods"
+    ],
+    [
+     "123217",
+     "College of the Sequoias"
+    ],
+    [
+     "247834",
+     "Collin County Community College District"
+    ],
+    [
+     "126669",
+     "Colorado Christian University"
+    ],
+    [
+     "127556",
+     "Colorado Mesa University"
+    ],
+    [
+     "126775",
+     "Colorado School of Mines"
+    ],
+    [
+     "476975",
+     "Colorado State University Global"
+    ],
+    [
+     "126818",
+     "Colorado State University-Fort Collins"
+    ],
+    [
+     "126827",
+     "Colorado Technical University-Colorado Springs"
+    ],
+    [
+     "234979",
+     "Columbia Basin College"
+    ],
+    [
+     "177065",
+     "Columbia College"
+    ],
+    [
+     "144281",
+     "Columbia College Chicago"
+    ],
+    [
+     "450933",
+     "Columbia Southern University"
+    ],
+    [
+     "219888",
+     "Columbia State Community College"
+    ],
+    [
+     "190150",
+     "Columbia University in the City of New York"
+    ],
+    [
+     "202222",
+     "Columbus State Community College"
+    ],
+    [
+     "139366",
+     "Columbus State University"
+    ],
+    [
+     "498562",
+     "Commonwealth University of Pennsylvania"
+    ],
+    [
+     "210605",
+     "Community College of Allegheny County"
+    ],
+    [
+     "434672",
+     "Community College of Baltimore County"
+    ],
+    [
+     "126942",
+     "Community College of Denver"
+    ],
+    [
+     "215239",
+     "Community College of Philadelphia"
+    ],
+    [
+     "217475",
+     "Community College of Rhode Island"
+    ],
+    [
+     "129367",
+     "Connecticut State Community College"
+    ],
+    [
+     "112826",
+     "Contra Costa College"
+    ],
+    [
+     "190415",
+     "Cornell University"
+    ],
+    [
+     "113096",
+     "Cosumnes River College"
+    ],
+    [
+     "184180",
+     "County College of Morris"
+    ],
+    [
+     "113111",
+     "Crafton Hills College"
+    ],
+    [
+     "181002",
+     "Creighton University"
+    ],
+    [
+     "113193",
+     "Cuesta College"
+    ],
+    [
+     "202356",
+     "Cuyahoga Community College District"
+    ],
+    [
+     "113218",
+     "Cuyamaca College"
+    ],
+    [
+     "113236",
+     "Cypress College"
+    ],
+    [
+     "224615",
+     "Dallas College"
+    ],
+    [
+     "139463",
+     "Dalton State College"
+    ],
+    [
+     "182670",
+     "Dartmouth College"
+    ],
+    [
+     "133386",
+     "Daytona State College"
+    ],
+    [
+     "113333",
+     "De Anza College"
+    ],
+    [
+     "144740",
+     "DePaul University"
+    ],
+    [
+     "482477",
+     "DeVry University-Illinois"
+    ],
+    [
+     "224350",
+     "Del Mar College"
+    ],
+    [
+     "211927",
+     "Delaware County Community College"
+    ],
+    [
+     "130934",
+     "Delaware State University"
+    ],
+    [
+     "130907",
+     "Delaware Technical Community College-Terry"
+    ],
+    [
+     "158662",
+     "Delgado Community College"
+    ],
+    [
+     "169521",
+     "Delta College"
+    ],
+    [
+     "153214",
+     "Des Moines Area Community College"
+    ],
+    [
+     "113634",
+     "Diablo Valley College"
+    ],
+    [
+     "212054",
+     "Drexel University"
+    ],
+    [
+     "198419",
+     "Duke University"
+    ],
+    [
+     "212106",
+     "Duquesne University"
+    ],
+    [
+     "198455",
+     "Durham Technical Community College"
+    ],
+    [
+     "190840",
+     "Dutchess Community College"
+    ],
+    [
+     "248934",
+     "ECPI University"
+    ],
+    [
+     "198464",
+     "East Carolina University"
+    ],
+    [
+     "113856",
+     "East Los Angeles College"
+    ],
+    [
+     "212115",
+     "East Stroudsburg University of Pennsylvania"
+    ],
+    [
+     "220075",
+     "East Tennessee State University"
+    ],
+    [
+     "224554",
+     "East Texas A&M University"
+    ],
+    [
+     "129215",
+     "Eastern Connecticut State University"
+    ],
+    [
+     "132693",
+     "Eastern Florida State College"
+    ],
+    [
+     "144892",
+     "Eastern Illinois University"
+    ],
+    [
+     "153311",
+     "Eastern Iowa Community College District"
+    ],
+    [
+     "156620",
+     "Eastern Kentucky University"
+    ],
+    [
+     "169798",
+     "Eastern Michigan University"
+    ],
+    [
+     "235097",
+     "Eastern Washington University"
+    ],
+    [
+     "235103",
+     "Edmonds College"
+    ],
+    [
+     "113980",
+     "El Camino Community College District"
+    ],
+    [
+     "224642",
+     "El Paso Community College"
+    ],
+    [
+     "144944",
+     "Elgin Community College"
+    ],
+    [
+     "156648",
+     "Elizabethtown Community and Technical College"
+    ],
+    [
+     "198516",
+     "Elon University"
+    ],
+    [
+     "133553",
+     "Embry-Riddle Aeronautical University-Daytona Beach"
+    ],
+    [
+     "426314",
+     "Embry-Riddle Aeronautical University-Worldwide"
+    ],
+    [
+     "165662",
+     "Emerson College"
+    ],
+    [
+     "127158",
+     "Emily Griffith Technical College"
+    ],
+    [
+     "139658",
+     "Emory University"
+    ],
+    [
+     "196264",
+     "Empire State University"
+    ],
+    [
+     "230418",
+     "Ensign College"
+    ],
+    [
+     "191083",
+     "Erie Community College"
+    ],
+    [
+     "184481",
+     "Essex County College"
+    ],
+    [
+     "384333",
+     "Estrella Mountain Community College"
+    ],
+    [
+     "235149",
+     "Everett Community College"
+    ],
+    [
+     "114266",
+     "Evergreen Valley College"
+    ],
+    [
+     "196680",
+     "Excelsior University"
+    ],
+    [
+     "129242",
+     "Fairfield University"
+    ],
+    [
+     "196042",
+     "Farmingdale State College"
+    ],
+    [
+     "191126",
+     "Fashion Institute of Technology"
+    ],
+    [
+     "198543",
+     "Fayetteville State University"
+    ],
+    [
+     "198534",
+     "Fayetteville Technical Community College"
+    ],
+    [
+     "169910",
+     "Ferris State University"
+    ],
+    [
+     "133650",
+     "Florida Agricultural and Mechanical University"
+    ],
+    [
+     "133669",
+     "Florida Atlantic University"
+    ],
+    [
+     "433660",
+     "Florida Gulf Coast University"
+    ],
+    [
+     "133881",
+     "Florida Institute of Technology"
+    ],
+    [
+     "133951",
+     "Florida International University"
+    ],
+    [
+     "133508",
+     "Florida SouthWestern State College"
+    ],
+    [
+     "133702",
+     "Florida State College at Jacksonville"
+    ],
+    [
+     "134097",
+     "Florida State University"
+    ],
+    [
+     "444219",
+     "Folsom Lake College"
+    ],
+    [
+     "114716",
+     "Foothill College"
+    ],
+    [
+     "191241",
+     "Fordham University"
+    ],
+    [
+     "198552",
+     "Forsyth Technical Community College"
+    ],
+    [
+     "155061",
+     "Fort Hays State University"
+    ],
+    [
+     "238722",
+     "Fox Valley Technical College"
+    ],
+    [
+     "202806",
+     "Franklin University"
+    ],
+    [
+     "162557",
+     "Frederick Community College"
+    ],
+    [
+     "114789",
+     "Fresno City College"
+    ],
+    [
+     "127200",
+     "Front Range Community College"
+    ],
+    [
+     "134237",
+     "Full Sail University"
+    ],
+    [
+     "114859",
+     "Fullerton College"
+    ],
+    [
+     "101240",
+     "Gadsden State Community College"
+    ],
+    [
+     "156471",
+     "Galen College of Nursing-Louisville"
+    ],
+    [
+     "198570",
+     "Gaston College"
+    ],
+    [
+     "105145",
+     "GateWay Community College"
+    ],
+    [
+     "238759",
+     "Gateway Technical College"
+    ],
+    [
+     "114938",
+     "Gavilan College"
+    ],
+    [
+     "101295",
+     "George C Wallace State Community College-Hanceville"
+    ],
+    [
+     "232186",
+     "George Mason University"
+    ],
+    [
+     "131469",
+     "George Washington University"
+    ],
+    [
+     "131496",
+     "Georgetown University"
+    ],
+    [
+     "139861",
+     "Georgia College & State University"
+    ],
+    [
+     "447689",
+     "Georgia Gwinnett College"
+    ],
+    [
+     "139700",
+     "Georgia Highlands College"
+    ],
+    [
+     "139755",
+     "Georgia Institute of Technology-Main Campus"
+    ],
+    [
+     "485111",
+     "Georgia Military College"
+    ],
+    [
+     "139384",
+     "Georgia Northwestern Technical College"
+    ],
+    [
+     "139931",
+     "Georgia Southern University"
+    ],
+    [
+     "139940",
+     "Georgia State University"
+    ],
+    [
+     "244437",
+     "Georgia State University-Perimeter College"
+    ],
+    [
+     "232195",
+     "Germanna Community College"
+    ],
+    [
+     "115001",
+     "Glendale Community College"
+    ],
+    [
+     "104708",
+     "Glendale Community College"
+    ],
+    [
+     "115126",
+     "Golden West College"
+    ],
+    [
+     "235316",
+     "Gonzaga University"
+    ],
+    [
+     "159009",
+     "Grambling State University"
+    ],
+    [
+     "104717",
+     "Grand Canyon University"
+    ],
+    [
+     "170055",
+     "Grand Rapids Community College"
+    ],
+    [
+     "170082",
+     "Grand Valley State University"
+    ],
+    [
+     "235343",
+     "Green River College"
+    ],
+    [
+     "218113",
+     "Greenville Technical College"
+    ],
+    [
+     "115296",
+     "Grossmont College"
+    ],
+    [
+     "198622",
+     "Guilford Technical Community College"
+    ],
+    [
+     "134343",
+     "Gulf Coast State College"
+    ],
+    [
+     "459213",
+     "Gurnick Academy of Medical Arts"
+    ],
+    [
+     "140012",
+     "Gwinnett Technical College"
+    ],
+    [
+     "232265",
+     "Hampton University"
+    ],
+    [
+     "107044",
+     "Harding University"
+    ],
+    [
+     "162706",
+     "Harford Community College"
+    ],
+    [
+     "212878",
+     "Harrisburg Area Community College"
+    ],
+    [
+     "115393",
+     "Hartnell College"
+    ],
+    [
+     "166027",
+     "Harvard University"
+    ],
+    [
+     "170240",
+     "Henry Ford College"
+    ],
+    [
+     "198695",
+     "High Point University"
+    ],
+    [
+     "235431",
+     "Highline College"
+    ],
+    [
+     "134495",
+     "Hillsborough College"
+    ],
+    [
+     "175786",
+     "Hinds Community College"
+    ],
+    [
+     "191649",
+     "Hofstra University"
+    ],
+    [
+     "175810",
+     "Holmes Community College"
+    ],
+    [
+     "166133",
+     "Holyoke Community College"
+    ],
+    [
+     "203386",
+     "Hondros College of Nursing"
+    ],
+    [
+     "218140",
+     "Horry-Georgetown Technical College"
+    ],
+    [
+     "225423",
+     "Houston City College"
+    ],
+    [
+     "162779",
+     "Howard Community College"
+    ],
+    [
+     "131520",
+     "Howard University"
+    ],
+    [
+     "184995",
+     "Hudson County Community College"
+    ],
+    [
+     "191719",
+     "Hudson Valley Community College"
+    ],
+    [
+     "142276",
+     "Idaho State University"
+    ],
+    [
+     "145682",
+     "Illinois Central College"
+    ],
+    [
+     "145813",
+     "Illinois State University"
+    ],
+    [
+     "115861",
+     "Imperial Valley College"
+    ],
+    [
+     "134608",
+     "Indian River State College"
+    ],
+    [
+     "151324",
+     "Indiana State University"
+    ],
+    [
+     "213020",
+     "Indiana University of Pennsylvania"
+    ],
+    [
+     "151351",
+     "Indiana University-Bloomington"
+    ],
+    [
+     "151111",
+     "Indiana University-Indianapolis"
+    ],
+    [
+     "151342",
+     "Indiana University-South Bend"
+    ],
+    [
+     "488679",
+     "Indiana Wesleyan University-National & Global"
+    ],
+    [
+     "242705",
+     "Inter American University of Puerto Rico-Bayamon"
+    ],
+    [
+     "153603",
+     "Iowa State University"
+    ],
+    [
+     "116439",
+     "Irvine Valley College"
+    ],
+    [
+     "175829",
+     "Itawamba Community College"
+    ],
+    [
+     "191968",
+     "Ithaca College"
+    ],
+    [
+     "150987",
+     "Ivy Tech Community College"
+    ],
+    [
+     "232414",
+     "J Sargeant Reynolds Community College"
+    ],
+    [
+     "170444",
+     "Jackson College"
+    ],
+    [
+     "175856",
+     "Jackson State University"
+    ],
+    [
+     "101480",
+     "Jacksonville State University"
+    ],
+    [
+     "232423",
+     "James Madison University"
+    ],
+    [
+     "156921",
+     "Jefferson Community and Technical College"
+    ],
+    [
+     "101505",
+     "Jefferson State Community College"
+    ],
+    [
+     "455196",
+     "Jersey College"
+    ],
+    [
+     "101514",
+     "John C Calhoun State Community College"
+    ],
+    [
+     "162928",
+     "Johns Hopkins University"
+    ],
+    [
+     "217235",
+     "Johnson & Wales University-Providence"
+    ],
+    [
+     "155210",
+     "Johnson County Community College"
+    ],
+    [
+     "198774",
+     "Johnston Community College"
+    ],
+    [
+     "146296",
+     "Joliet Junior College"
+    ],
+    [
+     "175883",
+     "Jones County Junior College"
+    ],
+    [
+     "170541",
+     "Kalamazoo Valley Community College"
+    ],
+    [
+     "155399",
+     "Kansas State University"
+    ],
+    [
+     "141796",
+     "Kapiolani Community College"
+    ],
+    [
+     "185262",
+     "Kean University"
+    ],
+    [
+     "135081",
+     "Keiser University-Ft Lauderdale"
+    ],
+    [
+     "486840",
+     "Kennesaw State University"
+    ],
+    [
+     "203517",
+     "Kent State University at Kent"
+    ],
+    [
+     "153737",
+     "Kirkwood Community College"
+    ],
+    [
+     "213349",
+     "Kutztown University of Pennsylvania"
+    ],
+    [
+     "117195",
+     "Lake Tahoe Community College"
+    ],
+    [
+     "135188",
+     "Lake-Sumter State College"
+    ],
+    [
+     "226091",
+     "Lamar University"
+    ],
+    [
+     "218229",
+     "Lander University"
+    ],
+    [
+     "209038",
+     "Lane Community College"
+    ],
+    [
+     "117247",
+     "Laney College"
+    ],
+    [
+     "140243",
+     "Lanier Technical College"
+    ],
+    [
+     "170657",
+     "Lansing Community College"
+    ],
+    [
+     "226134",
+     "Laredo College"
+    ],
+    [
+     "366401",
+     "Las Positas College"
+    ],
+    [
+     "226204",
+     "Lee College"
+    ],
+    [
+     "141811",
+     "Leeward Community College"
+    ],
+    [
+     "213525",
+     "Lehigh Carbon Community College"
+    ],
+    [
+     "213543",
+     "Lehigh University"
+    ],
+    [
+     "146612",
+     "Lewis University"
+    ],
+    [
+     "232557",
+     "Liberty University"
+    ],
+    [
+     "146685",
+     "Lincoln Land Community College"
+    ],
+    [
+     "177968",
+     "Lindenwood University"
+    ],
+    [
+     "209074",
+     "Linn-Benton Community College"
+    ],
+    [
+     "227182",
+     "Lone Star College System"
+    ],
+    [
+     "117645",
+     "Long Beach City College"
+    ],
+    [
+     "192448",
+     "Long Island University"
+    ],
+    [
+     "203748",
+     "Lorain County Community College"
+    ],
+    [
+     "117788",
+     "Los Angeles City College"
+    ],
+    [
+     "436429",
+     "Los Angeles Film School"
+    ],
+    [
+     "117690",
+     "Los Angeles Harbor College"
+    ],
+    [
+     "117867",
+     "Los Angeles Mission College"
+    ],
+    [
+     "117706",
+     "Los Angeles Pierce College"
+    ],
+    [
+     "117715",
+     "Los Angeles Southwest College"
+    ],
+    [
+     "117724",
+     "Los Angeles Trade Technical College"
+    ],
+    [
+     "117733",
+     "Los Angeles Valley College"
+    ],
+    [
+     "117894",
+     "Los Medanos College"
+    ],
+    [
+     "159391",
+     "Louisiana State University and Agricultural & Mechanical College"
+    ],
+    [
+     "159382",
+     "Louisiana State University at Alexandria"
+    ],
+    [
+     "159647",
+     "Louisiana Tech University"
+    ],
+    [
+     "117946",
+     "Loyola Marymount University"
+    ],
+    [
+     "146719",
+     "Loyola University Chicago"
+    ],
+    [
+     "163046",
+     "Loyola University Maryland"
+    ],
+    [
+     "170790",
+     "Macomb Community College"
+    ],
+    [
+     "497046",
+     "Madera Community College"
+    ],
+    [
+     "238263",
+     "Madison Area Technical College"
+    ],
+    [
+     "192819",
+     "Marist University"
+    ],
+    [
+     "239105",
+     "Marquette University"
+    ],
+    [
+     "237525",
+     "Marshall University"
+    ],
+    [
+     "178059",
+     "Maryville University of Saint Louis"
+    ],
+    [
+     "166647",
+     "Massachusetts Bay Community College"
+    ],
+    [
+     "166656",
+     "Massachusetts College of Pharmacy and Health Sciences"
+    ],
+    [
+     "166683",
+     "Massachusetts Institute of Technology"
+    ],
+    [
+     "166823",
+     "Massasoit Community College"
+    ],
+    [
+     "147004",
+     "McHenry County College"
+    ],
+    [
+     "226578",
+     "McLennan Community College"
+    ],
+    [
+     "159717",
+     "McNeese State University"
+    ],
+    [
+     "118718",
+     "Merced College"
+    ],
+    [
+     "185509",
+     "Mercer County Community College"
+    ],
+    [
+     "140447",
+     "Mercer University"
+    ],
+    [
+     "193016",
+     "Mercy University"
+    ],
+    [
+     "166850",
+     "Merrimack College"
+    ],
+    [
+     "118772",
+     "Merritt College"
+    ],
+    [
+     "105154",
+     "Mesa Community College"
+    ],
+    [
+     "181303",
+     "Metropolitan Community College Area"
+    ],
+    [
+     "177995",
+     "Metropolitan Community College-Kansas City"
+    ],
+    [
+     "174020",
+     "Metropolitan State University"
+    ],
+    [
+     "127565",
+     "Metropolitan State University of Denver"
+    ],
+    [
+     "135717",
+     "Miami Dade College"
+    ],
+    [
+     "204024",
+     "Miami University-Oxford"
+    ],
+    [
+     "171100",
+     "Michigan State University"
+    ],
+    [
+     "171128",
+     "Michigan Technological University"
+    ],
+    [
+     "482158",
+     "Middle Georgia State University"
+    ],
+    [
+     "220978",
+     "Middle Tennessee State University"
+    ],
+    [
+     "185536",
+     "Middlesex College"
+    ],
+    [
+     "166887",
+     "Middlesex Community College"
+    ],
+    [
+     "226806",
+     "Midland College"
+    ],
+    [
+     "218353",
+     "Midlands Technical College"
+    ],
+    [
+     "226833",
+     "Midwestern State University"
+    ],
+    [
+     "443650",
+     "Miller-Motte College-Chattanooga"
+    ],
+    [
+     "214041",
+     "Millersville University of Pennsylvania"
+    ],
+    [
+     "239248",
+     "Milwaukee Area Technical College"
+    ],
+    [
+     "174136",
+     "Minneapolis Community and Technical College"
+    ],
+    [
+     "173920",
+     "Minnesota State University-Mankato"
+    ],
+    [
+     "118912",
+     "MiraCosta College"
+    ],
+    [
+     "118930",
+     "Mission College"
+    ],
+    [
+     "176071",
+     "Mississippi Gulf Coast Community College"
+    ],
+    [
+     "176080",
+     "Mississippi State University"
+    ],
+    [
+     "179566",
+     "Missouri State University-Springfield"
+    ],
+    [
+     "178411",
+     "Missouri University of Science and Technology"
+    ],
+    [
+     "118976",
+     "Modesto Junior College"
+    ],
+    [
+     "185572",
+     "Monmouth University"
+    ],
+    [
+     "193326",
+     "Monroe Community College"
+    ],
+    [
+     "193308",
+     "Monroe University"
+    ],
+    [
+     "180461",
+     "Montana State University"
+    ],
+    [
+     "185590",
+     "Montclair State University"
+    ],
+    [
+     "119067",
+     "Monterey Peninsula College"
+    ],
+    [
+     "163426",
+     "Montgomery College"
+    ],
+    [
+     "214111",
+     "Montgomery County Community College"
+    ],
+    [
+     "119137",
+     "Moorpark College"
+    ],
+    [
+     "147378",
+     "Moraine Valley Community College"
+    ],
+    [
+     "157386",
+     "Morehead State University"
+    ],
+    [
+     "460394",
+     "Moreno Valley College"
+    ],
+    [
+     "163453",
+     "Morgan State University"
+    ],
+    [
+     "221096",
+     "Motlow State Community College"
+    ],
+    [
+     "169275",
+     "Mott Community College"
+    ],
+    [
+     "209250",
+     "Mt Hood Community College"
+    ],
+    [
+     "119164",
+     "Mt San Antonio College"
+    ],
+    [
+     "119216",
+     "Mt San Jacinto Community College District"
+    ],
+    [
+     "157401",
+     "Murray State University"
+    ],
+    [
+     "242972",
+     "NUC University"
+    ],
+    [
+     "119331",
+     "Napa Valley College"
+    ],
+    [
+     "221184",
+     "Nashville State Community College"
+    ],
+    [
+     "193478",
+     "Nassau Community College"
+    ],
+    [
+     "147536",
+     "National Louis University"
+    ],
+    [
+     "119605",
+     "National University"
+    ],
+    [
+     "227146",
+     "Navarro College"
+    ],
+    [
+     "441900",
+     "Nevada State University"
+    ],
+    [
+     "185129",
+     "New Jersey City University"
+    ],
+    [
+     "185828",
+     "New Jersey Institute of Technology"
+    ],
+    [
+     "187620",
+     "New Mexico State University-Dona Ana"
+    ],
+    [
+     "188030",
+     "New Mexico State University-Main Campus"
+    ],
+    [
+     "194091",
+     "New York Institute of Technology"
+    ],
+    [
+     "193900",
+     "New York University"
+    ],
+    [
+     "159966",
+     "Nicholls State University"
+    ],
+    [
+     "444787",
+     "Nightingale College"
+    ],
+    [
+     "460464",
+     "Norco College"
+    ],
+    [
+     "232937",
+     "Norfolk State University"
+    ],
+    [
+     "174428",
+     "Normandale Community College"
+    ],
+    [
+     "199102",
+     "North Carolina A & T State University"
+    ],
+    [
+     "199157",
+     "North Carolina Central University"
+    ],
+    [
+     "199193",
+     "North Carolina State University at Raleigh"
+    ],
+    [
+     "224110",
+     "North Central Texas College"
+    ],
+    [
+     "200332",
+     "North Dakota State University-Main Campus"
+    ],
+    [
+     "174376",
+     "North Hennepin Community College"
+    ],
+    [
+     "167312",
+     "North Shore Community College"
+    ],
+    [
+     "367459",
+     "NorthWest Arkansas Community College"
+    ],
+    [
+     "214379",
+     "Northampton County Area Community College"
+    ],
+    [
+     "488730",
+     "Northeast Lakeview College"
+    ],
+    [
+     "221908",
+     "Northeast State Community College"
+    ],
+    [
+     "239488",
+     "Northeast Wisconsin Technical College"
+    ],
+    [
+     "147776",
+     "Northeastern Illinois University"
+    ],
+    [
+     "207263",
+     "Northeastern State University"
+    ],
+    [
+     "167358",
+     "Northeastern University"
+    ],
+    [
+     "105330",
+     "Northern Arizona University"
+    ],
+    [
+     "167376",
+     "Northern Essex Community College"
+    ],
+    [
+     "147703",
+     "Northern Illinois University"
+    ],
+    [
+     "157447",
+     "Northern Kentucky University"
+    ],
+    [
+     "171456",
+     "Northern Michigan University"
+    ],
+    [
+     "232946",
+     "Northern Virginia Community College"
+    ],
+    [
+     "176178",
+     "Northwest Mississippi Community College"
+    ],
+    [
+     "178624",
+     "Northwest Missouri State University"
+    ],
+    [
+     "420398",
+     "Northwest Vista College"
+    ],
+    [
+     "160038",
+     "Northwestern State University of Louisiana"
+    ],
+    [
+     "147767",
+     "Northwestern University"
+    ],
+    [
+     "136215",
+     "Nova Southeastern University"
+    ],
+    [
+     "171535",
+     "Oakland Community College"
+    ],
+    [
+     "171571",
+     "Oakland University"
+    ],
+    [
+     "147800",
+     "Oakton College"
+    ],
+    [
+     "185873",
+     "Ocean County College"
+    ],
+    [
+     "227304",
+     "Odessa College"
+    ],
+    [
+     "204796",
+     "Ohio State University-Main Campus"
+    ],
+    [
+     "204857",
+     "Ohio University-Main Campus"
+    ],
+    [
+     "120290",
+     "Ohlone College"
+    ],
+    [
+     "207449",
+     "Oklahoma City Community College"
+    ],
+    [
+     "207388",
+     "Oklahoma State University-Main Campus"
+    ],
+    [
+     "207397",
+     "Oklahoma State University-Oklahoma City"
+    ],
+    [
+     "232982",
+     "Old Dominion University"
+    ],
+    [
+     "236188",
+     "Olympic College"
+    ],
+    [
+     "194222",
+     "Onondaga Community College"
+    ],
+    [
+     "207582",
+     "Oral Roberts University"
+    ],
+    [
+     "120342",
+     "Orange Coast College"
+    ],
+    [
+     "194240",
+     "Orange County Community College"
+    ],
+    [
+     "209542",
+     "Oregon State University"
+    ],
+    [
+     "204945",
+     "Owens Community College"
+    ],
+    [
+     "120421",
+     "Oxnard College"
+    ],
+    [
+     "177472",
+     "Ozarks Technical Community College"
+    ],
+    [
+     "194310",
+     "Pace University"
+    ],
+    [
+     "136358",
+     "Palm Beach State College"
+    ],
+    [
+     "246354",
+     "Palo Alto College"
+    ],
+    [
+     "120953",
+     "Palo Verde College"
+    ],
+    [
+     "120971",
+     "Palomar College"
+    ],
+    [
+     "364016",
+     "Paradise Valley Community College"
+    ],
+    [
+     "178721",
+     "Park University"
+    ],
+    [
+     "121044",
+     "Pasadena City College"
+    ],
+    [
+     "136400",
+     "Pasco-Hernando State College"
+    ],
+    [
+     "186034",
+     "Passaic County Community College"
+    ],
+    [
+     "176239",
+     "Pearl River Community College"
+    ],
+    [
+     "221643",
+     "Pellissippi State Community College"
+    ],
+    [
+     "366252",
+     "Pennsylvania College of Technology"
+    ],
+    [
+     "214777",
+     "Pennsylvania State University-Main Campus"
+    ],
+    [
+     "214713",
+     "Pennsylvania State University-Penn State Harrisburg"
+    ],
+    [
+     "479956",
+     "Pennsylvania State University-World Campus"
+    ],
+    [
+     "498571",
+     "Pennsylvania Western University"
+    ],
+    [
+     "136473",
+     "Pensacola State College"
+    ],
+    [
+     "121150",
+     "Pepperdine University"
+    ],
+    [
+     "105428",
+     "Phoenix College"
+    ],
+    [
+     "218520",
+     "Piedmont Technical College"
+    ],
+    [
+     "235237",
+     "Pierce College District"
+    ],
+    [
+     "127820",
+     "Pikes Peak State College"
+    ],
+    [
+     "105525",
+     "Pima Community College"
+    ],
+    [
+     "199333",
+     "Pitt Community College"
+    ],
+    [
+     "155681",
+     "Pittsburg State University"
+    ],
+    [
+     "136516",
+     "Polk State College"
+    ],
+    [
+     "241410",
+     "Pontifical Catholic University of Puerto Rico-Ponce"
+    ],
+    [
+     "209746",
+     "Portland Community College"
+    ],
+    [
+     "209807",
+     "Portland State University"
+    ],
+    [
+     "130183",
+     "Post University"
+    ],
+    [
+     "227526",
+     "Prairie View A & M University"
+    ],
+    [
+     "194578",
+     "Pratt Institute-Main"
+    ],
+    [
+     "163657",
+     "Prince George's Community College"
+    ],
+    [
+     "186131",
+     "Princeton University"
+    ],
+    [
+     "217402",
+     "Providence College"
+    ],
+    [
+     "127884",
+     "Pueblo Community College"
+    ],
+    [
+     "151102",
+     "Purdue University Fort Wayne"
+    ],
+    [
+     "489779",
+     "Purdue University Global"
+    ],
+    [
+     "490805",
+     "Purdue University Northwest"
+    ],
+    [
+     "243780",
+     "Purdue University-Main Campus"
+    ],
+    [
+     "130226",
+     "Quinnipiac University"
+    ],
+    [
+     "167534",
+     "Quinsigamond Community College"
+    ],
+    [
+     "233277",
+     "Radford University"
+    ],
+    [
+     "186201",
+     "Ramapo College of New Jersey"
+    ],
+    [
+     "186645",
+     "Raritan Valley Community College"
+    ],
+    [
+     "175014",
+     "Rasmussen University-Minnesota"
+    ],
+    [
+     "215585",
+     "Reading Area Community College"
+    ],
+    [
+     "127909",
+     "Red Rocks Community College"
+    ],
+    [
+     "117052",
+     "Reedley College"
+    ],
+    [
+     "231651",
+     "Regent University"
+    ],
+    [
+     "194824",
+     "Rensselaer Polytechnic Institute"
+    ],
+    [
+     "217420",
+     "Rhode Island College"
+    ],
+    [
+     "227757",
+     "Rice University"
+    ],
+    [
+     "121886",
+     "Rio Hondo College"
+    ],
+    [
+     "105668",
+     "Rio Salado College"
+    ],
+    [
+     "121901",
+     "Riverside City College"
+    ],
+    [
+     "195003",
+     "Rochester Institute of Technology"
+    ],
+    [
+     "148380",
+     "Rock Valley College"
+    ],
+    [
+     "195058",
+     "Rockland Community College"
+    ],
+    [
+     "217518",
+     "Roger Williams University"
+    ],
+    [
+     "209940",
+     "Rogue Community College"
+    ],
+    [
+     "207670",
+     "Rose State College"
+    ],
+    [
+     "183877",
+     "Rowan College at Burlington County"
+    ],
+    [
+     "184791",
+     "Rowan College of South Jersey-Gloucester Campus"
+    ],
+    [
+     "184782",
+     "Rowan University"
+    ],
+    [
+     "199494",
+     "Rowan-Cabarrus Community College"
+    ],
+    [
+     "186371",
+     "Rutgers University-Camden"
+    ],
+    [
+     "186380",
+     "Rutgers University-New Brunswick"
+    ],
+    [
+     "186399",
+     "Rutgers University-Newark"
+    ],
+    [
+     "196121",
+     "SUNY Brockport"
+    ],
+    [
+     "196130",
+     "SUNY Buffalo State University"
+    ],
+    [
+     "196167",
+     "SUNY College at Geneseo"
+    ],
+    [
+     "196006",
+     "SUNY College of Technology at Alfred"
+    ],
+    [
+     "196237",
+     "SUNY Old Westbury"
+    ],
+    [
+     "196185",
+     "SUNY Oneonta"
+    ],
+    [
+     "197294",
+     "SUNY Westchester Community College"
+    ],
+    [
+     "122180",
+     "Sacramento City College"
+    ],
+    [
+     "130253",
+     "Sacred Heart University"
+    ],
+    [
+     "122205",
+     "Saddleback College"
+    ],
+    [
+     "172051",
+     "Saginaw Valley State University"
+    ],
+    [
+     "174783",
+     "Saint Cloud State University"
+    ],
+    [
+     "137281",
+     "Saint Johns River State College"
+    ],
+    [
+     "215770",
+     "Saint Joseph's University - Philadelphia"
+    ],
+    [
+     "137032",
+     "Saint Leo University"
+    ],
+    [
+     "179308",
+     "Saint Louis Community College"
+    ],
+    [
+     "179159",
+     "Saint Louis University"
+    ],
+    [
+     "175041",
+     "Saint Paul College"
+    ],
+    [
+     "167729",
+     "Salem State University"
+    ],
+    [
+     "163851",
+     "Salisbury University"
+    ],
+    [
+     "230746",
+     "Salt Lake Community College"
+    ],
+    [
+     "227881",
+     "Sam Houston State University"
+    ],
+    [
+     "102049",
+     "Samford University"
+    ],
+    [
+     "227924",
+     "San Antonio College"
+    ],
+    [
+     "123527",
+     "San Bernardino Valley College"
+    ],
+    [
+     "122339",
+     "San Diego City College"
+    ],
+    [
+     "122375",
+     "San Diego Mesa College"
+    ],
+    [
+     "122384",
+     "San Diego Miramar College"
+    ],
+    [
+     "122409",
+     "San Diego State University"
+    ],
+    [
+     "122597",
+     "San Francisco State University"
+    ],
+    [
+     "227979",
+     "San Jacinto Community College"
+    ],
+    [
+     "122658",
+     "San Joaquin Delta College"
+    ],
+    [
+     "122746",
+     "San Jose City College"
+    ],
+    [
+     "122755",
+     "San Jose State University"
+    ],
+    [
+     "188100",
+     "San Juan College"
+    ],
+    [
+     "121619",
+     "Santa Ana College"
+    ],
+    [
+     "122889",
+     "Santa Barbara City College"
+    ],
+    [
+     "122931",
+     "Santa Clara University"
+    ],
+    [
+     "137096",
+     "Santa Fe College"
+    ],
+    [
+     "122977",
+     "Santa Monica College"
+    ],
+    [
+     "123013",
+     "Santa Rosa Junior College"
+    ],
+    [
+     "399212",
+     "Santiago Canyon College"
+    ],
+    [
+     "140951",
+     "Savannah College of Art and Design"
+    ],
+    [
+     "172200",
+     "Schoolcraft Community College District"
+    ],
+    [
+     "105747",
+     "Scottsdale Community College"
+    ],
+    [
+     "236513",
+     "Seattle Central College"
+    ],
+    [
+     "236595",
+     "Seattle University"
+    ],
+    [
+     "137209",
+     "Seminole State College of Florida"
+    ],
+    [
+     "186584",
+     "Seton Hall University"
+    ],
+    [
+     "123299",
+     "Shasta College"
+    ],
+    [
+     "216010",
+     "Shippensburg University of Pennsylvania"
+    ],
+    [
+     "195474",
+     "Siena University"
+    ],
+    [
+     "123341",
+     "Sierra College"
+    ],
+    [
+     "205470",
+     "Sinclair Community College"
+    ],
+    [
+     "123509",
+     "Skyline College"
+    ],
+    [
+     "216038",
+     "Slippery Rock University of Pennsylvania"
+    ],
+    [
+     "230597",
+     "Snow College"
+    ],
+    [
+     "123563",
+     "Solano Community College"
+    ],
+    [
+     "157711",
+     "Somerset Community College"
+    ],
+    [
+     "123572",
+     "Sonoma State University"
+    ],
+    [
+     "488077",
+     "Sonoran Desert Institute"
+    ],
+    [
+     "220552",
+     "South College"
+    ],
+    [
+     "219356",
+     "South Dakota State University"
+    ],
+    [
+     "443252",
+     "South Florida Institute of Technology"
+    ],
+    [
+     "434061",
+     "South Louisiana Community College"
+    ],
+    [
+     "105792",
+     "South Mountain Community College"
+    ],
+    [
+     "228158",
+     "South Plains College"
+    ],
+    [
+     "409315",
+     "South Texas College"
+    ],
+    [
+     "475121",
+     "South University-Savannah Online"
+    ],
+    [
+     "181640",
+     "Southeast Community College Area"
+    ],
+    [
+     "179557",
+     "Southeast Missouri State University"
+    ],
+    [
+     "160612",
+     "Southeastern Louisiana University"
+    ],
+    [
+     "137564",
+     "Southeastern University"
+    ],
+    [
+     "130493",
+     "Southern Connecticut State University"
+    ],
+    [
+     "139986",
+     "Southern Crescent Technical College"
+    ],
+    [
+     "149231",
+     "Southern Illinois University Edwardsville"
+    ],
+    [
+     "149222",
+     "Southern Illinois University-Carbondale"
+    ],
+    [
+     "161545",
+     "Southern Maine Community College"
+    ],
+    [
+     "228246",
+     "Southern Methodist University"
+    ],
+    [
+     "183026",
+     "Southern New Hampshire University"
+    ],
+    [
+     "251260",
+     "Southern Union State Community College"
+    ],
+    [
+     "160621",
+     "Southern University and A & M College"
+    ],
+    [
+     "230603",
+     "Southern Utah University"
+    ],
+    [
+     "221485",
+     "Southwest Tennessee Community College"
+    ],
+    [
+     "123800",
+     "Southwestern College"
+    ],
+    [
+     "143215",
+     "Southwestern Illinois College"
+    ],
+    [
+     "207865",
+     "Southwestern Oklahoma State University"
+    ],
+    [
+     "218830",
+     "Spartanburg Community College"
+    ],
+    [
+     "141060",
+     "Spelman College"
+    ],
+    [
+     "236692",
+     "Spokane Community College"
+    ],
+    [
+     "167905",
+     "Springfield Technical Community College"
+    ],
+    [
+     "262031",
+     "St Charles Community College"
+    ],
+    [
+     "137078",
+     "St Petersburg College"
+    ],
+    [
+     "227854",
+     "St Philip's College"
+    ],
+    [
+     "195809",
+     "St. John's University-New York"
+    ],
+    [
+     "243744",
+     "Stanford University"
+    ],
+    [
+     "205841",
+     "Stark State College"
+    ],
+    [
+     "135391",
+     "State College of Florida-Manatee-Sarasota"
+    ],
+    [
+     "196149",
+     "State University of New York at Cortland"
+    ],
+    [
+     "196176",
+     "State University of New York at New Paltz"
+    ],
+    [
+     "196194",
+     "State University of New York at Oswego"
+    ],
+    [
+     "196246",
+     "State University of New York at Plattsburgh"
+    ],
+    [
+     "228431",
+     "Stephen F Austin State University"
+    ],
+    [
+     "186867",
+     "Stevens Institute of Technology"
+    ],
+    [
+     "186876",
+     "Stockton University"
+    ],
+    [
+     "196097",
+     "Stony Brook University"
+    ],
+    [
+     "458919",
+     "Strayer University-Georgia"
+    ],
+    [
+     "459994",
+     "Strayer University-Global Region"
+    ],
+    [
+     "366395",
+     "Suffolk County Community College"
+    ],
+    [
+     "168005",
+     "Suffolk University"
+    ],
+    [
+     "196413",
+     "Syracuse University"
+    ],
+    [
+     "236753",
+     "Tacoma Community College"
+    ],
+    [
+     "124113",
+     "Taft College"
+    ],
+    [
+     "137759",
+     "Tallahassee State College"
+    ],
+    [
+     "228529",
+     "Tarleton State University"
+    ],
+    [
+     "228547",
+     "Tarrant County College District"
+    ],
+    [
+     "216339",
+     "Temple University"
+    ],
+    [
+     "221838",
+     "Tennessee State University"
+    ],
+    [
+     "221847",
+     "Tennessee Technological University"
+    ],
+    [
+     "226152",
+     "Texas A & M International University"
+    ],
+    [
+     "224147",
+     "Texas A & M University-Corpus Christi"
+    ],
+    [
+     "228723",
+     "Texas A&M University-College Station"
+    ],
+    [
+     "228705",
+     "Texas A&M University-Kingsville"
+    ],
+    [
+     "459949",
+     "Texas A&M University-San Antonio"
+    ],
+    [
+     "228875",
+     "Texas Christian University"
+    ],
+    [
+     "229063",
+     "Texas Southern University"
+    ],
+    [
+     "487320",
+     "Texas State Technical College"
+    ],
+    [
+     "228459",
+     "Texas State University"
+    ],
+    [
+     "229115",
+     "Texas Tech University"
+    ],
+    [
+     "229179",
+     "Texas Woman's University"
+    ],
+    [
+     "392257",
+     "The College of Health Care Professions-Northwest"
+    ],
+    [
+     "187134",
+     "The College of New Jersey"
+    ],
+    [
+     "193654",
+     "The New School"
+    ],
+    [
+     "100751",
+     "The University of Alabama"
+    ],
+    [
+     "154022",
+     "The University of Arizona Global Campus"
+    ],
+    [
+     "180489",
+     "The University of Montana"
+    ],
+    [
+     "137847",
+     "The University of Tampa"
+    ],
+    [
+     "221740",
+     "The University of Tennessee-Chattanooga"
+    ],
+    [
+     "221759",
+     "The University of Tennessee-Knoxville"
+    ],
+    [
+     "221768",
+     "The University of Tennessee-Martin"
+    ],
+    [
+     "229018",
+     "The University of Texas Permian Basin"
+    ],
+    [
+     "227368",
+     "The University of Texas Rio Grande Valley"
+    ],
+    [
+     "228769",
+     "The University of Texas at Arlington"
+    ],
+    [
+     "228778",
+     "The University of Texas at Austin"
+    ],
+    [
+     "228787",
+     "The University of Texas at Dallas"
+    ],
+    [
+     "228796",
+     "The University of Texas at El Paso"
+    ],
+    [
+     "229027",
+     "The University of Texas at San Antonio"
+    ],
+    [
+     "228802",
+     "The University of Texas at Tyler"
+    ],
+    [
+     "187046",
+     "Thomas Edison State University"
+    ],
+    [
+     "216366",
+     "Thomas Jefferson University"
+    ],
+    [
+     "233772",
+     "Tidewater Community College"
+    ],
+    [
+     "196592",
+     "Touro University"
+    ],
+    [
+     "164076",
+     "Towson University"
+    ],
+    [
+     "218885",
+     "Tri-County Technical College"
+    ],
+    [
+     "218894",
+     "Trident Technical College"
+    ],
+    [
+     "225308",
+     "Trinity Valley Community College"
+    ],
+    [
+     "149532",
+     "Triton College"
+    ],
+    [
+     "102368",
+     "Troy University"
+    ],
+    [
+     "182500",
+     "Truckee Meadows Community College"
+    ],
+    [
+     "168148",
+     "Tufts University"
+    ],
+    [
+     "160755",
+     "Tulane University of Louisiana"
+    ],
+    [
+     "207935",
+     "Tulsa Community College"
+    ],
+    [
+     "229355",
+     "Tyler Junior College"
+    ],
+    [
+     "187198",
+     "UCNJ Union College of Union County New Jersey"
+    ],
+    [
+     "441371",
+     "Ultimate Medical Academy"
+    ],
+    [
+     "128328",
+     "United States Air Force Academy"
+    ],
+    [
+     "197036",
+     "United States Military Academy"
+    ],
+    [
+     "164155",
+     "United States Naval Academy"
+    ],
+    [
+     "459204",
+     "Unitek College"
+    ],
+    [
+     "161572",
+     "Unity Environmental University"
+    ],
+    [
+     "243346",
+     "Universidad Ana G. Mendez-Carolina Campus"
+    ],
+    [
+     "241739",
+     "Universidad Ana G. Mendez-Cupey Campus"
+    ],
+    [
+     "243601",
+     "Universidad Ana G. Mendez-Gurabo Campus"
+    ],
+    [
+     "243577",
+     "Universidad Politecnica de Puerto Rico"
+    ],
+    [
+     "243443",
+     "Universidad del Sagrado Corazon"
+    ],
+    [
+     "196060",
+     "University at Albany"
+    ],
+    [
+     "196088",
+     "University at Buffalo"
+    ],
+    [
+     "200800",
+     "University of Akron Main Campus"
+    ],
+    [
+     "100663",
+     "University of Alabama at Birmingham"
+    ],
+    [
+     "100706",
+     "University of Alabama in Huntsville"
+    ],
+    [
+     "102553",
+     "University of Alaska Anchorage"
+    ],
+    [
+     "102614",
+     "University of Alaska Fairbanks"
+    ],
+    [
+     "104179",
+     "University of Arizona"
+    ],
+    [
+     "106397",
+     "University of Arkansas"
+    ],
+    [
+     "106245",
+     "University of Arkansas at Little Rock"
+    ],
+    [
+     "108092",
+     "University of Arkansas-Fort Smith"
+    ],
+    [
+     "107664",
+     "University of Arkansas-Pulaski Technical College"
+    ],
+    [
+     "110635",
+     "University of California-Berkeley"
+    ],
+    [
+     "110644",
+     "University of California-Davis"
+    ],
+    [
+     "110653",
+     "University of California-Irvine"
+    ],
+    [
+     "110662",
+     "University of California-Los Angeles"
+    ],
+    [
+     "445188",
+     "University of California-Merced"
+    ],
+    [
+     "110671",
+     "University of California-Riverside"
+    ],
+    [
+     "110680",
+     "University of California-San Diego"
+    ],
+    [
+     "110705",
+     "University of California-Santa Barbara"
+    ],
+    [
+     "110714",
+     "University of California-Santa Cruz"
+    ],
+    [
+     "106704",
+     "University of Central Arkansas"
+    ],
+    [
+     "132903",
+     "University of Central Florida"
+    ],
+    [
+     "176965",
+     "University of Central Missouri"
+    ],
+    [
+     "206941",
+     "University of Central Oklahoma"
+    ],
+    [
+     "144050",
+     "University of Chicago"
+    ],
+    [
+     "201955",
+     "University of Cincinnati-Blue Ash College"
+    ],
+    [
+     "201885",
+     "University of Cincinnati-Main Campus"
+    ],
+    [
+     "126614",
+     "University of Colorado Boulder"
+    ],
+    [
+     "126580",
+     "University of Colorado Colorado Springs"
+    ],
+    [
+     "126562",
+     "University of Colorado Denver/Anschutz Medical Campus"
+    ],
+    [
+     "129020",
+     "University of Connecticut"
+    ],
+    [
+     "202480",
+     "University of Dayton"
+    ],
+    [
+     "130943",
+     "University of Delaware"
+    ],
+    [
+     "127060",
+     "University of Denver"
+    ],
+    [
+     "134130",
+     "University of Florida"
+    ],
+    [
+     "484473",
+     "University of Florida-Online"
+    ],
+    [
+     "139959",
+     "University of Georgia"
+    ],
+    [
+     "129525",
+     "University of Hartford"
+    ],
+    [
+     "141574",
+     "University of Hawaii at Manoa"
+    ],
+    [
+     "225511",
+     "University of Houston"
+    ],
+    [
+     "225414",
+     "University of Houston-Clear Lake"
+    ],
+    [
+     "225432",
+     "University of Houston-Downtown"
+    ],
+    [
+     "142285",
+     "University of Idaho"
+    ],
+    [
+     "145600",
+     "University of Illinois Chicago"
+    ],
+    [
+     "145637",
+     "University of Illinois Urbana-Champaign"
+    ],
+    [
+     "153658",
+     "University of Iowa"
+    ],
+    [
+     "155317",
+     "University of Kansas"
+    ],
+    [
+     "157085",
+     "University of Kentucky"
+    ],
+    [
+     "160658",
+     "University of Louisiana at Lafayette"
+    ],
+    [
+     "159993",
+     "University of Louisiana at Monroe"
+    ],
+    [
+     "157289",
+     "University of Louisville"
+    ],
+    [
+     "161253",
+     "University of Maine"
+    ],
+    [
+     "232681",
+     "University of Mary Washington"
+    ],
+    [
+     "163204",
+     "University of Maryland Global Campus"
+    ],
+    [
+     "163268",
+     "University of Maryland-Baltimore County"
+    ],
+    [
+     "163286",
+     "University of Maryland-College Park"
+    ],
+    [
+     "262086",
+     "University of Massachusetts Global"
+    ],
+    [
+     "166629",
+     "University of Massachusetts-Amherst"
+    ],
+    [
+     "166638",
+     "University of Massachusetts-Boston"
+    ],
+    [
+     "167987",
+     "University of Massachusetts-Dartmouth"
+    ],
+    [
+     "166513",
+     "University of Massachusetts-Lowell"
+    ],
+    [
+     "220862",
+     "University of Memphis"
+    ],
+    [
+     "135726",
+     "University of Miami"
+    ],
+    [
+     "170976",
+     "University of Michigan-Ann Arbor"
+    ],
+    [
+     "171137",
+     "University of Michigan-Dearborn"
+    ],
+    [
+     "171146",
+     "University of Michigan-Flint"
+    ],
+    [
+     "174233",
+     "University of Minnesota-Duluth"
+    ],
+    [
+     "174066",
+     "University of Minnesota-Twin Cities"
+    ],
+    [
+     "176017",
+     "University of Mississippi"
+    ],
+    [
+     "178396",
+     "University of Missouri-Columbia"
+    ],
+    [
+     "178402",
+     "University of Missouri-Kansas City"
+    ],
+    [
+     "178420",
+     "University of Missouri-St Louis"
+    ],
+    [
+     "181215",
+     "University of Nebraska at Kearney"
+    ],
+    [
+     "181394",
+     "University of Nebraska at Omaha"
+    ],
+    [
+     "181464",
+     "University of Nebraska-Lincoln"
+    ],
+    [
+     "182281",
+     "University of Nevada-Las Vegas"
+    ],
+    [
+     "182290",
+     "University of Nevada-Reno"
+    ],
+    [
+     "183044",
+     "University of New Hampshire-Main Campus"
+    ],
+    [
+     "129941",
+     "University of New Haven"
+    ],
+    [
+     "187985",
+     "University of New Mexico-Main Campus"
+    ],
+    [
+     "159939",
+     "University of New Orleans"
+    ],
+    [
+     "101879",
+     "University of North Alabama"
+    ],
+    [
+     "199218",
+     "University of North Carolina Wilmington"
+    ],
+    [
+     "199120",
+     "University of North Carolina at Chapel Hill"
+    ],
+    [
+     "199139",
+     "University of North Carolina at Charlotte"
+    ],
+    [
+     "199148",
+     "University of North Carolina at Greensboro"
+    ],
+    [
+     "199281",
+     "University of North Carolina at Pembroke"
+    ],
+    [
+     "200280",
+     "University of North Dakota"
+    ],
+    [
+     "136172",
+     "University of North Florida"
+    ],
+    [
+     "482680",
+     "University of North Georgia"
+    ],
+    [
+     "227216",
+     "University of North Texas"
+    ],
+    [
+     "127741",
+     "University of Northern Colorado"
+    ],
+    [
+     "154095",
+     "University of Northern Iowa"
+    ],
+    [
+     "152080",
+     "University of Notre Dame"
+    ],
+    [
+     "207500",
+     "University of Oklahoma-Norman Campus"
+    ],
+    [
+     "209551",
+     "University of Oregon"
+    ],
+    [
+     "215062",
+     "University of Pennsylvania"
+    ],
+    [
+     "484613",
+     "University of Phoenix-Arizona"
+    ],
+    [
+     "215293",
+     "University of Pittsburgh-Pittsburgh Campus"
+    ],
+    [
+     "243197",
+     "University of Puerto Rico-Mayaguez"
+    ],
+    [
+     "243221",
+     "University of Puerto Rico-Rio Piedras"
+    ],
+    [
+     "217484",
+     "University of Rhode Island"
+    ],
+    [
+     "195030",
+     "University of Rochester"
+    ],
+    [
+     "122436",
+     "University of San Diego"
+    ],
+    [
+     "122612",
+     "University of San Francisco"
+    ],
+    [
+     "215929",
+     "University of Scranton"
+    ],
+    [
+     "102094",
+     "University of South Alabama"
+    ],
+    [
+     "218663",
+     "University of South Carolina-Columbia"
+    ],
+    [
+     "218742",
+     "University of South Carolina-Upstate"
+    ],
+    [
+     "219471",
+     "University of South Dakota"
+    ],
+    [
+     "137351",
+     "University of South Florida"
+    ],
+    [
+     "123961",
+     "University of Southern California"
+    ],
+    [
+     "151306",
+     "University of Southern Indiana"
+    ],
+    [
+     "161554",
+     "University of Southern Maine"
+    ],
+    [
+     "176372",
+     "University of Southern Mississippi"
+    ],
+    [
+     "174914",
+     "University of St Thomas"
+    ],
+    [
+     "206084",
+     "University of Toledo"
+    ],
+    [
+     "230764",
+     "University of Utah"
+    ],
+    [
+     "231174",
+     "University of Vermont"
+    ],
+    [
+     "234076",
+     "University of Virginia-Main Campus"
+    ],
+    [
+     "377555",
+     "University of Washington-Bothell Campus"
+    ],
+    [
+     "236948",
+     "University of Washington-Seattle Campus"
+    ],
+    [
+     "377564",
+     "University of Washington-Tacoma Campus"
+    ],
+    [
+     "138354",
+     "University of West Florida"
+    ],
+    [
+     "141334",
+     "University of West Georgia"
+    ],
+    [
+     "240268",
+     "University of Wisconsin-Eau Claire"
+    ],
+    [
+     "240277",
+     "University of Wisconsin-Green Bay"
+    ],
+    [
+     "240329",
+     "University of Wisconsin-La Crosse"
+    ],
+    [
+     "240444",
+     "University of Wisconsin-Madison"
+    ],
+    [
+     "240453",
+     "University of Wisconsin-Milwaukee"
+    ],
+    [
+     "240365",
+     "University of Wisconsin-Oshkosh"
+    ],
+    [
+     "240462",
+     "University of Wisconsin-Platteville"
+    ],
+    [
+     "240471",
+     "University of Wisconsin-River Falls"
+    ],
+    [
+     "240480",
+     "University of Wisconsin-Stevens Point"
+    ],
+    [
+     "240417",
+     "University of Wisconsin-Stout"
+    ],
+    [
+     "240189",
+     "University of Wisconsin-Whitewater"
+    ],
+    [
+     "240727",
+     "University of Wyoming"
+    ],
+    [
+     "156541",
+     "University of the Cumberlands"
+    ],
+    [
+     "225627",
+     "University of the Incarnate Word"
+    ],
+    [
+     "488846",
+     "University of the People"
+    ],
+    [
+     "230728",
+     "Utah State University"
+    ],
+    [
+     "230171",
+     "Utah Tech University"
+    ],
+    [
+     "230737",
+     "Utah Valley University"
+    ],
+    [
+     "141264",
+     "Valdosta State University"
+    ],
+    [
+     "138187",
+     "Valencia College"
+    ],
+    [
+     "221999",
+     "Vanderbilt University"
+    ],
+    [
+     "125028",
+     "Ventura College"
+    ],
+    [
+     "231165",
+     "Vermont State University"
+    ],
+    [
+     "125091",
+     "Victor Valley College"
+    ],
+    [
+     "216597",
+     "Villanova University"
+    ],
+    [
+     "152637",
+     "Vincennes University"
+    ],
+    [
+     "234030",
+     "Virginia Commonwealth University"
+    ],
+    [
+     "233754",
+     "Virginia Peninsula Community College"
+    ],
+    [
+     "233921",
+     "Virginia Polytechnic Institute and State University"
+    ],
+    [
+     "234155",
+     "Virginia State University"
+    ],
+    [
+     "233949",
+     "Virginia Western Community College"
+    ],
+    [
+     "222053",
+     "Volunteer State Community College"
+    ],
+    [
+     "199847",
+     "Wake Forest University"
+    ],
+    [
+     "199856",
+     "Wake Technical Community College"
+    ],
+    [
+     "125231",
+     "Walden University"
+    ],
+    [
+     "222062",
+     "Walters State Community College"
+    ],
+    [
+     "156082",
+     "Washburn University"
+    ],
+    [
+     "236939",
+     "Washington State University"
+    ],
+    [
+     "179867",
+     "Washington University in St Louis"
+    ],
+    [
+     "172617",
+     "Washtenaw Community College"
+    ],
+    [
+     "149727",
+     "Waubonsee Community College"
+    ],
+    [
+     "240125",
+     "Waukesha County Technical College"
+    ],
+    [
+     "172635",
+     "Wayne County Community College District"
+    ],
+    [
+     "172644",
+     "Wayne State University"
+    ],
+    [
+     "229799",
+     "Weatherford College"
+    ],
+    [
+     "230782",
+     "Weber State University"
+    ],
+    [
+     "168227",
+     "Wentworth Institute of Technology"
+    ],
+    [
+     "216764",
+     "West Chester University of Pennsylvania"
+    ],
+    [
+     "139278",
+     "West Georgia Technical College"
+    ],
+    [
+     "125471",
+     "West Los Angeles College"
+    ],
+    [
+     "229814",
+     "West Texas A & M University"
+    ],
+    [
+     "125499",
+     "West Valley College"
+    ],
+    [
+     "238032",
+     "West Virginia University"
+    ],
+    [
+     "200004",
+     "Western Carolina University"
+    ],
+    [
+     "130776",
+     "Western Connecticut State University"
+    ],
+    [
+     "433387",
+     "Western Governors University"
+    ],
+    [
+     "149772",
+     "Western Illinois University"
+    ],
+    [
+     "157951",
+     "Western Kentucky University"
+    ],
+    [
+     "172699",
+     "Western Michigan University"
+    ],
+    [
+     "237011",
+     "Western Washington University"
+    ],
+    [
+     "168263",
+     "Westfield State University"
+    ],
+    [
+     "229841",
+     "Wharton County Junior College"
+    ],
+    [
+     "156125",
+     "Wichita State University"
+    ],
+    [
+     "231624",
+     "William & Mary"
+    ],
+    [
+     "187444",
+     "William Paterson University of New Jersey"
+    ],
+    [
+     "149842",
+     "William Rainey Harper College"
+    ],
+    [
+     "131113",
+     "Wilmington University"
+    ],
+    [
+     "175272",
+     "Winona State University"
+    ],
+    [
+     "199999",
+     "Winston-Salem State University"
+    ],
+    [
+     "218964",
+     "Winthrop University"
+    ],
+    [
+     "168421",
+     "Worcester Polytechnic Institute"
+    ],
+    [
+     "168430",
+     "Worcester State University"
+    ],
+    [
+     "206604",
+     "Wright State University-Main Campus"
+    ],
+    [
+     "206622",
+     "Xavier University"
+    ],
+    [
+     "130794",
+     "Yale University"
+    ],
+    [
+     "106148",
+     "Yavapai College"
+    ],
+    [
+     "218991",
+     "York Technical College"
+    ],
+    [
+     "206695",
+     "Youngstown State University"
+    ],
+    [
+     "126119",
+     "Yuba College"
+    ]
+   ]
+  },
+  {
+   "id": "food-nutrients",
+   "title": "What is in common foods: calories, protein, fat and more",
+   "description": "Laboratory measurements of the nutrients in a few hundred everyday foods, per 100 grams.",
+   "region": "US",
+   "domain": "Health",
+   "source": "US Department of Agriculture, FoodData Central",
+   "source_url": "https://fdc.nal.usda.gov",
+   "licence": "Public domain (CC0)",
+   "file": "data/sets/food-nutrients.csv",
+   "keys": [
+    "food_id",
+    "year"
+   ],
+   "time": {
+    "col": "year",
+    "type": "year",
+    "min": "2026",
+    "max": "2026"
+   },
+   "entity": {
+    "col": "food_id",
+    "label_col": "food",
+    "label": "Food"
+   },
+   "rows": 413,
+   "columns": [
+    {
+     "name": "calories",
+     "title": "Calories",
+     "unit": "kilocalories per 100 g",
+     "description": "USDA FoodData Central, Foundation Foods: laboratory analysis of the food as described.",
+     "type": "num",
+     "filled": 373
+    },
+    {
+     "name": "protein",
+     "title": "Protein",
+     "unit": "g per 100 g",
+     "description": "USDA FoodData Central, Foundation Foods: laboratory analysis of the food as described.",
+     "type": "num",
+     "filled": 404
+    },
+    {
+     "name": "fat",
+     "title": "Fat",
+     "unit": "g per 100 g",
+     "description": "USDA FoodData Central, Foundation Foods: laboratory analysis of the food as described.",
+     "type": "num",
+     "filled": 392
+    },
+    {
+     "name": "carbohydrate",
+     "title": "Carbohydrate",
+     "unit": "g per 100 g",
+     "description": "USDA FoodData Central, Foundation Foods: laboratory analysis of the food as described.",
+     "type": "num",
+     "filled": 373
+    },
+    {
+     "name": "fibre",
+     "title": "Fibre",
+     "unit": "g per 100 g",
+     "description": "USDA FoodData Central, Foundation Foods: laboratory analysis of the food as described.",
+     "type": "num",
+     "filled": 233
+    },
+    {
+     "name": "sugars",
+     "title": "Sugars",
+     "unit": "g per 100 g",
+     "description": "USDA FoodData Central, Foundation Foods: laboratory analysis of the food as described.",
+     "type": "num",
+     "filled": 5
+    },
+    {
+     "name": "sodium",
+     "title": "Sodium",
+     "unit": "mg per 100 g",
+     "description": "USDA FoodData Central, Foundation Foods: laboratory analysis of the food as described.",
+     "type": "num",
+     "filled": 378
+    },
+    {
+     "name": "calcium",
+     "title": "Calcium",
+     "unit": "mg per 100 g",
+     "description": "USDA FoodData Central, Foundation Foods: laboratory analysis of the food as described.",
+     "type": "num",
+     "filled": 396
+    },
+    {
+     "name": "iron",
+     "title": "Iron",
+     "unit": "mg per 100 g",
+     "description": "USDA FoodData Central, Foundation Foods: laboratory analysis of the food as described.",
+     "type": "num",
+     "filled": 396
+    },
+    {
+     "name": "vitamin_c",
+     "title": "Vitamin c",
+     "unit": "mg per 100 g",
+     "description": "USDA FoodData Central, Foundation Foods: laboratory analysis of the food as described.",
+     "type": "num",
+     "filled": 118
+    }
+   ],
+   "bytes": 35473,
+   "built": "2026-11-24",
+   "coverage": "2026",
+   "entities": 413,
+   "cadence": "Twice a year",
+   "places": [
+    [
+     "2768188",
+     "Alaska Pollock, raw"
+    ],
+    [
+     "2262074",
+     "Almond butter, creamy"
+    ],
+    [
+     "2257045",
+     "Almond milk, unsweetened, plain, refrigerated"
+    ],
+    [
+     "1999631",
+     "Almond milk, unsweetened, plain, shelf stable"
+    ],
+    [
+     "2779262",
+     "Amaranth, flour, pre-gelatinized, organic"
+    ],
+    [
+     "2779249",
+     "Amaranth, puffed, organic"
+    ],
+    [
+     "2747652",
+     "Anchovies, canned in olive oil, with salt, drained"
+    ],
+    [
+     "2003590",
+     "Apple juice, with added vitamin C, from concentrate, shelf stable"
+    ],
+    [
+     "1750340",
+     "Apples, fuji, with skin, raw"
+    ],
+    [
+     "1750341",
+     "Apples, gala, with skin, raw"
+    ],
+    [
+     "1750342",
+     "Apples, granny smith, with skin, raw"
+    ],
+    [
+     "1750343",
+     "Apples, honeycrisp, with skin, raw"
+    ],
+    [
+     "1750339",
+     "Apples, red delicious, with skin, raw"
+    ],
+    [
+     "2346414",
+     "Applesauce, unsweetened, with added vitamin C"
+    ],
+    [
+     "2710815",
+     "Apricot, with skin, raw"
+    ],
+    [
+     "2710822",
+     "Arugula, baby, raw"
+    ],
+    [
+     "2710823",
+     "Asparagus, green, raw"
+    ],
+    [
+     "2710824",
+     "Avocado, Hass, peeled, raw"
+    ],
+    [
+     "2758982",
+     "Baked beans, Original, canned, with pork"
+    ],
+    [
+     "1105073",
+     "Bananas, overripe, raw"
+    ],
+    [
+     "1105314",
+     "Bananas, ripe and slightly ripe, raw"
+    ],
+    [
+     "747444",
+     "Beans, Dry, Black (0% moisture)"
+    ],
+    [
+     "747433",
+     "Beans, Dry, Brown (0% moisture)"
+    ],
+    [
+     "747436",
+     "Beans, Dry, Carioca (0% moisture)"
+    ],
+    [
+     "747437",
+     "Beans, Dry, Cranberry (0% moisture)"
+    ],
+    [
+     "747440",
+     "Beans, Dry, Dark Red Kidney (0% moisture)"
+    ],
+    [
+     "747432",
+     "Beans, Dry, Flor de Mayo (0% moisture)"
+    ],
+    [
+     "747446",
+     "Beans, Dry, Great Northern (0% moisture)"
+    ],
+    [
+     "747438",
+     "Beans, Dry, Light Red Kidney (0% moisture)"
+    ],
+    [
+     "747435",
+     "Beans, Dry, Light Tan (0% moisture)"
+    ],
+    [
+     "747430",
+     "Beans, Dry, Medium Red (0% moisture)"
+    ],
+    [
+     "747441",
+     "Beans, Dry, Navy (0% moisture)"
+    ],
+    [
+     "747439",
+     "Beans, Dry, Pink (0% moisture)"
+    ],
+    [
+     "747445",
+     "Beans, Dry, Pinto (0% moisture)"
+    ],
+    [
+     "747431",
+     "Beans, Dry, Red (0% moisture)"
+    ],
+    [
+     "747443",
+     "Beans, Dry, Small Red (0% moisture)"
+    ],
+    [
+     "747442",
+     "Beans, Dry, Small White (0% moisture)"
+    ],
+    [
+     "747434",
+     "Beans, Dry, Tan (0% moisture)"
+    ],
+    [
+     "2758983",
+     "Beans, baked, canned, vegetarian"
+    ],
+    [
+     "2644285",
+     "Beans, black, canned, sodium added, drained and rinsed"
+    ],
+    [
+     "2644287",
+     "Beans, cannellini, canned, sodium added, drained and rinsed"
+    ],
+    [
+     "2644281",
+     "Beans, cannellini, dry"
+    ],
+    [
+     "2644294",
+     "Beans, great northern, canned, sodium added, drained and rinsed"
+    ],
+    [
+     "2644289",
+     "Beans, kidney, dark red, canned, sodium added, sugar added, drained and rinsed"
+    ],
+    [
+     "2644290",
+     "Beans, kidney, light red, canned, sodium added, sugar added, drained and rinsed"
+    ],
+    [
+     "2644286",
+     "Beans, navy, canned, sodium added, drained and rinsed"
+    ],
+    [
+     "2644292",
+     "Beans, pinto, canned, sodium added, drained and rinsed"
+    ],
+    [
+     "321611",
+     "Beans, snap, green, canned, regular pack, drained solids"
+    ],
+    [
+     "2346400",
+     "Beans, snap, green, raw"
+    ],
+    [
+     "2646174",
+     "Beef, chuck, roast, boneless, choice, raw"
+    ],
+    [
+     "2646175",
+     "Beef, flank, steak, boneless, choice, raw"
+    ],
+    [
+     "2514744",
+     "Beef, ground, 80% lean meat / 20% fat, raw"
+    ],
+    [
+     "2514743",
+     "Beef, ground, 90% lean meat / 10% fat, raw"
+    ],
+    [
+     "746758",
+     "Beef, loin, tenderloin roast, separable lean only, boneless, trimmed to 0\" fat, select, cooked, roasted"
+    ],
+    [
+     "746759",
+     "Beef, loin, top loin steak, boneless, lip-on, separable lean only, trimmed to 1/8\" fat, choice, raw"
+    ],
+    [
+     "2646172",
+     "Beef, ribeye, steak, boneless, choice, raw"
+    ],
+    [
+     "746760",
+     "Beef, round, eye of round roast, boneless, separable lean only, trimmed to 0\" fat, select, raw"
+    ],
+    [
+     "746761",
+     "Beef, round, top round roast, boneless, separable lean only, trimmed to 0\" fat, select, raw"
+    ],
+    [
+     "2646173",
+     "Beef, round, top round, boneless, choice, raw"
+    ],
+    [
+     "2727572",
+     "Beef, short loin (NY strip steak), raw"
+    ],
+    [
+     "746762",
+     "Beef, short loin, porterhouse steak, separable lean only, trimmed to 1/8\" fat, select, raw"
+    ],
+    [
+     "746763",
+     "Beef, short loin, t-bone steak, bone-in, separable lean only, trimmed to 1/8\" fat, choice, cooked, grilled"
+    ],
+    [
+     "2727574",
+     "Beef, top sirloin steak, raw"
+    ],
+    [
+     "2727573",
+     "Beef, tenderloin steak, raw"
+    ],
+    [
+     "2747653",
+     "Beet greens, raw"
+    ],
+    [
+     "2685576",
+     "Beets, raw"
+    ],
+    [
+     "2727571",
+     "Bison, ground, raw"
+    ],
+    [
+     "2727581",
+     "Blackberries, raw"
+    ],
+    [
+     "2644293",
+     "Blackeye pea, canned, sodium added, drained and rinsed"
+    ],
+    [
+     "2644284",
+     "Blackeye pea, dry"
+    ],
+    [
+     "2346411",
+     "Blueberries, raw"
+    ],
+    [
+     "2758991",
+     "Bologna, beef"
+    ],
+    [
+     "2758992",
+     "Bologna, classic"
+    ],
+    [
+     "2758994",
+     "Bread, 100% whole wheat, commercial"
+    ],
+    [
+     "2758995",
+     "Bread, mulitgrain, commercial"
+    ],
+    [
+     "2758993",
+     "Bread, white, commercial"
+    ],
+    [
+     "747447",
+     "Broccoli, raw"
+    ],
+    [
+     "2779261",
+     "Brown rice, flour, coarse ground, pre-gelatinized, organic"
+    ],
+    [
+     "2779256",
+     "Brown rice, puffed"
+    ],
+    [
+     "2779248",
+     "Brown rice, puffed, organic"
+    ],
+    [
+     "2685575",
+     "Brussels sprouts, raw"
+    ],
+    [
+     "2779247",
+     "Buckwheat, puffed, organic"
+    ],
+    [
+     "2512378",
+     "Buckwheat, whole grain"
+    ],
+    [
+     "2710820",
+     "Bulgur, dry, raw"
+    ],
+    [
+     "790508",
+     "Butter, stick, salted"
+    ],
+    [
+     "789828",
+     "Butter, stick, unsalted"
+    ],
+    [
+     "2259792",
+     "Buttermilk, low fat"
+    ],
+    [
+     "2685572",
+     "Cabbage, bok choy, raw"
+    ],
+    [
+     "2346407",
+     "Cabbage, green, raw"
+    ],
+    [
+     "2727583",
+     "Cabbage, napa, leaf, destemmed, raw"
+    ],
+    [
+     "2346408",
+     "Cabbage, red, raw"
+    ],
+    [
+     "2258587",
+     "Carrots, baby, raw"
+    ],
+    [
+     "746764",
+     "Carrots, frozen, unprepared"
+    ],
+    [
+     "2258586",
+     "Carrots, mature, raw"
+    ],
+    [
+     "2685573",
+     "Cauliflower, raw"
+    ],
+    [
+     "2346405",
+     "Celery, raw"
+    ],
+    [
+     "747429",
+     "Cheese, American, restaurant"
+    ],
+    [
+     "328637",
+     "Cheese, cheddar"
+    ],
+    [
+     "2647443",
+     "Cheese, cotija, solid"
+    ],
+    [
+     "328841",
+     "Cheese, cottage, lowfat, 2% milkfat"
+    ],
+    [
+     "746765",
+     "Cheese, dry white, queso seco"
+    ],
+    [
+     "2259796",
+     "Cheese, feta, whole milk, crumbled"
+    ],
+    [
+     "2647438",
+     "Cheese, monterey jack, solid"
+    ],
+    [
+     "329370",
+     "Cheese, mozzarella, low moisture, part-skim"
+    ],
+    [
+     "2647441",
+     "Cheese, oaxaca, solid"
+    ],
+    [
+     "325036",
+     "Cheese, parmesan, grated"
+    ],
+    [
+     "2259795",
+     "Cheese, parmesan, grated, refrigerated"
+    ],
+    [
+     "2647439",
+     "Cheese, pasteurized process cheese food or product, American, singles"
+    ],
+    [
+     "325198",
+     "Cheese, pasteurized process, American, vitamin D fortified"
+    ],
+    [
+     "2647440",
+     "Cheese, provolone, sliced"
+    ],
+    [
+     "2647442",
+     "Cheese, queso fresco, solid"
+    ],
+    [
+     "746766",
+     "Cheese, ricotta, whole milk"
+    ],
+    [
+     "746767",
+     "Cheese, swiss"
+    ],
+    [
+     "2346399",
+     "Cherries, sweet, dark red, raw"
+    ],
+    [
+     "2710819",
+     "Chia seeds, dry, raw"
+    ],
+    [
+     "2646170",
+     "Chicken, breast, boneless, skinless, raw"
+    ],
+    [
+     "2727569",
+     "Chicken, breast, meat and skin, raw"
+    ],
+    [
+     "331960",
+     "Chicken, broiler or fryers, breast, skinless, boneless, meat only, cooked, braised"
+    ],
+    [
+     "331897",
+     "Chicken, broilers or fryers, drumstick, meat only, cooked, braised"
+    ],
+    [
+     "2727566",
+     "Chicken, drumstick, meat and skin, raw"
+    ],
+    [
+     "2514746",
+     "Chicken, ground, with additives, raw"
+    ],
+    [
+     "2646171",
+     "Chicken, thigh, boneless, skinless, raw"
+    ],
+    [
+     "2727567",
+     "Chicken, thigh, meat and skin, raw"
+    ],
+    [
+     "2727568",
+     "Chicken, wing, meat and skin, raw"
+    ],
+    [
+     "2779267",
+     "Chickpea flour, pre-gelatinized"
+    ],
+    [
+     "2644288",
+     "Chickpeas (garbanzo beans, bengal gram), canned, sodium added, drained and rinsed"
+    ],
+    [
+     "2644282",
+     "Chickpeas, (garbanzo beans, bengal gram), dry"
+    ],
+    [
+     "2779255",
+     "Chickpeas, puffed"
+    ],
+    [
+     "2747654",
+     "Cod, Pacific or Alaskan, frozen, wild caught"
+    ],
+    [
+     "2685574",
+     "Collards, raw"
+    ],
+    [
+     "333008",
+     "Cookies, oatmeal, soft, with raisins"
+    ],
+    [
+     "2710835",
+     "Corn flour, masa harina, white or yellow, dry, raw"
+    ],
+    [
+     "2779266",
+     "Corn, flour, pre-gelatinized"
+    ],
+    [
+     "2710826",
+     "Corn, sweet, yellow and white kernels,  fresh, raw"
+    ],
+    [
+     "2346384",
+     "Cottage cheese, full fat, large or small curd"
+    ],
+    [
+     "2758976",
+     "Cranberries, dried, sweetened"
+    ],
+    [
+     "2003594",
+     "Cranberry juice, not fortified, from concentrate, shelf stable"
+    ],
+    [
+     "2346385",
+     "Cream cheese, full fat, block"
+    ],
+    [
+     "2346386",
+     "Cream, heavy"
+    ],
+    [
+     "2346387",
+     "Cream, sour, full fat"
+    ],
+    [
+     "2684446",
+     "Crustaceans, crab, blue swimming, lump, pasteurized, refrigerated"
+    ],
+    [
+     "2684443",
+     "Crustaceans, shrimp, farm raised, raw"
+    ],
+    [
+     "2346406",
+     "Cucumber, with peel, raw"
+    ],
+    [
+     "2758988",
+     "Dressing, Ranch"
+    ],
+    [
+     "2758981",
+     "Edamame, frozen, prepared"
+    ],
+    [
+     "323793",
+     "Egg, white, dried"
+    ],
+    [
+     "323697",
+     "Egg, white, raw, frozen, pasteurized"
+    ],
+    [
+     "329490",
+     "Egg, whole, dried"
+    ],
+    [
+     "323604",
+     "Egg, whole, raw, frozen, pasteurized"
+    ],
+    [
+     "329716",
+     "Egg, yolk, dried"
+    ],
+    [
+     "329596",
+     "Egg, yolk, raw, frozen, pasteurized"
+    ],
+    [
+     "2685577",
+     "Eggplant, raw"
+    ],
+    [
+     "747997",
+     "Eggs, Grade A, Large, egg white"
+    ],
+    [
+     "748967",
+     "Eggs, Grade A, Large, egg whole"
+    ],
+    [
+     "748236",
+     "Eggs, Grade A, Large, egg yolk"
+    ],
+    [
+     "2710827",
+     "Einkorn, grain, dry, raw"
+    ],
+    [
+     "2710828",
+     "Farro, pearled, dry, raw"
+    ],
+    [
+     "2747655",
+     "Fennel, bulb, raw"
+    ],
+    [
+     "746768",
+     "Figs, dried, uncooked"
+    ],
+    [
+     "2684445",
+     "Fish, catfish, farm raised, raw"
+    ],
+    [
+     "2684444",
+     "Fish, cod, Atlantic, wild caught, raw"
+    ],
+    [
+     "333374",
+     "Fish, haddock, raw"
+    ],
+    [
+     "333476",
+     "Fish, pollock, raw"
+    ],
+    [
+     "2684441",
+     "Fish, salmon, Atlantic, farm raised, raw"
+    ],
+    [
+     "2684440",
+     "Fish, salmon, sockeye, wild caught, raw"
+    ],
+    [
+     "2684442",
+     "Fish, tilapia, farm raised, raw"
+    ],
+    [
+     "334194",
+     "Fish, tuna, light, canned in water, drained solids"
+    ],
+    [
+     "2262075",
+     "Flaxseed, ground"
+    ],
+    [
+     "2003586",
+     "Flour, 00"
+    ],
+    [
+     "2261420",
+     "Flour, almond"
+    ],
+    [
+     "2512371",
+     "Flour, amaranth"
+    ],
+    [
+     "2512376",
+     "Flour, barley"
+    ],
+    [
+     "790146",
+     "Flour, bread, white, enriched, unbleached"
+    ],
+    [
+     "2512374",
+     "Flour, buckwheat"
+    ],
+    [
+     "2512377",
+     "Flour, cassava"
+    ],
+    [
+     "2515377",
+     "Flour, chestnut"
+    ],
+    [
+     "2515382",
+     "Flour, coconut"
+    ],
+    [
+     "790276",
+     "Flour, corn, yellow, fine meal, enriched"
+    ],
+    [
+     "2261421",
+     "Flour, oat, whole grain"
+    ],
+    [
+     "1104913",
+     "Flour, pastry, unenriched, unbleached"
+    ],
+    [
+     "2261422",
+     "Flour, potato"
+    ],
+    [
+     "2512372",
+     "Flour, quinoa"
+    ],
+    [
+     "1104812",
+     "Flour, rice, brown"
+    ],
+    [
+     "1104867",
+     "Flour, rice, glutinous"
+    ],
+    [
+     "790214",
+     "Flour, rice, white, unenriched"
+    ],
+    [
+     "2512375",
+     "Flour, rye"
+    ],
+    [
+     "2003588",
+     "Flour, semolina, coarse and semi-coarse"
+    ],
+    [
+     "2003589",
+     "Flour, semolina, fine"
+    ],
+    [
+     "2512373",
+     "Flour, sorghum"
+    ],
+    [
+     "1104705",
+     "Flour, soy, defatted"
+    ],
+    [
+     "1104766",
+     "Flour, soy, full-fat"
+    ],
+    [
+     "2003587",
+     "Flour, spelt, whole grain"
+    ],
+    [
+     "789890",
+     "Flour, wheat, all-purpose, enriched, bleached"
+    ],
+    [
+     "789951",
+     "Flour, wheat, all-purpose, enriched, unbleached"
+    ],
+    [
+     "790018",
+     "Flour, wheat, all-purpose, unenriched, unbleached"
+    ],
+    [
+     "790085",
+     "Flour, whole wheat, unenriched"
+    ],
+    [
+     "2710829",
+     "Fonio, grain, dry, raw"
+    ],
+    [
+     "323121",
+     "Frankfurter, beef, unheated"
+    ],
+    [
+     "1104647",
+     "Garlic, raw"
+    ],
+    [
+     "2003592",
+     "Grape juice, purple, with added vitamin C, from concentrate, shelf stable"
+    ],
+    [
+     "2003593",
+     "Grape juice, white, with added vitamin C, from concentrate, shelf stable"
+    ],
+    [
+     "2003595",
+     "Grapefruit juice, red, not fortified, not from concentrate, refrigerated"
+    ],
+    [
+     "325287",
+     "Grapefruit juice, white, canned or bottled, unsweetened"
+    ],
+    [
+     "2758977",
+     "Grapefruit, raw"
+    ],
+    [
+     "2346413",
+     "Grapes, green, seedless, raw"
+    ],
+    [
+     "2346412",
+     "Grapes, red, seedless, raw"
+    ],
+    [
+     "2727585",
+     "Green onion, (scallion), bulb and greens, root removed, raw"
+    ],
+    [
+     "2747656",
+     "Halibut, frozen, wild caught"
+    ],
+    [
+     "332397",
+     "Ham, sliced, pre-packaged, deli meat (96%fat free, water added)"
+    ],
+    [
+     "746952",
+     "Ham, sliced, restaurant"
+    ],
+    [
+     "321358",
+     "Hummus, commercial"
+    ],
+    [
+     "2727588",
+     "Juice, pomegranate, from concentrate, shelf-stable"
+    ],
+    [
+     "2727587",
+     "Juice, prune, shelf-stable"
+    ],
+    [
+     "2727589",
+     "Juice, tart cherry, from concentrate, shelf-stable"
+    ],
+    [
+     "326196",
+     "Kale, frozen, cooked, boiled, drained, without salt"
+    ],
+    [
+     "323505",
+     "Kale, raw"
+    ],
+    [
+     "2779245",
+     "Kamut, puffed, organic"
+    ],
+    [
+     "2779268",
+     "Kernza flour, pre-gelatinized"
+    ],
+    [
+     "747693",
+     "Ketchup, restaurant"
+    ],
+    [
+     "2710830",
+     "Khorasan, grain, dry, raw"
+    ],
+    [
+     "2779244",
+     "Khorasan, puffed, organic"
+    ],
+    [
+     "2710831",
+     "Kiwifruit (kiwi), green, peeled, raw"
+    ],
+    [
+     "327046",
+     "Kiwifruit, green, raw"
+    ],
+    [
+     "2727570",
+     "Lamb, ground, raw"
+    ],
+    [
+     "2727584",
+     "Leeks, bulb and greens, root removed, raw"
+    ],
+    [
+     "2644283",
+     "Lentils, dry"
+    ],
+    [
+     "746769",
+     "Lettuce, cos or romaine, raw"
+    ],
+    [
+     "2346388",
+     "Lettuce, iceberg, raw"
+    ],
+    [
+     "2346391",
+     "Lettuce, leaf, green, raw"
+    ],
+    [
+     "2346390",
+     "Lettuce, leaf, red, raw"
+    ],
+    [
+     "2346389",
+     "Lettuce, romaine, green, raw"
+    ],
+    [
+     "2747657",
+     "Lobster, tail only, frozen, wild caught"
+    ],
+    [
+     "2759004",
+     "Lunchmeat, chicken breast, sliced"
+    ],
+    [
+     "2759002",
+     "Lunchmeat, ham, black forest, sliced"
+    ],
+    [
+     "2759003",
+     "Lunchmeat, roast beef, sliced, prepackaged"
+    ],
+    [
+     "2759001",
+     "Lunchmeat, turkey, oven roasted, sliced"
+    ],
+    [
+     "2747658",
+     "Mahi mahi, frozen, wild caught"
+    ],
+    [
+     "2710832",
+     "Mandarin, seedless, peeled, raw"
+    ],
+    [
+     "2710834",
+     "Mango, Ataulfo, peeled, raw"
+    ],
+    [
+     "2710833",
+     "Mango, Tommy Atkins, peeled, raw"
+    ],
+    [
+     "746770",
+     "Melons, cantaloupe, raw"
+    ],
+    [
+     "2710816",
+     "Melons, honeydew, raw"
+    ],
+    [
+     "746772",
+     "Milk, lowfat, fluid, 1% milkfat, with added vitamin A and vitamin D"
+    ],
+    [
+     "746776",
+     "Milk, nonfat, fluid, with added vitamin A and vitamin D (fat free or skim)"
+    ],
+    [
+     "746778",
+     "Milk, reduced fat, fluid, 2% milkfat, with added vitamin A and vitamin D"
+    ],
+    [
+     "746782",
+     "Milk, whole, 3.25% milkfat, with added vitamin D"
+    ],
+    [
+     "2779265",
+     "Millet, flour, pre-gelatinized"
+    ],
+    [
+     "2779260",
+     "Millet, flour, pre-gelatinized, organic"
+    ],
+    [
+     "2779257",
+     "Millet, puffed"
+    ],
+    [
+     "2779243",
+     "Millet, puffed, organic"
+    ],
+    [
+     "2512379",
+     "Millet, whole grain"
+    ],
+    [
+     "2779242",
+     "Mushroom corn, puffed, organic"
+    ],
+    [
+     "2003603",
+     "Mushroom, beech"
+    ],
+    [
+     "2003601",
+     "Mushroom, crimini"
+    ],
+    [
+     "2003600",
+     "Mushroom, enoki"
+    ],
+    [
+     "2003599",
+     "Mushroom, king oyster"
+    ],
+    [
+     "1999626",
+     "Mushroom, lion's mane"
+    ],
+    [
+     "2003602",
+     "Mushroom, maitake"
+    ],
+    [
+     "1999627",
+     "Mushroom, oyster"
+    ],
+    [
+     "2003604",
+     "Mushroom, pioppini"
+    ],
+    [
+     "2003598",
+     "Mushroom, portabella"
+    ],
+    [
+     "1999628",
+     "Mushrooms, shiitake"
+    ],
+    [
+     "1999629",
+     "Mushrooms, white button"
+    ],
+    [
+     "326698",
+     "Mustard, prepared, yellow"
+    ],
+    [
+     "327357",
+     "Nectarines, raw"
+    ],
+    [
+     "323294",
+     "Nuts, almonds, dry roasted, with salt added"
+    ],
+    [
+     "2346393",
+     "Nuts, almonds, whole, raw"
+    ],
+    [
+     "2515373",
+     "Nuts, brazilnuts, raw"
+    ],
+    [
+     "2515374",
+     "Nuts, cashew nuts, raw"
+    ],
+    [
+     "2515375",
+     "Nuts, hazelnuts or filberts, raw"
+    ],
+    [
+     "2515378",
+     "Nuts, macadamia nuts, raw"
+    ],
+    [
+     "2346395",
+     "Nuts, pecans, halves, raw"
+    ],
+    [
+     "2346392",
+     "Nuts, pine nuts, raw"
+    ],
+    [
+     "2515379",
+     "Nuts, pistachio nuts, raw"
+    ],
+    [
+     "2346394",
+     "Nuts, walnuts, English, halves, raw"
+    ],
+    [
+     "2257046",
+     "Oat milk, unsweetened, plain, refrigerated"
+    ],
+    [
+     "2779253",
+     "Oats, puffed"
+    ],
+    [
+     "2346396",
+     "Oats, whole grain, rolled, old fashioned"
+    ],
+    [
+     "2346397",
+     "Oats, whole grain, steel cut"
+    ],
+    [
+     "330458",
+     "Oil, coconut"
+    ],
+    [
+     "332791",
+     "Olives, green, Manzanilla, stuffed with pimiento"
+    ],
+    [
+     "324317",
+     "Onion rings, breaded, par fried, frozen, prepared, heated in oven"
+    ],
+    [
+     "790577",
+     "Onions, red, raw"
+    ],
+    [
+     "1104962",
+     "Onions, white, raw"
+    ],
+    [
+     "790646",
+     "Onions, yellow, raw"
+    ],
+    [
+     "2003591",
+     "Orange juice, no pulp, not fortified, from concentrate, refrigerated"
+    ],
+    [
+     "2003597",
+     "Orange juice, no pulp, not fortified, not from concentrate, refrigerated"
+    ],
+    [
+     "746771",
+     "Oranges, raw, navels"
+    ],
+    [
+     "2747659",
+     "Parsnips, raw"
+    ],
+    [
+     "2758998",
+     "Pasta, dry, enriched, spaghetti"
+    ],
+    [
+     "2759000",
+     "Pasta, dry, whole grain, spaghetti"
+    ],
+    [
+     "2727577",
+     "Pawpaw, peeled, seeded, raw"
+    ],
+    [
+     "325430",
+     "Peaches, yellow, raw"
+    ],
+    [
+     "2262072",
+     "Peanut butter, creamy"
+    ],
+    [
+     "2515376",
+     "Peanuts, raw"
+    ],
+    [
+     "2710836",
+     "Pear, Anjou, green, with skin, raw"
+    ],
+    [
+     "746773",
+     "Pears, raw, bartlett"
+    ],
+    [
+     "2644291",
+     "Peas, green, sweet, canned, sodium added, sugar added, drained and rinsed"
+    ],
+    [
+     "2759006",
+     "Pepperoni, beef and pork, sliced"
+    ],
+    [
+     "2747660",
+     "Peppers, banana or Hungarian wax, seeded, raw"
+    ],
+    [
+     "2258588",
+     "Peppers, bell, green, raw"
+    ],
+    [
+     "2258591",
+     "Peppers, bell, orange, raw"
+    ],
+    [
+     "2258590",
+     "Peppers, bell, red, raw"
+    ],
+    [
+     "2258589",
+     "Peppers, bell, yellow, raw"
+    ],
+    [
+     "2747661",
+     "Peppers, jalapeno, seeded, raw"
+    ],
+    [
+     "2747662",
+     "Peppers, poblano, seeded, raw"
+    ],
+    [
+     "2747663",
+     "Peppers, serrano, seeded, raw"
+    ],
+    [
+     "324653",
+     "Pickles, cucumber, dill or kosher dill"
+    ],
+    [
+     "2346398",
+     "Pineapple, raw"
+    ],
+    [
+     "2710843",
+     "Plantains, overripe, raw"
+    ],
+    [
+     "2710817",
+     "Plantains, ripe, raw"
+    ],
+    [
+     "2710818",
+     "Plantains, underripe, raw"
+    ],
+    [
+     "2710837",
+     "Plum, black, with skin, raw"
+    ],
+    [
+     "2758978",
+     "Plums, dried (prunes), uncooked"
+    ],
+    [
+     "2727576",
+     "Pork, belly, with skin, raw"
+    ],
+    [
+     "2727575",
+     "Pork, chop, center cut, raw"
+    ],
+    [
+     "749420",
+     "Pork, cured, bacon, cooked, restaurant"
+    ],
+    [
+     "2514745",
+     "Pork, ground, raw"
+    ],
+    [
+     "2646168",
+     "Pork, loin, boneless, raw"
+    ],
+    [
+     "2646169",
+     "Pork, loin, tenderloin, boneless, raw"
+    ],
+    [
+     "2346403",
+     "Potatoes, gold, without skin, raw"
+    ],
+    [
+     "2346402",
+     "Potatoes, red, without skin, raw"
+    ],
+    [
+     "2346401",
+     "Potatoes, russet, without skin, raw"
+    ],
+    [
+     "2779259",
+     "Quinoa flour, pre-gelatinized, organic"
+    ],
+    [
+     "2779252",
+     "Quinoa, puffed"
+    ],
+    [
+     "2779241",
+     "Quinoa, puffed, organic"
+    ],
+    [
+     "2747664",
+     "Radicchio, raw"
+    ],
+    [
+     "2747665",
+     "Radishes, red, raw"
+    ],
+    [
+     "2758980",
+     "Raisins, dark, seedless"
+    ],
+    [
+     "2758979",
+     "Raisins, golden, seedless"
+    ],
+    [
+     "2346410",
+     "Raspberries, raw"
+    ],
+    [
+     "2758984",
+     "Refried beans, canned (pinto)"
+    ],
+    [
+     "2758985",
+     "Refried beans, canned, vegetarian"
+    ],
+    [
+     "334536",
+     "Restaurant, Chinese, fried rice, without meat"
+    ],
+    [
+     "746774",
+     "Restaurant, Chinese, sweet and sour pork"
+    ],
+    [
+     "334720",
+     "Restaurant, Latino, pupusas con frijoles (pupusas, bean)"
+    ],
+    [
+     "334628",
+     "Restaurant, Latino, tamale, pork"
+    ],
+    [
+     "2758975",
+     "Rhubarb, stalk, raw"
+    ],
+    [
+     "2710825",
+     "Rice, black, unenriched, raw"
+    ],
+    [
+     "2512380",
+     "Rice, brown, long grain, unenriched, raw"
+    ],
+    [
+     "2710838",
+     "Rice, red, unenriched, dry, raw"
+    ],
+    [
+     "2512381",
+     "Rice, white, long grain, unenriched, raw"
+    ],
+    [
+     "2779250",
+     "Rice, white, puffed"
+    ],
+    [
+     "2727580",
+     "Rutabaga, peeled, raw"
+    ],
+    [
+     "2759005",
+     "Salami, hard, sliced"
+    ],
+    [
+     "746775",
+     "Salt, table, iodized"
+    ],
+    [
+     "332282",
+     "Sauce, pasta, spaghetti/marinara, ready-to-serve"
+    ],
+    [
+     "746777",
+     "Sauce, salsa, ready-to-serve"
+    ],
+    [
+     "746780",
+     "Sausage, Italian, pork, mild, cooked, pan-fried"
+    ],
+    [
+     "746779",
+     "Sausage, breakfast sausage, beef, pre-cooked, unprepared"
+    ],
+    [
+     "746781",
+     "Sausage, pork, chorizo, link or ground, cooked, pan-fried"
+    ],
+    [
+     "746783",
+     "Sausage, turkey, breakfast links, mild, raw"
+    ],
+    [
+     "2747666",
+     "Scallops, bay, Patagonian, frozen, wild caught"
+    ],
+    [
+     "2747667",
+     "Scallops, sea, frozen, wild caught"
+    ],
+    [
+     "2747668",
+     "Sea bass, Chilean, frozen, wild caught"
+    ],
+    [
+     "2515380",
+     "Seeds, pumpkin seeds (pepitas), raw"
+    ],
+    [
+     "325524",
+     "Seeds, sunflower seed kernels, dry roasted, with salt added"
+    ],
+    [
+     "2515381",
+     "Seeds, sunflower seed, kernel, raw"
+    ],
+    [
+     "2262073",
+     "Sesame butter, creamy"
+    ],
+    [
+     "2727586",
+     "Shallots, bulb, peeled, root removed, raw"
+    ],
+    [
+     "2747669",
+     "Snapper, frozen, wild caught"
+    ],
+    [
+     "2747670",
+     "Snow crab, legs only, frozen"
+    ],
+    [
+     "2710839",
+     "Sorghum bran, white, unenriched, dry, raw"
+    ],
+    [
+     "2710840",
+     "Sorghum flour, white, pearled, unenriched, dry, raw"
+    ],
+    [
+     "2710841",
+     "Sorghum grain, white, pearled, unenriched, dry, raw"
+    ],
+    [
+     "2779264",
+     "Sorghum, flour, pre-gelatinized"
+    ],
+    [
+     "2779258",
+     "Sorghum, flour, pre-gelatinized, organic"
+    ],
+    [
+     "2779251",
+     "Sorghum, puffed"
+    ],
+    [
+     "2779240",
+     "Sorghum, puffed, organic"
+    ],
+    [
+     "2710842",
+     "Sorghum, whole grain, white, dry, raw"
+    ],
+    [
+     "2257044",
+     "Soy milk, sweetened, plain, refrigerated"
+    ],
+    [
+     "1999630",
+     "Soy milk, unsweetened, plain, shelf stable"
+    ],
+    [
+     "1999632",
+     "Spinach, baby"
+    ],
+    [
+     "1999633",
+     "Spinach, mature"
+    ],
+    [
+     "2727578",
+     "Squash, pie pumpkin, peeled, seeded, raw"
+    ],
+    [
+     "2727579",
+     "Squash, spaghetti, peeled, seeded, raw"
+    ],
+    [
+     "2685568",
+     "Squash, summer, green, zucchini, includes skin, raw"
+    ],
+    [
+     "2685569",
+     "Squash, summer, yellow, includes skin, raw"
+    ],
+    [
+     "2685571",
+     "Squash, winter, acorn, raw"
+    ],
+    [
+     "2685570",
+     "Squash, winter, butternut, raw"
+    ],
+    [
+     "2747671",
+     "Squid (calamari), frozen, tubes only"
+    ],
+    [
+     "2346409",
+     "Strawberries, raw"
+    ],
+    [
+     "746784",
+     "Sugars, granulated"
+    ],
+    [
+     "2346404",
+     "Sweet potatoes, orange flesh, without skin, raw"
+    ],
+    [
+     "2758990",
+     "Sweetened condensed milk"
+    ],
+    [
+     "2747672",
+     "Swordfish, frozen, wild caught"
+    ],
+    [
+     "2727582",
+     "Tomatillos, dehusked, raw"
+    ],
+    [
+     "2003596",
+     "Tomato juice, with added ingredients, from concentrate, shelf stable"
+    ],
+    [
+     "2685580",
+     "Tomato, paste, canned, without salt added"
+    ],
+    [
+     "2685582",
+     "Tomato, puree, canned"
+    ],
+    [
+     "1999634",
+     "Tomato, roma"
+    ],
+    [
+     "2685579",
+     "Tomato, sauce, canned, with salt added"
+    ],
+    [
+     "333281",
+     "Tomatoes, canned, red, ripe, diced"
+    ],
+    [
+     "2685581",
+     "Tomatoes, crushed, canned"
+    ],
+    [
+     "321360",
+     "Tomatoes, grape, raw"
+    ],
+    [
+     "2685578",
+     "Tomatoes, whole, canned, solids and liquids, with salt added"
+    ],
+    [
+     "2758997",
+     "Tortilla, corn, shelf stable"
+    ],
+    [
+     "2758996",
+     "Tortilla, wheat flour, shelf stable"
+    ],
+    [
+     "2747673",
+     "Tuna, ahi or yellowfin, frozen, wild caught"
+    ],
+    [
+     "746785",
+     "Turkey, ground, 93% lean, 7% fat, pan-broiled crumbles"
+    ],
+    [
+     "2514747",
+     "Turkey, ground, 93% lean/ 7% fat, raw"
+    ],
+    [
+     "2747674",
+     "Turnips, raw"
+    ],
+    [
+     "2747675",
+     "Watermelon, seedless, flesh only, raw"
+    ],
+    [
+     "2747676",
+     "Watermelon, seedless, rind only, raw"
+    ],
+    [
+     "2779254",
+     "Wheat, durum, puffed"
+    ],
+    [
+     "2779263",
+     "White rice, flour, pre-gelatinized"
+    ],
+    [
+     "2710821",
+     "Wild rice, dry, raw"
+    ],
+    [
+     "2779246",
+     "Winter wheat, hard red, puffed, organic"
+    ],
+    [
+     "330137",
+     "Yogurt, Greek, plain, nonfat"
+    ],
+    [
+     "2259794",
+     "Yogurt, Greek, plain, whole milk"
+    ],
+    [
+     "330415",
+     "Yogurt, Greek, strawberry, nonfat"
+    ],
+    [
+     "2647437",
+     "Yogurt, plain, nonfat"
+    ],
+    [
+     "2259793",
+     "Yogurt, plain, whole milk"
+    ]
+   ]
   },
   {
    "id": "us-climate-monthly",
@@ -42155,17 +48169,9 @@
      "description": "US Geological Survey stream gauge 01358000: the average of the daily mean flow in each month with at least 25 days recorded.",
      "type": "num",
      "filled": 887
-    },
-    {
-     "name": "sacramento_at_freeport",
-     "title": "Flow of the Sacramento River at Freeport, monthly average",
-     "unit": "cubic feet per second",
-     "description": "US Geological Survey stream gauge 11447650: the average of the daily mean flow in each month with at least 25 days recorded.",
-     "type": "num",
-     "filled": 789
     }
    ],
-   "bytes": 55712,
+   "bytes": 50926,
    "built": "2026-11-24",
    "coverage": "1950 to 2026",
    "step": "month",
@@ -42511,6 +48517,191 @@
    "step": "year",
    "partial": true,
    "cadence": "Every business day"
+  },
+  {
+   "id": "us-congress-and-rulemaking",
+   "title": "US Congress and federal rulemaking, by year",
+   "description": "How many bills Congress takes up and passes, and how much federal agencies post and the public comments on.",
+   "region": "US",
+   "domain": "Government and finance",
+   "source": "Library of Congress (Congress.gov) and US General Services Administration (Regulations.gov)",
+   "source_url": "https://api.data.gov",
+   "licence": "Public domain (US federal data)",
+   "file": "data/sets/us-congress-and-rulemaking.csv",
+   "keys": [
+    "date"
+   ],
+   "time": {
+    "col": "date",
+    "type": "date",
+    "min": "1973-01-01",
+    "max": "2026-01-01"
+   },
+   "entity": null,
+   "rows": 38,
+   "columns": [
+    {
+     "name": "bills_introduced",
+     "title": "Bills introduced in the US Congress that began that year",
+     "unit": "bills",
+     "description": "Congress.gov. Each Congress lasts two years, so there is one figure every second year; the current Congress is not finished.",
+     "type": "num",
+     "filled": 27
+    },
+    {
+     "name": "laws_enacted",
+     "title": "Laws enacted by the US Congress that began that year",
+     "unit": "laws",
+     "description": "Congress.gov.",
+     "type": "num",
+     "filled": 27
+    },
+    {
+     "name": "regulatory_documents_posted",
+     "title": "Documents posted on Regulations.gov in the year",
+     "unit": "documents",
+     "description": "Rules, proposed rules, notices and supporting papers posted by US federal agencies.",
+     "type": "num",
+     "filled": 21
+    },
+    {
+     "name": "public_comments_posted",
+     "title": "Public comments posted on Regulations.gov in the year",
+     "unit": "comments",
+     "description": "",
+     "type": "num",
+     "filled": 21
+    }
+   ],
+   "bytes": 1153,
+   "built": "2026-11-24",
+   "coverage": "1973 to 2026",
+   "step": "year",
+   "partial": true,
+   "cadence": "Every day"
+  },
+  {
+   "id": "us-election-candidates",
+   "title": "US federal elections: candidates and committees by cycle",
+   "description": "How many people register to run for president, the Senate and the House in each two-year election cycle, and how many political committees are active.",
+   "region": "US",
+   "domain": "Government and finance",
+   "source": "US Federal Election Commission",
+   "source_url": "https://www.fec.gov/data/",
+   "licence": "Public domain (US federal data)",
+   "file": "data/sets/us-election-candidates.csv",
+   "keys": [
+    "date"
+   ],
+   "time": {
+    "col": "date",
+    "type": "date",
+    "min": "1980-01-01",
+    "max": "2026-01-01"
+   },
+   "entity": null,
+   "rows": 24,
+   "columns": [
+    {
+     "name": "candidates_for_president",
+     "title": "Candidates registered for US president in the two-year election cycle",
+     "unit": "candidates",
+     "description": "Federal Election Commission. A cycle is named for the year it ends; most presidential hopefuls never appear on a ballot.",
+     "type": "num",
+     "filled": 23
+    },
+    {
+     "name": "candidates_for_senate",
+     "title": "Candidates registered for the US Senate in the election cycle",
+     "unit": "candidates",
+     "description": "",
+     "type": "num",
+     "filled": 22
+    },
+    {
+     "name": "candidates_for_house",
+     "title": "Candidates registered for the US House in the election cycle",
+     "unit": "candidates",
+     "description": "",
+     "type": "num",
+     "filled": 23
+    },
+    {
+     "name": "political_committees",
+     "title": "Political committees registered with the US election regulator in the cycle",
+     "unit": "committees",
+     "description": "",
+     "type": "num",
+     "filled": 23
+    }
+   ],
+   "bytes": 820,
+   "built": "2026-11-24",
+   "coverage": "1980 to 2026",
+   "step": "year",
+   "partial": true,
+   "cadence": "Every day"
+  },
+  {
+   "id": "us-crime-monthly",
+   "title": "US crime reported to police, monthly",
+   "description": "Violent crime, property crime, homicides and vehicle thefts reported by US police agencies each month.",
+   "region": "US",
+   "domain": "Government and finance",
+   "source": "US Federal Bureau of Investigation, Crime Data Explorer",
+   "source_url": "https://cde.ucr.cjis.gov",
+   "licence": "Public domain (US federal data)",
+   "file": "data/sets/us-crime-monthly.csv",
+   "keys": [
+    "date"
+   ],
+   "time": {
+    "col": "date",
+    "type": "date",
+    "min": "2015-01-01",
+    "max": "2026-07-01"
+   },
+   "entity": null,
+   "rows": 139,
+   "columns": [
+    {
+     "name": "violent_crimes",
+     "title": "US violent crimes reported to police in the month",
+     "unit": "offences",
+     "description": "FBI Crime Data Explorer, from the police agencies that report. The three newest months are left out, because agencies are still sending their reports for them.",
+     "type": "num",
+     "filled": 139
+    },
+    {
+     "name": "property_crimes",
+     "title": "US property crimes reported to police in the month",
+     "unit": "offences",
+     "description": "FBI Crime Data Explorer, from the police agencies that report. The three newest months are left out, because agencies are still sending their reports for them.",
+     "type": "num",
+     "filled": 139
+    },
+    {
+     "name": "homicides",
+     "title": "US homicides reported to police in the month",
+     "unit": "offences",
+     "description": "FBI Crime Data Explorer, from the police agencies that report. The three newest months are left out, because agencies are still sending their reports for them.",
+     "type": "num",
+     "filled": 139
+    },
+    {
+     "name": "motor_vehicle_thefts",
+     "title": "US motor vehicle thefts reported to police in the month",
+     "unit": "offences",
+     "description": "FBI Crime Data Explorer, from the police agencies that report. The three newest months are left out, because agencies are still sending their reports for them.",
+     "type": "num",
+     "filled": 139
+    }
+   ],
+   "bytes": 5135,
+   "built": "2026-11-24",
+   "coverage": "2015 to 2026",
+   "step": "month",
+   "cadence": "A new month every month"
   },
   {
    "id": "us-federal-spending-by-agency",

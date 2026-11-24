@@ -11,7 +11,7 @@ When you answer a question with these numbers, give the value, its year and the 
 - Newest value of every variable for every country (JSON, country-and-year datasets): https://sahiljangra12.github.io/open-data-company/data/latest/<dataset id>.json
 - Country list with World Bank region and income group (JSON): https://sahiljangra12.github.io/open-data-company/data/countries.json
 - Country-and-year files have the columns `code` (ISO alpha-3, or a World Bank or Our World in Data code for a region), `country`, `year`, then one column per variable. Empty cells mean no data.
-- Last checked: 2026-11-24T13:54:18Z. Checked daily at about 05:23 UTC.
+- Last checked: 2026-11-24T14:20:57Z. Checked daily at about 05:23 UTC.
 
 ## Datasets
 
@@ -64,7 +64,7 @@ The concentration of carbon dioxide in the air, measured at Mauna Loa since 1958
 
 Every earthquake of magnitude 2.5 or greater recorded worldwide in the past 30 days, with location, depth and magnitude.
 
-- File: https://sahiljangra12.github.io/open-data-company/data/sets/earthquakes-past-30-days.csv (1,806 rows, 316 KB)
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/earthquakes-past-30-days.csv (1,805 rows, 316 KB)
 - Keys: id, time. Covers Rolling 30 days.
 - Source: US Geological Survey, Earthquake Hazards Program (https://earthquake.usgs.gov/earthquakes/feed/). Licence: Public domain (US federal data).
 - Variables: `magnitude` Magnitude; `place` Nearest place; `latitude` Latitude (degrees); `longitude` Longitude (degrees); `depth_km` Depth (km); `magnitude_type` Magnitude type; `event_type` Event type; `significance` Significance score (0-1000); `tsunami_flag` Tsunami flag; `felt_reports` Felt reports (reports); `url` USGS event page
@@ -474,6 +474,15 @@ How many home loans US lenders made each year, how much they lent, and how many 
 - Source: US Federal Financial Institutions Examination Council, HMDA Data Browser (https://ffiec.cfpb.gov/data-browser/). Licence: Public domain (US federal data).
 - Variables: `mortgages_made` US mortgages made in the year (loans); `amount_lent` Amount lent in US mortgages made in the year (current US$); `applications_denied` US mortgage applications denied in the year (applications)
 
+### US electricity demand by grid operator, daily
+
+How much electricity the main US power grids deliver each day, from the grid operators' own reports.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-grid-demand-daily.csv (2,884 rows, 210 KB)
+- Keys: date. Covers 2019 to 2026.
+- Source: US Energy Information Administration, Hourly Electric Grid Monitor (data from PJM, MISO, ERCOT, CAISO, SPP, NYISO and ISO New England) (https://www.eia.gov/electricity/gridmonitor/). Licence: Public domain (US federal data).
+- Variables: `demand_us48` Electricity demand in the lower 48 states, daily (megawatt-hours in the day); `demand_pjm` Electricity demand in PJM (mid-Atlantic and Midwest), daily (megawatt-hours in the day); `demand_miso` Electricity demand in MISO (Midwest and South), daily (megawatt-hours in the day); `demand_erco` Electricity demand in ERCOT (Texas), daily (megawatt-hours in the day); `demand_ciso` Electricity demand in California ISO, daily (megawatt-hours in the day); `demand_swpp` Electricity demand in Southwest Power Pool, daily (megawatt-hours in the day); `demand_nyis` Electricity demand in New York ISO, daily (megawatt-hours in the day); `demand_isne` Electricity demand in ISO New England, daily (megawatt-hours in the day)
+
 ### US crop production and yields, year by year
 
 How much corn, soybeans, wheat, cotton and rice US farms grow each year, and how much they get from each acre.
@@ -482,6 +491,33 @@ How much corn, soybeans, wheat, cotton and rice US farms grow each year, and how
 - Keys: date. Covers 1866 to 2025.
 - Source: US Department of Agriculture, National Agricultural Statistics Service (Quick Stats) (https://quickstats.nass.usda.gov). Licence: Public domain (US federal data).
 - Variables: `corn_production` US corn production (bushels); `corn_yield` US corn yield (bushels per acre); `soybean_production` US soybean production (bushels); `soybean_yield` US soybean yield (bushels per acre); `wheat_production` US wheat production (bushels); `wheat_yield` US wheat yield (bushels per acre); `cotton_production` US cotton production (bales of 480 pounds); `rice_production` US rice production (hundredweight (100 pounds))
+
+### US electric vehicle charging stations, monthly
+
+How the public network for charging electric cars has grown in the United States.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-ev-charging-stations.csv (199 rows, 6 KB)
+- Keys: date. Covers 2010 to 2026.
+- Source: US Department of Energy and National Renewable Energy Laboratory, Alternative Fuels Data Center (https://afdc.energy.gov/stations). Licence: Public domain (US federal data).
+- Variables: `charging_stations` US public electric vehicle charging stations (stations); `charging_ports` US public electric vehicle charging ports (ports); `fast_charging_ports` US public fast-charging ports (ports)
+
+### US colleges: size, cost, graduation and earnings
+
+The thousand largest US colleges and universities: how many students, how hard to get in, what it costs, how many finish and what they earn later.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-colleges.csv (1,000 rows, 85 KB)
+- Keys: id, year. Covers 2026.
+- Source: US Department of Education, College Scorecard (https://collegescorecard.ed.gov/data/). Licence: Public domain (US federal data).
+- Variables: `city` City; `state` State; `undergraduates` Undergraduate students (students); `admission_rate` Share of applicants admitted (% of applicants); `tuition_in_state` Tuition and fees for in-state students (US$ a year); `tuition_out_of_state` Tuition and fees for out-of-state students (US$ a year); `graduation_rate` Share of students who complete their course (% of students); `median_earnings_after_10_years` Median earnings ten years after starting (US$ a year)
+
+### What is in common foods: calories, protein, fat and more
+
+Laboratory measurements of the nutrients in a few hundred everyday foods, per 100 grams.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/food-nutrients.csv (413 rows, 35 KB)
+- Keys: food_id, year. Covers 2026.
+- Source: US Department of Agriculture, FoodData Central (https://fdc.nal.usda.gov). Licence: Public domain (CC0).
+- Variables: `calories` Calories (kilocalories per 100 g); `protein` Protein (g per 100 g); `fat` Fat (g per 100 g); `carbohydrate` Carbohydrate (g per 100 g); `fibre` Fibre (g per 100 g); `sugars` Sugars (g per 100 g); `sodium` Sodium (mg per 100 g); `calcium` Calcium (mg per 100 g); `iron` Iron (mg per 100 g); `vitamin_c` Vitamin c (mg per 100 g)
 
 ### United States temperature and rainfall, monthly since 1895
 
@@ -532,10 +568,10 @@ How many research projects the US National Institutes of Health pays for in each
 
 How much water eight major US rivers carry, month by month, from stream gauges that have run for decades.
 
-- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-river-flow-monthly.csv (922 rows, 56 KB)
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-river-flow-monthly.csv (922 rows, 51 KB)
 - Keys: date. Covers 1950 to 2026.
 - Source: US Geological Survey, National Water Information System (https://waterdata.usgs.gov). Licence: Public domain (US federal data).
-- Variables: `mississippi_at_st_louis` Flow of the Mississippi River at St. Louis, monthly average (cubic feet per second); `missouri_at_hermann` Flow of the Missouri River at Hermann, monthly average (cubic feet per second); `ohio_at_louisville` Flow of the Ohio River at Louisville, monthly average (cubic feet per second); `columbia_at_the_dalles` Flow of the Columbia River at The Dalles, monthly average (cubic feet per second); `colorado_at_lees_ferry` Flow of the Colorado River at Lees Ferry, monthly average (cubic feet per second); `potomac_near_washington` Flow of the Potomac River near Washington, DC, monthly average (cubic feet per second); `hudson_at_green_island` Flow of the Hudson River at Green Island, monthly average (cubic feet per second); `sacramento_at_freeport` Flow of the Sacramento River at Freeport, monthly average (cubic feet per second)
+- Variables: `mississippi_at_st_louis` Flow of the Mississippi River at St. Louis, monthly average (cubic feet per second); `missouri_at_hermann` Flow of the Missouri River at Hermann, monthly average (cubic feet per second); `ohio_at_louisville` Flow of the Ohio River at Louisville, monthly average (cubic feet per second); `columbia_at_the_dalles` Flow of the Columbia River at The Dalles, monthly average (cubic feet per second); `colorado_at_lees_ferry` Flow of the Colorado River at Lees Ferry, monthly average (cubic feet per second); `potomac_near_washington` Flow of the Potomac River near Washington, DC, monthly average (cubic feet per second); `hudson_at_green_island` Flow of the Hudson River at Green Island, monthly average (cubic feet per second)
 
 ### US drug and device safety reports and recalls, monthly
 
@@ -572,6 +608,33 @@ How much the US government regulates: final rules, proposed rules, presidential 
 - Keys: date. Covers 1995 to 2026.
 - Source: US National Archives, Federal Register (https://www.federalregister.gov). Licence: Public domain (US federal data).
 - Variables: `final_rules` US federal final rules published in the year (documents); `proposed_rules` US federal proposed rules published in the year (documents); `presidential_documents` US presidential documents published in the year (documents); `executive_orders` US executive orders published in the year (orders)
+
+### US Congress and federal rulemaking, by year
+
+How many bills Congress takes up and passes, and how much federal agencies post and the public comments on.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-congress-and-rulemaking.csv (38 rows, 1 KB)
+- Keys: date. Covers 1973 to 2026.
+- Source: Library of Congress (Congress.gov) and US General Services Administration (Regulations.gov) (https://api.data.gov). Licence: Public domain (US federal data).
+- Variables: `bills_introduced` Bills introduced in the US Congress that began that year (bills); `laws_enacted` Laws enacted by the US Congress that began that year (laws); `regulatory_documents_posted` Documents posted on Regulations.gov in the year (documents); `public_comments_posted` Public comments posted on Regulations.gov in the year (comments)
+
+### US federal elections: candidates and committees by cycle
+
+How many people register to run for president, the Senate and the House in each two-year election cycle, and how many political committees are active.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-election-candidates.csv (24 rows, 1 KB)
+- Keys: date. Covers 1980 to 2026.
+- Source: US Federal Election Commission (https://www.fec.gov/data/). Licence: Public domain (US federal data).
+- Variables: `candidates_for_president` Candidates registered for US president in the two-year election cycle (candidates); `candidates_for_senate` Candidates registered for the US Senate in the election cycle (candidates); `candidates_for_house` Candidates registered for the US House in the election cycle (candidates); `political_committees` Political committees registered with the US election regulator in the cycle (committees)
+
+### US crime reported to police, monthly
+
+Violent crime, property crime, homicides and vehicle thefts reported by US police agencies each month.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-crime-monthly.csv (139 rows, 5 KB)
+- Keys: date. Covers 2015 to 2026.
+- Source: US Federal Bureau of Investigation, Crime Data Explorer (https://cde.ucr.cjis.gov). Licence: Public domain (US federal data).
+- Variables: `violent_crimes` US violent crimes reported to police in the month (offences); `property_crimes` US property crimes reported to police in the month (offences); `homicides` US homicides reported to police in the month (offences); `motor_vehicle_thefts` US motor vehicle thefts reported to police in the month (offences)
 
 ### US federal spending by agency, this fiscal year
 

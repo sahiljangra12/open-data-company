@@ -1,9 +1,9 @@
 {
  "count": 136,
  "tally": {
-  "live": 35,
-  "via": 29,
-  "key": 34,
+  "live": 42,
+  "via": 35,
+  "key": 21,
   "images": 7,
   "bulk": 11,
   "terms": 2,
@@ -32,7 +32,7 @@
    "status": "key",
    "status_label": "Needs a free key",
    "datasets": [],
-   "note": "Its loader is written and waits only for a free key, added as the GitHub secret DATA_GOV_API_KEY."
+   "note": "Its catalog search did not answer this site's requests, with or without a key."
   },
   {
    "name": "Maryland Open Data",
@@ -482,10 +482,15 @@
    "update": "annual",
    "api": true,
    "buyers": "Solar and wind developers",
-   "status": "key",
-   "status_label": "Needs a free key",
-   "datasets": [],
-   "note": "Its loader is written and waits only for a free key, added as the GitHub secret DATA_GOV_API_KEY."
+   "status": "live",
+   "status_label": "On the site",
+   "datasets": [
+    {
+     "id": "us-ev-charging-stations",
+     "title": "US electric vehicle charging stations, monthly"
+    }
+   ],
+   "note": "Electric vehicle charging stations, from the Alternative Fuels Data Center that NREL keeps. Its solar and cost models are not tables."
   },
   {
    "name": "PJM Data Miner",
@@ -517,10 +522,15 @@
    "update": "realtime",
    "api": true,
    "buyers": "Traders, developers, consultants",
-   "status": "key",
-   "status_label": "Needs a free key",
-   "datasets": [],
-   "note": "Its loader is written and waits only for a free key, added as the GitHub secret EIA_API_KEY."
+   "status": "via",
+   "status_label": "On the site, through another publisher",
+   "datasets": [
+    {
+     "id": "us-grid-demand-daily",
+     "title": "US electricity demand by grid operator, daily"
+    }
+   ],
+   "note": "Daily demand, through the US Energy Information Administration."
   },
   {
    "name": "CAISO OASIS",
@@ -532,10 +542,15 @@
    "update": "realtime",
    "api": true,
    "buyers": "Traders, storage developers",
-   "status": "key",
-   "status_label": "Needs a free key",
-   "datasets": [],
-   "note": "Its loader is written and waits only for a free key, added as the GitHub secret EIA_API_KEY."
+   "status": "via",
+   "status_label": "On the site, through another publisher",
+   "datasets": [
+    {
+     "id": "us-grid-demand-daily",
+     "title": "US electricity demand by grid operator, daily"
+    }
+   ],
+   "note": "Daily demand, through the US Energy Information Administration."
   },
   {
    "name": "MISO market data",
@@ -547,10 +562,15 @@
    "update": "realtime",
    "api": true,
    "buyers": "Traders, developers",
-   "status": "key",
-   "status_label": "Needs a free key",
-   "datasets": [],
-   "note": "Its loader is written and waits only for a free key, added as the GitHub secret EIA_API_KEY."
+   "status": "via",
+   "status_label": "On the site, through another publisher",
+   "datasets": [
+    {
+     "id": "us-grid-demand-daily",
+     "title": "US electricity demand by grid operator, daily"
+    }
+   ],
+   "note": "Daily demand, through the US Energy Information Administration."
   },
   {
    "name": "NYISO market data",
@@ -562,10 +582,15 @@
    "update": "realtime",
    "api": true,
    "buyers": "Traders, developers",
-   "status": "key",
-   "status_label": "Needs a free key",
-   "datasets": [],
-   "note": "Its loader is written and waits only for a free key, added as the GitHub secret EIA_API_KEY."
+   "status": "via",
+   "status_label": "On the site, through another publisher",
+   "datasets": [
+    {
+     "id": "us-grid-demand-daily",
+     "title": "US electricity demand by grid operator, daily"
+    }
+   ],
+   "note": "Daily demand, through the US Energy Information Administration."
   },
   {
    "name": "ISO New England data",
@@ -577,10 +602,15 @@
    "update": "realtime",
    "api": true,
    "buyers": "Traders, developers",
-   "status": "key",
-   "status_label": "Needs a free key",
-   "datasets": [],
-   "note": "Its loader is written and waits only for a free key, added as the GitHub secret EIA_API_KEY."
+   "status": "via",
+   "status_label": "On the site, through another publisher",
+   "datasets": [
+    {
+     "id": "us-grid-demand-daily",
+     "title": "US electricity demand by grid operator, daily"
+    }
+   ],
+   "note": "Daily demand, through the US Energy Information Administration."
   },
   {
    "name": "SPP data",
@@ -592,10 +622,15 @@
    "update": "realtime",
    "api": false,
    "buyers": "Traders, wind developers",
-   "status": "key",
-   "status_label": "Needs a free key",
-   "datasets": [],
-   "note": "Its loader is written and waits only for a free key, added as the GitHub secret EIA_API_KEY."
+   "status": "via",
+   "status_label": "On the site, through another publisher",
+   "datasets": [
+    {
+     "id": "us-grid-demand-daily",
+     "title": "US electricity demand by grid operator, daily"
+    }
+   ],
+   "note": "Daily demand, through the US Energy Information Administration."
   },
   {
    "name": "LBNL interconnection queues",
@@ -974,10 +1009,15 @@
    "update": "quarterly",
    "api": true,
    "buyers": "Food and nutrition apps",
-   "status": "key",
-   "status_label": "Needs a free key",
-   "datasets": [],
-   "note": "Its loader is written and waits only for a free key, added as the GitHub secret DATA_GOV_API_KEY."
+   "status": "live",
+   "status_label": "On the site",
+   "datasets": [
+    {
+     "id": "food-nutrients",
+     "title": "What is in common foods: calories, protein, fat and more"
+    }
+   ],
+   "note": "Nutrients in a few hundred everyday foods."
   },
   {
    "name": "USDA Cropland Data Layer",
@@ -1094,10 +1134,15 @@
    "update": "annual",
    "api": true,
    "buyers": "Edtech, student advisers",
-   "status": "key",
-   "status_label": "Needs a free key",
-   "datasets": [],
-   "note": "Its loader is written and waits only for a free key, added as the GitHub secret DATA_GOV_API_KEY."
+   "status": "live",
+   "status_label": "On the site",
+   "datasets": [
+    {
+     "id": "us-colleges",
+     "title": "US colleges: size, cost, graduation and earnings"
+    }
+   ],
+   "note": "The thousand largest colleges: cost, graduation and earnings."
   },
   {
    "name": "O*NET",
@@ -1139,10 +1184,15 @@
    "update": "daily",
    "api": true,
    "buyers": "Lobbyists, policy teams",
-   "status": "key",
-   "status_label": "Needs a free key",
-   "datasets": [],
-   "note": "Its loader is written and waits only for a free key, added as the GitHub secret DATA_GOV_API_KEY."
+   "status": "live",
+   "status_label": "On the site",
+   "datasets": [
+    {
+     "id": "us-congress-and-rulemaking",
+     "title": "US Congress and federal rulemaking, by year"
+    }
+   ],
+   "note": "Bills introduced and laws enacted by each Congress."
   },
   {
    "name": "Federal Register",
@@ -1174,10 +1224,15 @@
    "update": "daily",
    "api": true,
    "buyers": "Compliance teams, law firms",
-   "status": "key",
-   "status_label": "Needs a free key",
-   "datasets": [],
-   "note": "Its loader is written and waits only for a free key, added as the GitHub secret DATA_GOV_API_KEY."
+   "status": "live",
+   "status_label": "On the site",
+   "datasets": [
+    {
+     "id": "us-congress-and-rulemaking",
+     "title": "US Congress and federal rulemaking, by year"
+    }
+   ],
+   "note": "Documents and public comments posted each year."
   },
   {
    "name": "FEC campaign finance",
@@ -1189,10 +1244,15 @@
    "update": "daily",
    "api": true,
    "buyers": "Media, political consultants",
-   "status": "key",
-   "status_label": "Needs a free key",
-   "datasets": [],
-   "note": "Its loader is written and waits only for a free key, added as the GitHub secret DATA_GOV_API_KEY."
+   "status": "live",
+   "status_label": "On the site",
+   "datasets": [
+    {
+     "id": "us-election-candidates",
+     "title": "US federal elections: candidates and committees by cycle"
+    }
+   ],
+   "note": "Candidates and committees registered in each election cycle."
   },
   {
    "name": "FBI Crime Data Explorer",
@@ -1204,10 +1264,15 @@
    "update": "quarterly",
    "api": true,
    "buyers": "Real estate, insurers, security firms",
-   "status": "key",
-   "status_label": "Needs a free key",
-   "datasets": [],
-   "note": "Its loader is written and waits only for a free key, added as the GitHub secret DATA_GOV_API_KEY."
+   "status": "live",
+   "status_label": "On the site",
+   "datasets": [
+    {
+     "id": "us-crime-monthly",
+     "title": "US crime reported to police, monthly"
+    }
+   ],
+   "note": "Crimes reported to police, by month."
   },
   {
    "name": "CourtListener",
