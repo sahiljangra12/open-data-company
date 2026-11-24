@@ -1710,6 +1710,53 @@ def cdc_places():
                  ["state", "state_name", "year"] + out_cols, out, meta, min_rows=40)
 
 
+# ---------- UN Comtrade: what every country sells to and buys from the rest of the world ----------
+COMTRADE_CODES = {"842": "USA", "699": "IND", "251": "FRA", "579": "NOR", "757": "CHE", "381": "ITA", "490": "TWN"}      # where its numbering differs from the UN's usual one
+
+
+def comtrade():
+    id, cell, names = "world-trade-in-goods", {}, {}
+    path = SETS / f"{id}.csv"
+    if path.exists():                                       # earlier years rarely change: keep them and ask only for recent ones
+        with open(path, encoding="utf-8") as f:
+            for r in csv.DictReader(f):
+                names[r["code"]] = r["country"]
+                cell[(r["code"], int(r["year"]))] = {c: float(r[c]) for c in ("goods_exports", "goods_imports") if r.get(c, "") != ""}
+    have = {}
+    for (_, y) in cell:
+        have[y] = have.get(y, 0) + 1
+    h = {"Ocp-Apim-Subscription-Key": os.environ["COMTRADE_API_KEY"].strip()} if os.environ.get("COMTRADE_API_KEY", "").strip() else None
+    m49, known, shown = iso()["m49"], iso()["name"], False
+    for y in range(2000, THIS_YEAR):
+        if have.get(y, 0) >= 100 and y < THIS_YEAR - 3:
+            continue
+        for flow, col in (("X", "goods_exports"), ("M", "goods_imports")):
+            try:
+                j = J(f"https://comtradeapi.un.org/public/v1/preview/C/A/HS?period={y}&partnerCode=0&cmdCode=TOTAL&flowCode={flow}&includeDesc=true", headers=h, tries=2, timeout=120)
+                rows = j.get("data") or []
+                if not shown:
+                    print(f"  comtrade {y}: {len(rows)} rows; {json.dumps(rows[:1])[:420] if rows else json.dumps(j)[:300]}")
+                    shown = True
+                for r in rows:
+                    num_code = str(r.get("reporterCode"))
+                    code = r.get("reporterISO") or COMTRADE_CODES.get(num_code) or m49.get(num_code)
+                    if code and len(code) == 3 and r.get("primaryValue") and str(r.get("partnerCode")) == "0":
+                        cell.setdefault((code, y), {})[col] = r["primaryValue"]
+                        names[code] = known.get(code) or r.get("reporterDesc") or code
+            except Exception as e:
+                print(f"  comtrade {y} {flow}: {str(e)[:70]}")
+            time.sleep(1.5)                                 # the public service allows only a slow pace
+    for v in cell.values():
+        if "goods_exports" in v and "goods_imports" in v:
+            v["goods_trade_balance"] = v["goods_exports"] - v["goods_imports"]
+    S = "UN Comtrade, as each country reported it, all goods, all trading partners together."
+    meta = dict(goods_exports=dict(title="Goods exported (UN Comtrade)", unit="current US$", description=S), goods_imports=dict(title="Goods imported (UN Comtrade)", unit="current US$", description=S),
+                goods_trade_balance=dict(title="Goods trade balance (UN Comtrade)", unit="current US$", description="Exports minus imports of goods, worked out here from the two reported totals."))
+    return country_year(id, "World trade in goods: exports and imports by country", "What each country sold to and bought from the rest of the world in goods each year, as reported to the United Nations.",
+                        "Economy and development", "UN Comtrade (UN Statistics Division)", "https://comtrade.un.org", "UN Comtrade terms: free to use with the source named; check them before commercial reuse", cell, names, meta,
+                        ["goods_exports", "goods_imports", "goods_trade_balance"])
+
+
 # ---------- more loaders that wait for a free key ----------
 def us_crops():
     k = key("NASS_API_KEY")
@@ -1934,9 +1981,9 @@ def probe_urls():
 
 BUILDERS = [(lambda s=s: wb_set(s[0], s[1], s[2], s[3], s[4], s[5], **s[6])) for s in WB_SETS] + [(lambda s=s: owid_charts(*s)) for s in OWID_SETS] + [
     imf, un_population, undp, who, pwt, us_monthly, us_quarterly, us_daily, us_debt, us_climate, wikipedia, research, gbif, github_activity,
-    federal_register, fda, clinical_trials, fema, fdic, flu, chicago, nyc, us_spending, nih, eurostat, world_monthly, usgs_water, cdc_overdose, maryland, uk, climate_trace, hmda, cdc_places,
+    federal_register, fda, clinical_trials, fema, fdic, flu, chicago, nyc, us_spending, nih, eurostat, world_monthly, usgs_water, cdc_overdose, maryland, uk, climate_trace, hmda, cdc_places, comtrade,
     eia_grid, us_lawmaking, census_states, us_crops, us_elections, us_crime, us_colleges, us_ev_charging, foods,
 ]
 NAMES = [s[0] for s in WB_SETS] + [s[0] for s in OWID_SETS] + ["imf", "un_population", "undp", "who", "pwt", "us_monthly", "us_quarterly", "us_daily", "us_debt", "us_climate", "wikipedia", "research", "gbif",
-                                    "github_activity", "federal_register", "fda", "clinical_trials", "fema", "fdic", "flu", "chicago", "nyc", "us_spending", "nih", "eurostat", "world_monthly", "usgs_water", "cdc_overdose", "maryland", "uk", "climate_trace", "hmda", "cdc_places",
+                                    "github_activity", "federal_register", "fda", "clinical_trials", "fema", "fdic", "flu", "chicago", "nyc", "us_spending", "nih", "eurostat", "world_monthly", "usgs_water", "cdc_overdose", "maryland", "uk", "climate_trace", "hmda", "cdc_places", "comtrade",
                                     "eia_grid", "us_lawmaking", "census_states", "us_crops", "us_elections", "us_crime", "us_colleges", "us_ev_charging", "foods"]
