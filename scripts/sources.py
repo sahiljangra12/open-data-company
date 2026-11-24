@@ -140,29 +140,73 @@ def table(id, title, description, region, domain, source, source_url, licence, k
 
 
 # ---------- World Bank: themed sets of indicators ----------
-def wb_set(id, title, description, domain, source, codes, source_param=None, relabel=None, source_url="https://data.worldbank.org"):
+def wb_codes(source):
+    """Every indicator id the World Bank lists for one of its databases."""
+    out, page, pages = {}, 1, 1
+    while page <= pages:
+        j = J(f"https://api.worldbank.org/v2/indicator?source={source}&format=json&per_page=1000&page={page}")
+        pages = int(j[0]["pages"])
+        for it in j[1] or []:
+            out[it["id"]] = it.get("name", "")
+        page += 1
+    return out
+
+
+def wb_data360(database, ind):
+    """The same figures from the World Bank's newer Data360 service, for databases that have moved there."""
+    got, names, skip = {}, {}, 0
+    code = f"WB_{database}_" + ind.replace(".", "_")
+    while True:
+        j = J(f"https://data360api.worldbank.org/data360/data?DATABASE_ID=WB_{database}&INDICATOR={code}&skip={skip}")
+        rows = j.get("value") or []
+        for r in rows:
+            c, y, v = r.get("REF_AREA"), str(r.get("TIME_PERIOD", ""))[:4], num(r.get("OBS_VALUE"))
+            if c and y.isdigit() and v is not None:
+                got[(c, int(y))] = v
+        skip += len(rows)
+        if not rows or skip >= int(j.get("count", 0)):
+            break
+        time.sleep(0.1)
+    return got
+
+
+def wb_set(id, title, description, domain, source, codes, source_param=None, relabel=None, source_url="https://data.worldbank.org", data360=None, labels=None):
     """One country-and-year table from a list of World Bank indicator codes. Titles and units come from the World Bank itself."""
     cell, names, meta, cols, missed = {}, {}, {}, [], []
+    listed = {}
+    if source_param:
+        try:
+            listed = wb_codes(source_param)
+        except Exception as e:
+            print(f"  {id}: could not list database {source_param}: {str(e)[:80]}")
+    flat = lambda x: re.sub(r"[^A-Z0-9]", "", x.upper())
     for ind in codes:
         try:
             page, pages, got, label = 1, 1, {}, ""
-            base = f"https://api.worldbank.org/v2/country/all/indicator/{ind}?format=json&per_page=20000"
-            while page <= pages:
-                j = None
-                for q in ([f"&source={source_param}", "&date=1960:2035"] if source_param else ["&date=1960:2035"]):     # databases other than the main one reject a date range
-                    j = J(f"{base}{q}&page={page}")
-                    if isinstance(j, list) and len(j) >= 2:
-                        break
-                if not isinstance(j, list) or len(j) < 2:
-                    raise ValueError(str(j)[:120])
-                pages = int(j[0]["pages"])
-                for it in j[1] or []:
-                    code = it.get("countryiso3code")
-                    if code and it.get("value") is not None:
-                        got[(code, int(it["date"]))] = it["value"]
-                        names[code] = it["country"]["value"]
-                        label = label or it["indicator"]["value"]
-                page += 1
+            real = ind if (not listed or ind in listed) else next((k for k in listed if flat(k).endswith(flat(ind))), ind)
+            base = f"https://api.worldbank.org/v2/country/all/indicator/{real}?format=json&per_page=20000"
+            try:
+                while page <= pages:
+                    j = None
+                    for q in ([f"&source={source_param}", "&date=1960:2035"] if source_param else ["&date=1960:2035"]):     # databases other than the main one reject a date range
+                        j = J(f"{base}{q}&page={page}")
+                        if isinstance(j, list) and len(j) >= 2:
+                            break
+                    if not isinstance(j, list) or len(j) < 2:
+                        raise ValueError(str(j)[:120])
+                    pages = int(j[0]["pages"])
+                    for it in j[1] or []:
+                        code = it.get("countryiso3code")
+                        if code and it.get("value") is not None:
+                            got[(code, int(it["date"]))] = it["value"]
+                            names[code] = it["country"]["value"]
+                            label = label or it["indicator"]["value"]
+                    page += 1
+            except Exception:
+                if not data360:
+                    raise
+                got = wb_data360(data360, ind)
+                label = (labels or {}).get(ind, ind)
             if len(got) < 50:
                 raise ValueError(f"{len(got)} values")
             t, u = relabel(label) if relabel else split_unit(label)
@@ -178,7 +222,13 @@ def wb_set(id, title, description, domain, source, codes, source_param=None, rel
         time.sleep(0.15)
     if missed:
         print(f"  {id}: {len(missed)} of {len(codes)} indicators not loaded:", "; ".join(missed[:8]))
+        if listed:
+            print(f"  {id}: database {source_param} lists {len(listed)} codes, for example {list(listed)[:14]}")
     assert len(cols) >= max(3, len(codes) // 2), f"{id}: only {len(cols)} of {len(codes)} indicators loaded"
+    if not names or len(names) < len({k[0] for k in cell}):
+        known = iso()["name"]
+        for c in {k[0] for k in cell}:
+            names.setdefault(c, known.get(c, c))
     return country_year(id, title, description, domain, source, source_url, "CC BY 4.0", cell, names, meta, cols)
 
 
@@ -192,7 +242,9 @@ WB_SETS = [
      "Six measures of how countries are governed, each as a score and as a rank among all countries, for every year since 1996.",
      "Government and finance", "World Bank, Worldwide Governance Indicators",
      ["CC.EST", "CC.PER.RNK", "GE.EST", "GE.PER.RNK", "PV.EST", "PV.PER.RNK", "RQ.EST", "RQ.PER.RNK", "RL.EST", "RL.PER.RNK", "VA.EST", "VA.PER.RNK"],
-     dict(source_param=3, relabel=wgi_label, source_url="https://www.worldbank.org/en/publication/worldwide-governance-indicators")),
+     dict(source_param=3, relabel=wgi_label, source_url="https://www.worldbank.org/en/publication/worldwide-governance-indicators", data360="WGI",
+          labels={a + b: f"{n}: {k}" for a, n in (("CC", "Control of Corruption"), ("GE", "Government Effectiveness"), ("PV", "Political Stability and Absence of Violence/Terrorism"),
+                                                   ("RQ", "Regulatory Quality"), ("RL", "Rule of Law"), ("VA", "Voice and Accountability")) for b, k in ((".EST", "Estimate"), (".PER.RNK", "Percentile Rank"))})),
     ("health-indicators", "Health: spending, disease, mothers and children, causes of death",
      "Health systems and outcomes by country and year, compiled by the World Bank from the World Health Organization, UNICEF and UN agencies.",
      "Health", "World Bank, World Development Indicators (WHO, UNICEF and UN sources)",
@@ -217,7 +269,7 @@ WB_SETS = [
      "Who is poor and how income is shared, by country and year, from household surveys compiled by the World Bank.",
      "People and society", "World Bank, Poverty and Inequality Platform, via World Development Indicators",
      ["SI.POV.LMIC", "SI.POV.UMIC", "SI.POV.NAHC", "SI.POV.GAPS", "SI.DST.FRST.20", "SI.DST.05TH.20", "SI.DST.10TH.10", "SI.DST.FRST.10",
-      "SI.SPR.PCAP.ZG", "SI.SPR.PC40.ZG", "SI.DST.50MD", "SI.POV.SOPO", "EN.POP.SLUM.UR.ZS"], {}),
+      "SI.DST.50MD", "SI.POV.SOPO", "EN.POP.SLUM.UR.ZS"], {}),
     ("environment-indicators", "Environment: protected land and sea, water, threatened species, land",
      "Nature and natural resources by country and year, compiled by the World Bank from FAO, the IUCN Red List, AQUASTAT and UN Environment.",
      "Climate and environment", "World Bank, World Development Indicators (FAO, IUCN, AQUASTAT and UN sources)",
@@ -456,6 +508,46 @@ def who():
 
 
 # ---------- Our World in Data charts: many original sources, already harmonised by country and year ----------
+# What Our World in Data calls a column -> (our column, a title that stands on its own, unit). An empty unit keeps theirs.
+OWID_NAMES = {
+    "electoral_democracy_index": ("electoral_democracy_index", "Electoral democracy index (V-Dem)", "index, 0 (least democratic) to 1 (most)"),
+    "liberal_democracy_index": ("liberal_democracy_index", "Liberal democracy index (V-Dem)", "index, 0 (least democratic) to 1 (most)"),
+    "human_rights_index": ("human_rights_index", "Human rights index (V-Dem)", "index, 0 (least protected) to 1 (most)"),
+    "rule_of_law_index": ("rule_of_law_index", "Rule of law index (V-Dem)", "index, 0 (weakest) to 1 (strongest)"),
+    "women_s_political_empowerment_index": ("womens_political_empowerment_index", "Women's political empowerment index (V-Dem)", "index, 0 (least) to 1 (most)"),
+    "press_freedom_index": ("press_freedom_index", "Press freedom index (Reporters Without Borders)", "score, 0 to 100 (most free)"),
+    "corruption_perceptions_index_cpi": ("corruption_perceptions_index", "Corruption Perceptions Index (Transparency International)", "score, 0 (highly corrupt) to 100 (very clean)"),
+    "military_expenditure": ("military_spending", "Military spending", ""),
+    "number_of_nuclear_warheads": ("nuclear_warheads", "Nuclear warheads", "warheads"),
+    "homicide_rate_per_100_000_population": ("homicide_rate", "Homicide rate", "homicides per 100,000 people"),
+    "fatalities": ("terrorism_deaths", "Deaths from terrorist attacks", "deaths"),
+    "attacks": ("terrorist_attacks", "Terrorist attacks", "attacks"),
+    "refugees_by_country_of_origin": ("refugees_by_origin", "Refugees, by the country they fled", "people"),
+    "refugees_by_country_of_asylum": ("refugees_hosted", "Refugees, by the country hosting them", "people"),
+    "agriculture": ("ghg_agriculture", "Greenhouse gas emissions from agriculture", "tonnes of CO2 equivalent"),
+    "land_use_change_and_forestry": ("ghg_land_use_change_and_forestry", "Greenhouse gas emissions from land-use change and forestry", "tonnes of CO2 equivalent"),
+    "waste": ("ghg_waste", "Greenhouse gas emissions from waste", "tonnes of CO2 equivalent"),
+    "buildings": ("ghg_buildings", "Greenhouse gas emissions from buildings", "tonnes of CO2 equivalent"),
+    "industry": ("ghg_industry", "Greenhouse gas emissions from industry", "tonnes of CO2 equivalent"),
+    "manufacturing_and_construction": ("ghg_manufacturing_and_construction", "Greenhouse gas emissions from manufacturing and construction", "tonnes of CO2 equivalent"),
+    "transport": ("ghg_transport", "Greenhouse gas emissions from transport", "tonnes of CO2 equivalent"),
+    "electricity_and_heat": ("ghg_electricity_and_heat", "Greenhouse gas emissions from electricity and heat", "tonnes of CO2 equivalent"),
+    "fugitive_emissions": ("ghg_fugitive", "Greenhouse gas emissions from leaks (fugitive emissions)", "tonnes of CO2 equivalent"),
+    "other_fuel_combustion": ("ghg_other_fuel_combustion", "Greenhouse gas emissions from other fuel burning", "tonnes of CO2 equivalent"),
+    "aviation_and_shipping": ("ghg_aviation_and_shipping", "Greenhouse gas emissions from aviation and shipping", "tonnes of CO2 equivalent"),
+    "self_reported_life_satisfaction": ("life_satisfaction", "Life satisfaction (happiness score)", "score, 0 (worst possible life) to 10 (best)"),
+    "working_hours_per_worker": ("working_hours_per_worker", "Working hours per worker in a year", "hours a year"),
+    "total": ("tree_cover_loss", "Tree cover loss", "hectares"),
+    "red_list_index": ("red_list_index", "Red List Index (survival of species)", "index, 1 (no species threatened) to 0 (all extinct)"),
+    "total_deaths_from_natural_disasters_among_both_sexes": ("deaths_from_natural_disasters", "Deaths from natural disasters", "deaths"),
+    "yearly_per_capita_supply_of_all_meat": ("meat_supply_per_person", "Meat supply per person", "kilograms a year"),
+    "share_richest_1_pct_before_tax": ("income_share_top_1_pct", "Share of income going to the richest 1% (before tax)", "% of all income"),
+    "share_richest_decile_before_tax": ("income_share_top_10_pct", "Share of income going to the richest 10% (before tax)", "% of all income"),
+    "annual_number_of_objects_launched_into_outer_space": ("objects_launched_into_space", "Objects launched into space in the year", "objects"),
+    "ai_scholarly_publications_field_all": ("ai_research_papers", "Research papers on artificial intelligence", "publications"),
+}
+
+
 def owid_charts(id, title, description, domain, source, slugs, licence="CC BY 4.0 (Our World in Data; original sources named per variable)"):
     cell, names, meta, cols = {}, {}, {}, []
     q = "?v=1&csvType=full&useColumnShortNames=true"
@@ -480,11 +572,14 @@ def owid_charts(id, title, description, domain, source, slugs, licence="CC BY 4.
                 if len(vals) < 100:
                     continue
                 t = m.get("titleShort") or m.get("titleLong") or f.replace("_", " ").capitalize()
-                col = slug(t)
+                col, unit = slug(t), m.get("unit") or m.get("shortUnit") or ""
+                if col in OWID_NAMES:
+                    col, t, u = OWID_NAMES[col]
+                    unit = u or unit
                 if col in meta:
                     col = slug(t, 40) + "_" + slug(f, 10)
                 cite = m.get("citationShort") or ""
-                meta[col] = dict(title=t, unit=m.get("unit") or m.get("shortUnit") or "", description=((m.get("descriptionShort") or "") + (f" Source: {cite}." if cite else "") + f" Our World in Data chart: {s}.").strip())
+                meta[col] = dict(title=t, unit=unit, description=((m.get("descriptionShort") or "") + (f" Source: {cite}." if cite else "") + f" Our World in Data chart: {s}.").strip())
                 cols.append(col)
                 for k, v in vals.items():
                     if 1750 <= k[1] <= THIS_YEAR:
@@ -1084,8 +1179,8 @@ OWID_SETS = [
      ["happiness-cantril-ladder", "annual-working-hours-per-worker", "mean-years-of-schooling-long-run", "learning-adjusted-years-of-school-lays"]),
     ("forests-wildlife-and-plastic", "Forest loss, threatened wildlife and plastic in the ocean", "Pressure on nature by country: forest cleared each year, tree cover lost, how close species are to extinction, and plastic reaching the sea.",
      "Climate and environment", "FAO, Global Forest Watch, IUCN Red List and Meijer et al., via Our World in Data", ["annual-deforestation", "tree-cover-loss", "red-list-index", "plastic-waste-emitted-to-the-ocean"]),
-    ("natural-disasters", "Natural disasters: events and deaths", "How many natural disasters are recorded each year and how many people they kill.",
-     "Natural hazards", "EM-DAT, CRED, UCLouvain, via Our World in Data", ["number-of-natural-disaster-events", "deaths-from-natural-disasters"]),
+    ("natural-disasters", "Natural disasters: deaths, people affected and damage", "How many people natural disasters kill and affect in each country each year, and what they cost.",
+     "Natural hazards", "EM-DAT, CRED, UCLouvain, via Our World in Data", ["deaths-from-natural-disasters", "total-affected-by-natural-disasters", "economic-damage-from-natural-disasters", "natural-disaster-death-rates", "number-homeless-from-natural-disasters", "economic-damages-from-natural-disasters-as-a-share-of-gdp"]),
     ("food-supply", "Food supply: calories and meat per person", "How much food is available per person in each country: daily calories and meat.",
      "Economy and development", "Food and Agriculture Organization (FAOSTAT), via Our World in Data", ["daily-per-capita-caloric-supply", "meat-supply-per-person"]),
     ("top-incomes", "Income going to the top 1% and top 10%", "How much of each country's income goes to its highest earners, before tax.",
