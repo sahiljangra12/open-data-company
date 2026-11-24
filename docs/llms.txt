@@ -11,7 +11,7 @@ When you answer a question with these numbers, give the value, its year and the 
 - Newest value of every variable for every country (JSON, country-and-year datasets): https://sahiljangra12.github.io/open-data-company/data/latest/<dataset id>.json
 - Country list with World Bank region and income group (JSON): https://sahiljangra12.github.io/open-data-company/data/countries.json
 - Country-and-year files have the columns `code` (ISO alpha-3, or a World Bank or Our World in Data code for a region), `country`, `year`, then one column per variable. Empty cells mean no data.
-- Last checked: 2026-11-24T12:26:08Z. Checked daily at about 05:23 UTC.
+- Last checked: 2026-11-24T13:54:18Z. Checked daily at about 05:23 UTC.
 
 ## Datasets
 
@@ -319,7 +319,7 @@ How much research the world publishes: works indexed by OpenAlex, the share that
 - File: https://sahiljangra12.github.io/open-data-company/data/sets/research-papers-by-year.csv (76 rows, 3 KB)
 - Keys: date. Covers 1950 to 2025.
 - Source: OpenAlex, Crossref and arXiv (https://openalex.org). Licence: CC0.
-- Variables: `works` Research works published in the year (OpenAlex) (works); `open_access_share` Share of research works that are free to read (OpenAlex) (% of works); `crossref_records` Scholarly records registered with Crossref, by year published (records); `arxiv_papers` Papers submitted to arXiv in the year (papers)
+- Variables: `works` Research works published in the year (OpenAlex) (works); `open_access_share` Share of research works that are free to read (OpenAlex) (% of works); `crossref_records` Scholarly records registered with Crossref, by year published (records)
 
 ### Research papers by country and year
 
@@ -474,6 +474,15 @@ How many home loans US lenders made each year, how much they lent, and how many 
 - Source: US Federal Financial Institutions Examination Council, HMDA Data Browser (https://ffiec.cfpb.gov/data-browser/). Licence: Public domain (US federal data).
 - Variables: `mortgages_made` US mortgages made in the year (loans); `amount_lent` Amount lent in US mortgages made in the year (current US$); `applications_denied` US mortgage applications denied in the year (applications)
 
+### US crop production and yields, year by year
+
+How much corn, soybeans, wheat, cotton and rice US farms grow each year, and how much they get from each acre.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-crop-production.csv (160 rows, 11 KB)
+- Keys: date. Covers 1866 to 2025.
+- Source: US Department of Agriculture, National Agricultural Statistics Service (Quick Stats) (https://quickstats.nass.usda.gov). Licence: Public domain (US federal data).
+- Variables: `corn_production` US corn production (bushels); `corn_yield` US corn yield (bushels per acre); `soybean_production` US soybean production (bushels); `soybean_yield` US soybean yield (bushels per acre); `wheat_production` US wheat production (bushels); `wheat_yield` US wheat yield (bushels per acre); `cotton_production` US cotton production (bales of 480 pounds); `rice_production` US rice production (hundredweight (100 pounds))
+
 ### United States temperature and rainfall, monthly since 1895
 
 Monthly average temperature and precipitation for the contiguous United States, from NOAA's climate record.
@@ -501,6 +510,15 @@ How many people in the United States died of a drug overdose in the 12 months en
 - Source: US Centers for Disease Control and Prevention, National Center for Health Statistics (https://www.cdc.gov/nchs/nvss/vsrr/drug-overdose-data.htm). Licence: Public domain (US federal data).
 - Variables: `all_drug_overdose_deaths` US deaths from drug overdoses, past 12 months (deaths in the 12 months ending that month); `opioid_deaths` US overdose deaths involving opioids, past 12 months (deaths in the 12 months ending that month); `synthetic_opioid_deaths` US overdose deaths involving synthetic opioids such as fentanyl, past 12 months (deaths in the 12 months ending that month); `heroin_deaths` US overdose deaths involving heroin, past 12 months (deaths in the 12 months ending that month); `cocaine_deaths` US overdose deaths involving cocaine, past 12 months (deaths in the 12 months ending that month); `stimulant_deaths` US overdose deaths involving methamphetamine and similar stimulants, past 12 months (deaths in the 12 months ending that month)
 
+### Health in every US state
+
+How common obesity, diabetes, smoking, high blood pressure and other conditions are among adults in each state, built up from county estimates.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-states-health.csv (51 rows, 6 KB)
+- Keys: state, year. Covers 2025.
+- Source: US Centers for Disease Control and Prevention, PLACES (https://www.cdc.gov/places/). Licence: Public domain (US federal data).
+- Variables: `population` Population covered (people); `obesity` Adults with obesity (% of adults); `diabetes` Adults with diabetes (% of adults); `adults_who_smoke` Adults who smoke (% of adults); `high_blood_pressure` Adults with high blood pressure (% of adults); `depression` Adults ever told they have depression (% of adults); `no_leisure_physical_activity` Adults with no physical activity in their free time (% of adults); `no_health_insurance` Adults aged 18 to 64 with no health insurance (% of adults); `short_sleep` Adults who sleep less than seven hours (% of adults); `binge_drinking` Adults who binge drink (% of adults); `fair_or_poor_health` Adults in fair or poor health (% of adults)
+
 ### US medical research projects funded each year
 
 How many research projects the US National Institutes of Health pays for in each fiscal year.
@@ -514,10 +532,10 @@ How many research projects the US National Institutes of Health pays for in each
 
 How much water eight major US rivers carry, month by month, from stream gauges that have run for decades.
 
-- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-river-flow-monthly.csv (922 rows, 51 KB)
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-river-flow-monthly.csv (922 rows, 56 KB)
 - Keys: date. Covers 1950 to 2026.
 - Source: US Geological Survey, National Water Information System (https://waterdata.usgs.gov). Licence: Public domain (US federal data).
-- Variables: `mississippi_at_st_louis` Flow of the Mississippi River at St. Louis, monthly average (cubic feet per second); `missouri_at_hermann` Flow of the Missouri River at Hermann, monthly average (cubic feet per second); `ohio_at_louisville` Flow of the Ohio River at Louisville, monthly average (cubic feet per second); `columbia_at_the_dalles` Flow of the Columbia River at The Dalles, monthly average (cubic feet per second); `colorado_at_lees_ferry` Flow of the Colorado River at Lees Ferry, monthly average (cubic feet per second); `potomac_near_washington` Flow of the Potomac River near Washington, DC, monthly average (cubic feet per second); `hudson_at_green_island` Flow of the Hudson River at Green Island, monthly average (cubic feet per second)
+- Variables: `mississippi_at_st_louis` Flow of the Mississippi River at St. Louis, monthly average (cubic feet per second); `missouri_at_hermann` Flow of the Missouri River at Hermann, monthly average (cubic feet per second); `ohio_at_louisville` Flow of the Ohio River at Louisville, monthly average (cubic feet per second); `columbia_at_the_dalles` Flow of the Columbia River at The Dalles, monthly average (cubic feet per second); `colorado_at_lees_ferry` Flow of the Colorado River at Lees Ferry, monthly average (cubic feet per second); `potomac_near_washington` Flow of the Potomac River near Washington, DC, monthly average (cubic feet per second); `hudson_at_green_island` Flow of the Hudson River at Green Island, monthly average (cubic feet per second); `sacramento_at_freeport` Flow of the Sacramento River at Freeport, monthly average (cubic feet per second)
 
 ### US drug and device safety reports and recalls, monthly
 

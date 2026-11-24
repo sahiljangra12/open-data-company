@@ -1,13 +1,13 @@
 {
  "count": 136,
  "tally": {
-  "live": 33,
+  "live": 35,
   "via": 29,
-  "key": 35,
+  "key": 34,
   "images": 7,
   "bulk": 11,
   "terms": 2,
-  "later": 19
+  "later": 18
  },
  "labels": {
   "live": "On the site",
@@ -32,7 +32,7 @@
    "status": "key",
    "status_label": "Needs a free key",
    "datasets": [],
-   "note": "Its catalog search now asks for a key."
+   "note": "Its loader is written and waits only for a free key, added as the GitHub secret DATA_GOV_API_KEY."
   },
   {
    "name": "Maryland Open Data",
@@ -485,7 +485,7 @@
    "status": "key",
    "status_label": "Needs a free key",
    "datasets": [],
-   "note": "Free, but the source asks for a key or account that only the site's owner can create."
+   "note": "Its loader is written and waits only for a free key, added as the GitHub secret DATA_GOV_API_KEY."
   },
   {
    "name": "PJM Data Miner",
@@ -829,10 +829,15 @@
    "update": "annual",
    "api": true,
    "buyers": "Hospitals, health nonprofits, insurers",
-   "status": "later",
-   "status_label": "Not loaded yet",
-   "datasets": [],
-   "note": "Open to load; its loader has not been written yet."
+   "status": "live",
+   "status_label": "On the site",
+   "datasets": [
+    {
+     "id": "us-states-health",
+     "title": "Health in every US state"
+    }
+   ],
+   "note": "State figures built up from its county estimates."
   },
   {
    "name": "CMS data (Medicare, hospitals)",
@@ -934,10 +939,15 @@
    "update": "weekly",
    "api": true,
    "buyers": "Agribusiness, commodity traders",
-   "status": "key",
-   "status_label": "Needs a free key",
-   "datasets": [],
-   "note": "Free, but the source asks for a key or account that only the site's owner can create."
+   "status": "live",
+   "status_label": "On the site",
+   "datasets": [
+    {
+     "id": "us-crop-production",
+     "title": "US crop production and yields, year by year"
+    }
+   ],
+   "note": "Production and yields of the main crops, by year."
   },
   {
    "name": "USDA Economic Research Service",
@@ -967,7 +977,7 @@
    "status": "key",
    "status_label": "Needs a free key",
    "datasets": [],
-   "note": "Free, but the source asks for a key or account that only the site's owner can create."
+   "note": "Its loader is written and waits only for a free key, added as the GitHub secret DATA_GOV_API_KEY."
   },
   {
    "name": "USDA Cropland Data Layer",
@@ -1087,7 +1097,7 @@
    "status": "key",
    "status_label": "Needs a free key",
    "datasets": [],
-   "note": "Free, but the source asks for a key or account that only the site's owner can create."
+   "note": "Its loader is written and waits only for a free key, added as the GitHub secret DATA_GOV_API_KEY."
   },
   {
    "name": "O*NET",
@@ -1182,7 +1192,7 @@
    "status": "key",
    "status_label": "Needs a free key",
    "datasets": [],
-   "note": "Free, but the source asks for a key or account that only the site's owner can create."
+   "note": "Its loader is written and waits only for a free key, added as the GitHub secret DATA_GOV_API_KEY."
   },
   {
    "name": "FBI Crime Data Explorer",
@@ -1197,7 +1207,7 @@
    "status": "key",
    "status_label": "Needs a free key",
    "datasets": [],
-   "note": "Free, but the source asks for a key or account that only the site's owner can create."
+   "note": "Its loader is written and waits only for a free key, added as the GitHub secret DATA_GOV_API_KEY."
   },
   {
    "name": "CourtListener",
@@ -2158,7 +2168,7 @@
    "status": "later",
    "status_label": "Not loaded yet",
    "datasets": [],
-   "note": "Published as a file whose address changes every month."
+   "note": "The only file at a fixed address stopped in 2018; the current one moves every month."
   },
   {
    "name": "WFP food prices",

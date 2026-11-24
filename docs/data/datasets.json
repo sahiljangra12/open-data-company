@@ -1,5 +1,5 @@
 {
- "checked": "2026-11-24T12:26:08Z",
+ "checked": "2026-11-24T13:54:18Z",
  "cron": "23 5 * * *",
  "datasets": [
   {
@@ -5692,7 +5692,7 @@
    "time": {
     "col": "time",
     "type": "date",
-    "min": "2026-10-25T12:29:05Z",
+    "min": "2026-10-25T13:54:24Z",
     "max": "2026-11-24T11:55:13Z"
    },
    "entity": null,
@@ -5776,7 +5776,7 @@
      "unit": "reports",
      "description": "",
      "type": "num",
-     "filled": 305
+     "filled": 304
     },
     {
      "name": "url",
@@ -5787,7 +5787,7 @@
      "filled": 1806
     }
    ],
-   "bytes": 315833,
+   "bytes": 315811,
    "built": "2026-11-24",
    "coverage": "Rolling 30 days",
    "default_vars": [
@@ -34749,17 +34749,9 @@
      "description": "Journal articles, books, preprints and other items with a Crossref DOI, by publication year.",
      "type": "num",
      "filled": 76
-    },
-    {
-     "name": "arxiv_papers",
-     "title": "Papers submitted to arXiv in the year",
-     "unit": "papers",
-     "description": "Preprints first submitted to arXiv in the year, counted through arXiv's public search.",
-     "type": "num",
-     "filled": 35
     }
    ],
-   "bytes": 3061,
+   "bytes": 2790,
    "built": "2026-11-24",
    "coverage": "1950 to 2025",
    "step": "year",
@@ -41037,6 +41029,99 @@
    "cadence": "Once a year"
   },
   {
+   "id": "us-crop-production",
+   "title": "US crop production and yields, year by year",
+   "description": "How much corn, soybeans, wheat, cotton and rice US farms grow each year, and how much they get from each acre.",
+   "region": "US",
+   "domain": "Economy and development",
+   "source": "US Department of Agriculture, National Agricultural Statistics Service (Quick Stats)",
+   "source_url": "https://quickstats.nass.usda.gov",
+   "licence": "Public domain (US federal data)",
+   "file": "data/sets/us-crop-production.csv",
+   "keys": [
+    "date"
+   ],
+   "time": {
+    "col": "date",
+    "type": "date",
+    "min": "1866-01-01",
+    "max": "2025-01-01"
+   },
+   "entity": null,
+   "rows": 160,
+   "columns": [
+    {
+     "name": "corn_production",
+     "title": "US corn production",
+     "unit": "bushels",
+     "description": "USDA National Agricultural Statistics Service, survey estimate: Corn, Grain - Production, Measured In Bu.",
+     "type": "num",
+     "filled": 160
+    },
+    {
+     "name": "corn_yield",
+     "title": "US corn yield",
+     "unit": "bushels per acre",
+     "description": "USDA National Agricultural Statistics Service, survey estimate: Corn, Grain - Yield, Measured In Bu / Acre.",
+     "type": "num",
+     "filled": 160
+    },
+    {
+     "name": "soybean_production",
+     "title": "US soybean production",
+     "unit": "bushels",
+     "description": "USDA National Agricultural Statistics Service, survey estimate: Soybeans - Production, Measured In Bu.",
+     "type": "num",
+     "filled": 102
+    },
+    {
+     "name": "soybean_yield",
+     "title": "US soybean yield",
+     "unit": "bushels per acre",
+     "description": "USDA National Agricultural Statistics Service, survey estimate: Soybeans - Yield, Measured In Bu / Acre.",
+     "type": "num",
+     "filled": 102
+    },
+    {
+     "name": "wheat_production",
+     "title": "US wheat production",
+     "unit": "bushels",
+     "description": "USDA National Agricultural Statistics Service, survey estimate: Wheat - Production, Measured In Bu.",
+     "type": "num",
+     "filled": 160
+    },
+    {
+     "name": "wheat_yield",
+     "title": "US wheat yield",
+     "unit": "bushels per acre",
+     "description": "USDA National Agricultural Statistics Service, survey estimate: Wheat - Yield, Measured In Bu / Acre.",
+     "type": "num",
+     "filled": 160
+    },
+    {
+     "name": "cotton_production",
+     "title": "US cotton production",
+     "unit": "bales of 480 pounds",
+     "description": "USDA National Agricultural Statistics Service, survey estimate: Cotton - Production, Measured In 480 Lb Bales.",
+     "type": "num",
+     "filled": 160
+    },
+    {
+     "name": "rice_production",
+     "title": "US rice production",
+     "unit": "hundredweight (100 pounds)",
+     "description": "USDA National Agricultural Statistics Service, survey estimate: Rice - Production, Measured In Cwt.",
+     "type": "num",
+     "filled": 131
+    }
+   ],
+   "bytes": 11389,
+   "built": "2026-11-24",
+   "coverage": "1866 to 2025",
+   "step": "year",
+   "cadence": "A few times a year"
+  },
+  {
    "id": "us-climate-monthly",
    "title": "United States temperature and rainfall, monthly since 1895",
    "description": "Monthly average temperature and precipitation for the contiguous United States, from NOAA's climate record.",
@@ -41628,6 +41713,334 @@
    "cadence": "A new month every month, about four months behind"
   },
   {
+   "id": "us-states-health",
+   "title": "Health in every US state",
+   "description": "How common obesity, diabetes, smoking, high blood pressure and other conditions are among adults in each state, built up from county estimates.",
+   "region": "US",
+   "domain": "Health",
+   "source": "US Centers for Disease Control and Prevention, PLACES",
+   "source_url": "https://www.cdc.gov/places/",
+   "licence": "Public domain (US federal data)",
+   "file": "data/sets/us-states-health.csv",
+   "keys": [
+    "state",
+    "year"
+   ],
+   "time": {
+    "col": "year",
+    "type": "year",
+    "min": "2025",
+    "max": "2025"
+   },
+   "entity": {
+    "col": "state",
+    "label_col": "state_name",
+    "label": "State"
+   },
+   "rows": 51,
+   "columns": [
+    {
+     "name": "population",
+     "title": "Population covered",
+     "unit": "people",
+     "description": "",
+     "type": "num",
+     "filled": 51
+    },
+    {
+     "name": "obesity",
+     "title": "Adults with obesity",
+     "unit": "% of adults",
+     "description": "CDC PLACES model-based county estimates, averaged across each state's counties in proportion to their population. A guide, not an official state figure.",
+     "type": "num",
+     "filled": 49
+    },
+    {
+     "name": "diabetes",
+     "title": "Adults with diabetes",
+     "unit": "% of adults",
+     "description": "CDC PLACES model-based county estimates, averaged across each state's counties in proportion to their population. A guide, not an official state figure.",
+     "type": "num",
+     "filled": 49
+    },
+    {
+     "name": "adults_who_smoke",
+     "title": "Adults who smoke",
+     "unit": "% of adults",
+     "description": "CDC PLACES model-based county estimates, averaged across each state's counties in proportion to their population. A guide, not an official state figure.",
+     "type": "num",
+     "filled": 49
+    },
+    {
+     "name": "high_blood_pressure",
+     "title": "Adults with high blood pressure",
+     "unit": "% of adults",
+     "description": "CDC PLACES model-based county estimates, averaged across each state's counties in proportion to their population. A guide, not an official state figure.",
+     "type": "num",
+     "filled": 49
+    },
+    {
+     "name": "depression",
+     "title": "Adults ever told they have depression",
+     "unit": "% of adults",
+     "description": "CDC PLACES model-based county estimates, averaged across each state's counties in proportion to their population. A guide, not an official state figure.",
+     "type": "num",
+     "filled": 49
+    },
+    {
+     "name": "no_leisure_physical_activity",
+     "title": "Adults with no physical activity in their free time",
+     "unit": "% of adults",
+     "description": "CDC PLACES model-based county estimates, averaged across each state's counties in proportion to their population. A guide, not an official state figure.",
+     "type": "num",
+     "filled": 49
+    },
+    {
+     "name": "no_health_insurance",
+     "title": "Adults aged 18 to 64 with no health insurance",
+     "unit": "% of adults",
+     "description": "CDC PLACES model-based county estimates, averaged across each state's counties in proportion to their population. A guide, not an official state figure.",
+     "type": "num",
+     "filled": 49
+    },
+    {
+     "name": "short_sleep",
+     "title": "Adults who sleep less than seven hours",
+     "unit": "% of adults",
+     "description": "CDC PLACES model-based county estimates, averaged across each state's counties in proportion to their population. A guide, not an official state figure.",
+     "type": "num",
+     "filled": 51
+    },
+    {
+     "name": "binge_drinking",
+     "title": "Adults who binge drink",
+     "unit": "% of adults",
+     "description": "CDC PLACES model-based county estimates, averaged across each state's counties in proportion to their population. A guide, not an official state figure.",
+     "type": "num",
+     "filled": 49
+    },
+    {
+     "name": "fair_or_poor_health",
+     "title": "Adults in fair or poor health",
+     "unit": "% of adults",
+     "description": "CDC PLACES model-based county estimates, averaged across each state's counties in proportion to their population. A guide, not an official state figure.",
+     "type": "num",
+     "filled": 49
+    }
+   ],
+   "bytes": 5919,
+   "built": "2026-11-24",
+   "coverage": "2025",
+   "entities": 51,
+   "cadence": "Once a year",
+   "places": [
+    [
+     "AL",
+     "Alabama"
+    ],
+    [
+     "AK",
+     "Alaska"
+    ],
+    [
+     "AZ",
+     "Arizona"
+    ],
+    [
+     "AR",
+     "Arkansas"
+    ],
+    [
+     "CA",
+     "California"
+    ],
+    [
+     "CO",
+     "Colorado"
+    ],
+    [
+     "CT",
+     "Connecticut"
+    ],
+    [
+     "DE",
+     "Delaware"
+    ],
+    [
+     "DC",
+     "District of Columbia"
+    ],
+    [
+     "FL",
+     "Florida"
+    ],
+    [
+     "GA",
+     "Georgia"
+    ],
+    [
+     "HI",
+     "Hawaii"
+    ],
+    [
+     "ID",
+     "Idaho"
+    ],
+    [
+     "IL",
+     "Illinois"
+    ],
+    [
+     "IN",
+     "Indiana"
+    ],
+    [
+     "IA",
+     "Iowa"
+    ],
+    [
+     "KS",
+     "Kansas"
+    ],
+    [
+     "KY",
+     "Kentucky"
+    ],
+    [
+     "LA",
+     "Louisiana"
+    ],
+    [
+     "ME",
+     "Maine"
+    ],
+    [
+     "MD",
+     "Maryland"
+    ],
+    [
+     "MA",
+     "Massachusetts"
+    ],
+    [
+     "MI",
+     "Michigan"
+    ],
+    [
+     "MN",
+     "Minnesota"
+    ],
+    [
+     "MS",
+     "Mississippi"
+    ],
+    [
+     "MO",
+     "Missouri"
+    ],
+    [
+     "MT",
+     "Montana"
+    ],
+    [
+     "NE",
+     "Nebraska"
+    ],
+    [
+     "NV",
+     "Nevada"
+    ],
+    [
+     "NH",
+     "New Hampshire"
+    ],
+    [
+     "NJ",
+     "New Jersey"
+    ],
+    [
+     "NM",
+     "New Mexico"
+    ],
+    [
+     "NY",
+     "New York"
+    ],
+    [
+     "NC",
+     "North Carolina"
+    ],
+    [
+     "ND",
+     "North Dakota"
+    ],
+    [
+     "OH",
+     "Ohio"
+    ],
+    [
+     "OK",
+     "Oklahoma"
+    ],
+    [
+     "OR",
+     "Oregon"
+    ],
+    [
+     "PA",
+     "Pennsylvania"
+    ],
+    [
+     "RI",
+     "Rhode Island"
+    ],
+    [
+     "SC",
+     "South Carolina"
+    ],
+    [
+     "SD",
+     "South Dakota"
+    ],
+    [
+     "TN",
+     "Tennessee"
+    ],
+    [
+     "TX",
+     "Texas"
+    ],
+    [
+     "UT",
+     "Utah"
+    ],
+    [
+     "VT",
+     "Vermont"
+    ],
+    [
+     "VA",
+     "Virginia"
+    ],
+    [
+     "WA",
+     "Washington"
+    ],
+    [
+     "WV",
+     "West Virginia"
+    ],
+    [
+     "WI",
+     "Wisconsin"
+    ],
+    [
+     "WY",
+     "Wyoming"
+    ]
+   ]
+  },
+  {
    "id": "us-nih-research-projects",
    "title": "US medical research projects funded each year",
    "description": "How many research projects the US National Institutes of Health pays for in each fiscal year.",
@@ -41742,9 +42155,17 @@
      "description": "US Geological Survey stream gauge 01358000: the average of the daily mean flow in each month with at least 25 days recorded.",
      "type": "num",
      "filled": 887
+    },
+    {
+     "name": "sacramento_at_freeport",
+     "title": "Flow of the Sacramento River at Freeport, monthly average",
+     "unit": "cubic feet per second",
+     "description": "US Geological Survey stream gauge 11447650: the average of the daily mean flow in each month with at least 25 days recorded.",
+     "type": "num",
+     "filled": 789
     }
    ],
-   "bytes": 50926,
+   "bytes": 55712,
    "built": "2026-11-24",
    "coverage": "1950 to 2026",
    "step": "month",

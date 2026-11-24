@@ -1,7 +1,4 @@
 id,time,magnitude,place,latitude,longitude,depth_km,magnitude_type,event_type,significance,tsunami_flag,felt_reports,url
-us7000tw05,2026-10-25T12:29:05Z,4.2,"13 km NNW of Itháki, Greece",38.4687,20.6349,10,mb,earthquake,271,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us7000tw05
-us6000u4u9,2026-10-25T13:22:34Z,4,"2 km SW of Choix, Mexico",26.6939,-108.3445,10,mb,earthquake,246,0,1,https://earthquake.usgs.gov/earthquakes/eventpage/us6000u4u9
-us6000u4ua,2026-10-25T13:23:14Z,4.3,"45 km ESE of San Pedro de Atacama, Chile",-23.1379,-67.8315,124.858,mb,earthquake,284,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us6000u4ua
 us6000u4ue,2026-10-25T13:54:24Z,4.5,south of the Fiji Islands,-24.6229,179.924,515.211,mb,earthquake,312,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us6000u4ue
 uu80161791,2026-10-25T14:05:31Z,2.45,"16 km NNE of Milford, Utah",38.5225,-112.9093,2.49,ml,earthquake,92,0,,https://earthquake.usgs.gov/earthquakes/eventpage/uu80161791
 us7000tw07,2026-10-25T14:08:47Z,4.2,"10 km NE of Shūshtar, Iran",32.1068,48.9337,10,mb,earthquake,271,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us7000tw07
@@ -341,9 +338,10 @@ us7000tty7,2026-10-29T08:49:42Z,5.2,"214 km NNW of Bamboo Flat, India",13.3213,9
 us7000tu4l,2026-10-29T10:00:23Z,3.3,"100 km E of Akutan, Alaska",54.0035,-164.2558,35,ml,earthquake,168,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us7000tu4l
 pr71537903,2026-10-29T10:19:13Z,2.65,"23 km NNW of Saint Croix, U.S. Virgin Islands",17.9132,-64.8637,12.6,md,earthquake,108,0,,https://earthquake.usgs.gov/earthquakes/eventpage/pr71537903
 us7000ttyd,2026-10-29T10:33:22Z,4.9,"111 km SW of Port-Vila, Vanuatu",-18.4979,167.6261,10,mb,earthquake,369,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us7000ttyd
+us7000ttyi,2026-10-29T11:13:51Z,4.6,"74 km ESE of Sarangani, Philippines",5.244,126.119,10,mb,earthquake,326,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us7000ttyi
 aka2026vkvroo,2026-10-29T11:32:09Z,2.5,"51 km SSE of McGrath, Alaska",62.566,-155.058,5.5,ml,earthquake,96,0,,https://earthquake.usgs.gov/earthquakes/eventpage/aka2026vkvroo
 us7000twmu,2026-10-29T11:32:46Z,2.8,"44 km S of Adak, Alaska",51.479,-176.6828,35.665,ml,earthquake,121,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us7000twmu
-us7000ttyk,2026-10-29T11:38:23Z,4.6,"Pulau Pulau Tanimbar, Indonesia",-7.4929,130.073,10,mb,earthquake,326,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us7000ttyk
+us7000ttyk,2026-10-29T11:38:23Z,4.6,"Pulau Pulau Tanimbar, Indonesia",-7.4906,130.0857,10,mb,earthquake,326,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us7000ttyk
 us7000ttym,2026-10-29T12:01:57Z,4.3,"55 km NNE of Muzaffarābād, Pakistan",34.8306,73.7119,45.24,mb,earthquake,284,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us7000ttym
 nc75459362,2026-10-29T12:38:05Z,2.72,"12 km SW of Ridgemark, CA",36.7453,-121.467,8.78,md,earthquake,115,0,3,https://earthquake.usgs.gov/earthquakes/eventpage/nc75459362
 us7000twiz,2026-10-29T13:16:26Z,4.2,"106 km N of Ambon, Indonesia",-2.7364,128.0972,10,mb,earthquake,271,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us7000twiz
@@ -402,7 +400,7 @@ us7000tu7k,2026-10-30T10:24:11Z,4.5,"108 km ENE of Barcelona, Philippines",8.398
 aka2026vmppxt,2026-10-30T10:30:02Z,2.5,"66 km SSE of Akutan, Alaska",53.615,-165.285,44.5,ml,earthquake,96,0,,https://earthquake.usgs.gov/earthquakes/eventpage/aka2026vmppxt
 us7000tu7m,2026-10-30T10:45:03Z,4.8,"44 km SSE of Sykiá, Greece",39.6973,24.2221,10,mb,earthquake,354,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us7000tu7m
 us7000tu7p,2026-10-30T10:57:48Z,4.5,south of the Fiji Islands,-23.6152,179.8309,544.365,mb,earthquake,312,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us7000tu7p
-us7000tumn,2026-10-30T12:40:57Z,4.7,"148 km NW of Port-Olry, Vanuatu",-14.2547,165.9597,10,mb,earthquake,340,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us7000tumn
+us7000tumn,2026-10-30T12:40:56Z,4.6,"146 km WNW of Port-Olry, Vanuatu",-14.3239,165.9329,10,mb,earthquake,326,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us7000tumn
 us7000tu83,2026-10-30T13:18:18Z,4.5,"69 km ENE of Kuji, Japan",40.4619,142.5086,44.569,mb,earthquake,312,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us7000tu83
 aka2026vmvpxg,2026-10-30T13:29:56Z,2.5,"65 km SSE of King Cove, Alaska",54.51,-161.977,30.4,ml,earthquake,96,0,,https://earthquake.usgs.gov/earthquakes/eventpage/aka2026vmvpxg
 nc75459817,2026-10-30T13:42:03Z,2.61,"22 km SSW of Big Pine, CA",36.9733,-118.367,6.78,md,earthquake,105,0,,https://earthquake.usgs.gov/earthquakes/eventpage/nc75459817
@@ -608,9 +606,11 @@ us7000tuu0,2026-11-02T05:19:49Z,4.8,"178 km WNW of Panguna, Papua New Guinea",-5
 aka2026vrtove,2026-11-02T05:26:54Z,3.1,"73 km SSW of Nikolski, Alaska",52.363,-169.387,23,ml,earthquake,148,0,,https://earthquake.usgs.gov/earthquakes/eventpage/aka2026vrtove
 us7000tuu3,2026-11-02T06:14:26Z,2.6,"13 km SSE of Stonewall Gap, Colorado",37.0402,-104.9672,5,ml,earthquake,104,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us7000tuu3
 aka2026vrvegu,2026-11-02T06:14:44Z,2.6,"85 km S of Unalaska, Alaska",53.106,-166.624,27.6,ml,earthquake,104,0,,https://earthquake.usgs.gov/earthquakes/eventpage/aka2026vrvegu
+us7000txjm,2026-11-02T06:43:07Z,4.5,Mid-Indian Ridge,-35.421,78.4422,10,mb,earthquake,312,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us7000txjm
 us7000tuua,2026-11-02T06:53:01Z,4.3,"109 km NNW of Naisano Dua, Indonesia",-8.6392,123.535,10,mb,earthquake,284,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us7000tuua
 ci41571032,2026-11-02T07:50:10Z,3.16,"9 km NNE of Delta, B.C., MX",32.4323,-115.1628,15.59,ml,earthquake,154,0,1,https://earthquake.usgs.gov/earthquakes/eventpage/ci41571032
 us7000tuuy,2026-11-02T08:13:11Z,5.1,"23 km WNW of Tomohon, Indonesia",1.3581,124.6005,170.272,mb,earthquake,400,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us7000tuuy
+us7000txju,2026-11-02T08:25:02Z,4.2,western Indian-Antarctic Ridge,-49.0555,125.533,10,mb,earthquake,271,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us7000txju
 us7000tuv5,2026-11-02T08:42:45Z,4.9,"105 km SW of Basco, Philippines",19.702,121.34,35,mb,earthquake,369,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us7000tuv5
 aka2026vsaibi,2026-11-02T08:49:03Z,2.8,"92 km SSE of Akutan, Alaska",53.399,-165.124,20.5,ml,earthquake,121,0,,https://earthquake.usgs.gov/earthquakes/eventpage/aka2026vsaibi
 us7000tuv8,2026-11-02T08:59:22Z,4.9,"107 km SSE of Palekastro, Greece",34.2603,26.5404,36.96,mb,earthquake,369,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us7000tuv8
