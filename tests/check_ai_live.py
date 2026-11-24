@@ -126,9 +126,13 @@ def main():
 
         # ---- the public website itself (GitHub Pages), once it serves this version ----
         if os.environ.get("CHECK_PUBLIC", "1") != "0":
+            print("\n   waiting 65 seconds so this check starts inside a fresh per-visitor rate-limit window", flush=True)
+            page.wait_for_timeout(65000)
             public = browser.new_page(viewport={"width": 1280, "height": 900})
-            perr = []
+            perr, calls = [], []
             public.on("pageerror", lambda e: perr.append(str(e)))
+            public.on("response", lambda r: calls.append(f"{r.request.method} {r.status}") if "/api/data-ai" in r.url else None)
+            public.on("requestfailed", lambda r: calls.append(f"{r.method} failed: {r.failure}") if "/api/data-ai" in r.url else None)
             fresh = False
             for _ in range(18):                                   # GitHub Pages takes a minute or two to publish a push
                 public.goto(SITE + "/open-data-company/ask.html?v=" + os.urandom(3).hex())
@@ -150,7 +154,7 @@ def main():
                 t = public.locator(".turn").last
                 text = t.locator(".aitext").first.inner_text() if t.locator(".aitext").count() else ""
                 notes = " ".join(t.locator(".ainote").all_inner_texts())
-                print("\nPublic page, Q: Is Kenya getting more people online, and why?\n   A: " + text.replace("\n", "\n      ") + f"\n   note: {notes}", flush=True)
+                print("\nPublic page, Q: Is Kenya getting more people online, and why?\n   A: " + text.replace("\n", "\n      ") + f"\n   note: {notes}\n   calls to the service: {calls}", flush=True)
                 check("the public page gets an AI answer built on the data", t.locator(".acts.small").count() > 0 and "straight from the data" not in notes and "Kenya" in text and t.locator(".answer").count() >= 1)
                 public.goto(SITE + "/open-data-company/?v=" + os.urandom(3).hex())
                 public.wait_for_selector("#quick a")
