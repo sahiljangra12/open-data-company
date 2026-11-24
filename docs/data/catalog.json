@@ -1,9 +1,9 @@
 {
  "count": 136,
  "tally": {
-  "live": 45,
+  "live": 47,
   "via": 35,
-  "key": 18,
+  "key": 16,
   "images": 7,
   "bulk": 11,
   "terms": 2,
@@ -246,10 +246,15 @@
    "update": "annual",
    "api": true,
    "buyers": "Retail, real estate, marketing",
-   "status": "key",
-   "status_label": "Needs a free key",
-   "datasets": [],
-   "note": "Its loader is written and waits only for a free key, added as the GitHub secret CENSUS_API_KEY."
+   "status": "live",
+   "status_label": "On the site",
+   "datasets": [
+    {
+     "id": "us-states-census",
+     "title": "US states: people, income, housing and business"
+    }
+   ],
+   "note": "Population, income, housing, poverty and education for every state."
   },
   {
    "name": "Census County Business Patterns",
@@ -261,10 +266,15 @@
    "update": "annual",
    "api": true,
    "buyers": "Site selection, market sizing",
-   "status": "key",
-   "status_label": "Needs a free key",
-   "datasets": [],
-   "note": "Its loader is written and waits only for a free key, added as the GitHub secret CENSUS_API_KEY."
+   "status": "live",
+   "status_label": "On the site",
+   "datasets": [
+    {
+     "id": "us-states-census",
+     "title": "US states: people, income, housing and business"
+    }
+   ],
+   "note": "Businesses, employees and payroll for every state."
   },
   {
    "name": "Census Building Permits Survey",

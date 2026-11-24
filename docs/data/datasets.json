@@ -1,5 +1,5 @@
 {
- "checked": "2026-11-24T16:35:59Z",
+ "checked": "2026-11-24T21:52:01Z",
  "cron": "23 5 * * *",
  "datasets": [
   {
@@ -5692,11 +5692,11 @@
    "time": {
     "col": "time",
     "type": "date",
-    "min": "2026-10-25T16:22:11Z",
-    "max": "2026-11-24T15:39:43Z"
+    "min": "2026-10-25T22:01:35Z",
+    "max": "2026-11-24T21:25:18Z"
    },
    "entity": null,
-   "rows": 1814,
+   "rows": 1832,
    "columns": [
     {
      "name": "magnitude",
@@ -5704,7 +5704,7 @@
      "unit": "",
      "description": "",
      "type": "num",
-     "filled": 1814
+     "filled": 1832
     },
     {
      "name": "place",
@@ -5712,7 +5712,7 @@
      "unit": "",
      "description": "",
      "type": "str",
-     "filled": 1814
+     "filled": 1832
     },
     {
      "name": "latitude",
@@ -5720,7 +5720,7 @@
      "unit": "degrees",
      "description": "",
      "type": "num",
-     "filled": 1814
+     "filled": 1832
     },
     {
      "name": "longitude",
@@ -5728,7 +5728,7 @@
      "unit": "degrees",
      "description": "",
      "type": "num",
-     "filled": 1814
+     "filled": 1832
     },
     {
      "name": "depth_km",
@@ -5736,7 +5736,7 @@
      "unit": "km",
      "description": "",
      "type": "num",
-     "filled": 1814
+     "filled": 1832
     },
     {
      "name": "magnitude_type",
@@ -5744,7 +5744,7 @@
      "unit": "",
      "description": "",
      "type": "str",
-     "filled": 1814
+     "filled": 1832
     },
     {
      "name": "event_type",
@@ -5752,7 +5752,7 @@
      "unit": "",
      "description": "",
      "type": "str",
-     "filled": 1814
+     "filled": 1832
     },
     {
      "name": "significance",
@@ -5760,7 +5760,7 @@
      "unit": "0-1000",
      "description": "USGS score combining magnitude, felt reports and estimated impact.",
      "type": "num",
-     "filled": 1814
+     "filled": 1832
     },
     {
      "name": "tsunami_flag",
@@ -5768,7 +5768,7 @@
      "unit": "",
      "description": "1 if the event was in an oceanic region and may warrant tsunami information; not a warning.",
      "type": "num",
-     "filled": 1814
+     "filled": 1832
     },
     {
      "name": "felt_reports",
@@ -5776,7 +5776,7 @@
      "unit": "reports",
      "description": "",
      "type": "num",
-     "filled": 303
+     "filled": 305
     },
     {
      "name": "url",
@@ -5784,10 +5784,10 @@
      "unit": "",
      "description": "",
      "type": "str",
-     "filled": 1814
+     "filled": 1832
     }
    ],
-   "bytes": 317201,
+   "bytes": 320282,
    "built": "2026-11-24",
    "coverage": "Rolling 30 days",
    "default_vars": [
@@ -35643,7 +35643,7 @@
      "filled": 35
     }
    ],
-   "bytes": 3065,
+   "bytes": 3066,
    "built": "2026-11-24",
    "coverage": "1950 to 2025",
    "step": "year",
@@ -35674,7 +35674,7 @@
     "label_col": "country",
     "label": "Country or region"
    },
-   "rows": 5200,
+   "rows": 5201,
    "columns": [
     {
      "name": "works",
@@ -35682,10 +35682,10 @@
      "unit": "works",
      "description": "OpenAlex works with at least one author affiliated with an institution in the country. A work with authors in several countries counts once for each.",
      "type": "num",
-     "filled": 5200
+     "filled": 5201
     }
    ],
-   "bytes": 124163,
+   "bytes": 124185,
    "built": "2026-11-24",
    "coverage": "2000 to 2025",
    "entities": 220,
@@ -41640,7 +41640,7 @@
      "unit": "current US$",
      "description": "Published by Federal Reserve; FRED series M2SL.",
      "type": "num",
-     "filled": 813
+     "filled": 814
     },
     {
      "name": "retail_sales",
@@ -41683,7 +41683,7 @@
      "filled": 429
     }
    ],
-   "bytes": 189724,
+   "bytes": 189710,
    "built": "2026-11-24",
    "coverage": "1913 to 2026",
    "step": "month",
@@ -41802,7 +41802,7 @@
     "max": "2026-11-23"
    },
    "entity": null,
-   "rows": 26442,
+   "rows": 26444,
    "columns": [
     {
      "name": "federal_funds_rate_daily",
@@ -41810,7 +41810,7 @@
      "unit": "% a year",
      "description": "Published by Federal Reserve; FRED series DFF.",
      "type": "num",
-     "filled": 26441
+     "filled": 26444
     },
     {
      "name": "treasury_2_year",
@@ -41818,7 +41818,7 @@
      "unit": "% a year",
      "description": "Published by Federal Reserve; FRED series DGS2.",
      "type": "num",
-     "filled": 12615
+     "filled": 12616
     },
     {
      "name": "treasury_10_year",
@@ -41826,7 +41826,7 @@
      "unit": "% a year",
      "description": "Published by Federal Reserve; FRED series DGS10.",
      "type": "num",
-     "filled": 16207
+     "filled": 16208
     },
     {
      "name": "treasury_30_year",
@@ -41834,7 +41834,7 @@
      "unit": "% a year",
      "description": "Published by Federal Reserve; FRED series DGS30.",
      "type": "num",
-     "filled": 12437
+     "filled": 12438
     },
     {
      "name": "yield_curve_10_year_minus_2_year",
@@ -41885,7 +41885,7 @@
      "filled": 14008
     }
    ],
-   "bytes": 1166893,
+   "bytes": 1166961,
    "built": "2026-11-24",
    "coverage": "1954 to 2026",
    "step": "day",
@@ -41908,10 +41908,10 @@
     "col": "date",
     "type": "date",
     "min": "1993-04-01",
-    "max": "2026-11-20"
+    "max": "2026-11-23"
    },
    "entity": null,
-   "rows": 8439,
+   "rows": 8440,
    "columns": [
     {
      "name": "total_public_debt",
@@ -41919,7 +41919,7 @@
      "unit": "current US$",
      "description": "Total public debt outstanding: everything the federal government owes.",
      "type": "num",
-     "filled": 8439
+     "filled": 8440
     },
     {
      "name": "debt_held_by_the_public",
@@ -41927,7 +41927,7 @@
      "unit": "current US$",
      "description": "Federal debt held by investors outside the government.",
      "type": "num",
-     "filled": 5481
+     "filled": 5482
     },
     {
      "name": "intragovernmental_holdings",
@@ -41935,10 +41935,10 @@
      "unit": "current US$",
      "description": "Federal debt held by government trust funds such as Social Security.",
      "type": "num",
-     "filled": 5481
+     "filled": 5482
     }
    ],
-   "bytes": 387250,
+   "bytes": 387306,
    "built": "2026-11-24",
    "coverage": "1993 to 2026",
    "step": "day",
@@ -42089,6 +42089,338 @@
    "coverage": "2019 to 2026",
    "step": "day",
    "cadence": "Every day"
+  },
+  {
+   "id": "us-states-census",
+   "title": "US states: people, income, housing and business",
+   "description": "Every US state, the District of Columbia and Puerto Rico, year by year: population, income, age, home values, rent, poverty, education, unemployment and businesses.",
+   "region": "US",
+   "domain": "People and society",
+   "source": "US Census Bureau, American Community Survey and County Business Patterns",
+   "source_url": "https://www.census.gov/data/developers/data-sets.html",
+   "licence": "Public domain (US federal data)",
+   "file": "data/sets/us-states-census.csv",
+   "keys": [
+    "state",
+    "year"
+   ],
+   "time": {
+    "col": "year",
+    "type": "year",
+    "min": "2010",
+    "max": "2025"
+   },
+   "entity": {
+    "col": "state",
+    "label_col": "state_name",
+    "label": "State"
+   },
+   "rows": 780,
+   "columns": [
+    {
+     "name": "population",
+     "title": "Population of the state",
+     "unit": "people",
+     "description": "US Census Bureau, American Community Survey, 1-year estimates, table B01003.",
+     "type": "num",
+     "filled": 780
+    },
+    {
+     "name": "median_household_income",
+     "title": "Median household income",
+     "unit": "US$ a year, in that year's dollars",
+     "description": "US Census Bureau, American Community Survey, 1-year estimates, table B19013. Not adjusted for inflation.",
+     "type": "num",
+     "filled": 780
+    },
+    {
+     "name": "median_age",
+     "title": "Median age",
+     "unit": "years",
+     "description": "US Census Bureau, American Community Survey, 1-year estimates, table B01002.",
+     "type": "num",
+     "filled": 780
+    },
+    {
+     "name": "median_home_value",
+     "title": "Median value of owner-occupied homes",
+     "unit": "US$",
+     "description": "US Census Bureau, American Community Survey, 1-year estimates, table B25077.",
+     "type": "num",
+     "filled": 780
+    },
+    {
+     "name": "median_rent",
+     "title": "Median monthly rent, with utilities",
+     "unit": "US$ a month",
+     "description": "US Census Bureau, American Community Survey, 1-year estimates, table B25064 (gross rent).",
+     "type": "num",
+     "filled": 780
+    },
+    {
+     "name": "poverty_rate",
+     "title": "People living below the poverty line",
+     "unit": "% of people",
+     "description": "US Census Bureau, American Community Survey, 1-year estimates, table B17001.",
+     "type": "num",
+     "filled": 780
+    },
+    {
+     "name": "adults_with_a_degree",
+     "title": "Adults aged 25 and over with a bachelor's degree or higher",
+     "unit": "% of adults 25 and over",
+     "description": "US Census Bureau, American Community Survey, 1-year estimates, table B15003.",
+     "type": "num",
+     "filled": 728
+    },
+    {
+     "name": "unemployment_rate",
+     "title": "Unemployment rate (survey-based)",
+     "unit": "% of the civilian labour force",
+     "description": "US Census Bureau, American Community Survey, 1-year estimates, table B23025. This differs slightly from the official monthly rate.",
+     "type": "num",
+     "filled": 728
+    },
+    {
+     "name": "business_establishments",
+     "title": "Business establishments",
+     "unit": "establishments",
+     "description": "US Census Bureau, County Business Patterns: places of business with paid employees.",
+     "type": "num",
+     "filled": 572
+    },
+    {
+     "name": "employees_at_businesses",
+     "title": "Employees at those businesses",
+     "unit": "people",
+     "description": "US Census Bureau, County Business Patterns: employees in the pay period including March 12.",
+     "type": "num",
+     "filled": 572
+    },
+    {
+     "name": "annual_payroll",
+     "title": "Annual payroll of those businesses",
+     "unit": "US$",
+     "description": "US Census Bureau, County Business Patterns.",
+     "type": "num",
+     "filled": 572
+    }
+   ],
+   "bytes": 66796,
+   "built": "2026-11-24",
+   "coverage": "2010 to 2025",
+   "entities": 52,
+   "cadence": "Once a year, in September",
+   "places": [
+    [
+     "AL",
+     "Alabama"
+    ],
+    [
+     "AK",
+     "Alaska"
+    ],
+    [
+     "AZ",
+     "Arizona"
+    ],
+    [
+     "AR",
+     "Arkansas"
+    ],
+    [
+     "CA",
+     "California"
+    ],
+    [
+     "CO",
+     "Colorado"
+    ],
+    [
+     "CT",
+     "Connecticut"
+    ],
+    [
+     "DE",
+     "Delaware"
+    ],
+    [
+     "DC",
+     "District of Columbia"
+    ],
+    [
+     "FL",
+     "Florida"
+    ],
+    [
+     "GA",
+     "Georgia"
+    ],
+    [
+     "HI",
+     "Hawaii"
+    ],
+    [
+     "ID",
+     "Idaho"
+    ],
+    [
+     "IL",
+     "Illinois"
+    ],
+    [
+     "IN",
+     "Indiana"
+    ],
+    [
+     "IA",
+     "Iowa"
+    ],
+    [
+     "KS",
+     "Kansas"
+    ],
+    [
+     "KY",
+     "Kentucky"
+    ],
+    [
+     "LA",
+     "Louisiana"
+    ],
+    [
+     "ME",
+     "Maine"
+    ],
+    [
+     "MD",
+     "Maryland"
+    ],
+    [
+     "MA",
+     "Massachusetts"
+    ],
+    [
+     "MI",
+     "Michigan"
+    ],
+    [
+     "MN",
+     "Minnesota"
+    ],
+    [
+     "MS",
+     "Mississippi"
+    ],
+    [
+     "MO",
+     "Missouri"
+    ],
+    [
+     "MT",
+     "Montana"
+    ],
+    [
+     "NE",
+     "Nebraska"
+    ],
+    [
+     "NV",
+     "Nevada"
+    ],
+    [
+     "NH",
+     "New Hampshire"
+    ],
+    [
+     "NJ",
+     "New Jersey"
+    ],
+    [
+     "NM",
+     "New Mexico"
+    ],
+    [
+     "NY",
+     "New York"
+    ],
+    [
+     "NC",
+     "North Carolina"
+    ],
+    [
+     "ND",
+     "North Dakota"
+    ],
+    [
+     "OH",
+     "Ohio"
+    ],
+    [
+     "OK",
+     "Oklahoma"
+    ],
+    [
+     "OR",
+     "Oregon"
+    ],
+    [
+     "PA",
+     "Pennsylvania"
+    ],
+    [
+     "PR",
+     "Puerto Rico"
+    ],
+    [
+     "RI",
+     "Rhode Island"
+    ],
+    [
+     "SC",
+     "South Carolina"
+    ],
+    [
+     "SD",
+     "South Dakota"
+    ],
+    [
+     "TN",
+     "Tennessee"
+    ],
+    [
+     "TX",
+     "Texas"
+    ],
+    [
+     "UT",
+     "Utah"
+    ],
+    [
+     "VT",
+     "Vermont"
+    ],
+    [
+     "VA",
+     "Virginia"
+    ],
+    [
+     "WA",
+     "Washington"
+    ],
+    [
+     "WV",
+     "West Virginia"
+    ],
+    [
+     "WI",
+     "Wisconsin"
+    ],
+    [
+     "WY",
+     "Wyoming"
+    ]
+   ]
   },
   {
    "id": "us-states-rents",
@@ -49446,17 +49778,9 @@
      "description": "US Geological Survey stream gauge 01358000: the average of the daily mean flow in each month with at least 25 days recorded.",
      "type": "num",
      "filled": 887
-    },
-    {
-     "name": "sacramento_at_freeport",
-     "title": "Flow of the Sacramento River at Freeport, monthly average",
-     "unit": "cubic feet per second",
-     "description": "US Geological Survey stream gauge 11447650: the average of the daily mean flow in each month with at least 25 days recorded.",
-     "type": "num",
-     "filled": 789
     }
    ],
-   "bytes": 55712,
+   "bytes": 50927,
    "built": "2026-11-24",
    "coverage": "1950 to 2026",
    "step": "month",
