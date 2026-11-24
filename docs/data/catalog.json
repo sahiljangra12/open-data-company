@@ -1,9 +1,9 @@
 {
  "count": 136,
  "tally": {
-  "live": 42,
+  "live": 43,
   "via": 35,
-  "key": 21,
+  "key": 20,
   "images": 7,
   "bulk": 11,
   "terms": 2,
@@ -1561,10 +1561,15 @@
    "update": "monthly",
    "api": true,
    "buyers": "Importers, exporters, trade consultants",
-   "status": "key",
-   "status_label": "Needs a free key",
-   "datasets": [],
-   "note": "Free, but the source asks for a key or account that only the site's owner can create."
+   "status": "live",
+   "status_label": "On the site",
+   "datasets": [
+    {
+     "id": "world-trade-in-goods",
+     "title": "World trade in goods: exports and imports by country"
+    }
+   ],
+   "note": "Total exports and imports of goods for every reporting country, from its public service."
   },
   {
    "name": "WTO Stats",

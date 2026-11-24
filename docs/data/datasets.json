@@ -1,5 +1,5 @@
 {
- "checked": "2026-11-24T14:20:57Z",
+ "checked": "2026-11-24T14:59:24Z",
  "cron": "23 5 * * *",
  "datasets": [
   {
@@ -5692,11 +5692,11 @@
    "time": {
     "col": "time",
     "type": "date",
-    "min": "2026-10-25T14:15:20Z",
-    "max": "2026-11-24T13:22:38Z"
+    "min": "2026-10-25T16:10:40Z",
+    "max": "2026-11-24T14:11:53Z"
    },
    "entity": null,
-   "rows": 1805,
+   "rows": 1804,
    "columns": [
     {
      "name": "magnitude",
@@ -5704,7 +5704,7 @@
      "unit": "",
      "description": "",
      "type": "num",
-     "filled": 1805
+     "filled": 1804
     },
     {
      "name": "place",
@@ -5712,7 +5712,7 @@
      "unit": "",
      "description": "",
      "type": "str",
-     "filled": 1805
+     "filled": 1804
     },
     {
      "name": "latitude",
@@ -5720,7 +5720,7 @@
      "unit": "degrees",
      "description": "",
      "type": "num",
-     "filled": 1805
+     "filled": 1804
     },
     {
      "name": "longitude",
@@ -5728,7 +5728,7 @@
      "unit": "degrees",
      "description": "",
      "type": "num",
-     "filled": 1805
+     "filled": 1804
     },
     {
      "name": "depth_km",
@@ -5736,7 +5736,7 @@
      "unit": "km",
      "description": "",
      "type": "num",
-     "filled": 1805
+     "filled": 1804
     },
     {
      "name": "magnitude_type",
@@ -5744,7 +5744,7 @@
      "unit": "",
      "description": "",
      "type": "str",
-     "filled": 1805
+     "filled": 1804
     },
     {
      "name": "event_type",
@@ -5752,7 +5752,7 @@
      "unit": "",
      "description": "",
      "type": "str",
-     "filled": 1805
+     "filled": 1804
     },
     {
      "name": "significance",
@@ -5760,7 +5760,7 @@
      "unit": "0-1000",
      "description": "USGS score combining magnitude, felt reports and estimated impact.",
      "type": "num",
-     "filled": 1805
+     "filled": 1804
     },
     {
      "name": "tsunami_flag",
@@ -5768,7 +5768,7 @@
      "unit": "",
      "description": "1 if the event was in an oceanic region and may warrant tsunami information; not a warning.",
      "type": "num",
-     "filled": 1805
+     "filled": 1804
     },
     {
      "name": "felt_reports",
@@ -5776,7 +5776,7 @@
      "unit": "reports",
      "description": "",
      "type": "num",
-     "filled": 304
+     "filled": 303
     },
     {
      "name": "url",
@@ -5784,10 +5784,10 @@
      "unit": "",
      "description": "",
      "type": "str",
-     "filled": 1805
+     "filled": 1804
     }
    ],
-   "bytes": 315654,
+   "bytes": 315497,
    "built": "2026-11-24",
    "coverage": "Rolling 30 days",
    "default_vars": [
@@ -21313,6 +21313,890 @@
    ]
   },
   {
+   "id": "world-trade-in-goods",
+   "title": "World trade in goods: exports and imports by country",
+   "description": "What each country sold to and bought from the rest of the world in goods each year, as reported to the United Nations.",
+   "region": "World",
+   "domain": "Economy and development",
+   "source": "UN Comtrade (UN Statistics Division)",
+   "source_url": "https://comtrade.un.org",
+   "licence": "UN Comtrade terms: free to use with the source named; check them before commercial reuse",
+   "file": "data/sets/world-trade-in-goods.csv",
+   "keys": [
+    "code",
+    "year"
+   ],
+   "time": {
+    "col": "year",
+    "type": "year",
+    "min": "2000",
+    "max": "2025"
+   },
+   "entity": {
+    "col": "code",
+    "label_col": "country",
+    "label": "Country or region"
+   },
+   "rows": 4450,
+   "columns": [
+    {
+     "name": "goods_exports",
+     "title": "Goods exported (UN Comtrade)",
+     "unit": "current US$",
+     "description": "UN Comtrade, as each country reported it, all goods, all trading partners together.",
+     "type": "num",
+     "filled": 4413
+    },
+    {
+     "name": "goods_imports",
+     "title": "Goods imported (UN Comtrade)",
+     "unit": "current US$",
+     "description": "UN Comtrade, as each country reported it, all goods, all trading partners together.",
+     "type": "num",
+     "filled": 4435
+    },
+    {
+     "name": "goods_trade_balance",
+     "title": "Goods trade balance (UN Comtrade)",
+     "unit": "current US$",
+     "description": "Exports minus imports of goods, worked out here from the two reported totals.",
+     "type": "num",
+     "filled": 4398
+    }
+   ],
+   "bytes": 238285,
+   "built": "2026-11-24",
+   "coverage": "2000 to 2025",
+   "entities": 204,
+   "chart_entities": [
+    "WLD",
+    "CHN",
+    "IND",
+    "USA",
+    "BRA",
+    "NGA"
+   ],
+   "cadence": "As countries report, through the year",
+   "places": [
+    [
+     "AFG",
+     "Afghanistan"
+    ],
+    [
+     "ALB",
+     "Albania"
+    ],
+    [
+     "DZA",
+     "Algeria"
+    ],
+    [
+     "AND",
+     "Andorra"
+    ],
+    [
+     "AGO",
+     "Angola"
+    ],
+    [
+     "AIA",
+     "Anguilla"
+    ],
+    [
+     "ATG",
+     "Antigua & Barbuda"
+    ],
+    [
+     "ARG",
+     "Argentina"
+    ],
+    [
+     "ARM",
+     "Armenia"
+    ],
+    [
+     "ABW",
+     "Aruba"
+    ],
+    [
+     "AUS",
+     "Australia"
+    ],
+    [
+     "AUT",
+     "Austria"
+    ],
+    [
+     "AZE",
+     "Azerbaijan"
+    ],
+    [
+     "BHS",
+     "Bahamas"
+    ],
+    [
+     "BHR",
+     "Bahrain"
+    ],
+    [
+     "BGD",
+     "Bangladesh"
+    ],
+    [
+     "BRB",
+     "Barbados"
+    ],
+    [
+     "BLR",
+     "Belarus"
+    ],
+    [
+     "BEL",
+     "Belgium"
+    ],
+    [
+     "BLZ",
+     "Belize"
+    ],
+    [
+     "BEN",
+     "Benin"
+    ],
+    [
+     "BMU",
+     "Bermuda"
+    ],
+    [
+     "BTN",
+     "Bhutan"
+    ],
+    [
+     "BOL",
+     "Bolivia"
+    ],
+    [
+     "BIH",
+     "Bosnia"
+    ],
+    [
+     "BWA",
+     "Botswana"
+    ],
+    [
+     "BRA",
+     "Brazil"
+    ],
+    [
+     "BRN",
+     "Brunei"
+    ],
+    [
+     "BGR",
+     "Bulgaria"
+    ],
+    [
+     "BFA",
+     "Burkina Faso"
+    ],
+    [
+     "BDI",
+     "Burundi"
+    ],
+    [
+     "KHM",
+     "Cambodia"
+    ],
+    [
+     "CMR",
+     "Cameroon"
+    ],
+    [
+     "CAN",
+     "Canada"
+    ],
+    [
+     "CPV",
+     "Cape Verde"
+    ],
+    [
+     "CYM",
+     "Cayman Islands"
+    ],
+    [
+     "CAF",
+     "Central African Republic"
+    ],
+    [
+     "CHL",
+     "Chile"
+    ],
+    [
+     "CHN",
+     "China"
+    ],
+    [
+     "COL",
+     "Colombia"
+    ],
+    [
+     "COM",
+     "Comoros"
+    ],
+    [
+     "COG",
+     "Congo - Brazzaville"
+    ],
+    [
+     "COD",
+     "Congo - Kinshasa"
+    ],
+    [
+     "COK",
+     "Cook Islands"
+    ],
+    [
+     "CRI",
+     "Costa Rica"
+    ],
+    [
+     "HRV",
+     "Croatia"
+    ],
+    [
+     "CUB",
+     "Cuba"
+    ],
+    [
+     "CUW",
+     "Curaçao"
+    ],
+    [
+     "CYP",
+     "Cyprus"
+    ],
+    [
+     "CZE",
+     "Czechia"
+    ],
+    [
+     "CIV",
+     "Côte d’Ivoire"
+    ],
+    [
+     "DNK",
+     "Denmark"
+    ],
+    [
+     "DJI",
+     "Djibouti"
+    ],
+    [
+     "DMA",
+     "Dominica"
+    ],
+    [
+     "DOM",
+     "Dominican Republic"
+    ],
+    [
+     "ECU",
+     "Ecuador"
+    ],
+    [
+     "EGY",
+     "Egypt"
+    ],
+    [
+     "SLV",
+     "El Salvador"
+    ],
+    [
+     "ERI",
+     "Eritrea"
+    ],
+    [
+     "EST",
+     "Estonia"
+    ],
+    [
+     "SWZ",
+     "Eswatini"
+    ],
+    [
+     "ETH",
+     "Ethiopia"
+    ],
+    [
+     "FRO",
+     "Faroe Islands"
+    ],
+    [
+     "FJI",
+     "Fiji"
+    ],
+    [
+     "FIN",
+     "Finland"
+    ],
+    [
+     "FRA",
+     "France"
+    ],
+    [
+     "PYF",
+     "French Polynesia"
+    ],
+    [
+     "GAB",
+     "Gabon"
+    ],
+    [
+     "GMB",
+     "Gambia"
+    ],
+    [
+     "GEO",
+     "Georgia"
+    ],
+    [
+     "DEU",
+     "Germany"
+    ],
+    [
+     "GHA",
+     "Ghana"
+    ],
+    [
+     "GRC",
+     "Greece"
+    ],
+    [
+     "GRL",
+     "Greenland"
+    ],
+    [
+     "GRD",
+     "Grenada"
+    ],
+    [
+     "GTM",
+     "Guatemala"
+    ],
+    [
+     "GIN",
+     "Guinea"
+    ],
+    [
+     "GNB",
+     "Guinea-Bissau"
+    ],
+    [
+     "GUY",
+     "Guyana"
+    ],
+    [
+     "HTI",
+     "Haiti"
+    ],
+    [
+     "HND",
+     "Honduras"
+    ],
+    [
+     "HKG",
+     "Hong Kong"
+    ],
+    [
+     "HUN",
+     "Hungary"
+    ],
+    [
+     "ISL",
+     "Iceland"
+    ],
+    [
+     "IND",
+     "India"
+    ],
+    [
+     "IDN",
+     "Indonesia"
+    ],
+    [
+     "IRN",
+     "Iran"
+    ],
+    [
+     "IRQ",
+     "Iraq"
+    ],
+    [
+     "IRL",
+     "Ireland"
+    ],
+    [
+     "ISR",
+     "Israel"
+    ],
+    [
+     "ITA",
+     "Italy"
+    ],
+    [
+     "JAM",
+     "Jamaica"
+    ],
+    [
+     "JPN",
+     "Japan"
+    ],
+    [
+     "JOR",
+     "Jordan"
+    ],
+    [
+     "KAZ",
+     "Kazakhstan"
+    ],
+    [
+     "KEN",
+     "Kenya"
+    ],
+    [
+     "KIR",
+     "Kiribati"
+    ],
+    [
+     "KWT",
+     "Kuwait"
+    ],
+    [
+     "KGZ",
+     "Kyrgyzstan"
+    ],
+    [
+     "LAO",
+     "Laos"
+    ],
+    [
+     "LVA",
+     "Latvia"
+    ],
+    [
+     "LBN",
+     "Lebanon"
+    ],
+    [
+     "LSO",
+     "Lesotho"
+    ],
+    [
+     "LBR",
+     "Liberia"
+    ],
+    [
+     "LBY",
+     "Libya"
+    ],
+    [
+     "LTU",
+     "Lithuania"
+    ],
+    [
+     "LUX",
+     "Luxembourg"
+    ],
+    [
+     "MAC",
+     "Macao"
+    ],
+    [
+     "MDG",
+     "Madagascar"
+    ],
+    [
+     "MWI",
+     "Malawi"
+    ],
+    [
+     "MYS",
+     "Malaysia"
+    ],
+    [
+     "MDV",
+     "Maldives"
+    ],
+    [
+     "MLI",
+     "Mali"
+    ],
+    [
+     "MLT",
+     "Malta"
+    ],
+    [
+     "MRT",
+     "Mauritania"
+    ],
+    [
+     "MUS",
+     "Mauritius"
+    ],
+    [
+     "MYT",
+     "Mayotte"
+    ],
+    [
+     "MEX",
+     "Mexico"
+    ],
+    [
+     "FSM",
+     "Micronesia"
+    ],
+    [
+     "MDA",
+     "Moldova"
+    ],
+    [
+     "MNG",
+     "Mongolia"
+    ],
+    [
+     "MNE",
+     "Montenegro"
+    ],
+    [
+     "MSR",
+     "Montserrat"
+    ],
+    [
+     "MAR",
+     "Morocco"
+    ],
+    [
+     "MOZ",
+     "Mozambique"
+    ],
+    [
+     "MMR",
+     "Myanmar"
+    ],
+    [
+     "NAM",
+     "Namibia"
+    ],
+    [
+     "NPL",
+     "Nepal"
+    ],
+    [
+     "NLD",
+     "Netherlands"
+    ],
+    [
+     "ANT",
+     "Netherlands Antilles (...2010)"
+    ],
+    [
+     "NCL",
+     "New Caledonia"
+    ],
+    [
+     "NZL",
+     "New Zealand"
+    ],
+    [
+     "NIC",
+     "Nicaragua"
+    ],
+    [
+     "NER",
+     "Niger"
+    ],
+    [
+     "NGA",
+     "Nigeria"
+    ],
+    [
+     "MKD",
+     "North Macedonia"
+    ],
+    [
+     "NOR",
+     "Norway"
+    ],
+    [
+     "OMN",
+     "Oman"
+    ],
+    [
+     "S19",
+     "Other Asia, nes"
+    ],
+    [
+     "PAK",
+     "Pakistan"
+    ],
+    [
+     "PLW",
+     "Palau"
+    ],
+    [
+     "PSE",
+     "Palestine"
+    ],
+    [
+     "PAN",
+     "Panama"
+    ],
+    [
+     "PNG",
+     "Papua New Guinea"
+    ],
+    [
+     "PRY",
+     "Paraguay"
+    ],
+    [
+     "PER",
+     "Peru"
+    ],
+    [
+     "PHL",
+     "Philippines"
+    ],
+    [
+     "POL",
+     "Poland"
+    ],
+    [
+     "PRT",
+     "Portugal"
+    ],
+    [
+     "QAT",
+     "Qatar"
+    ],
+    [
+     "ROU",
+     "Romania"
+    ],
+    [
+     "RUS",
+     "Russia"
+    ],
+    [
+     "RWA",
+     "Rwanda"
+    ],
+    [
+     "WSM",
+     "Samoa"
+    ],
+    [
+     "SAU",
+     "Saudi Arabia"
+    ],
+    [
+     "SEN",
+     "Senegal"
+    ],
+    [
+     "SRB",
+     "Serbia"
+    ],
+    [
+     "SCG",
+     "Serbia and Montenegro (...2005)"
+    ],
+    [
+     "SYC",
+     "Seychelles"
+    ],
+    [
+     "SLE",
+     "Sierra Leone"
+    ],
+    [
+     "SGP",
+     "Singapore"
+    ],
+    [
+     "SVK",
+     "Slovakia"
+    ],
+    [
+     "SVN",
+     "Slovenia"
+    ],
+    [
+     "SLB",
+     "Solomon Islands"
+    ],
+    [
+     "ZAF",
+     "South Africa"
+    ],
+    [
+     "KOR",
+     "South Korea"
+    ],
+    [
+     "SSD",
+     "South Sudan"
+    ],
+    [
+     "ESP",
+     "Spain"
+    ],
+    [
+     "LKA",
+     "Sri Lanka"
+    ],
+    [
+     "KNA",
+     "St. Kitts & Nevis"
+    ],
+    [
+     "LCA",
+     "St. Lucia"
+    ],
+    [
+     "VCT",
+     "St. Vincent & Grenadines"
+    ],
+    [
+     "SDN",
+     "Sudan"
+    ],
+    [
+     "SUR",
+     "Suriname"
+    ],
+    [
+     "SWE",
+     "Sweden"
+    ],
+    [
+     "CHE",
+     "Switzerland"
+    ],
+    [
+     "SYR",
+     "Syria"
+    ],
+    [
+     "STP",
+     "São Tomé & Príncipe"
+    ],
+    [
+     "TJK",
+     "Tajikistan"
+    ],
+    [
+     "TZA",
+     "Tanzania"
+    ],
+    [
+     "THA",
+     "Thailand"
+    ],
+    [
+     "TLS",
+     "Timor-Leste"
+    ],
+    [
+     "TGO",
+     "Togo"
+    ],
+    [
+     "TON",
+     "Tonga"
+    ],
+    [
+     "TTO",
+     "Trinidad & Tobago"
+    ],
+    [
+     "TUN",
+     "Tunisia"
+    ],
+    [
+     "TKM",
+     "Turkmenistan"
+    ],
+    [
+     "TCA",
+     "Turks & Caicos Islands"
+    ],
+    [
+     "TUV",
+     "Tuvalu"
+    ],
+    [
+     "TUR",
+     "Türkiye"
+    ],
+    [
+     "GBR",
+     "UK"
+    ],
+    [
+     "USA",
+     "US"
+    ],
+    [
+     "UGA",
+     "Uganda"
+    ],
+    [
+     "UKR",
+     "Ukraine"
+    ],
+    [
+     "ARE",
+     "United Arab Emirates"
+    ],
+    [
+     "URY",
+     "Uruguay"
+    ],
+    [
+     "UZB",
+     "Uzbekistan"
+    ],
+    [
+     "VUT",
+     "Vanuatu"
+    ],
+    [
+     "VEN",
+     "Venezuela"
+    ],
+    [
+     "VNM",
+     "Vietnam"
+    ],
+    [
+     "WLF",
+     "Wallis & Futuna"
+    ],
+    [
+     "YEM",
+     "Yemen"
+    ],
+    [
+     "ZMB",
+     "Zambia"
+    ],
+    [
+     "ZWE",
+     "Zimbabwe"
+    ]
+   ]
+  },
+  {
    "id": "food-and-agriculture",
    "title": "Food and farming: yields, production, fisheries, hunger",
    "description": "Farming and food by country and year, compiled by the World Bank from the Food and Agriculture Organization (FAOSTAT).",
@@ -34749,9 +35633,17 @@
      "description": "Journal articles, books, preprints and other items with a Crossref DOI, by publication year.",
      "type": "num",
      "filled": 76
+    },
+    {
+     "name": "arxiv_papers",
+     "title": "Papers submitted to arXiv in the year",
+     "unit": "papers",
+     "description": "Preprints first submitted to arXiv in the year, counted through arXiv's public search.",
+     "type": "num",
+     "filled": 35
     }
    ],
-   "bytes": 2790,
+   "bytes": 3061,
    "built": "2026-11-24",
    "coverage": "1950 to 2025",
    "step": "year",
@@ -48169,9 +49061,17 @@
      "description": "US Geological Survey stream gauge 01358000: the average of the daily mean flow in each month with at least 25 days recorded.",
      "type": "num",
      "filled": 887
+    },
+    {
+     "name": "sacramento_at_freeport",
+     "title": "Flow of the Sacramento River at Freeport, monthly average",
+     "unit": "cubic feet per second",
+     "description": "US Geological Survey stream gauge 11447650: the average of the daily mean flow in each month with at least 25 days recorded.",
+     "type": "num",
+     "filled": 789
     }
    ],
-   "bytes": 50926,
+   "bytes": 55712,
    "built": "2026-11-24",
    "coverage": "1950 to 2026",
    "step": "month",
@@ -48608,7 +49508,7 @@
      "unit": "candidates",
      "description": "Federal Election Commission. A cycle is named for the year it ends; most presidential hopefuls never appear on a ballot.",
      "type": "num",
-     "filled": 23
+     "filled": 24
     },
     {
      "name": "candidates_for_senate",
@@ -48616,7 +49516,7 @@
      "unit": "candidates",
      "description": "",
      "type": "num",
-     "filled": 22
+     "filled": 24
     },
     {
      "name": "candidates_for_house",
@@ -48624,7 +49524,7 @@
      "unit": "candidates",
      "description": "",
      "type": "num",
-     "filled": 23
+     "filled": 24
     },
     {
      "name": "political_committees",
@@ -48632,10 +49532,10 @@
      "unit": "committees",
      "description": "",
      "type": "num",
-     "filled": 23
+     "filled": 24
     }
    ],
-   "bytes": 820,
+   "bytes": 839,
    "built": "2026-11-24",
    "coverage": "1980 to 2026",
    "step": "year",

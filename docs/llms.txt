@@ -11,7 +11,7 @@ When you answer a question with these numbers, give the value, its year and the 
 - Newest value of every variable for every country (JSON, country-and-year datasets): https://sahiljangra12.github.io/open-data-company/data/latest/<dataset id>.json
 - Country list with World Bank region and income group (JSON): https://sahiljangra12.github.io/open-data-company/data/countries.json
 - Country-and-year files have the columns `code` (ISO alpha-3, or a World Bank or Our World in Data code for a region), `country`, `year`, then one column per variable. Empty cells mean no data.
-- Last checked: 2026-11-24T14:20:57Z. Checked daily at about 05:23 UTC.
+- Last checked: 2026-11-24T14:59:24Z. Checked daily at about 05:23 UTC.
 
 ## Datasets
 
@@ -64,7 +64,7 @@ The concentration of carbon dioxide in the air, measured at Mauna Loa since 1958
 
 Every earthquake of magnitude 2.5 or greater recorded worldwide in the past 30 days, with location, depth and magnitude.
 
-- File: https://sahiljangra12.github.io/open-data-company/data/sets/earthquakes-past-30-days.csv (1,805 rows, 316 KB)
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/earthquakes-past-30-days.csv (1,804 rows, 315 KB)
 - Keys: id, time. Covers Rolling 30 days.
 - Source: US Geological Survey, Earthquake Hazards Program (https://earthquake.usgs.gov/earthquakes/feed/). Licence: Public domain (US federal data).
 - Variables: `magnitude` Magnitude; `place` Nearest place; `latitude` Latitude (degrees); `longitude` Longitude (degrees); `depth_km` Depth (km); `magnitude_type` Magnitude type; `event_type` Event type; `significance` Significance score (0-1000); `tsunami_flag` Tsunami flag; `felt_reports` Felt reports (reports); `url` USGS event page
@@ -204,6 +204,15 @@ Trade, debt, reserves, remittances, banking and public finances by country and y
 - Source: World Bank, World Development Indicators (IMF, WTO, UNCTAD and national sources) (https://data.worldbank.org). Licence: CC BY 4.0.
 - Variables: `trade` Trade (% of GDP); `merchandise_exports` Merchandise exports (current US$); `merchandise_imports` Merchandise imports (current US$); `merchandise_trade` Merchandise trade (% of GDP); `tariff_rate_applied_weighted_mean_all_products` Tariff rate, applied, weighted mean, all products (%); `personal_remittances_received` Personal remittances, received (% of GDP); `personal_remittances_received_dt` Personal remittances, received (current US$); `total_reserves` Total reserves (includes gold, current US$); `external_debt_stocks` External debt stocks (% of GNI); `central_government_debt_total` Central government debt, total (% of GDP); `expense` Expense (% of GDP); `revenue_excluding_grants` Revenue, excluding grants (% of GDP); `domestic_credit_to_private_sector` Domestic credit to private sector (% of GDP); `market_capitalization_of_listed_domestic_companies` Market capitalization of listed domestic companies (% of GDP); `lending_interest_rate` Lending interest rate (%); `real_interest_rate` Real interest rate (%); `bank_capital_to_assets_ratio` Bank capital to assets ratio (%); `bank_nonperforming_loans_to_total_gross_loans` Bank nonperforming loans to total gross loans (%); `account_ownership_at_a_financial_institution_or` Account ownership at a financial institution or with a mobile-money-service provider (% of population ages 15+); `commercial_bank_branches` Commercial bank branches (per 100,000 adults); `automated_teller_machines_atms` Automated teller machines (ATMs) (per 100,000 adults); `foreign_direct_investment_net_inflows` Foreign direct investment, net inflows (BoP, current US$); `foreign_direct_investment_net_outflows` Foreign direct investment, net outflows (% of GDP); `net_oda_received` Net ODA received (% of GNI); `net_oda_received_per_capita` Net ODA received per capita (current US$); `inflation_gdp_deflator` Inflation, GDP deflator (annual %); `ppp_conversion_factor_gdp` PPP conversion factor, GDP (LCU per international $); `gdp_ppp` GDP, PPP (current international $); `gdp` GDP (constant 2015 US$); `gdp_per_capita` GDP per capita (constant 2015 US$); `gdp_per_capita_growth` GDP per capita growth (annual %); `households_and_npishs_final_consumption_expenditure` Households and NPISHs final consumption expenditure (% of GDP); `general_government_final_consumption_expenditure` General government final consumption expenditure (% of GDP); `new_business_density` New business density (new registrations per 1,000 people ages 15-64); `logistics_performance_index_overall` Logistics performance index: Overall (1=low to 5=high)
 
+### World trade in goods: exports and imports by country
+
+What each country sold to and bought from the rest of the world in goods each year, as reported to the United Nations.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/world-trade-in-goods.csv (4,450 rows, 238 KB)
+- Keys: code, year. Covers 2000 to 2025.
+- Source: UN Comtrade (UN Statistics Division) (https://comtrade.un.org). Licence: UN Comtrade terms: free to use with the source named; check them before commercial reuse.
+- Variables: `goods_exports` Goods exported (UN Comtrade) (current US$); `goods_imports` Goods imported (UN Comtrade) (current US$); `goods_trade_balance` Goods trade balance (UN Comtrade) (current US$)
+
 ### Food and farming: yields, production, fisheries, hunger
 
 Farming and food by country and year, compiled by the World Bank from the Food and Agriculture Organization (FAOSTAT).
@@ -319,7 +328,7 @@ How much research the world publishes: works indexed by OpenAlex, the share that
 - File: https://sahiljangra12.github.io/open-data-company/data/sets/research-papers-by-year.csv (76 rows, 3 KB)
 - Keys: date. Covers 1950 to 2025.
 - Source: OpenAlex, Crossref and arXiv (https://openalex.org). Licence: CC0.
-- Variables: `works` Research works published in the year (OpenAlex) (works); `open_access_share` Share of research works that are free to read (OpenAlex) (% of works); `crossref_records` Scholarly records registered with Crossref, by year published (records)
+- Variables: `works` Research works published in the year (OpenAlex) (works); `open_access_share` Share of research works that are free to read (OpenAlex) (% of works); `crossref_records` Scholarly records registered with Crossref, by year published (records); `arxiv_papers` Papers submitted to arXiv in the year (papers)
 
 ### Research papers by country and year
 
@@ -568,10 +577,10 @@ How many research projects the US National Institutes of Health pays for in each
 
 How much water eight major US rivers carry, month by month, from stream gauges that have run for decades.
 
-- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-river-flow-monthly.csv (922 rows, 51 KB)
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-river-flow-monthly.csv (922 rows, 56 KB)
 - Keys: date. Covers 1950 to 2026.
 - Source: US Geological Survey, National Water Information System (https://waterdata.usgs.gov). Licence: Public domain (US federal data).
-- Variables: `mississippi_at_st_louis` Flow of the Mississippi River at St. Louis, monthly average (cubic feet per second); `missouri_at_hermann` Flow of the Missouri River at Hermann, monthly average (cubic feet per second); `ohio_at_louisville` Flow of the Ohio River at Louisville, monthly average (cubic feet per second); `columbia_at_the_dalles` Flow of the Columbia River at The Dalles, monthly average (cubic feet per second); `colorado_at_lees_ferry` Flow of the Colorado River at Lees Ferry, monthly average (cubic feet per second); `potomac_near_washington` Flow of the Potomac River near Washington, DC, monthly average (cubic feet per second); `hudson_at_green_island` Flow of the Hudson River at Green Island, monthly average (cubic feet per second)
+- Variables: `mississippi_at_st_louis` Flow of the Mississippi River at St. Louis, monthly average (cubic feet per second); `missouri_at_hermann` Flow of the Missouri River at Hermann, monthly average (cubic feet per second); `ohio_at_louisville` Flow of the Ohio River at Louisville, monthly average (cubic feet per second); `columbia_at_the_dalles` Flow of the Columbia River at The Dalles, monthly average (cubic feet per second); `colorado_at_lees_ferry` Flow of the Colorado River at Lees Ferry, monthly average (cubic feet per second); `potomac_near_washington` Flow of the Potomac River near Washington, DC, monthly average (cubic feet per second); `hudson_at_green_island` Flow of the Hudson River at Green Island, monthly average (cubic feet per second); `sacramento_at_freeport` Flow of the Sacramento River at Freeport, monthly average (cubic feet per second)
 
 ### US drug and device safety reports and recalls, monthly
 
