@@ -2009,6 +2009,102 @@ def hud_rents():
                  ["state", "year"], "year", "year", dict(col="state", label_col="state_name", label="State"), ["state", "state_name", "year"] + cols, rows, meta, min_rows=40)
 
 
+def us_air_quality():
+    k, email = key("AQS_KEY"), key("AQS_EMAIL")
+    id, cell, names = "us-states-air-quality", {}, {}
+    path = SETS / f"{id}.csv"
+    if path.exists():
+        with open(path, encoding="utf-8") as f:
+            for r in csv.DictReader(f):
+                names[r["state"]] = r["state_name"]
+                cell[(r["state"], int(r["year"]))] = {c: float(v) for c, v in r.items() if c not in ("state", "state_name", "year") and v != ""}
+    have = {y for _, y in cell}
+    missing = [y for y in range(THIS_YEAR - 1, THIS_YEAR - 6, -1) if y not in have][:1]      # the service is slow by design: one new year on each run, newest first
+    shown = False
+    for y in missing:
+        for fips, st in USPS.items():
+            try:
+                j = J(f"https://aqs.epa.gov/data/api/annualData/byState?email={urllib.parse.quote(email)}&key={k}&param=88101&bdate={y}0101&edate={y}1231&state={fips}", tries=2, timeout=200)
+                rows = j.get("Data") or []
+                if not shown and rows:
+                    print("  us_air_quality sample:", {a: rows[0].get(a) for a in ("state", "county", "pollutant_standard", "event_type", "arithmetic_mean", "units_of_measure", "validity_indicator")})
+                    shown = True
+                sites = {}
+                for r in rows:
+                    if str(r.get("pollutant_standard", "")).startswith("PM25 Annual") and r.get("event_type") != "Events Excluded" and r.get("validity_indicator") == "Y" and r.get("arithmetic_mean") is not None:
+                        sites.setdefault((r.get("county_code"), r.get("site_number")), []).append(float(r["arithmetic_mean"]))
+                if sites:
+                    means = [sum(v) / len(v) for v in sites.values()]
+                    names[st] = rows[0].get("state") or st
+                    cell[(st, y)] = dict(fine_particles=round(sum(means) / len(means), 2), dirtiest_monitor=round(max(means), 2), cleanest_monitor=round(min(means), 2), monitors=len(means))
+            except Exception as e:
+                print(f"  us_air_quality {st} {y}: {str(e)[:60]}")
+            time.sleep(5.5)                                 # the service asks for five seconds between requests
+    D = "US Environmental Protection Agency, Air Quality System: the yearly average of fine particles (PM2.5) at each valid monitor, then averaged across the state's monitors. Monitors are not spread evenly, so this is a guide rather than what the average resident breathes."
+    meta = dict(fine_particles=dict(title="Fine particle pollution (PM2.5), average across the state's monitors", unit="micrograms per cubic metre", description=D), dirtiest_monitor=dict(title="Highest yearly PM2.5 at any monitor in the state", unit="micrograms per cubic metre"),
+                cleanest_monitor=dict(title="Lowest yearly PM2.5 at any monitor in the state", unit="micrograms per cubic metre"), monitors=dict(title="Monitors counted", unit="monitors"))
+    cols = ["fine_particles", "dirtiest_monitor", "cleanest_monitor", "monitors"]
+    rows = [[st, names.get(st, st), y] + [num(v.get(c)) for c in cols] for (st, y), v in sorted(cell.items())]
+    return table(id, "Air quality in every US state: fine particles", "How much fine particle pollution the air holds in each US state, from the government's monitors.",
+                 "US", "Climate and environment", "US Environmental Protection Agency, Air Quality System", "https://www.epa.gov/aqs", PD, ["state", "year"], "year", "year", dict(col="state", label_col="state_name", label="State"),
+                 ["state", "state_name", "year"] + cols, rows, meta, min_rows=30)
+
+
+def birds():
+    k = key("EBIRD_API_KEY")
+    h = {"X-eBirdApiToken": k}
+    id = "bird-observations-daily"
+    _, old = prior(id)
+    regions = [("US", "the United States", "us"), ("IN", "India", "india"), ("GB", "the United Kingdom", "uk")]
+    cols = [f"{what}_{tag}" for _, _, tag in regions for what in ("checklists", "species")]
+    cell = {d: {c: float(r[c]) for c in cols if r.get(c, "") != ""} for d, r in old.items()}
+    today, shown = date.today(), False
+    for back in range(3, 34 if len(cell) < 20 else 9):       # recent days are still being filled in by observers, so they are re-read for a week
+        day = date.fromordinal(today.toordinal() - back)
+        d = day.isoformat()
+        for code, _, tag in regions:
+            try:
+                j = J(f"https://api.ebird.org/v2/product/stats/{code}/{day.year}/{day.month}/{day.day}", headers=h, tries=2)
+                if not shown:
+                    print("  birds sample:", json.dumps(j)[:200])
+                    shown = True
+                if j.get("numChecklists"):
+                    cell.setdefault(d, {})[f"checklists_{tag}"] = j["numChecklists"]
+                    cell[d][f"species_{tag}"] = j.get("numSpecies")
+            except Exception as e:
+                print(f"  birds {code} {d}: {str(e)[:60]}")
+            time.sleep(0.3)
+    meta = {}
+    for _, label, tag in regions:
+        meta[f"checklists_{tag}"] = dict(title=f"Bird checklists sent in from {label} that day", unit="checklists", description="eBird, Cornell Lab of Ornithology: lists of birds seen, sent in by birdwatchers. The newest three days are left out because lists are still arriving.")
+        meta[f"species_{tag}"] = dict(title=f"Bird species reported in {label} that day", unit="species", description="eBird, Cornell Lab of Ornithology.")
+    return series(id, "Birds seen each day: eBird checklists and species", "How many birdwatching lists are sent in each day, and how many kinds of bird they report, for the United States, India and the United Kingdom.",
+                  "World", "Climate and environment", "eBird, Cornell Lab of Ornithology", "https://ebird.org", "eBird API terms: free for non-commercial use with the source named", cell, meta, cols, "day", min_rows=5)
+
+
+def us_courts():
+    k = key("COURTLISTENER_API_TOKEN")
+    h = {"Authorization": "Token " + k}
+    kinds = dict(court_opinions="", supreme_court_opinions="&court=scotus")
+    state = dict(shown=False)
+
+    def count(y, c):
+        j = J(f"https://www.courtlistener.com/api/rest/v4/search/?type=o&filed_after={y}-01-01&filed_before={y}-12-31{kinds[c]}", headers=h, tries=2, timeout=120)
+        if not state["shown"]:
+            print("  us_courts sample:", json.dumps({a: j.get(a) for a in ("count", "next")})[:200])
+            state["shown"] = True
+        n = j["count"]
+        assert isinstance(n, int), f"count is {str(n)[:60]}"
+        return n
+    cell = yearly("us-court-opinions", 1950, count, list(kinds), recent=2)
+    meta = dict(court_opinions=dict(title="US court opinions published in the year", unit="opinions", description="Written decisions of federal and state courts collected by CourtListener (Free Law Project). Coverage of older years and of lower courts is incomplete; the current year is not over."),
+                supreme_court_opinions=dict(title="US Supreme Court opinions published in the year", unit="opinions", description="CourtListener (Free Law Project)."))
+    out = series("us-court-opinions", "US court opinions, year by year", "How many written decisions US courts publish each year, in all and from the Supreme Court.",
+                 "US", "Government and finance", "CourtListener, Free Law Project", "https://www.courtlistener.com", "Public domain court documents; CourtListener metadata CC BY-ND", cell, meta, list(kinds), "year", min_rows=20)
+    out["partial"] = True
+    return out
+
+
 # ---------- addresses to look at before writing a loader; not part of a normal run ----------
 PROBES = ["https://www.fao.org/fileadmin/templates/worldfood/Reports_and_docs/Food_price_indices_data.csv",
           "https://www.fao.org/media/docs/worldfoodsituationlibraries/default-document-library/food_price_indices_data.csv",
@@ -2041,8 +2137,8 @@ def probe_urls():
 BUILDERS = [(lambda s=s: wb_set(s[0], s[1], s[2], s[3], s[4], s[5], **s[6])) for s in WB_SETS] + [(lambda s=s: owid_charts(*s)) for s in OWID_SETS] + [
     imf, un_population, undp, who, pwt, us_monthly, us_quarterly, us_daily, us_debt, us_climate, wikipedia, research, gbif, github_activity,
     federal_register, fda, clinical_trials, fema, fdic, flu, chicago, nyc, us_spending, nih, eurostat, world_monthly, usgs_water, cdc_overdose, maryland, uk, climate_trace, hmda, cdc_places, comtrade,
-    eia_grid, us_lawmaking, census_states, us_crops, us_elections, us_crime, us_colleges, us_ev_charging, foods, hud_rents,
+    eia_grid, us_lawmaking, census_states, us_crops, us_elections, us_crime, us_colleges, us_ev_charging, foods, hud_rents, us_air_quality, birds, us_courts,
 ]
 NAMES = [s[0] for s in WB_SETS] + [s[0] for s in OWID_SETS] + ["imf", "un_population", "undp", "who", "pwt", "us_monthly", "us_quarterly", "us_daily", "us_debt", "us_climate", "wikipedia", "research", "gbif",
                                     "github_activity", "federal_register", "fda", "clinical_trials", "fema", "fdic", "flu", "chicago", "nyc", "us_spending", "nih", "eurostat", "world_monthly", "usgs_water", "cdc_overdose", "maryland", "uk", "climate_trace", "hmda", "cdc_places", "comtrade",
-                                    "eia_grid", "us_lawmaking", "census_states", "us_crops", "us_elections", "us_crime", "us_colleges", "us_ev_charging", "foods", "hud_rents"]
+                                    "eia_grid", "us_lawmaking", "census_states", "us_crops", "us_elections", "us_crime", "us_colleges", "us_ev_charging", "foods", "hud_rents", "us_air_quality", "birds", "us_courts"]

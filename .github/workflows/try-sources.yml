@@ -41,6 +41,10 @@ jobs:
           NASS_API_KEY: ${{ secrets.NASS_API_KEY }}
           COMTRADE_API_KEY: ${{ secrets.COMTRADE_API_KEY }}
           HUD_API_TOKEN: ${{ secrets.HUD_API_TOKEN }}
+          AQS_KEY: ${{ secrets.AQS_KEY }}
+          AQS_EMAIL: ${{ secrets.AQS_EMAIL }}
+          EBIRD_API_KEY: ${{ secrets.EBIRD_API_KEY }}
+          COURTLISTENER_API_TOKEN: ${{ secrets.COURTLISTENER_API_TOKEN }}
           ONLY: ${{ inputs.only }}
           PROBE: ${{ inputs.probe }}
         run: |
@@ -55,6 +59,10 @@ jobs:
           NASS_API_KEY: ${{ secrets.NASS_API_KEY }}
           COMTRADE_API_KEY: ${{ secrets.COMTRADE_API_KEY }}
           HUD_API_TOKEN: ${{ secrets.HUD_API_TOKEN }}
+          AQS_KEY: ${{ secrets.AQS_KEY }}
+          AQS_EMAIL: ${{ secrets.AQS_EMAIL }}
+          EBIRD_API_KEY: ${{ secrets.EBIRD_API_KEY }}
+          COURTLISTENER_API_TOKEN: ${{ secrets.COURTLISTENER_API_TOKEN }}
         run: |
           python scripts/build_datasets.py
           python scripts/build_catalog.py

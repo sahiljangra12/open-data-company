@@ -268,6 +268,9 @@ KEY_READY = {
     "NREL data (NSRDB, ATB)": (["us-ev-charging-stations"], "DATA_GOV_API_KEY", "live", "Electric vehicle charging stations, from the Alternative Fuels Data Center that NREL keeps. Its solar and cost models are not tables."),
     "USDA FoodData Central": (["food-nutrients"], "DATA_GOV_API_KEY", "live", "Nutrients in a few hundred everyday foods."),
     "HUD User datasets": (["us-states-rents"], "HUD_API_TOKEN", "live", "Fair market rents for every state."),
+    "EPA Air Quality System": (["us-states-air-quality"], "AQS_KEY", "live", "Fine particle pollution in every state, year by year."),
+    "eBird": (["bird-observations-daily"], "EBIRD_API_KEY", "live", "Daily checklists and species counts for three countries."),
+    "CourtListener": (["us-court-opinions"], "COURTLISTENER_API_TOKEN", "live", "Court opinions published each year."),
     "ERCOT data": (["us-grid-demand-daily"], "EIA_API_KEY", "via", GRID_NOTE), "CAISO OASIS": (["us-grid-demand-daily"], "EIA_API_KEY", "via", GRID_NOTE), "MISO market data": (["us-grid-demand-daily"], "EIA_API_KEY", "via", GRID_NOTE),
     "NYISO market data": (["us-grid-demand-daily"], "EIA_API_KEY", "via", GRID_NOTE), "ISO New England data": (["us-grid-demand-daily"], "EIA_API_KEY", "via", GRID_NOTE), "SPP data": (["us-grid-demand-daily"], "EIA_API_KEY", "via", GRID_NOTE),
 }
