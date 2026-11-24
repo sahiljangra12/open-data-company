@@ -11,7 +11,7 @@ When you answer a question with these numbers, give the value, its year and the 
 - Newest value of every variable for every country (JSON, country-and-year datasets): https://sahiljangra12.github.io/open-data-company/data/latest/<dataset id>.json
 - Country list with World Bank region and income group (JSON): https://sahiljangra12.github.io/open-data-company/data/countries.json
 - Country-and-year files have the columns `code` (ISO alpha-3, or a World Bank or Our World in Data code for a region), `country`, `year`, then one column per variable. Empty cells mean no data.
-- Last checked: 2026-11-24T11:36:33Z. Checked daily at about 05:23 UTC.
+- Last checked: 2026-11-24T12:15:06Z. Checked daily at about 05:23 UTC.
 
 ## Datasets
 
@@ -77,6 +77,15 @@ The IMF's own figures for every economy, from 1980 to this year. The latest year
 - Keys: code, year. Covers 1980 to 2026.
 - Source: International Monetary Fund, World Economic Outlook (https://www.imf.org/external/datamapper/datasets/WEO). Licence: Free to use with attribution (IMF copyright and usage terms).
 - Variables: `real_gdp_growth` Real GDP growth (IMF) (% per year); `gdp` GDP, current prices (IMF) (current US$); `gdp_per_person` GDP per person, current prices (IMF) (current US$); `gdp_per_person_ppp` GDP per person, purchasing power parity (IMF) (current international $); `share_of_world_gdp` Share of world GDP, purchasing power parity (IMF) (% of world GDP); `inflation` Inflation, average consumer prices (IMF) (% per year); `inflation_end_of_year` Inflation, end of year (IMF) (% per year); `unemployment_rate` Unemployment rate (IMF) (% of labor force); `population` Population (IMF) (people); `current_account_balance` Current account balance (IMF) (% of GDP); `government_debt` Government gross debt (IMF) (% of GDP); `government_balance` Government net lending or borrowing (IMF) (% of GDP)
+
+### Europe: jobs, prices, income, energy and population
+
+Official statistics for the countries of Europe, harmonised so that they compare like with like, with the European Union as a whole.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/europe-eurostat.csv (2,697 rows, 140 KB)
+- Keys: code, year. Covers 1960 to 2025.
+- Source: Eurostat (https://ec.europa.eu/eurostat/data/database). Licence: Eurostat: free reuse with the source named.
+- Variables: `unemployment_rate` Unemployment rate (Eurostat) (% of the labour force); `employment_rate` Employment rate, ages 20 to 64 (Eurostat) (% of people aged 20 to 64); `inflation` Inflation, harmonised consumer prices (Eurostat) (% a year); `gdp_per_person` GDP per person (Eurostat) (euros, current prices); `real_gdp_growth` Real GDP growth (Eurostat) (% a year); `government_debt` Government debt (Eurostat) (% of GDP); `renewable_energy_share` Renewable energy in final energy use (Eurostat) (% of energy use); `life_expectancy` Life expectancy at birth (Eurostat) (years); `population` Population on 1 January (Eurostat) (people); `at_risk_of_poverty` People at risk of poverty or social exclusion (Eurostat) (% of people); `gini_coefficient` Gini coefficient of disposable income (Eurostat) (0 (equal) to 100); `internet_users` People who used the internet in the past three months (Eurostat) (% of people aged 16 to 74)
 
 ### Population, births, deaths and migration since 1950 (UN)
 
@@ -249,6 +258,15 @@ Where each country's emissions come from: electricity and heat, transport, indus
 - Source: Climate Watch (World Resources Institute), via Our World in Data (https://ourworldindata.org). Licence: CC BY 4.0 (Our World in Data; original sources named per variable).
 - Variables: `ghg_agriculture` Greenhouse gas emissions from agriculture (tonnes of CO2 equivalent); `ghg_land_use_change_and_forestry` Greenhouse gas emissions from land-use change and forestry (tonnes of CO2 equivalent); `ghg_waste` Greenhouse gas emissions from waste (tonnes of CO2 equivalent); `ghg_buildings` Greenhouse gas emissions from buildings (tonnes of CO2 equivalent); `ghg_industry` Greenhouse gas emissions from industry (tonnes of CO2 equivalent); `ghg_manufacturing_and_construction` Greenhouse gas emissions from manufacturing and construction (tonnes of CO2 equivalent); `ghg_transport` Greenhouse gas emissions from transport (tonnes of CO2 equivalent); `ghg_electricity_and_heat` Greenhouse gas emissions from electricity and heat (tonnes of CO2 equivalent); `ghg_fugitive` Greenhouse gas emissions from leaks (fugitive emissions) (tonnes of CO2 equivalent); `ghg_other_fuel_combustion` Greenhouse gas emissions from other fuel burning (tonnes of CO2 equivalent); `ghg_aviation_and_shipping` Greenhouse gas emissions from aviation and shipping (tonnes of CO2 equivalent)
 
+### Emissions measured independently (Climate TRACE)
+
+Greenhouse gas emissions for every country, estimated from satellites and sensors rather than from national reports.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/climate-trace-emissions.csv (2,739 rows, 153 KB)
+- Keys: code, year. Covers 2015 to 2025.
+- Source: Climate TRACE (https://climatetrace.org). Licence: CC BY 4.0.
+- Variables: `greenhouse_gas_emissions` Greenhouse gas emissions (Climate TRACE) (tonnes of CO2 equivalent); `co2` Carbon dioxide emissions (Climate TRACE) (tonnes); `ch4` Methane emissions (Climate TRACE) (tonnes of methane); `n2o` Nitrous oxide emissions (Climate TRACE) (tonnes of nitrous oxide)
+
 ### Forest loss, threatened wildlife and plastic in the ocean
 
 Pressure on nature by country: forest cleared each year, tree cover lost, how close species are to extinction, and plastic reaching the sea.
@@ -357,6 +375,24 @@ How many medical studies begin each year, from the world's largest trial registr
 - Source: US National Library of Medicine, ClinicalTrials.gov (https://clinicaltrials.gov). Licence: Public domain (US federal data).
 - Variables: `studies_started` Clinical studies started in the year (studies); `interventional_studies_started` Clinical trials (interventional studies) started in the year (trials); `phase_3_trials_started` Phase 3 clinical trials started in the year (trials)
 
+### Leading indicators and real exchange rates, monthly
+
+The OECD's early signals of turning points in eight large economies, and how strong each currency is after allowing for prices.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/world-leading-indicators-and-exchange-rates.csv (862 rows, 81 KB)
+- Keys: date. Covers 1955 to 2026.
+- Source: OECD and Bank for International Settlements, via FRED (https://fred.stlouisfed.org). Licence: Free reuse with the source named (OECD and BIS terms), retrieved from FRED.
+- Variables: `leading_indicator_usa` OECD leading indicator for the United States (index, long-run trend = 100); `leading_indicator_chn` OECD leading indicator for China (index, long-run trend = 100); `leading_indicator_jpn` OECD leading indicator for Japan (index, long-run trend = 100); `leading_indicator_deu` OECD leading indicator for Germany (index, long-run trend = 100); `leading_indicator_gbr` OECD leading indicator for the United Kingdom (index, long-run trend = 100); `leading_indicator_fra` OECD leading indicator for France (index, long-run trend = 100); `leading_indicator_ind` OECD leading indicator for India (index, long-run trend = 100); `leading_indicator_bra` OECD leading indicator for Brazil (index, long-run trend = 100); `real_exchange_rate_united_states` Real exchange rate of the United States, against a broad basket of currencies (index, 2020 = 100); `real_exchange_rate_china` Real exchange rate of China, against a broad basket of currencies (index, 2020 = 100); `real_exchange_rate_japan` Real exchange rate of Japan, against a broad basket of currencies (index, 2020 = 100); `real_exchange_rate_euro_area` Real exchange rate of the euro area, against a broad basket of currencies (index, 2020 = 100); `real_exchange_rate_united_kingdom` Real exchange rate of the United Kingdom, against a broad basket of currencies (index, 2020 = 100); `real_exchange_rate_india` Real exchange rate of India, against a broad basket of currencies (index, 2020 = 100); `real_exchange_rate_brazil` Real exchange rate of Brazil, against a broad basket of currencies (index, 2020 = 100); `real_exchange_rate_mexico` Real exchange rate of Mexico, against a broad basket of currencies (index, 2020 = 100)
+
+### United Kingdom economy, monthly
+
+Prices, jobs and output in the United Kingdom, month by month, from its national statistics office.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/uk-economy-monthly.csv (669 rows, 20 KB)
+- Keys: date. Covers 1971 to 2026.
+- Source: UK Office for National Statistics (https://www.ons.gov.uk). Licence: Open Government Licence v3.0.
+- Variables: `inflation` UK inflation (consumer prices, change over a year) (% a year); `inflation_with_housing` UK inflation including owner-occupiers' housing costs (% a year); `unemployment_rate` UK unemployment rate (% of people 16 and over in the labour force); `employment_rate` UK employment rate, ages 16 to 64 (% of people aged 16 to 64); `monthly_gdp_index` UK monthly GDP (index)
+
 ### IMF projections for the next five years
 
 What the IMF expects for growth, inflation, debt and jobs in each economy over the coming years. Projections, not measurements.
@@ -429,6 +465,15 @@ What the US federal government owes, to the penny, for every business day since 
 - Source: US Treasury, Fiscal Data: Debt to the Penny (https://fiscaldata.treasury.gov/datasets/debt-to-the-penny/). Licence: Public domain (US federal data).
 - Variables: `total_public_debt` US national debt (current US$); `debt_held_by_the_public` US debt held by the public (current US$); `intragovernmental_holdings` US debt held by government accounts (current US$)
 
+### US mortgage lending, year by year
+
+How many home loans US lenders made each year, how much they lent, and how many applications they turned down.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-mortgage-lending.csv (8 rows, 1 KB)
+- Keys: date. Covers 2018 to 2025.
+- Source: US Federal Financial Institutions Examination Council, HMDA Data Browser (https://ffiec.cfpb.gov/data-browser/). Licence: Public domain (US federal data).
+- Variables: `mortgages_made` US mortgages made in the year (loans); `amount_lent` Amount lent in US mortgages made in the year (current US$); `applications_denied` US mortgage applications denied in the year (applications)
+
 ### United States temperature and rainfall, monthly since 1895
 
 Monthly average temperature and precipitation for the contiguous United States, from NOAA's climate record.
@@ -447,6 +492,15 @@ How many people were admitted to hospital with confirmed flu each week, for the 
 - Source: Centers for Disease Control and Prevention (NHSN), via the FluSight Forecast Hub (https://github.com/cdcepi/FluSight-forecast-hub). Licence: Public domain (US federal data).
 - Variables: `united_states` Flu hospital admissions in the week, the United States (people admitted); `alabama` Flu hospital admissions in the week, Alabama (people admitted); `alaska` Flu hospital admissions in the week, Alaska (people admitted); `arizona` Flu hospital admissions in the week, Arizona (people admitted); `arkansas` Flu hospital admissions in the week, Arkansas (people admitted); `california` Flu hospital admissions in the week, California (people admitted); `colorado` Flu hospital admissions in the week, Colorado (people admitted); `connecticut` Flu hospital admissions in the week, Connecticut (people admitted); `delaware` Flu hospital admissions in the week, Delaware (people admitted); `district_of_columbia` Flu hospital admissions in the week, District of Columbia (people admitted); `florida` Flu hospital admissions in the week, Florida (people admitted); `georgia` Flu hospital admissions in the week, Georgia (people admitted); `hawaii` Flu hospital admissions in the week, Hawaii (people admitted); `idaho` Flu hospital admissions in the week, Idaho (people admitted); `illinois` Flu hospital admissions in the week, Illinois (people admitted); `indiana` Flu hospital admissions in the week, Indiana (people admitted); `iowa` Flu hospital admissions in the week, Iowa (people admitted); `kansas` Flu hospital admissions in the week, Kansas (people admitted); `kentucky` Flu hospital admissions in the week, Kentucky (people admitted); `louisiana` Flu hospital admissions in the week, Louisiana (people admitted); `maine` Flu hospital admissions in the week, Maine (people admitted); `maryland` Flu hospital admissions in the week, Maryland (people admitted); `massachusetts` Flu hospital admissions in the week, Massachusetts (people admitted); `michigan` Flu hospital admissions in the week, Michigan (people admitted); `minnesota` Flu hospital admissions in the week, Minnesota (people admitted); `mississippi` Flu hospital admissions in the week, Mississippi (people admitted); `missouri` Flu hospital admissions in the week, Missouri (people admitted); `montana` Flu hospital admissions in the week, Montana (people admitted); `nebraska` Flu hospital admissions in the week, Nebraska (people admitted); `nevada` Flu hospital admissions in the week, Nevada (people admitted); `new_hampshire` Flu hospital admissions in the week, New Hampshire (people admitted); `new_jersey` Flu hospital admissions in the week, New Jersey (people admitted); `new_mexico` Flu hospital admissions in the week, New Mexico (people admitted); `new_york` Flu hospital admissions in the week, New York (people admitted); `north_carolina` Flu hospital admissions in the week, North Carolina (people admitted); `north_dakota` Flu hospital admissions in the week, North Dakota (people admitted); `ohio` Flu hospital admissions in the week, Ohio (people admitted); `oklahoma` Flu hospital admissions in the week, Oklahoma (people admitted); `oregon` Flu hospital admissions in the week, Oregon (people admitted); `pennsylvania` Flu hospital admissions in the week, Pennsylvania (people admitted); `puerto_rico` Flu hospital admissions in the week, Puerto Rico (people admitted); `rhode_island` Flu hospital admissions in the week, Rhode Island (people admitted); `south_carolina` Flu hospital admissions in the week, South Carolina (people admitted); `south_dakota` Flu hospital admissions in the week, South Dakota (people admitted); `tennessee` Flu hospital admissions in the week, Tennessee (people admitted); `texas` Flu hospital admissions in the week, Texas (people admitted); `utah` Flu hospital admissions in the week, Utah (people admitted); `vermont` Flu hospital admissions in the week, Vermont (people admitted); `virginia` Flu hospital admissions in the week, Virginia (people admitted); `washington` Flu hospital admissions in the week, Washington (people admitted); `west_virginia` Flu hospital admissions in the week, West Virginia (people admitted); `wisconsin` Flu hospital admissions in the week, Wisconsin (people admitted); `wyoming` Flu hospital admissions in the week, Wyoming (people admitted)
 
+### US deaths from drug overdoses, 12-month running count
+
+How many people in the United States died of a drug overdose in the 12 months ending each month, in total and for the main drugs involved.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-drug-overdose-deaths.csv (138 rows, 7 KB)
+- Keys: date. Covers 2015 to 2026.
+- Source: US Centers for Disease Control and Prevention, National Center for Health Statistics (https://www.cdc.gov/nchs/nvss/vsrr/drug-overdose-data.htm). Licence: Public domain (US federal data).
+- Variables: `all_drug_overdose_deaths` US deaths from drug overdoses, past 12 months (deaths in the 12 months ending that month); `opioid_deaths` US overdose deaths involving opioids, past 12 months (deaths in the 12 months ending that month); `synthetic_opioid_deaths` US overdose deaths involving synthetic opioids such as fentanyl, past 12 months (deaths in the 12 months ending that month); `heroin_deaths` US overdose deaths involving heroin, past 12 months (deaths in the 12 months ending that month); `cocaine_deaths` US overdose deaths involving cocaine, past 12 months (deaths in the 12 months ending that month); `stimulant_deaths` US overdose deaths involving methamphetamine and similar stimulants, past 12 months (deaths in the 12 months ending that month)
+
 ### US medical research projects funded each year
 
 How many research projects the US National Institutes of Health pays for in each fiscal year.
@@ -455,6 +509,15 @@ How many research projects the US National Institutes of Health pays for in each
 - Keys: date. Covers 1990 to 2026.
 - Source: US National Institutes of Health, RePORTER (https://reporter.nih.gov). Licence: Public domain (US federal data).
 - Variables: `projects_funded` Research projects funded by the US National Institutes of Health (projects)
+
+### Flow of major US rivers, monthly
+
+How much water eight major US rivers carry, month by month, from stream gauges that have run for decades.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-river-flow-monthly.csv (922 rows, 56 KB)
+- Keys: date. Covers 1950 to 2026.
+- Source: US Geological Survey, National Water Information System (https://waterdata.usgs.gov). Licence: Public domain (US federal data).
+- Variables: `mississippi_at_st_louis` Flow of the Mississippi River at St. Louis, monthly average (cubic feet per second); `missouri_at_hermann` Flow of the Missouri River at Hermann, monthly average (cubic feet per second); `ohio_at_louisville` Flow of the Ohio River at Louisville, monthly average (cubic feet per second); `columbia_at_the_dalles` Flow of the Columbia River at The Dalles, monthly average (cubic feet per second); `colorado_at_lees_ferry` Flow of the Colorado River at Lees Ferry, monthly average (cubic feet per second); `potomac_near_washington` Flow of the Potomac River near Washington, DC, monthly average (cubic feet per second); `hudson_at_green_island` Flow of the Hudson River at Green Island, monthly average (cubic feet per second); `sacramento_at_freeport` Flow of the Sacramento River at Freeport, monthly average (cubic feet per second)
 
 ### US drug and device safety reports and recalls, monthly
 
@@ -536,6 +599,15 @@ Motor vehicle collisions reported by the NYPD each month since mid-2012, with th
 - Keys: date. Covers 2012 to 2026.
 - Source: NYC Open Data, New York Police Department (https://data.cityofnewyork.us/Public-Safety/Motor-Vehicle-Collisions-Crashes/h9gi-nx95). Licence: NYC Open Data terms of use (free to use).
 - Variables: `crashes` New York City: motor vehicle crashes in the month (crashes); `people_injured` New York City: people injured in crashes in the month (people); `people_killed` New York City: people killed in crashes in the month (people); `pedestrians_killed` New York City: pedestrians killed in crashes in the month (people); `cyclists_killed` New York City: cyclists killed in crashes in the month (people)
+
+### Maryland: reported crime, year by year
+
+Serious crimes reported to police across the state of Maryland each year since 1975, as counts and as rates.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/maryland-crime.csv (46 rows, 5 KB)
+- Keys: date. Covers 1975 to 2020.
+- Source: State of Maryland, Open Data Portal (https://opendata.maryland.gov). Licence: Open data, State of Maryland.
+- Variables: `population` Maryland population (people); `murders` Maryland: murders (offences); `rapes` Maryland: rapes (offences); `robberies` Maryland: robberies (offences); `aggravated_assaults` Maryland: aggravated assaults (offences); `breaking_and_entering` Maryland: breaking and entering (offences); `larceny_theft` Maryland: larceny and theft (offences); `motor_vehicle_thefts` Maryland: motor vehicle thefts (offences); `all_serious_crimes` Maryland: all serious crimes reported (offences); `violent_crimes` Maryland: violent crimes (offences); `property_crimes` Maryland: property crimes (offences); `violent_crime_rate` Maryland: violent crime rate (per 100,000 people); `property_crime_rate` Maryland: property crime rate (per 100,000 people); `murder_rate` Maryland: murder rate (per 100,000 people)
 
 ### PJM summer peak load: forecasts and actuals by zone
 

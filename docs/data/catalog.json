@@ -1,13 +1,13 @@
 {
  "count": 136,
  "tally": {
-  "live": 28,
-  "via": 24,
-  "key": 29,
+  "live": 33,
+  "via": 29,
+  "key": 35,
   "images": 7,
-  "bulk": 12,
+  "bulk": 10,
   "terms": 2,
-  "later": 34
+  "later": 20
  },
  "labels": {
   "live": "On the site",
@@ -44,10 +44,15 @@
    "update": "varies",
    "api": true,
    "buyers": "State contractors, nonprofits",
-   "status": "later",
-   "status_label": "Not loaded yet",
-   "datasets": [],
-   "note": "A catalog of many tables; single tables are added one at a time."
+   "status": "live",
+   "status_label": "On the site",
+   "datasets": [
+    {
+     "id": "maryland-crime",
+     "title": "Maryland: reported crime, year by year"
+    }
+   ],
+   "note": "Statewide crime, 1975 to 2020. Other tables are added one at a time."
   },
   {
    "name": "Open Baltimore",
@@ -244,7 +249,7 @@
    "status": "key",
    "status_label": "Needs a free key",
    "datasets": [],
-   "note": "The Census service turned away this site's requests without a key."
+   "note": "Its loader is written and waits only for a free key, added as the GitHub secret CENSUS_API_KEY."
   },
   {
    "name": "Census County Business Patterns",
@@ -259,7 +264,7 @@
    "status": "key",
    "status_label": "Needs a free key",
    "datasets": [],
-   "note": "The Census service turned away this site's requests without a key."
+   "note": "Its loader is written and waits only for a free key, added as the GitHub secret CENSUS_API_KEY."
   },
   {
    "name": "Census Building Permits Survey",
@@ -330,10 +335,15 @@
    "update": "annual",
    "api": true,
    "buyers": "Lenders, fair-lending compliance",
-   "status": "bulk",
-   "status_label": "Too large to host",
-   "datasets": [],
-   "note": "Published as whole-archive downloads far larger than a free static site can hold or refresh."
+   "status": "live",
+   "status_label": "On the site",
+   "datasets": [
+    {
+     "id": "us-mortgage-lending",
+     "title": "US mortgage lending, year by year"
+    }
+   ],
+   "note": "Yearly national totals. The loan-by-loan files are too large to host."
   },
   {
    "name": "SEC EDGAR",
@@ -387,7 +397,7 @@
    "status": "later",
    "status_label": "Not loaded yet",
    "datasets": [],
-   "note": "Open to load; its loader has not been written yet."
+   "note": "Its service turned away this site's automatic requests."
   },
   {
    "name": "SBA loan data",
@@ -507,10 +517,10 @@
    "update": "realtime",
    "api": true,
    "buyers": "Traders, developers, consultants",
-   "status": "later",
-   "status_label": "Not loaded yet",
+   "status": "key",
+   "status_label": "Needs a free key",
    "datasets": [],
-   "note": "Open to load; its loader has not been written yet."
+   "note": "Its loader is written and waits only for a free key, added as the GitHub secret EIA_API_KEY."
   },
   {
    "name": "CAISO OASIS",
@@ -522,10 +532,10 @@
    "update": "realtime",
    "api": true,
    "buyers": "Traders, storage developers",
-   "status": "later",
-   "status_label": "Not loaded yet",
+   "status": "key",
+   "status_label": "Needs a free key",
    "datasets": [],
-   "note": "Open to load; its loader has not been written yet."
+   "note": "Its loader is written and waits only for a free key, added as the GitHub secret EIA_API_KEY."
   },
   {
    "name": "MISO market data",
@@ -537,10 +547,10 @@
    "update": "realtime",
    "api": true,
    "buyers": "Traders, developers",
-   "status": "later",
-   "status_label": "Not loaded yet",
+   "status": "key",
+   "status_label": "Needs a free key",
    "datasets": [],
-   "note": "Open to load; its loader has not been written yet."
+   "note": "Its loader is written and waits only for a free key, added as the GitHub secret EIA_API_KEY."
   },
   {
    "name": "NYISO market data",
@@ -552,10 +562,10 @@
    "update": "realtime",
    "api": true,
    "buyers": "Traders, developers",
-   "status": "later",
-   "status_label": "Not loaded yet",
+   "status": "key",
+   "status_label": "Needs a free key",
    "datasets": [],
-   "note": "Open to load; its loader has not been written yet."
+   "note": "Its loader is written and waits only for a free key, added as the GitHub secret EIA_API_KEY."
   },
   {
    "name": "ISO New England data",
@@ -567,10 +577,10 @@
    "update": "realtime",
    "api": true,
    "buyers": "Traders, developers",
-   "status": "later",
-   "status_label": "Not loaded yet",
+   "status": "key",
+   "status_label": "Needs a free key",
    "datasets": [],
-   "note": "Open to load; its loader has not been written yet."
+   "note": "Its loader is written and waits only for a free key, added as the GitHub secret EIA_API_KEY."
   },
   {
    "name": "SPP data",
@@ -582,10 +592,10 @@
    "update": "realtime",
    "api": false,
    "buyers": "Traders, wind developers",
-   "status": "later",
-   "status_label": "Not loaded yet",
+   "status": "key",
+   "status_label": "Needs a free key",
    "datasets": [],
-   "note": "Open to load; its loader has not been written yet."
+   "note": "Its loader is written and waits only for a free key, added as the GitHub secret EIA_API_KEY."
   },
   {
    "name": "LBNL interconnection queues",
@@ -711,10 +721,15 @@
    "update": "realtime",
    "api": true,
    "buyers": "Utilities, engineering firms",
-   "status": "later",
-   "status_label": "Not loaded yet",
-   "datasets": [],
-   "note": "Open to load; its loader has not been written yet."
+   "status": "live",
+   "status_label": "On the site",
+   "datasets": [
+    {
+     "id": "us-river-flow-monthly",
+     "title": "Flow of major US rivers, monthly"
+    }
+   ],
+   "note": "Monthly flow of eight major rivers."
   },
   {
    "name": "USGS Earthquake Catalog",
@@ -790,15 +805,19 @@
    "update": "annual",
    "api": true,
    "buyers": "Public health, pharma",
-   "status": "later",
-   "status_label": "Not loaded yet",
+   "status": "via",
+   "status_label": "On the site, through another publisher",
    "datasets": [
+    {
+     "id": "us-drug-overdose-deaths",
+     "title": "US deaths from drug overdoses, 12-month running count"
+    },
     {
      "id": "us-flu-hospital-admissions",
      "title": "US flu hospital admissions, weekly, by state"
     }
    ],
-   "note": "Its query service limits automatic use. A different CDC feed, weekly flu hospital admissions, is on the site."
+   "note": "Its query tool cannot be automated. The same death-certificate counts for drug overdoses come from CDC's open data site."
   },
   {
    "name": "CDC PLACES",
@@ -1113,7 +1132,7 @@
    "status": "key",
    "status_label": "Needs a free key",
    "datasets": [],
-   "note": "Free, but the source asks for a key or account that only the site's owner can create."
+   "note": "Its loader is written and waits only for a free key, added as the GitHub secret DATA_GOV_API_KEY."
   },
   {
    "name": "Federal Register",
@@ -1148,7 +1167,7 @@
    "status": "key",
    "status_label": "Needs a free key",
    "datasets": [],
-   "note": "Free, but the source asks for a key or account that only the site's owner can create."
+   "note": "Its loader is written and waits only for a free key, added as the GitHub secret DATA_GOV_API_KEY."
   },
   {
    "name": "FEC campaign finance",
@@ -1353,10 +1372,15 @@
    "update": "varies",
    "api": true,
    "buyers": "EU-facing businesses",
-   "status": "later",
-   "status_label": "Not loaded yet",
-   "datasets": [],
-   "note": "A catalog of other publishers' files."
+   "status": "via",
+   "status_label": "On the site, through another publisher",
+   "datasets": [
+    {
+     "id": "europe-eurostat",
+     "title": "Europe: jobs, prices, income, energy and population"
+    }
+   ],
+   "note": "A catalog; Eurostat's tables are its core."
   },
   {
    "name": "data.gov.uk",
@@ -1368,10 +1392,15 @@
    "update": "varies",
    "api": true,
    "buyers": "UK-facing businesses",
-   "status": "later",
-   "status_label": "Not loaded yet",
-   "datasets": [],
-   "note": "A catalog of other publishers' files."
+   "status": "via",
+   "status_label": "On the site, through another publisher",
+   "datasets": [
+    {
+     "id": "uk-economy-monthly",
+     "title": "United Kingdom economy, monthly"
+    }
+   ],
+   "note": "A catalog; the main UK economic series come from the Office for National Statistics."
   },
   {
    "name": "India data.gov.in",
@@ -1437,10 +1466,15 @@
    "update": "monthly",
    "api": true,
    "buyers": "Consultants, policy teams",
-   "status": "later",
-   "status_label": "Not loaded yet",
-   "datasets": [],
-   "note": "Open to load; its loader has not been written yet."
+   "status": "via",
+   "status_label": "On the site, through another publisher",
+   "datasets": [
+    {
+     "id": "world-leading-indicators-and-exchange-rates",
+     "title": "Leading indicators and real exchange rates, monthly"
+    }
+   ],
+   "note": "Its leading indicators, through FRED."
   },
   {
    "name": "UN Comtrade",
@@ -1482,10 +1516,15 @@
    "update": "quarterly",
    "api": true,
    "buyers": "Banks, macro investors",
-   "status": "later",
-   "status_label": "Not loaded yet",
-   "datasets": [],
-   "note": "Open to load; its loader has not been written yet."
+   "status": "via",
+   "status_label": "On the site, through another publisher",
+   "datasets": [
+    {
+     "id": "world-leading-indicators-and-exchange-rates",
+     "title": "Leading indicators and real exchange rates, monthly"
+    }
+   ],
+   "note": "Real exchange rates, through FRED."
   },
   {
    "name": "Eurostat",
@@ -1497,10 +1536,15 @@
    "update": "monthly",
    "api": true,
    "buyers": "EU market research",
-   "status": "later",
-   "status_label": "Not loaded yet",
-   "datasets": [],
-   "note": "Open to load; its loader has not been written yet."
+   "status": "live",
+   "status_label": "On the site",
+   "datasets": [
+    {
+     "id": "europe-eurostat",
+     "title": "Europe: jobs, prices, income, energy and population"
+    }
+   ],
+   "note": "Twelve headline tables for every European country."
   },
   {
    "name": "Penn World Table",
@@ -1907,10 +1951,15 @@
    "update": "monthly",
    "api": true,
    "buyers": "ESG, supply-chain emissions, investors",
-   "status": "later",
-   "status_label": "Not loaded yet",
-   "datasets": [],
-   "note": "Open to load; its loader has not been written yet."
+   "status": "live",
+   "status_label": "On the site",
+   "datasets": [
+    {
+     "id": "climate-trace-emissions",
+     "title": "Emissions measured independently (Climate TRACE)"
+    }
+   ],
+   "note": "Country totals."
   },
   {
    "name": "Copernicus ERA5 reanalysis",
@@ -2109,7 +2158,7 @@
    "status": "later",
    "status_label": "Not loaded yet",
    "datasets": [],
-   "note": "Open to load; its loader has not been written yet."
+   "note": "Published as a file whose address changes every month."
   },
   {
    "name": "WFP food prices",
@@ -2443,10 +2492,10 @@
    "update": "quarterly",
    "api": false,
    "buyers": "Developer-tool companies",
-   "status": "bulk",
-   "status_label": "Too large to host",
+   "status": "later",
+   "status_label": "Not loaded yet",
    "datasets": [],
-   "note": "Published as whole-archive downloads far larger than a free static site can hold or refresh."
+   "note": "Its loader is written but has not delivered data yet."
   },
   {
    "name": "Common Crawl",

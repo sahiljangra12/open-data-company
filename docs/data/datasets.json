@@ -1,5 +1,5 @@
 {
- "checked": "2026-11-24T11:36:33Z",
+ "checked": "2026-11-24T12:15:06Z",
  "cron": "23 5 * * *",
  "datasets": [
   {
@@ -5692,8 +5692,8 @@
    "time": {
     "col": "time",
     "type": "date",
-    "min": "2026-10-25T11:24:13Z",
-    "max": "2026-11-24T10:29:48Z"
+    "min": "2026-10-25T12:09:05Z",
+    "max": "2026-11-24T11:15:07Z"
    },
    "entity": null,
    "rows": 1805,
@@ -5787,7 +5787,7 @@
      "filled": 1805
     }
    ],
-   "bytes": 315645,
+   "bytes": 315658,
    "built": "2026-11-24",
    "coverage": "Rolling 30 days",
    "default_vars": [
@@ -6853,6 +6853,350 @@
     [
      "ZWE",
      "Zimbabwe"
+    ]
+   ]
+  },
+  {
+   "id": "europe-eurostat",
+   "title": "Europe: jobs, prices, income, energy and population",
+   "description": "Official statistics for the countries of Europe, harmonised so that they compare like with like, with the European Union as a whole.",
+   "region": "World",
+   "domain": "Economy and development",
+   "source": "Eurostat",
+   "source_url": "https://ec.europa.eu/eurostat/data/database",
+   "licence": "Eurostat: free reuse with the source named",
+   "file": "data/sets/europe-eurostat.csv",
+   "keys": [
+    "code",
+    "year"
+   ],
+   "time": {
+    "col": "year",
+    "type": "year",
+    "min": "1960",
+    "max": "2025"
+   },
+   "entity": {
+    "col": "code",
+    "label_col": "country",
+    "label": "Country or region"
+   },
+   "rows": 2697,
+   "columns": [
+    {
+     "name": "unemployment_rate",
+     "title": "Unemployment rate (Eurostat)",
+     "unit": "% of the labour force",
+     "description": "Eurostat table une_rt_a.",
+     "type": "num",
+     "filled": 601
+    },
+    {
+     "name": "employment_rate",
+     "title": "Employment rate, ages 20 to 64 (Eurostat)",
+     "unit": "% of people aged 20 to 64",
+     "description": "Eurostat table lfsi_emp_a.",
+     "type": "num",
+     "filled": 601
+    },
+    {
+     "name": "inflation",
+     "title": "Inflation, harmonised consumer prices (Eurostat)",
+     "unit": "% a year",
+     "description": "Eurostat table prc_hicp_aind.",
+     "type": "num",
+     "filled": 1047
+    },
+    {
+     "name": "gdp_per_person",
+     "title": "GDP per person (Eurostat)",
+     "unit": "euros, current prices",
+     "description": "Eurostat table nama_10_pc.",
+     "type": "num",
+     "filled": 1195
+    },
+    {
+     "name": "real_gdp_growth",
+     "title": "Real GDP growth (Eurostat)",
+     "unit": "% a year",
+     "description": "Eurostat table nama_10_gdp.",
+     "type": "num",
+     "filled": 1177
+    },
+    {
+     "name": "government_debt",
+     "title": "Government debt (Eurostat)",
+     "unit": "% of GDP",
+     "description": "Eurostat table gov_10dd_edpt1.",
+     "type": "num",
+     "filled": 858
+    },
+    {
+     "name": "renewable_energy_share",
+     "title": "Renewable energy in final energy use (Eurostat)",
+     "unit": "% of energy use",
+     "description": "Eurostat table nrg_ind_ren.",
+     "type": "num",
+     "filled": 795
+    },
+    {
+     "name": "life_expectancy",
+     "title": "Life expectancy at birth (Eurostat)",
+     "unit": "years",
+     "description": "Eurostat table demo_mlexpec.",
+     "type": "num",
+     "filled": 1764
+    },
+    {
+     "name": "population",
+     "title": "Population on 1 January (Eurostat)",
+     "unit": "people",
+     "description": "Eurostat table demo_pjan.",
+     "type": "num",
+     "filled": 2632
+    },
+    {
+     "name": "at_risk_of_poverty",
+     "title": "People at risk of poverty or social exclusion (Eurostat)",
+     "unit": "% of people",
+     "description": "Eurostat table ilc_peps01n.",
+     "type": "num",
+     "filled": 390
+    },
+    {
+     "name": "gini_coefficient",
+     "title": "Gini coefficient of disposable income (Eurostat)",
+     "unit": "0 (equal) to 100",
+     "description": "Eurostat table ilc_di12.",
+     "type": "num",
+     "filled": 736
+    },
+    {
+     "name": "internet_users",
+     "title": "People who used the internet in the past three months (Eurostat)",
+     "unit": "% of people aged 16 to 74",
+     "description": "Eurostat table isoc_ci_ifp_iu.",
+     "type": "num",
+     "filled": 774
+    }
+   ],
+   "bytes": 140173,
+   "built": "2026-11-24",
+   "coverage": "1960 to 2025",
+   "entities": 51,
+   "chart_entities": [
+    "WLD",
+    "CHN",
+    "IND",
+    "USA",
+    "BRA",
+    "NGA"
+   ],
+   "cadence": "Revised by Eurostat through the year",
+   "places": [
+    [
+     "ALB",
+     "Albania"
+    ],
+    [
+     "AND",
+     "Andorra"
+    ],
+    [
+     "ARM",
+     "Armenia"
+    ],
+    [
+     "AUT",
+     "Austria"
+    ],
+    [
+     "AZE",
+     "Azerbaijan"
+    ],
+    [
+     "BLR",
+     "Belarus"
+    ],
+    [
+     "BEL",
+     "Belgium"
+    ],
+    [
+     "BIH",
+     "Bosnia"
+    ],
+    [
+     "BGR",
+     "Bulgaria"
+    ],
+    [
+     "HRV",
+     "Croatia"
+    ],
+    [
+     "CYP",
+     "Cyprus"
+    ],
+    [
+     "CZE",
+     "Czechia"
+    ],
+    [
+     "DNK",
+     "Denmark"
+    ],
+    [
+     "EST",
+     "Estonia"
+    ],
+    [
+     "EUU",
+     "European Union"
+    ],
+    [
+     "FIN",
+     "Finland"
+    ],
+    [
+     "FRA",
+     "France"
+    ],
+    [
+     "GEO",
+     "Georgia"
+    ],
+    [
+     "DEU",
+     "Germany"
+    ],
+    [
+     "GRC",
+     "Greece"
+    ],
+    [
+     "HUN",
+     "Hungary"
+    ],
+    [
+     "ISL",
+     "Iceland"
+    ],
+    [
+     "IRL",
+     "Ireland"
+    ],
+    [
+     "ITA",
+     "Italy"
+    ],
+    [
+     "XKX",
+     "Kosovo"
+    ],
+    [
+     "LVA",
+     "Latvia"
+    ],
+    [
+     "LIE",
+     "Liechtenstein"
+    ],
+    [
+     "LTU",
+     "Lithuania"
+    ],
+    [
+     "LUX",
+     "Luxembourg"
+    ],
+    [
+     "MLT",
+     "Malta"
+    ],
+    [
+     "MDA",
+     "Moldova"
+    ],
+    [
+     "MCO",
+     "Monaco"
+    ],
+    [
+     "MNE",
+     "Montenegro"
+    ],
+    [
+     "NLD",
+     "Netherlands"
+    ],
+    [
+     "MKD",
+     "North Macedonia"
+    ],
+    [
+     "NOR",
+     "Norway"
+    ],
+    [
+     "POL",
+     "Poland"
+    ],
+    [
+     "PRT",
+     "Portugal"
+    ],
+    [
+     "ROU",
+     "Romania"
+    ],
+    [
+     "RUS",
+     "Russia"
+    ],
+    [
+     "SMR",
+     "San Marino"
+    ],
+    [
+     "SRB",
+     "Serbia"
+    ],
+    [
+     "SVK",
+     "Slovakia"
+    ],
+    [
+     "SVN",
+     "Slovenia"
+    ],
+    [
+     "ESP",
+     "Spain"
+    ],
+    [
+     "SWE",
+     "Sweden"
+    ],
+    [
+     "CHE",
+     "Switzerland"
+    ],
+    [
+     "TUR",
+     "Türkiye"
+    ],
+    [
+     "GBR",
+     "UK"
+    ],
+    [
+     "USA",
+     "US"
+    ],
+    [
+     "UKR",
+     "Ukraine"
     ]
    ]
   },
@@ -27601,6 +27945,1078 @@
    ]
   },
   {
+   "id": "climate-trace-emissions",
+   "title": "Emissions measured independently (Climate TRACE)",
+   "description": "Greenhouse gas emissions for every country, estimated from satellites and sensors rather than from national reports.",
+   "region": "World",
+   "domain": "Climate and environment",
+   "source": "Climate TRACE",
+   "source_url": "https://climatetrace.org",
+   "licence": "CC BY 4.0",
+   "file": "data/sets/climate-trace-emissions.csv",
+   "keys": [
+    "code",
+    "year"
+   ],
+   "time": {
+    "col": "year",
+    "type": "year",
+    "min": "2015",
+    "max": "2025"
+   },
+   "entity": {
+    "col": "code",
+    "label_col": "country",
+    "label": "Country or region"
+   },
+   "rows": 2739,
+   "columns": [
+    {
+     "name": "greenhouse_gas_emissions",
+     "title": "Greenhouse gas emissions (Climate TRACE)",
+     "unit": "tonnes of CO2 equivalent",
+     "description": "All greenhouse gases over 100 years, estimated independently from satellites and other sensors rather than from what countries report.",
+     "type": "num",
+     "filled": 2739
+    },
+    {
+     "name": "co2",
+     "title": "Carbon dioxide emissions (Climate TRACE)",
+     "unit": "tonnes",
+     "description": "",
+     "type": "num",
+     "filled": 2739
+    },
+    {
+     "name": "ch4",
+     "title": "Methane emissions (Climate TRACE)",
+     "unit": "tonnes of methane",
+     "description": "",
+     "type": "num",
+     "filled": 2739
+    },
+    {
+     "name": "n2o",
+     "title": "Nitrous oxide emissions (Climate TRACE)",
+     "unit": "tonnes of nitrous oxide",
+     "description": "",
+     "type": "num",
+     "filled": 2739
+    }
+   ],
+   "bytes": 153080,
+   "built": "2026-11-24",
+   "coverage": "2015 to 2025",
+   "entities": 249,
+   "chart_entities": [
+    "WLD",
+    "CHN",
+    "IND",
+    "USA",
+    "BRA",
+    "NGA"
+   ],
+   "cadence": "A few times a year",
+   "places": [
+    [
+     "AFG",
+     "Afghanistan"
+    ],
+    [
+     "ALB",
+     "Albania"
+    ],
+    [
+     "DZA",
+     "Algeria"
+    ],
+    [
+     "ASM",
+     "American Samoa"
+    ],
+    [
+     "AND",
+     "Andorra"
+    ],
+    [
+     "AGO",
+     "Angola"
+    ],
+    [
+     "AIA",
+     "Anguilla"
+    ],
+    [
+     "ATA",
+     "Antarctica"
+    ],
+    [
+     "ATG",
+     "Antigua & Barbuda"
+    ],
+    [
+     "ARG",
+     "Argentina"
+    ],
+    [
+     "ARM",
+     "Armenia"
+    ],
+    [
+     "ABW",
+     "Aruba"
+    ],
+    [
+     "AUS",
+     "Australia"
+    ],
+    [
+     "AUT",
+     "Austria"
+    ],
+    [
+     "AZE",
+     "Azerbaijan"
+    ],
+    [
+     "BHS",
+     "Bahamas"
+    ],
+    [
+     "BHR",
+     "Bahrain"
+    ],
+    [
+     "BGD",
+     "Bangladesh"
+    ],
+    [
+     "BRB",
+     "Barbados"
+    ],
+    [
+     "BLR",
+     "Belarus"
+    ],
+    [
+     "BEL",
+     "Belgium"
+    ],
+    [
+     "BLZ",
+     "Belize"
+    ],
+    [
+     "BEN",
+     "Benin"
+    ],
+    [
+     "BMU",
+     "Bermuda"
+    ],
+    [
+     "BTN",
+     "Bhutan"
+    ],
+    [
+     "BOL",
+     "Bolivia"
+    ],
+    [
+     "BIH",
+     "Bosnia"
+    ],
+    [
+     "BWA",
+     "Botswana"
+    ],
+    [
+     "BRA",
+     "Brazil"
+    ],
+    [
+     "IOT",
+     "British Indian Ocean Territory"
+    ],
+    [
+     "VGB",
+     "British Virgin Islands"
+    ],
+    [
+     "BRN",
+     "Brunei"
+    ],
+    [
+     "BGR",
+     "Bulgaria"
+    ],
+    [
+     "BFA",
+     "Burkina Faso"
+    ],
+    [
+     "BDI",
+     "Burundi"
+    ],
+    [
+     "KHM",
+     "Cambodia"
+    ],
+    [
+     "CMR",
+     "Cameroon"
+    ],
+    [
+     "CAN",
+     "Canada"
+    ],
+    [
+     "CPV",
+     "Cape Verde"
+    ],
+    [
+     "BES",
+     "Caribbean Netherlands"
+    ],
+    [
+     "CYM",
+     "Cayman Islands"
+    ],
+    [
+     "CAF",
+     "Central African Republic"
+    ],
+    [
+     "TCD",
+     "Chad"
+    ],
+    [
+     "CHL",
+     "Chile"
+    ],
+    [
+     "CHN",
+     "China"
+    ],
+    [
+     "CXR",
+     "Christmas Island"
+    ],
+    [
+     "CCK",
+     "Cocos Islands"
+    ],
+    [
+     "COL",
+     "Colombia"
+    ],
+    [
+     "COM",
+     "Comoros"
+    ],
+    [
+     "COG",
+     "Congo - Brazzaville"
+    ],
+    [
+     "COD",
+     "Congo - Kinshasa"
+    ],
+    [
+     "COK",
+     "Cook Islands"
+    ],
+    [
+     "CRI",
+     "Costa Rica"
+    ],
+    [
+     "HRV",
+     "Croatia"
+    ],
+    [
+     "CUB",
+     "Cuba"
+    ],
+    [
+     "CUW",
+     "Curaçao"
+    ],
+    [
+     "CYP",
+     "Cyprus"
+    ],
+    [
+     "CZE",
+     "Czechia"
+    ],
+    [
+     "CIV",
+     "Côte d’Ivoire"
+    ],
+    [
+     "DNK",
+     "Denmark"
+    ],
+    [
+     "DJI",
+     "Djibouti"
+    ],
+    [
+     "DMA",
+     "Dominica"
+    ],
+    [
+     "DOM",
+     "Dominican Republic"
+    ],
+    [
+     "ECU",
+     "Ecuador"
+    ],
+    [
+     "EGY",
+     "Egypt"
+    ],
+    [
+     "SLV",
+     "El Salvador"
+    ],
+    [
+     "GNQ",
+     "Equatorial Guinea"
+    ],
+    [
+     "ERI",
+     "Eritrea"
+    ],
+    [
+     "EST",
+     "Estonia"
+    ],
+    [
+     "SWZ",
+     "Eswatini"
+    ],
+    [
+     "ETH",
+     "Ethiopia"
+    ],
+    [
+     "FLK",
+     "Falkland Islands"
+    ],
+    [
+     "FRO",
+     "Faroe Islands"
+    ],
+    [
+     "FJI",
+     "Fiji"
+    ],
+    [
+     "FIN",
+     "Finland"
+    ],
+    [
+     "FRA",
+     "France"
+    ],
+    [
+     "GUF",
+     "French Guiana"
+    ],
+    [
+     "PYF",
+     "French Polynesia"
+    ],
+    [
+     "ATF",
+     "French Southern Territories"
+    ],
+    [
+     "GAB",
+     "Gabon"
+    ],
+    [
+     "GMB",
+     "Gambia"
+    ],
+    [
+     "GEO",
+     "Georgia"
+    ],
+    [
+     "DEU",
+     "Germany"
+    ],
+    [
+     "GHA",
+     "Ghana"
+    ],
+    [
+     "GIB",
+     "Gibraltar"
+    ],
+    [
+     "GRC",
+     "Greece"
+    ],
+    [
+     "GRL",
+     "Greenland"
+    ],
+    [
+     "GRD",
+     "Grenada"
+    ],
+    [
+     "GLP",
+     "Guadeloupe"
+    ],
+    [
+     "GUM",
+     "Guam"
+    ],
+    [
+     "GTM",
+     "Guatemala"
+    ],
+    [
+     "GGY",
+     "Guernsey"
+    ],
+    [
+     "GIN",
+     "Guinea"
+    ],
+    [
+     "GNB",
+     "Guinea-Bissau"
+    ],
+    [
+     "GUY",
+     "Guyana"
+    ],
+    [
+     "HTI",
+     "Haiti"
+    ],
+    [
+     "HND",
+     "Honduras"
+    ],
+    [
+     "HKG",
+     "Hong Kong"
+    ],
+    [
+     "HUN",
+     "Hungary"
+    ],
+    [
+     "ISL",
+     "Iceland"
+    ],
+    [
+     "IND",
+     "India"
+    ],
+    [
+     "IDN",
+     "Indonesia"
+    ],
+    [
+     "IRN",
+     "Iran"
+    ],
+    [
+     "IRQ",
+     "Iraq"
+    ],
+    [
+     "IRL",
+     "Ireland"
+    ],
+    [
+     "IMN",
+     "Isle of Man"
+    ],
+    [
+     "ISR",
+     "Israel"
+    ],
+    [
+     "ITA",
+     "Italy"
+    ],
+    [
+     "JAM",
+     "Jamaica"
+    ],
+    [
+     "JPN",
+     "Japan"
+    ],
+    [
+     "JEY",
+     "Jersey"
+    ],
+    [
+     "JOR",
+     "Jordan"
+    ],
+    [
+     "KAZ",
+     "Kazakhstan"
+    ],
+    [
+     "KEN",
+     "Kenya"
+    ],
+    [
+     "KIR",
+     "Kiribati"
+    ],
+    [
+     "XKX",
+     "Kosovo"
+    ],
+    [
+     "KWT",
+     "Kuwait"
+    ],
+    [
+     "KGZ",
+     "Kyrgyzstan"
+    ],
+    [
+     "LAO",
+     "Laos"
+    ],
+    [
+     "LVA",
+     "Latvia"
+    ],
+    [
+     "LBN",
+     "Lebanon"
+    ],
+    [
+     "LSO",
+     "Lesotho"
+    ],
+    [
+     "LBR",
+     "Liberia"
+    ],
+    [
+     "LBY",
+     "Libya"
+    ],
+    [
+     "LIE",
+     "Liechtenstein"
+    ],
+    [
+     "LTU",
+     "Lithuania"
+    ],
+    [
+     "LUX",
+     "Luxembourg"
+    ],
+    [
+     "MAC",
+     "Macao"
+    ],
+    [
+     "MDG",
+     "Madagascar"
+    ],
+    [
+     "MWI",
+     "Malawi"
+    ],
+    [
+     "MYS",
+     "Malaysia"
+    ],
+    [
+     "MDV",
+     "Maldives"
+    ],
+    [
+     "MLI",
+     "Mali"
+    ],
+    [
+     "MLT",
+     "Malta"
+    ],
+    [
+     "MHL",
+     "Marshall Islands"
+    ],
+    [
+     "MTQ",
+     "Martinique"
+    ],
+    [
+     "MRT",
+     "Mauritania"
+    ],
+    [
+     "MUS",
+     "Mauritius"
+    ],
+    [
+     "MYT",
+     "Mayotte"
+    ],
+    [
+     "MEX",
+     "Mexico"
+    ],
+    [
+     "FSM",
+     "Micronesia"
+    ],
+    [
+     "MDA",
+     "Moldova"
+    ],
+    [
+     "MCO",
+     "Monaco"
+    ],
+    [
+     "MNG",
+     "Mongolia"
+    ],
+    [
+     "MNE",
+     "Montenegro"
+    ],
+    [
+     "MSR",
+     "Montserrat"
+    ],
+    [
+     "MAR",
+     "Morocco"
+    ],
+    [
+     "MOZ",
+     "Mozambique"
+    ],
+    [
+     "MMR",
+     "Myanmar"
+    ],
+    [
+     "NAM",
+     "Namibia"
+    ],
+    [
+     "NRU",
+     "Nauru"
+    ],
+    [
+     "NPL",
+     "Nepal"
+    ],
+    [
+     "NLD",
+     "Netherlands"
+    ],
+    [
+     "NCL",
+     "New Caledonia"
+    ],
+    [
+     "NZL",
+     "New Zealand"
+    ],
+    [
+     "NIC",
+     "Nicaragua"
+    ],
+    [
+     "NER",
+     "Niger"
+    ],
+    [
+     "NGA",
+     "Nigeria"
+    ],
+    [
+     "NIU",
+     "Niue"
+    ],
+    [
+     "NFK",
+     "Norfolk Island"
+    ],
+    [
+     "PRK",
+     "North Korea"
+    ],
+    [
+     "MKD",
+     "North Macedonia"
+    ],
+    [
+     "MNP",
+     "Northern Mariana Islands"
+    ],
+    [
+     "NOR",
+     "Norway"
+    ],
+    [
+     "OMN",
+     "Oman"
+    ],
+    [
+     "PAK",
+     "Pakistan"
+    ],
+    [
+     "PLW",
+     "Palau"
+    ],
+    [
+     "PSE",
+     "Palestine"
+    ],
+    [
+     "PAN",
+     "Panama"
+    ],
+    [
+     "PNG",
+     "Papua New Guinea"
+    ],
+    [
+     "PRY",
+     "Paraguay"
+    ],
+    [
+     "PER",
+     "Peru"
+    ],
+    [
+     "PHL",
+     "Philippines"
+    ],
+    [
+     "PCN",
+     "Pitcairn"
+    ],
+    [
+     "POL",
+     "Poland"
+    ],
+    [
+     "PRT",
+     "Portugal"
+    ],
+    [
+     "PRI",
+     "Puerto Rico"
+    ],
+    [
+     "QAT",
+     "Qatar"
+    ],
+    [
+     "ROU",
+     "Romania"
+    ],
+    [
+     "RUS",
+     "Russia"
+    ],
+    [
+     "RWA",
+     "Rwanda"
+    ],
+    [
+     "REU",
+     "Réunion"
+    ],
+    [
+     "WSM",
+     "Samoa"
+    ],
+    [
+     "SMR",
+     "San Marino"
+    ],
+    [
+     "SAU",
+     "Saudi Arabia"
+    ],
+    [
+     "SEN",
+     "Senegal"
+    ],
+    [
+     "SRB",
+     "Serbia"
+    ],
+    [
+     "SYC",
+     "Seychelles"
+    ],
+    [
+     "SLE",
+     "Sierra Leone"
+    ],
+    [
+     "SGP",
+     "Singapore"
+    ],
+    [
+     "SXM",
+     "Sint Maarten"
+    ],
+    [
+     "SVK",
+     "Slovakia"
+    ],
+    [
+     "SVN",
+     "Slovenia"
+    ],
+    [
+     "SLB",
+     "Solomon Islands"
+    ],
+    [
+     "SOM",
+     "Somalia"
+    ],
+    [
+     "ZAF",
+     "South Africa"
+    ],
+    [
+     "SGS",
+     "South Georgia & South Sandwich Islands"
+    ],
+    [
+     "KOR",
+     "South Korea"
+    ],
+    [
+     "SSD",
+     "South Sudan"
+    ],
+    [
+     "ESP",
+     "Spain"
+    ],
+    [
+     "LKA",
+     "Sri Lanka"
+    ],
+    [
+     "BLM",
+     "St. Barthélemy"
+    ],
+    [
+     "SHN",
+     "St. Helena"
+    ],
+    [
+     "KNA",
+     "St. Kitts & Nevis"
+    ],
+    [
+     "LCA",
+     "St. Lucia"
+    ],
+    [
+     "MAF",
+     "St. Martin"
+    ],
+    [
+     "SPM",
+     "St. Pierre & Miquelon"
+    ],
+    [
+     "VCT",
+     "St. Vincent & Grenadines"
+    ],
+    [
+     "SDN",
+     "Sudan"
+    ],
+    [
+     "SUR",
+     "Suriname"
+    ],
+    [
+     "SJM",
+     "Svalbard & Jan Mayen"
+    ],
+    [
+     "SWE",
+     "Sweden"
+    ],
+    [
+     "CHE",
+     "Switzerland"
+    ],
+    [
+     "SYR",
+     "Syria"
+    ],
+    [
+     "STP",
+     "São Tomé & Príncipe"
+    ],
+    [
+     "TWN",
+     "Taiwan"
+    ],
+    [
+     "TJK",
+     "Tajikistan"
+    ],
+    [
+     "TZA",
+     "Tanzania"
+    ],
+    [
+     "THA",
+     "Thailand"
+    ],
+    [
+     "TLS",
+     "Timor-Leste"
+    ],
+    [
+     "TGO",
+     "Togo"
+    ],
+    [
+     "TKL",
+     "Tokelau"
+    ],
+    [
+     "TON",
+     "Tonga"
+    ],
+    [
+     "TTO",
+     "Trinidad & Tobago"
+    ],
+    [
+     "TUN",
+     "Tunisia"
+    ],
+    [
+     "TKM",
+     "Turkmenistan"
+    ],
+    [
+     "TCA",
+     "Turks & Caicos Islands"
+    ],
+    [
+     "TUV",
+     "Tuvalu"
+    ],
+    [
+     "TUR",
+     "Türkiye"
+    ],
+    [
+     "UMI",
+     "U.S. Outlying Islands"
+    ],
+    [
+     "VIR",
+     "U.S. Virgin Islands"
+    ],
+    [
+     "GBR",
+     "UK"
+    ],
+    [
+     "USA",
+     "US"
+    ],
+    [
+     "UGA",
+     "Uganda"
+    ],
+    [
+     "UKR",
+     "Ukraine"
+    ],
+    [
+     "ARE",
+     "United Arab Emirates"
+    ],
+    [
+     "URY",
+     "Uruguay"
+    ],
+    [
+     "UZB",
+     "Uzbekistan"
+    ],
+    [
+     "VUT",
+     "Vanuatu"
+    ],
+    [
+     "VAT",
+     "Vatican City"
+    ],
+    [
+     "VEN",
+     "Venezuela"
+    ],
+    [
+     "VNM",
+     "Vietnam"
+    ],
+    [
+     "WLF",
+     "Wallis & Futuna"
+    ],
+    [
+     "ESH",
+     "Western Sahara"
+    ],
+    [
+     "WLD",
+     "World"
+    ],
+    [
+     "YEM",
+     "Yemen"
+    ],
+    [
+     "ZMB",
+     "Zambia"
+    ],
+    [
+     "ZWE",
+     "Zimbabwe"
+    ],
+    [
+     "ALA",
+     "Åland Islands"
+    ]
+   ]
+  },
+  {
    "id": "forests-wildlife-and-plastic",
    "title": "Forest loss, threatened wildlife and plastic in the ocean",
    "description": "Pressure on nature by country: forest cleared each year, tree cover lost, how close species are to extinction, and plastic reaching the sea.",
@@ -36598,6 +38014,232 @@
    "cadence": "Every day"
   },
   {
+   "id": "world-leading-indicators-and-exchange-rates",
+   "title": "Leading indicators and real exchange rates, monthly",
+   "description": "The OECD's early signals of turning points in eight large economies, and how strong each currency is after allowing for prices.",
+   "region": "World",
+   "domain": "Economy and development",
+   "source": "OECD and Bank for International Settlements, via FRED",
+   "source_url": "https://fred.stlouisfed.org",
+   "licence": "Free reuse with the source named (OECD and BIS terms), retrieved from FRED",
+   "file": "data/sets/world-leading-indicators-and-exchange-rates.csv",
+   "keys": [
+    "date"
+   ],
+   "time": {
+    "col": "date",
+    "type": "date",
+    "min": "1955-01-01",
+    "max": "2026-10-01"
+   },
+   "entity": null,
+   "rows": 862,
+   "columns": [
+    {
+     "name": "leading_indicator_usa",
+     "title": "OECD leading indicator for the United States",
+     "unit": "index, long-run trend = 100",
+     "description": "Published by the OECD; FRED series USALOLITONOSTSAM.",
+     "type": "num",
+     "filled": 829
+    },
+    {
+     "name": "leading_indicator_chn",
+     "title": "OECD leading indicator for China",
+     "unit": "index, long-run trend = 100",
+     "description": "Published by the OECD; FRED series CHNLOLITONOSTSAM.",
+     "type": "num",
+     "filled": 381
+    },
+    {
+     "name": "leading_indicator_jpn",
+     "title": "OECD leading indicator for Japan",
+     "unit": "index, long-run trend = 100",
+     "description": "Published by the OECD; FRED series JPNLOLITONOSTSAM.",
+     "type": "num",
+     "filled": 781
+    },
+    {
+     "name": "leading_indicator_deu",
+     "title": "OECD leading indicator for Germany",
+     "unit": "index, long-run trend = 100",
+     "description": "Published by the OECD; FRED series DEULOLITONOSTSAM.",
+     "type": "num",
+     "filled": 757
+    },
+    {
+     "name": "leading_indicator_gbr",
+     "title": "OECD leading indicator for the United Kingdom",
+     "unit": "index, long-run trend = 100",
+     "description": "Published by the OECD; FRED series GBRLOLITONOSTSAM.",
+     "type": "num",
+     "filled": 794
+    },
+    {
+     "name": "leading_indicator_fra",
+     "title": "OECD leading indicator for France",
+     "unit": "index, long-run trend = 100",
+     "description": "Published by the OECD; FRED series FRALOLITONOSTSAM.",
+     "type": "num",
+     "filled": 687
+    },
+    {
+     "name": "leading_indicator_ind",
+     "title": "OECD leading indicator for India",
+     "unit": "index, long-run trend = 100",
+     "description": "Published by the OECD; FRED series INDLOLITONOSTSAM.",
+     "type": "num",
+     "filled": 358
+    },
+    {
+     "name": "leading_indicator_bra",
+     "title": "OECD leading indicator for Brazil",
+     "unit": "index, long-run trend = 100",
+     "description": "Published by the OECD; FRED series BRALOLITONOSTSAM.",
+     "type": "num",
+     "filled": 421
+    },
+    {
+     "name": "real_exchange_rate_united_states",
+     "title": "Real exchange rate of the United States, against a broad basket of currencies",
+     "unit": "index, 2020 = 100",
+     "description": "Published by the Bank for International Settlements; FRED series RBUSBIS.",
+     "type": "num",
+     "filled": 394
+    },
+    {
+     "name": "real_exchange_rate_china",
+     "title": "Real exchange rate of China, against a broad basket of currencies",
+     "unit": "index, 2020 = 100",
+     "description": "Published by the Bank for International Settlements; FRED series RBCNBIS.",
+     "type": "num",
+     "filled": 394
+    },
+    {
+     "name": "real_exchange_rate_japan",
+     "title": "Real exchange rate of Japan, against a broad basket of currencies",
+     "unit": "index, 2020 = 100",
+     "description": "Published by the Bank for International Settlements; FRED series RBJPBIS.",
+     "type": "num",
+     "filled": 394
+    },
+    {
+     "name": "real_exchange_rate_euro_area",
+     "title": "Real exchange rate of the euro area, against a broad basket of currencies",
+     "unit": "index, 2020 = 100",
+     "description": "Published by the Bank for International Settlements; FRED series RBXMBIS.",
+     "type": "num",
+     "filled": 394
+    },
+    {
+     "name": "real_exchange_rate_united_kingdom",
+     "title": "Real exchange rate of the United Kingdom, against a broad basket of currencies",
+     "unit": "index, 2020 = 100",
+     "description": "Published by the Bank for International Settlements; FRED series RBGBBIS.",
+     "type": "num",
+     "filled": 394
+    },
+    {
+     "name": "real_exchange_rate_india",
+     "title": "Real exchange rate of India, against a broad basket of currencies",
+     "unit": "index, 2020 = 100",
+     "description": "Published by the Bank for International Settlements; FRED series RBINBIS.",
+     "type": "num",
+     "filled": 394
+    },
+    {
+     "name": "real_exchange_rate_brazil",
+     "title": "Real exchange rate of Brazil, against a broad basket of currencies",
+     "unit": "index, 2020 = 100",
+     "description": "Published by the Bank for International Settlements; FRED series RBBRBIS.",
+     "type": "num",
+     "filled": 394
+    },
+    {
+     "name": "real_exchange_rate_mexico",
+     "title": "Real exchange rate of Mexico, against a broad basket of currencies",
+     "unit": "index, 2020 = 100",
+     "description": "Published by the Bank for International Settlements; FRED series RBMXBIS.",
+     "type": "num",
+     "filled": 394
+    }
+   ],
+   "bytes": 81329,
+   "built": "2026-11-24",
+   "coverage": "1955 to 2026",
+   "step": "month",
+   "cadence": "A new month about once a month"
+  },
+  {
+   "id": "uk-economy-monthly",
+   "title": "United Kingdom economy, monthly",
+   "description": "Prices, jobs and output in the United Kingdom, month by month, from its national statistics office.",
+   "region": "World",
+   "domain": "Economy and development",
+   "source": "UK Office for National Statistics",
+   "source_url": "https://www.ons.gov.uk",
+   "licence": "Open Government Licence v3.0",
+   "file": "data/sets/uk-economy-monthly.csv",
+   "keys": [
+    "date"
+   ],
+   "time": {
+    "col": "date",
+    "type": "date",
+    "min": "1971-02-01",
+    "max": "2026-10-01"
+   },
+   "entity": null,
+   "rows": 669,
+   "columns": [
+    {
+     "name": "inflation",
+     "title": "UK inflation (consumer prices, change over a year)",
+     "unit": "% a year",
+     "description": "UK Office for National Statistics series D7G7.",
+     "type": "num",
+     "filled": 454
+    },
+    {
+     "name": "inflation_with_housing",
+     "title": "UK inflation including owner-occupiers' housing costs",
+     "unit": "% a year",
+     "description": "UK Office for National Statistics series L55O.",
+     "type": "num",
+     "filled": 454
+    },
+    {
+     "name": "unemployment_rate",
+     "title": "UK unemployment rate",
+     "unit": "% of people 16 and over in the labour force",
+     "description": "UK Office for National Statistics series MGSX.",
+     "type": "num",
+     "filled": 667
+    },
+    {
+     "name": "employment_rate",
+     "title": "UK employment rate, ages 16 to 64",
+     "unit": "% of people aged 16 to 64",
+     "description": "UK Office for National Statistics series LF24.",
+     "type": "num",
+     "filled": 667
+    },
+    {
+     "name": "monthly_gdp_index",
+     "title": "UK monthly GDP",
+     "unit": "index",
+     "description": "UK Office for National Statistics series ECY2.",
+     "type": "num",
+     "filled": 357
+    }
+   ],
+   "bytes": 19873,
+   "built": "2026-11-24",
+   "coverage": "1971 to 2026",
+   "step": "month",
+   "cadence": "A new month every month"
+  },
+  {
    "id": "imf-projections",
    "title": "IMF projections for the next five years",
    "description": "What the IMF expects for growth, inflation, debt and jobs in each economy over the coming years. Projections, not measurements.",
@@ -39342,6 +40984,59 @@
    "cadence": "Every business day"
   },
   {
+   "id": "us-mortgage-lending",
+   "title": "US mortgage lending, year by year",
+   "description": "How many home loans US lenders made each year, how much they lent, and how many applications they turned down.",
+   "region": "US",
+   "domain": "Economy and development",
+   "source": "US Federal Financial Institutions Examination Council, HMDA Data Browser",
+   "source_url": "https://ffiec.cfpb.gov/data-browser/",
+   "licence": "Public domain (US federal data)",
+   "file": "data/sets/us-mortgage-lending.csv",
+   "keys": [
+    "date"
+   ],
+   "time": {
+    "col": "date",
+    "type": "date",
+    "min": "2018-01-01",
+    "max": "2025-01-01"
+   },
+   "entity": null,
+   "rows": 8,
+   "columns": [
+    {
+     "name": "mortgages_made",
+     "title": "US mortgages made in the year",
+     "unit": "loans",
+     "description": "Home loans originated, from the records lenders file under the Home Mortgage Disclosure Act.",
+     "type": "num",
+     "filled": 8
+    },
+    {
+     "name": "amount_lent",
+     "title": "Amount lent in US mortgages made in the year",
+     "unit": "current US$",
+     "description": "",
+     "type": "num",
+     "filled": 8
+    },
+    {
+     "name": "applications_denied",
+     "title": "US mortgage applications denied in the year",
+     "unit": "applications",
+     "description": "",
+     "type": "num",
+     "filled": 8
+    }
+   ],
+   "bytes": 391,
+   "built": "2026-11-24",
+   "coverage": "2018 to 2025",
+   "step": "year",
+   "cadence": "Once a year"
+  },
+  {
    "id": "us-climate-monthly",
    "title": "United States temperature and rainfall, monthly since 1895",
    "description": "Monthly average temperature and precipitation for the contiguous United States, from NOAA's climate record.",
@@ -39856,6 +41551,83 @@
    "cadence": "A new week every week"
   },
   {
+   "id": "us-drug-overdose-deaths",
+   "title": "US deaths from drug overdoses, 12-month running count",
+   "description": "How many people in the United States died of a drug overdose in the 12 months ending each month, in total and for the main drugs involved.",
+   "region": "US",
+   "domain": "Health",
+   "source": "US Centers for Disease Control and Prevention, National Center for Health Statistics",
+   "source_url": "https://www.cdc.gov/nchs/nvss/vsrr/drug-overdose-data.htm",
+   "licence": "Public domain (US federal data)",
+   "file": "data/sets/us-drug-overdose-deaths.csv",
+   "keys": [
+    "date"
+   ],
+   "time": {
+    "col": "date",
+    "type": "date",
+    "min": "2015-01-01",
+    "max": "2026-06-01"
+   },
+   "entity": null,
+   "rows": 138,
+   "columns": [
+    {
+     "name": "all_drug_overdose_deaths",
+     "title": "US deaths from drug overdoses, past 12 months",
+     "unit": "deaths in the 12 months ending that month",
+     "description": "Provisional counts from death certificates, CDC National Center for Health Statistics. A death can involve more than one drug, so the drug columns overlap. This column uses CDC's figure adjusted for reports still to arrive.",
+     "type": "num",
+     "filled": 138
+    },
+    {
+     "name": "opioid_deaths",
+     "title": "US overdose deaths involving opioids, past 12 months",
+     "unit": "deaths in the 12 months ending that month",
+     "description": "Provisional counts from death certificates, CDC National Center for Health Statistics. A death can involve more than one drug, so the drug columns overlap. Recent months are incomplete.",
+     "type": "num",
+     "filled": 138
+    },
+    {
+     "name": "synthetic_opioid_deaths",
+     "title": "US overdose deaths involving synthetic opioids such as fentanyl, past 12 months",
+     "unit": "deaths in the 12 months ending that month",
+     "description": "Provisional counts from death certificates, CDC National Center for Health Statistics. A death can involve more than one drug, so the drug columns overlap. Recent months are incomplete.",
+     "type": "num",
+     "filled": 138
+    },
+    {
+     "name": "heroin_deaths",
+     "title": "US overdose deaths involving heroin, past 12 months",
+     "unit": "deaths in the 12 months ending that month",
+     "description": "Provisional counts from death certificates, CDC National Center for Health Statistics. A death can involve more than one drug, so the drug columns overlap. Recent months are incomplete.",
+     "type": "num",
+     "filled": 138
+    },
+    {
+     "name": "cocaine_deaths",
+     "title": "US overdose deaths involving cocaine, past 12 months",
+     "unit": "deaths in the 12 months ending that month",
+     "description": "Provisional counts from death certificates, CDC National Center for Health Statistics. A death can involve more than one drug, so the drug columns overlap. Recent months are incomplete.",
+     "type": "num",
+     "filled": 138
+    },
+    {
+     "name": "stimulant_deaths",
+     "title": "US overdose deaths involving methamphetamine and similar stimulants, past 12 months",
+     "unit": "deaths in the 12 months ending that month",
+     "description": "Provisional counts from death certificates, CDC National Center for Health Statistics. A death can involve more than one drug, so the drug columns overlap. Recent months are incomplete.",
+     "type": "num",
+     "filled": 138
+    }
+   ],
+   "bytes": 6651,
+   "built": "2026-11-24",
+   "coverage": "2015 to 2026",
+   "step": "month",
+   "cadence": "A new month every month, about four months behind"
+  },
+  {
    "id": "us-nih-research-projects",
    "title": "US medical research projects funded each year",
    "description": "How many research projects the US National Institutes of Health pays for in each fiscal year.",
@@ -39892,6 +41664,99 @@
    "step": "year",
    "partial": true,
    "cadence": "Every week"
+  },
+  {
+   "id": "us-river-flow-monthly",
+   "title": "Flow of major US rivers, monthly",
+   "description": "How much water eight major US rivers carry, month by month, from stream gauges that have run for decades.",
+   "region": "US",
+   "domain": "Climate and environment",
+   "source": "US Geological Survey, National Water Information System",
+   "source_url": "https://waterdata.usgs.gov",
+   "licence": "Public domain (US federal data)",
+   "file": "data/sets/us-river-flow-monthly.csv",
+   "keys": [
+    "date"
+   ],
+   "time": {
+    "col": "date",
+    "type": "date",
+    "min": "1950-01-01",
+    "max": "2026-10-01"
+   },
+   "entity": null,
+   "rows": 922,
+   "columns": [
+    {
+     "name": "mississippi_at_st_louis",
+     "title": "Flow of the Mississippi River at St. Louis, monthly average",
+     "unit": "cubic feet per second",
+     "description": "US Geological Survey stream gauge 07010000: the average of the daily mean flow in each month with at least 25 days recorded.",
+     "type": "num",
+     "filled": 922
+    },
+    {
+     "name": "missouri_at_hermann",
+     "title": "Flow of the Missouri River at Hermann, monthly average",
+     "unit": "cubic feet per second",
+     "description": "US Geological Survey stream gauge 06934500: the average of the daily mean flow in each month with at least 25 days recorded.",
+     "type": "num",
+     "filled": 922
+    },
+    {
+     "name": "ohio_at_louisville",
+     "title": "Flow of the Ohio River at Louisville, monthly average",
+     "unit": "cubic feet per second",
+     "description": "US Geological Survey stream gauge 03294500: the average of the daily mean flow in each month with at least 25 days recorded.",
+     "type": "num",
+     "filled": 922
+    },
+    {
+     "name": "columbia_at_the_dalles",
+     "title": "Flow of the Columbia River at The Dalles, monthly average",
+     "unit": "cubic feet per second",
+     "description": "US Geological Survey stream gauge 14105700: the average of the daily mean flow in each month with at least 25 days recorded.",
+     "type": "num",
+     "filled": 922
+    },
+    {
+     "name": "colorado_at_lees_ferry",
+     "title": "Flow of the Colorado River at Lees Ferry, monthly average",
+     "unit": "cubic feet per second",
+     "description": "US Geological Survey stream gauge 09380000: the average of the daily mean flow in each month with at least 25 days recorded.",
+     "type": "num",
+     "filled": 922
+    },
+    {
+     "name": "potomac_near_washington",
+     "title": "Flow of the Potomac River near Washington, DC, monthly average",
+     "unit": "cubic feet per second",
+     "description": "US Geological Survey stream gauge 01646500: the average of the daily mean flow in each month with at least 25 days recorded.",
+     "type": "num",
+     "filled": 922
+    },
+    {
+     "name": "hudson_at_green_island",
+     "title": "Flow of the Hudson River at Green Island, monthly average",
+     "unit": "cubic feet per second",
+     "description": "US Geological Survey stream gauge 01358000: the average of the daily mean flow in each month with at least 25 days recorded.",
+     "type": "num",
+     "filled": 887
+    },
+    {
+     "name": "sacramento_at_freeport",
+     "title": "Flow of the Sacramento River at Freeport, monthly average",
+     "unit": "cubic feet per second",
+     "description": "US Geological Survey stream gauge 11447650: the average of the daily mean flow in each month with at least 25 days recorded.",
+     "type": "num",
+     "filled": 789
+    }
+   ],
+   "bytes": 55712,
+   "built": "2026-11-24",
+   "coverage": "1950 to 2026",
+   "step": "month",
+   "cadence": "A new month every month"
   },
   {
    "id": "us-fda-reports",
@@ -41061,6 +42926,147 @@
    "coverage": "2012 to 2026",
    "step": "month",
    "cadence": "Every day"
+  },
+  {
+   "id": "maryland-crime",
+   "title": "Maryland: reported crime, year by year",
+   "description": "Serious crimes reported to police across the state of Maryland each year since 1975, as counts and as rates.",
+   "region": "US",
+   "domain": "Government and finance",
+   "source": "State of Maryland, Open Data Portal",
+   "source_url": "https://opendata.maryland.gov",
+   "licence": "Open data, State of Maryland",
+   "file": "data/sets/maryland-crime.csv",
+   "keys": [
+    "date"
+   ],
+   "time": {
+    "col": "date",
+    "type": "date",
+    "min": "1975-01-01",
+    "max": "2020-01-01"
+   },
+   "entity": null,
+   "rows": 46,
+   "columns": [
+    {
+     "name": "population",
+     "title": "Maryland population",
+     "unit": "people",
+     "description": "Maryland Statistical Analysis Center, Uniform Crime Reports, statewide totals.",
+     "type": "num",
+     "filled": 46
+    },
+    {
+     "name": "murders",
+     "title": "Maryland: murders",
+     "unit": "offences",
+     "description": "Maryland Statistical Analysis Center, Uniform Crime Reports, statewide totals.",
+     "type": "num",
+     "filled": 46
+    },
+    {
+     "name": "rapes",
+     "title": "Maryland: rapes",
+     "unit": "offences",
+     "description": "Maryland Statistical Analysis Center, Uniform Crime Reports, statewide totals.",
+     "type": "num",
+     "filled": 46
+    },
+    {
+     "name": "robberies",
+     "title": "Maryland: robberies",
+     "unit": "offences",
+     "description": "Maryland Statistical Analysis Center, Uniform Crime Reports, statewide totals.",
+     "type": "num",
+     "filled": 46
+    },
+    {
+     "name": "aggravated_assaults",
+     "title": "Maryland: aggravated assaults",
+     "unit": "offences",
+     "description": "Maryland Statistical Analysis Center, Uniform Crime Reports, statewide totals.",
+     "type": "num",
+     "filled": 46
+    },
+    {
+     "name": "breaking_and_entering",
+     "title": "Maryland: breaking and entering",
+     "unit": "offences",
+     "description": "Maryland Statistical Analysis Center, Uniform Crime Reports, statewide totals.",
+     "type": "num",
+     "filled": 46
+    },
+    {
+     "name": "larceny_theft",
+     "title": "Maryland: larceny and theft",
+     "unit": "offences",
+     "description": "Maryland Statistical Analysis Center, Uniform Crime Reports, statewide totals.",
+     "type": "num",
+     "filled": 46
+    },
+    {
+     "name": "motor_vehicle_thefts",
+     "title": "Maryland: motor vehicle thefts",
+     "unit": "offences",
+     "description": "Maryland Statistical Analysis Center, Uniform Crime Reports, statewide totals.",
+     "type": "num",
+     "filled": 46
+    },
+    {
+     "name": "all_serious_crimes",
+     "title": "Maryland: all serious crimes reported",
+     "unit": "offences",
+     "description": "Maryland Statistical Analysis Center, Uniform Crime Reports, statewide totals.",
+     "type": "num",
+     "filled": 46
+    },
+    {
+     "name": "violent_crimes",
+     "title": "Maryland: violent crimes",
+     "unit": "offences",
+     "description": "Maryland Statistical Analysis Center, Uniform Crime Reports, statewide totals.",
+     "type": "num",
+     "filled": 46
+    },
+    {
+     "name": "property_crimes",
+     "title": "Maryland: property crimes",
+     "unit": "offences",
+     "description": "Maryland Statistical Analysis Center, Uniform Crime Reports, statewide totals.",
+     "type": "num",
+     "filled": 46
+    },
+    {
+     "name": "violent_crime_rate",
+     "title": "Maryland: violent crime rate",
+     "unit": "per 100,000 people",
+     "description": "Maryland Statistical Analysis Center, Uniform Crime Reports, statewide totals.",
+     "type": "num",
+     "filled": 46
+    },
+    {
+     "name": "property_crime_rate",
+     "title": "Maryland: property crime rate",
+     "unit": "per 100,000 people",
+     "description": "Maryland Statistical Analysis Center, Uniform Crime Reports, statewide totals.",
+     "type": "num",
+     "filled": 46
+    },
+    {
+     "name": "murder_rate",
+     "title": "Maryland: murder rate",
+     "unit": "per 100,000 people",
+     "description": "Maryland Statistical Analysis Center, Uniform Crime Reports, statewide totals.",
+     "type": "num",
+     "filled": 46
+    }
+   ],
+   "bytes": 4659,
+   "built": "2026-11-24",
+   "coverage": "1975 to 2020",
+   "step": "year",
+   "cadence": "Rarely; the state's file ends in 2020"
   },
   {
    "id": "pjm-summer-peak-forecasts",

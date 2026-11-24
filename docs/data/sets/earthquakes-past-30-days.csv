@@ -1,7 +1,4 @@
 id,time,magnitude,place,latitude,longitude,depth_km,magnitude_type,event_type,significance,tsunami_flag,felt_reports,url
-us6000u4tx,2026-10-25T11:24:13Z,5,"197 km ENE of Nagqu, China",32.3733,93.863,10,mb,earthquake,385,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us6000u4tx
-us6000u4ty,2026-10-25T11:25:57Z,5.9,"214 km ENE of Nagqu, China",32.4675,94.0105,7,mww,earthquake,536,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us6000u4ty
-us6000u4u4,2026-10-25T11:55:16Z,4.4,"219 km NE of Nagqu, China",32.715,93.875,10,mb,earthquake,298,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us6000u4u4
 us6000u4u2,2026-10-25T12:09:05Z,4.6,"161 km WSW of Ternate, Indonesia",0.1129,126.0997,46.193,mb,earthquake,326,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us6000u4u2
 us7000tw05,2026-10-25T12:29:05Z,4.2,"13 km NNW of Itháki, Greece",38.4687,20.6349,10,mb,earthquake,271,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us7000tw05
 us6000u4u9,2026-10-25T13:22:34Z,4,"2 km SW of Choix, Mexico",26.6939,-108.3445,10,mb,earthquake,246,0,1,https://earthquake.usgs.gov/earthquakes/eventpage/us6000u4u9
@@ -348,6 +345,7 @@ us7000ttyd,2026-10-29T10:33:22Z,4.9,"111 km SW of Port-Vila, Vanuatu",-18.4979,1
 aka2026vkvroo,2026-10-29T11:32:09Z,2.5,"51 km SSE of McGrath, Alaska",62.566,-155.058,5.5,ml,earthquake,96,0,,https://earthquake.usgs.gov/earthquakes/eventpage/aka2026vkvroo
 us7000twmu,2026-10-29T11:32:46Z,2.8,"44 km S of Adak, Alaska",51.479,-176.6828,35.665,ml,earthquake,121,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us7000twmu
 us7000ttyk,2026-10-29T11:38:24Z,4.6,"Pulau Pulau Tanimbar, Indonesia",-7.5288,130.0224,10,mb,earthquake,326,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us7000ttyk
+us7000ttym,2026-10-29T12:01:57Z,4.3,"55 km NNE of Muzaffarābād, Pakistan",34.8306,73.7119,45.24,mb,earthquake,284,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us7000ttym
 nc75459362,2026-10-29T12:38:05Z,2.72,"12 km SW of Ridgemark, CA",36.7453,-121.467,8.78,md,earthquake,115,0,3,https://earthquake.usgs.gov/earthquakes/eventpage/nc75459362
 us7000twiz,2026-10-29T13:16:26Z,4.2,"106 km N of Ambon, Indonesia",-2.7364,128.0972,10,mb,earthquake,271,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us7000twiz
 us7000ttyw,2026-10-29T13:42:58Z,4.7,"4 km SE of Pitaloza Arriba, Panama",7.6173,-80.6394,10,mb,earthquake,341,0,2,https://earthquake.usgs.gov/earthquakes/eventpage/us7000ttyw
@@ -1802,5 +1800,7 @@ aka2026xgopue,2026-11-24T07:43:34Z,3.7,"44 km SSW of Adak, Alaska",51.49,-176.79
 aka2026xgpqpn,2026-11-24T08:14:29Z,2.6,"7 km ESE of Portage Creek, Alaska",58.871,-157.603,0.3,ml,earthquake,104,0,,https://earthquake.usgs.gov/earthquakes/eventpage/aka2026xgpqpn
 aka2026xgrbne,2026-11-24T08:57:07Z,3.4,"17 km E of Clam Gulch, Alaska",60.211,-151.073,58.3,ml,earthquake,178,0,2,https://earthquake.usgs.gov/earthquakes/eventpage/aka2026xgrbne
 tx2026xcyrjw,2026-11-24T09:09:45Z,2.8,"17 km S of Nixon, Texas",29.111,-97.775,8.8753,ml,earthquake,121,0,1,https://earthquake.usgs.gov/earthquakes/eventpage/tx2026xcyrjw
-us6000ud63,2026-11-24T09:35:16Z,2.7,"20 km ENE of Falls City, Texas",29.0581,-97.8278,8.695,mb_lg,earthquake,112,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us6000ud63
+tx2026xcznni,2026-11-24T09:35:14Z,2.5,"16 km S of Nixon, Texas",29.121,-97.777,6.1519,ml,earthquake,96,0,,https://earthquake.usgs.gov/earthquakes/eventpage/tx2026xcznni
 aka2026xgudxu,2026-11-24T10:29:48Z,3.1,"31 km NNE of Stevens Village, Alaska",66.271,-148.871,9.8,ml,earthquake,148,0,,https://earthquake.usgs.gov/earthquakes/eventpage/aka2026xgudxu
+us6000ud6h,2026-11-24T11:06:14Z,6.4,Mauritius - Reunion region,-17.7049,65.6995,10,mww,earthquake,630,0,,https://earthquake.usgs.gov/earthquakes/eventpage/us6000ud6h
+tx2026xdcvpg,2026-11-24T11:15:07Z,3,"16 km S of Nixon, Texas",29.116,-97.789,7.094,ml,earthquake,138,0,,https://earthquake.usgs.gov/earthquakes/eventpage/tx2026xdcvpg
