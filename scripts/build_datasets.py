@@ -326,7 +326,7 @@ def temperature():
     rows = [[m] + [v.get(c, "") for c in cols] for m, v in sorted(cell.items())]
     return spec("global-temperature", "Global temperature, monthly",
                 "How much warmer or cooler the planet's surface was each month than a long-term average, from NASA and NOAA.",
-                "World", "Climate and emissions", "NASA GISTEMP and NOAA Climate at a Glance, via DataHub",
+                "World", "Climate and environment", "NASA GISTEMP and NOAA Climate at a Glance, via DataHub",
                 "https://github.com/datasets/global-temp", "CC BY 4.0 packaging of US federal data", ["month"], "month", "date", None,
                 ["month"] + cols, rows,
                 dict(nasa_anomaly_c=dict(title="Global temperature against the 1951-1980 average (NASA)", unit="°C",
@@ -351,7 +351,7 @@ def co2ppm():
     rows = [[m] + [v.get(c, "") for c in cols] for m, v in sorted(cell.items())]
     return spec("atmospheric-co2", "CO2 in the atmosphere, monthly",
                 "The concentration of carbon dioxide in the air, measured at Mauna Loa since 1958 and averaged across the globe since 1979.",
-                "World", "Climate and emissions", "NOAA Global Monitoring Laboratory, via DataHub", "https://github.com/datasets/co2-ppm",
+                "World", "Climate and environment", "NOAA Global Monitoring Laboratory, via DataHub", "https://github.com/datasets/co2-ppm",
                 "Public domain (US federal data; PDDL packaging)", ["month"], "month", "date", None, ["month"] + cols, rows,
                 dict(mauna_loa_ppm=dict(title="CO2 at Mauna Loa", unit="parts per million", description="Monthly mean CO2 at Mauna Loa Observatory, Hawaii."),
                      mauna_loa_trend_ppm=dict(title="CO2 at Mauna Loa, seasonal cycle removed", unit="parts per million"),
@@ -362,12 +362,13 @@ def co2ppm():
 BUILDERS = [
     lambda: owid("co2-and-greenhouse-gases", "co2-data", "co2", "CO2 and greenhouse gas emissions",
                  "Annual emissions by country: CO2 by fuel and sector, per-capita and cumulative figures, methane, nitrous oxide, and each country's share of the world total.",
-                 "Climate and emissions"),
+                 "Climate and environment"),
     lambda: owid("energy", "energy-data", "energy", "Energy production, consumption and electricity mix",
                  "Annual energy data by country: primary energy, electricity generation by source, shares of coal, gas, nuclear, solar and wind, and per-capita use.",
                  "Energy"),
     worldbank, temperature, co2ppm, quakes, oil, gas, pjm,
 ]
+BUILDER_NAMES = ["co2", "energy", "worldbank", "temperature", "co2ppm", "quakes", "oil", "gas", "pjm"]
 
 
 # ---------- country reference: World Bank regions and income groups ----------
@@ -800,8 +801,28 @@ def build_sample(real):
     print("sample table written for", y)
 
 
+def describe(d):
+    """A close look at one freshly built dataset, for trying a new source."""
+    h, rows = read_rows(SETS / f"{d['id']}.csv")
+    print(f"     {d['title']} | {d['source']} | {d['domain']} | {d['bytes'] / 1e6:.2f} MB | {d['time']['min']} to {d['time']['max']}" + (f" | {d.get('entities')} places" if d.get("entity") else ""))
+    for c in d["columns"][:60]:
+        print(f"       {c['name']} | {c['title']} | unit={c['unit']!r} | {c['type']} | filled {c['filled']}")
+    for r in rows[:2] + rows[-2:]:
+        print("       row:", ",".join(str(x) for x in r)[:260])
+
+
 def main():
+    global SETS
     derive_only = "--derive" in sys.argv                    # rebuild only the derived files from the CSVs already on disk
+    trying = "--try" in sys.argv                            # build into a scratch folder and print what came back; nothing is kept
+    only = sys.argv[sys.argv.index("--only") + 1].split(",") if "--only" in sys.argv else None
+    if trying:
+        SETS = Path(tempfile.mkdtemp())
+    import sources                                          # the builders for the wider catalog; they use the helpers above
+    if "--probe-owid" in sys.argv:
+        sources.owid_probe(sys.argv[sys.argv.index("--probe-owid") + 1].split(","))
+        return
+    builders = list(zip(BUILDER_NAMES + sources.NAMES, BUILDERS + sources.BUILDERS))
     SETS.mkdir(parents=True, exist_ok=True)
     before = tempfile.mkdtemp()
     for f in SETS.glob("*.csv"):
@@ -809,17 +830,27 @@ def main():
     was = json.loads(MANIFEST.read_text()) if MANIFEST.exists() else {"datasets": []}
     old = {d["id"]: d for d in was["datasets"]}
     out, failed = [], []
-    for b in ([] if derive_only else BUILDERS):
+    for name, b in ([] if derive_only else builders):
+        if only and name not in only:
+            continue
+        started = time.time()
         try:
-            d = b()
-            skip = ("built", "places", "default_vars", "chart_entities", "coverage", "chart", "default_entities", "cadence")
-            if old.get(d["id"]) and {k: v for k, v in old[d["id"]].items() if k not in skip} == {k: v for k, v in d.items() if k not in skip}:
-                d["built"] = old[d["id"]]["built"]          # unchanged data keeps its date
-            out.append(d)
-            print(f"ok   {d['id']}: {d['rows']} rows, {len(d['columns'])} variables")
+            res = b()
+            for d in (res if isinstance(res, list) else [res]):
+                skip = ("built", "places", "default_vars", "chart_entities", "coverage", "chart", "default_entities", "cadence")
+                if old.get(d["id"]) and {k: v for k, v in old[d["id"]].items() if k not in skip} == {k: v for k, v in d.items() if k not in skip}:
+                    d["built"] = old[d["id"]]["built"]      # unchanged data keeps its date
+                out.append(d)
+                print(f"ok   {d['id']}: {d['rows']} rows, {len(d['columns'])} variables, {time.time() - started:.0f}s", flush=True)
+                if trying:
+                    describe(d)
         except Exception as e:
-            failed.append(str(e)[:200])
-            print("FAIL", str(e)[:200])
+            failed.append(f"{name}: {str(e)[:180]}")
+            print(f"FAIL {name}: {str(e)[:200]} ({time.time() - started:.0f}s)", flush=True)
+    if trying:
+        print(f"\n{len(out)} datasets built, {len(failed)} builders failed:", "; ".join(f.split(':')[0] for f in failed))
+        shutil.rmtree(SETS, ignore_errors=True)
+        return
     keep = {d["id"] for d in out}
     out += [d for i, d in old.items() if i not in keep]     # a failed build keeps the last good version
     out.sort(key=lambda d: ORDER.index(d["id"]) if d["id"] in ORDER else len(ORDER))

@@ -1,0 +1,1059 @@
+"""More datasets, one builder for each source in the catalog that can be read without an account or key.
+
+Every builder returns one spec or a list of specs (see `spec()` in build_datasets.py) and is added to BUILDERS at the
+foot of this file. Three shapes are used, because the rest of the site already understands them:
+
+  country_year()  one row per country and year          -> lookups, comparisons, rankings, maps, charts, the AI
+  series()        one row per date, a column per measure -> latest reading, history, charts, the AI
+  table()         anything else (lists, agencies)        -> the explorer
+
+A builder that fails keeps the files from the last good run, so one source being down never breaks the site.
+Fetching is polite: one request at a time, a pause between requests to the same host, and for sources that are asked
+year by year only the recent years are fetched again; older years are read back from the file already on disk.
+"""
+import csv, gzip, io, json, re, sys, time, urllib.parse, urllib.request
+from datetime import date, datetime, timezone
+
+bd = sys.modules["__main__"] if hasattr(sys.modules.get("__main__"), "spec") else __import__("build_datasets")
+RAW, SETS = bd.RAW, bd.SETS
+THIS_YEAR = date.today().year
+PD = "Public domain (US federal data)"
+COUNTRY = dict(col="code", label_col="country", label="Country or region")
+
+
+# ---------- helpers ----------
+def fetch(url, headers=None, data=None, tries=3, timeout=150):
+    h = dict(bd.UA)
+    h.update(headers or {})
+    for i in range(tries):
+        try:
+            with urllib.request.urlopen(urllib.request.Request(url, headers=h, data=data), timeout=timeout) as r:
+                raw = r.read()
+                return gzip.decompress(raw) if r.headers.get("Content-Encoding") == "gzip" else raw
+        except Exception:
+            if i == tries - 1:
+                raise
+            time.sleep(4 * (i + 1))
+
+
+def J(url, **kw):
+    return json.loads(fetch(url, **kw))
+
+
+def text(url, **kw):
+    return fetch(url, **kw).decode("utf-8-sig", "replace")
+
+
+def slug(s, n=52):
+    s = re.sub(r"[^a-z0-9]+", "_", s.lower().replace("%", " pct ").replace("$", " usd ")).strip("_")
+    return s if len(s) <= n else s[:n].rsplit("_", 1)[0]
+
+
+def num(v, n=7):
+    """A float rounded to n significant figures, written without needless digits; '' for missing."""
+    if v in ("", None):
+        return ""
+    try:
+        x = float(v)
+    except (TypeError, ValueError):
+        return ""
+    if x != x or x in (float("inf"), float("-inf")):
+        return ""
+    x = float(f"{x:.{n}g}")
+    return int(x) if x == int(x) and abs(x) < 1e15 else x
+
+
+def split_unit(label):
+    """'Hospital beds (per 1,000 people)' -> ('Hospital beds', 'per 1,000 people')."""
+    m = re.match(r"^(.*\S)\s*\(([^()]+)\)\s*$", label.strip())
+    return (m.group(1), m.group(2)) if m else (label.strip(), "")
+
+
+_iso = {}
+
+
+def iso():
+    """ISO 3166 two-letter and UN M49 numeric codes -> three-letter codes, and English names."""
+    if not _iso:
+        a2, m49, name = {}, {}, {}
+        for r in csv.DictReader(io.StringIO(text(f"{RAW}datasets/country-codes/main/data/country-codes.csv"))):
+            a3 = r.get("ISO3166-1-Alpha-3")
+            if not a3:
+                continue
+            if r.get("ISO3166-1-Alpha-2"):
+                a2[r["ISO3166-1-Alpha-2"]] = a3
+            if r.get("M49"):
+                m49[str(int(float(r["M49"])))] = a3
+            name[a3] = r.get("CLDR display name") or r.get("official_name_en") or a3
+        a2.setdefault("XK", "XKX")
+        name.setdefault("XKX", "Kosovo")
+        a2.setdefault("NA", "NAM")                          # read as "not available" by some CSV tools; make sure it is there
+        _iso.update(a2=a2, m49=m49, name=name)
+    return _iso
+
+
+def prior(id, key=0):
+    """Rows of the file from the last run, keyed by one column: lets a builder fetch only what is new."""
+    path = SETS / f"{id}.csv"
+    if not path.exists():
+        return [], {}
+    with open(path, newline="", encoding="utf-8") as f:
+        r = csv.reader(f)
+        h = next(r)
+        return h, {row[key]: dict(zip(h, row)) for row in r}
+
+
+def country_year(id, title, description, domain, source, source_url, licence, cell, names, meta, cols, region="World", min_rows=200):
+    """cell: {(code, year): {column: value}}; names: {code: label}."""
+    cols = [c for c in cols if any(c in v for v in cell.values())]
+    rows = [[c, names.get(c, c), y] + [num(v.get(col)) for col in cols] for (c, y), v in sorted(cell.items())]
+    rows = [r for r in rows if any(x != "" for x in r[3:])]
+    assert len(rows) >= min_rows, f"{id}: only {len(rows)} rows"
+    return bd.spec(id, title, description, region, domain, source, source_url, licence, ["code", "year"], "year", "year",
+                   COUNTRY, ["code", "country", "year"] + cols, rows, meta)
+
+
+def series(id, title, description, region, domain, source, source_url, licence, cell, meta, cols, step, min_rows=12):
+    """cell: {'YYYY-MM-DD': {column: value}}; step says how far apart the dates are: day, week, month, quarter or year."""
+    cols = [c for c in cols if any(c in v for v in cell.values())]
+    rows = [[d] + [num(v.get(c)) for c in cols] for d, v in sorted(cell.items())]
+    rows = [r for r in rows if any(x != "" for x in r[1:])]
+    assert len(rows) >= min_rows, f"{id}: only {len(rows)} rows"
+    assert all(re.fullmatch(r"\d{4}-\d{2}-\d{2}", r[0]) for r in rows), f"{id}: a date is not YYYY-MM-DD"
+    out = bd.spec(id, title, description, region, domain, source, source_url, licence, ["date"], "date", "date", None,
+                  ["date"] + cols, rows, meta)
+    out["step"] = step
+    return out
+
+
+def table(id, title, description, region, domain, source, source_url, licence, keys, time_col, time_type, entity, header, rows, meta, min_rows=5):
+    assert len(rows) >= min_rows, f"{id}: only {len(rows)} rows"
+    k = [header.index(c) for c in keys]
+    assert len({tuple(r[i] for i in k) for r in rows}) == len(rows), f"{id}: key columns do not identify a row"
+    return bd.spec(id, title, description, region, domain, source, source_url, licence, keys, time_col, time_type, entity, header, rows, meta)
+
+
+# ---------- World Bank: themed sets of indicators ----------
+def wb_set(id, title, description, domain, source, codes, source_param=None, relabel=None, source_url="https://data.worldbank.org"):
+    """One country-and-year table from a list of World Bank indicator codes. Titles and units come from the World Bank itself."""
+    cell, names, meta, cols, missed = {}, {}, {}, [], []
+    for ind in codes:
+        try:
+            page, pages, got, label = 1, 1, {}, ""
+            while page <= pages:
+                j = J(f"https://api.worldbank.org/v2/country/all/indicator/{ind}?format=json&per_page=20000&date=1960:2035&page={page}"
+                      + (f"&source={source_param}" if source_param else ""))
+                if not isinstance(j, list) or len(j) < 2:
+                    raise ValueError(str(j)[:120])
+                pages = int(j[0]["pages"])
+                for it in j[1] or []:
+                    code = it.get("countryiso3code")
+                    if code and it.get("value") is not None:
+                        got[(code, int(it["date"]))] = it["value"]
+                        names[code] = it["country"]["value"]
+                        label = label or it["indicator"]["value"]
+                page += 1
+            if len(got) < 50:
+                raise ValueError(f"{len(got)} values")
+            t, u = relabel(label) if relabel else split_unit(label)
+            col = slug(t)
+            if col in meta:
+                col = slug(t, 40) + "_" + slug(ind.split(".")[-1])
+            meta[col] = dict(title=t, unit=u, description=f"World Bank indicator {ind}: {label}.")
+            cols.append(col)
+            for k, v in got.items():
+                cell.setdefault(k, {})[col] = v
+        except Exception as e:
+            missed.append(f"{ind}: {str(e)[:70]}")
+        time.sleep(0.15)
+    if missed:
+        print(f"  {id}: {len(missed)} of {len(codes)} indicators not loaded:", "; ".join(missed[:8]))
+    assert len(cols) >= max(3, len(codes) // 2), f"{id}: only {len(cols)} of {len(codes)} indicators loaded"
+    return country_year(id, title, description, domain, source, source_url, "CC BY 4.0", cell, names, meta, cols)
+
+
+def wgi_label(label):
+    name, kind = (label.split(":", 1) + [""])[:2]
+    return (name.strip(), "score from -2.5 (weak) to 2.5 (strong)") if "Estimate" in kind else (name.strip() + ", percentile rank", "percentile, 0 (lowest) to 100")
+
+
+WB_SETS = [
+    ("governance-indicators", "Governance: corruption, rule of law, stability and three more",
+     "Six measures of how countries are governed, each as a score and as a rank among all countries, for every year since 1996.",
+     "Government and finance", "World Bank, Worldwide Governance Indicators",
+     ["CC.EST", "CC.PER.RNK", "GE.EST", "GE.PER.RNK", "PV.EST", "PV.PER.RNK", "RQ.EST", "RQ.PER.RNK", "RL.EST", "RL.PER.RNK", "VA.EST", "VA.PER.RNK"],
+     dict(source_param=3, relabel=wgi_label, source_url="https://www.worldbank.org/en/publication/worldwide-governance-indicators")),
+    ("health-indicators", "Health: spending, disease, mothers and children, causes of death",
+     "Health systems and outcomes by country and year, compiled by the World Bank from the World Health Organization, UNICEF and UN agencies.",
+     "Health", "World Bank, World Development Indicators (WHO, UNICEF and UN sources)",
+     ["SH.XPD.CHEX.PC.CD", "SH.XPD.OOPC.CH.ZS", "SH.XPD.GHED.GD.ZS", "SH.MED.BEDS.ZS", "SH.MED.NUMW.P3", "SH.IMM.IDPT", "SH.TBS.INCD", "SH.DYN.AIDS.ZS",
+      "SH.MLR.INCD.P3", "SH.STA.STNT.ME.ZS", "SH.STA.WAST.ZS", "SH.STA.OWGH.ME.ZS", "SH.ANM.ALLW.ZS", "SH.STA.BRTC.ZS", "SP.ADO.TFRT", "SH.DYN.NMRT",
+      "SP.DYN.CDRT.IN", "SP.DYN.CBRT.IN", "SH.DTH.COMM.ZS", "SH.DTH.NCOM.ZS", "SH.DTH.INJR.ZS", "SH.STA.SUIC.P5", "SH.STA.TRAF.P5", "SH.PRV.SMOK",
+      "SH.ALC.PCAP.LI", "SH.STA.DIAB.ZS", "SH.DYN.NCOM.ZS", "SH.UHC.SRVS.CV.XD", "SH.H2O.SMDW.ZS", "SH.STA.SMSS.ZS", "SH.STA.AIRP.P5",
+      "SP.DYN.LE00.FE.IN", "SP.DYN.LE00.MA.IN", "SH.STA.ANVC.ZS", "SP.DYN.CONU.ZS"], {}),
+    ("education-indicators", "Education: enrolment, completion, literacy, teachers and learning",
+     "Schooling by country and year, compiled by the World Bank from the UNESCO Institute for Statistics.",
+     "People and society", "World Bank, World Development Indicators (UNESCO Institute for Statistics)",
+     ["SE.PRE.ENRR", "SE.PRM.NENR", "SE.PRM.CMPT.ZS", "SE.SEC.NENR", "SE.SEC.CMPT.LO.ZS", "SE.ADT.1524.LT.ZS", "SE.ADT.LITR.FE.ZS", "SE.ADT.LITR.MA.ZS",
+      "SE.PRM.UNER", "SE.PRM.UNER.ZS", "SE.PRM.ENRL.TC.ZS", "SE.SEC.ENRL.TC.ZS", "SE.XPD.TOTL.GB.ZS", "SE.ENR.PRSC.FM.ZS", "SE.ENR.TERT.FM.ZS",
+      "SE.COM.DURS", "SE.PRM.TCAQ.ZS", "SE.LPV.PRIM", "SE.TER.CUAT.BA.ZS", "SE.SEC.CUAT.UP.ZS", "HD.HCI.OVRL", "SE.TER.ENRR.FE"], {}),
+    ("gender-indicators", "Women and men: work, law, management, marriage and money",
+     "How women's lives compare with men's by country and year: work, legal rights, leadership, marriage and access to finance.",
+     "People and society", "World Bank, World Development Indicators and Gender Data Portal",
+     ["SL.TLF.CACT.MA.ZS", "SL.TLF.CACT.FM.ZS", "SG.LAW.INDX", "SL.EMP.SMGT.FE.ZS", "SP.M18.2024.FE.ZS", "SG.VAW.1549.ZS", "IC.FRM.FEMO.ZS",
+      "SL.UEM.TOTL.FE.ZS", "SL.UEM.TOTL.MA.ZS", "FX.OWN.TOTL.FE.ZS", "FX.OWN.TOTL.MA.ZS", "SP.POP.TOTL.FE.ZS", "SL.EMP.WORK.FE.ZS", "SL.EMP.VULN.FE.ZS",
+      "SE.SEC.ENRR.FE", "SG.GEN.MNST.ZS"], {}),
+    ("poverty-and-inequality", "Poverty and inequality: poverty lines, income shares, shared prosperity",
+     "Who is poor and how income is shared, by country and year, from household surveys compiled by the World Bank.",
+     "People and society", "World Bank, Poverty and Inequality Platform, via World Development Indicators",
+     ["SI.POV.LMIC", "SI.POV.UMIC", "SI.POV.NAHC", "SI.POV.GAPS", "SI.DST.FRST.20", "SI.DST.05TH.20", "SI.DST.10TH.10", "SI.DST.FRST.10",
+      "SI.SPR.PCAP.ZG", "SI.SPR.PC40.ZG", "SI.POV.MDIM", "SI.DST.50MD", "SI.POV.SOPO", "EN.POP.SLUM.UR.ZS"], {}),
+    ("environment-indicators", "Environment: protected land and sea, water, threatened species, land",
+     "Nature and natural resources by country and year, compiled by the World Bank from FAO, the IUCN Red List, AQUASTAT and UN Environment.",
+     "Climate and environment", "World Bank, World Development Indicators (FAO, IUCN, AQUASTAT and UN sources)",
+     ["ER.PTD.TOTL.ZS", "ER.LND.PTLD.ZS", "ER.MRN.PTMR.ZS", "AG.LND.FRST.K2", "ER.H2O.FWTL.ZS", "ER.H2O.FWTL.K3", "ER.H2O.INTR.PC", "ER.H2O.FWST.ZS",
+      "EN.MAM.THRD.NO", "EN.BIR.THRD.NO", "EN.FSH.THRD.NO", "EN.HPT.THRD.NO", "EN.ATM.PM25.MC.ZS", "AG.LND.ARBL.ZS", "AG.LND.ARBL.HA.PC",
+      "AG.LND.TOTL.K2", "AG.SRF.TOTL.K2", "NY.GDP.TOTL.RT.ZS", "NY.GDP.FRST.RT.ZS", "AG.LND.EL5M.ZS", "EN.POP.EL5M.ZS", "EG.USE.PCAP.KG.OE",
+      "EG.CFT.ACCS.ZS", "EG.ELC.ACCS.RU.ZS", "AG.LND.PRCP.MM", "EN.GHG.ALL.PC.CE.AR5"], {}),
+    ("trade-and-finance", "Trade, money and government finance",
+     "Trade, debt, reserves, remittances, banking and public finances by country and year.",
+     "Economy and development", "World Bank, World Development Indicators (IMF, WTO, UNCTAD and national sources)",
+     ["NE.TRD.GNFS.ZS", "TX.VAL.MRCH.CD.WT", "TM.VAL.MRCH.CD.WT", "TG.VAL.TOTL.GD.ZS", "TM.TAX.MRCH.WM.AR.ZS", "BX.TRF.PWKR.DT.GD.ZS", "BX.TRF.PWKR.CD.DT",
+      "FI.RES.TOTL.CD", "DT.DOD.DECT.GN.ZS", "GC.DOD.TOTL.GD.ZS", "GC.XPN.TOTL.GD.ZS", "GC.REV.XGRT.GD.ZS", "FS.AST.PRVT.GD.ZS", "CM.MKT.LCAP.GD.ZS",
+      "FR.INR.LEND", "FR.INR.RINR", "FB.BNK.CAPA.ZS", "FB.AST.NPER.ZS", "FX.OWN.TOTL.ZS", "FB.CBK.BRCH.P5", "FB.ATM.TOTL.P5", "BX.KLT.DINV.CD.WD",
+      "BM.KLT.DINV.WD.GD.ZS", "DT.ODA.ODAT.GN.ZS", "DT.ODA.ODAT.PC.ZS", "NY.GDP.DEFL.KD.ZG", "PA.NUS.PPP", "NY.GDP.MKTP.PP.CD", "NY.GDP.MKTP.KD",
+      "NY.GDP.PCAP.KD", "NY.GDP.PCAP.KD.ZG", "NE.CON.PRVT.ZS", "NE.CON.GOVT.ZS", "IC.BUS.NDNS.ZS", "IC.REG.DURS", "LP.LPI.OVRL.XQ"], {}),
+    ("technology-and-transport", "Technology and transport: broadband, patents, research, flights, ports, rail",
+     "How connected and inventive countries are, by year: internet and phones, patents and research, air, sea and rail traffic, tourism.",
+     "Science and technology", "World Bank, World Development Indicators (ITU, WIPO, UNESCO, ICAO and UN sources)",
+     ["IT.NET.BBND.P2", "IT.NET.SECR.P6", "IT.MLT.MAIN.P2", "IP.PAT.RESD", "IP.PAT.NRES", "IP.TMK.TOTL", "IP.JRN.ARTC.SC", "SP.POP.SCIE.RD.P6",
+      "TX.VAL.TECH.CD", "TX.VAL.ICTG.ZS.UN", "BX.GSR.CCIS.ZS", "IS.AIR.PSGR", "IS.AIR.DPRT", "IS.AIR.GOOD.MT.K1", "IS.SHP.GOOD.TU", "IS.RRS.TOTL.KM",
+      "IS.RRS.PASG.KM", "ST.INT.RCPT.CD", "ST.INT.DPRT"], {}),
+    ("labour-indicators", "Work: employment, youth out of work, sectors and kinds of jobs",
+     "Jobs by country and year: who works, in which sector and on what terms, from International Labour Organization estimates compiled by the World Bank.",
+     "People and society", "World Bank, World Development Indicators (International Labour Organization, ILOSTAT)",
+     ["SL.EMP.TOTL.SP.ZS", "SL.TLF.CACT.ZS", "SL.UEM.1524.ZS", "SL.UEM.NEET.ZS", "SL.AGR.EMPL.ZS", "SL.IND.EMPL.ZS", "SL.SRV.EMPL.ZS", "SL.EMP.SELF.ZS",
+      "SL.EMP.WORK.ZS", "SL.EMP.VULN.ZS", "SL.TLF.TOTL.IN", "SL.GDP.PCAP.EM.KD", "SL.TLF.0714.ZS", "SL.UEM.ADVN.ZS", "SL.TLF.PART.ZS", "SL.EMP.MPYR.ZS"], {}),
+    ("food-and-agriculture", "Food and farming: yields, production, fisheries, hunger",
+     "Farming and food by country and year, compiled by the World Bank from the Food and Agriculture Organization (FAOSTAT).",
+     "Economy and development", "World Bank, World Development Indicators (Food and Agriculture Organization, FAOSTAT)",
+     ["AG.YLD.CREL.KG", "AG.PRD.CREL.MT", "AG.PRD.FOOD.XD", "AG.PRD.CROP.XD", "AG.PRD.LVSK.XD", "AG.CON.FERT.ZS", "ER.FSH.PROD.MT", "ER.FSH.AQUA.MT",
+      "ER.FSH.CAPT.MT", "AG.LND.IRIG.AG.ZS", "AG.LND.CREL.HA", "SN.ITK.SVFI.ZS", "SN.ITK.MSFI.ZS", "NV.AGR.EMPL.KD", "TM.VAL.FOOD.ZS.UN",
+      "TX.VAL.FOOD.ZS.UN", "SP.RUR.TOTL.ZS", "SP.RUR.TOTL"], {}),
+]
+
+
+# ---------- IMF World Economic Outlook ----------
+IMF = [  # code, column, title, unit, multiply by
+    ("NGDP_RPCH", "real_gdp_growth", "Real GDP growth (IMF)", "% per year", 1),
+    ("NGDPD", "gdp", "GDP, current prices (IMF)", "current US$", 1e9),
+    ("NGDPDPC", "gdp_per_person", "GDP per person, current prices (IMF)", "current US$", 1),
+    ("PPPPC", "gdp_per_person_ppp", "GDP per person, purchasing power parity (IMF)", "current international $", 1),
+    ("PPPSH", "share_of_world_gdp", "Share of world GDP, purchasing power parity (IMF)", "% of world GDP", 1),
+    ("PCPIPCH", "inflation", "Inflation, average consumer prices (IMF)", "% per year", 1),
+    ("PCPIEPCH", "inflation_end_of_year", "Inflation, end of year (IMF)", "% per year", 1),
+    ("LUR", "unemployment_rate", "Unemployment rate (IMF)", "% of labor force", 1),
+    ("LP", "population", "Population (IMF)", "people", 1e6),
+    ("BCA_NGDPD", "current_account_balance", "Current account balance (IMF)", "% of GDP", 1),
+    ("GGXWDG_NGDP", "government_debt", "Government gross debt (IMF)", "% of GDP", 1),
+    ("GGXCNL_NGDP", "government_balance", "Government net lending or borrowing (IMF)", "% of GDP", 1),
+    ("GGR_NGDP", "government_revenue", "Government revenue (IMF)", "% of GDP", 1),
+    ("GGX_NGDP", "government_spending", "Government spending (IMF)", "% of GDP", 1),
+]
+
+
+def imf():
+    base = "https://www.imf.org/external/datamapper/api/v1/"
+    names = {}
+    for kind in ("countries", "regions", "groups"):
+        try:
+            for code, v in (J(base + kind).get(kind) or {}).items():
+                if v.get("label"):
+                    names[code] = v["label"]
+        except Exception as e:
+            print("  imf labels", kind, str(e)[:60])
+        time.sleep(0.5)
+    assert len(names) > 150, "IMF country list not loaded"
+    alias = {"WEOWORLD": "WLD", "UVK": "XKX", "WBG": "PSE"}
+    past, future, loaded = {}, {}, []
+    for code, col, title, unit, k in IMF:
+        try:
+            vals = J(base + code)["values"][code]
+            n = 0
+            for c, by in vals.items():
+                if c not in names:
+                    continue
+                for y, v in by.items():
+                    if v is None:
+                        continue
+                    (past if int(y) <= THIS_YEAR else future).setdefault((alias.get(c, c), int(y)), {})[col] = v * k
+                    n += 1
+            if n < 500:
+                raise ValueError(f"{n} values")
+            loaded.append(col)
+        except Exception as e:
+            print(f"  imf {code}: {str(e)[:70]}")
+        time.sleep(0.5)
+    assert len(loaded) >= 6, f"only {len(loaded)} IMF indicators loaded"
+    names = {alias.get(c, c): n for c, n in names.items()}
+    names["WLD"] = "World"
+    meta = {col: dict(title=title, unit=unit, description=f"IMF World Economic Outlook series {code}. Recent years are IMF estimates.") for code, col, title, unit, _ in IMF}
+    url, src = "https://www.imf.org/external/datamapper/datasets/WEO", "International Monetary Fund, World Economic Outlook"
+    lic = "Free to use with attribution (IMF copyright and usage terms)"
+    out = [country_year("imf-world-economic-outlook", "IMF World Economic Outlook: growth, inflation, debt, jobs",
+                        "The IMF's own figures for every economy, from 1980 to this year. The latest years are estimates.",
+                        "Economy and development", src, url, lic, past, names, meta, loaded)]
+    if future:
+        fmeta = {c: dict(title=m["title"].replace(" (IMF)", ", IMF projection"), unit=m["unit"], description=m["description"].replace("Recent years are IMF estimates.", "These are projections, not measurements.")) for c, m in meta.items()}
+        out.append(country_year("imf-projections", "IMF projections for the next five years",
+                                "What the IMF expects for growth, inflation, debt and jobs in each economy over the coming years. Projections, not measurements.",
+                                "Economy and development", src, url, lic, future, names, fmeta, loaded, min_rows=100))
+    return out
+
+
+# ---------- United Nations: population estimates and projections ----------
+WPP = [  # column in the UN file, our column, title, unit, multiply by
+    ("TPopulation1July", "population", "Population (UN)", "people", 1000), ("PopDensity", "population_density", "Population density (UN)", "people per km²", 1),
+    ("MedianAgePop", "median_age", "Median age", "years", 1), ("PopGrowthRate", "population_growth_rate", "Population growth rate (UN)", "% per year", 1),
+    ("TFR", "total_fertility_rate", "Total fertility rate (UN)", "births per woman", 1), ("CBR", "birth_rate", "Birth rate (UN)", "births per 1,000 people", 1),
+    ("CDR", "death_rate", "Death rate (UN)", "deaths per 1,000 people", 1), ("LEx", "life_expectancy", "Life expectancy at birth (UN)", "years", 1),
+    ("LExMale", "life_expectancy_men", "Life expectancy at birth, men (UN)", "years", 1), ("LExFemale", "life_expectancy_women", "Life expectancy at birth, women (UN)", "years", 1),
+    ("IMR", "infant_mortality_rate", "Infant mortality rate (UN)", "deaths per 1,000 live births", 1), ("Q5", "under_5_mortality_rate", "Under-five mortality rate (UN)", "deaths per 1,000 live births", 1),
+    ("Births", "births", "Births in the year", "births", 1000), ("Deaths", "deaths", "Deaths in the year", "deaths", 1000),
+    ("NetMigrations", "net_migration", "Net migration in the year (UN)", "people", 1000), ("CNMR", "net_migration_rate", "Net migration rate", "per 1,000 people", 1),
+    ("PopSexRatio", "sex_ratio", "Sex ratio", "men per 100 women", 1), ("NatChangeRT", "natural_change_rate", "Rate of natural change", "per 1,000 people", 1),
+]
+
+
+def un_population():
+    urls = ["https://population.un.org/wpp/assets/Excel%20Files/1_Indicator%20(Standard)/CSV_FILES/WPP2024_Demographic_Indicators_Medium.csv.gz",
+            "https://population.un.org/wpp/Download/Files/1_Indicator%20(Standard)/CSV_FILES/WPP2024_Demographic_Indicators_Medium.csv.gz"]
+    raw, err = None, ""
+    for u in urls:
+        try:
+            raw = fetch(u, timeout=300)
+            break
+        except Exception as e:
+            err = str(e)[:80]
+    assert raw, "UN population file not reachable: " + err
+    if raw[:2] == b"\x1f\x8b":
+        raw = gzip.decompress(raw)
+    past, future, names = {}, {}, {}
+    for r in csv.DictReader(io.StringIO(raw.decode("utf-8-sig", "replace"))):
+        code = r.get("ISO3_code") or ("WLD" if r.get("Location") == "World" else "")
+        if not code or not r.get("Time", "").isdigit():
+            continue
+        y = int(r["Time"])
+        names[code] = r["Location"]
+        row = {col: float(r[f]) * k for f, col, _, _, k in WPP if r.get(f) not in ("", None)}
+        if row:
+            (past if y <= THIS_YEAR else future)[(code, y)] = row
+    cols = [c for _, c, _, _, _ in WPP]
+    meta = {c: dict(title=t, unit=u, description=f"UN World Population Prospects 2024, medium variant, column {f}. Figures up to 2023 are estimates; later years are projections.") for f, c, t, u, _ in WPP}
+    src, url, lic = "United Nations, World Population Prospects 2024", "https://population.un.org/wpp/", "CC BY 3.0 IGO"
+    out = [country_year("un-population", "Population, births, deaths and migration since 1950 (UN)",
+                        "The United Nations' demographic figures for every country: population, age, fertility, life expectancy, deaths and migration.",
+                        "People and society", src, url, lic, past, names, meta, cols)]
+    if future:
+        fmeta = {c: dict(title=m["title"].replace(" (UN)", "") + ", UN projection", unit=m["unit"], description="UN World Population Prospects 2024, medium-variant projection. A projection, not a measurement.") for c, m in meta.items()}
+        out.append(country_year("un-population-projections", "Population projections to 2100 (UN)",
+                                "Where the United Nations expects each country's population, ageing, births and life expectancy to go by 2100, in its medium scenario.",
+                                "People and society", src, url, lic, future, names, fmeta, cols))
+    return out
+
+
+# ---------- UNDP: Human Development Index ----------
+HDR = [("hdi", "human_development_index", "Human Development Index", "index, 0 to 1"), ("eys", "expected_years_of_schooling", "Expected years of schooling", "years"),
+       ("mys", "mean_years_of_schooling", "Mean years of schooling", "years"), ("gnipc", "gni_per_person_ppp", "Gross national income per person (UNDP)", "2021 PPP $"),
+       ("ihdi", "inequality_adjusted_hdi", "Inequality-adjusted Human Development Index", "index, 0 to 1"), ("gii", "gender_inequality_index", "Gender Inequality Index", "index, 0 (equal) to 1"),
+       ("gdi", "gender_development_index", "Gender Development Index", "ratio of women's HDI to men's"), ("phdi", "planetary_pressures_adjusted_hdi", "Planetary pressures-adjusted Human Development Index", "index, 0 to 1"),
+       ("mf", "material_footprint_per_person", "Material footprint per person", "tonnes")]
+
+
+def undp():
+    urls = [f"https://hdr.undp.org/sites/default/files/{y}_HDR/HDR{str(y)[2:]}_Composite_indices_complete_time_series.csv" for y in (THIS_YEAR, THIS_YEAR - 1)] + \
+           ["https://hdr.undp.org/sites/default/files/2025_HDR/HDR25_Composite_indices_complete_time_series.csv",
+            "https://hdr.undp.org/sites/default/files/2023-24_HDR/HDR23-24_Composite_indices_complete_time_series.csv"]
+    raw, err = None, ""
+    for u in dict.fromkeys(urls):
+        try:
+            raw = fetch(u, tries=1).decode("utf-8-sig", "replace")
+            if "iso3" in raw[:300].lower():
+                break
+            raw = None
+        except Exception as e:
+            err = str(e)[:80]
+    assert raw, "UNDP file not reachable: " + err
+    cell, names, want = {}, {}, {p: c for p, c, _, _ in HDR}
+    for r in csv.DictReader(io.StringIO(raw)):
+        code = (r.get("iso3") or "").strip()
+        if not code or code.startswith("ZZ"):
+            continue
+        names[code] = r.get("country", code).strip()
+        for k, v in r.items():
+            m = re.fullmatch(r"([a-z_0-9]+?)_(\d{4})", k or "")
+            if m and m.group(1) in want and v not in ("", None):
+                try:
+                    cell.setdefault((code, int(m.group(2))), {})[want[m.group(1)]] = float(v)
+                except ValueError:
+                    pass
+    meta = {c: dict(title=t, unit=u, description=f"UNDP Human Development Report, series {p}.") for p, c, t, u in HDR}
+    return country_year("human-development-index", "Human Development Index and its parts (UNDP)",
+                        "The UN's measure of how well people live: health, schooling and income in one index, with versions adjusted for inequality, gender and pressure on the planet.",
+                        "People and society", "United Nations Development Programme, Human Development Report", "https://hdr.undp.org/data-center", "CC BY 3.0 IGO",
+                        cell, names, meta, [c for _, c, _, _ in HDR])
+
+
+# ---------- WHO Global Health Observatory ----------
+GHO = ["WHOSIS_000002", "WHOSIS_000015", "NCD_BMI_30A", "NCD_BMI_25A", "BP_04", "NCD_PAA", "HWF_0001", "HWF_0006", "HWF_0010", "HWF_0014", "SA_0000001688", "M_Est_tob_curr_std", "MH_12", "RS_198"]
+
+
+def who():
+    base, cell, names, meta, cols = "https://ghoapi.azureedge.net/api/", {}, {}, {}, []
+    for code in GHO:
+        try:
+            rows = J(base + code + "?$filter=" + urllib.parse.quote("SpatialDimType eq 'COUNTRY'"))["value"]
+            both = [r for r in rows if r.get("NumericValue") is not None and (r.get("Dim1") in (None, "", "SEX_BTSX", "BTSX")) and str(r.get("TimeDim", "")).isdigit()]
+            got = {}
+            for r in both:
+                got.setdefault((r["SpatialDim"], int(r["TimeDim"])), []).append(r["NumericValue"])
+            clean = {k: v[0] for k, v in got.items() if len(v) == 1}
+            if len(clean) < 200 or len(clean) < 0.95 * len(got):   # more than one figure for a country and year: the series has breakdowns we cannot pick from safely
+                raise ValueError(f"{len(clean)} single values of {len(got)}")
+            label = J(base + "Indicator?$filter=" + urllib.parse.quote(f"IndicatorCode eq '{code}'"))["value"][0]["IndicatorName"]
+            t, u = split_unit(label)
+            col = slug(t)
+            meta[col] = dict(title=t + " (WHO)", unit=u, description=f"WHO Global Health Observatory indicator {code}: {label}. Both sexes.")
+            cols.append(col)
+            for k, v in clean.items():
+                cell.setdefault(k, {})[col] = v
+        except Exception as e:
+            print(f"  who {code}: {str(e)[:80]}")
+        time.sleep(0.4)
+    assert len(cols) >= 4, f"only {len(cols)} WHO indicators loaded"
+    nm = iso()["name"]
+    for c, _ in cell:
+        names[c] = nm.get(c, c)
+    return country_year("who-health-observatory", "WHO health observatory: healthy life, obesity, blood pressure, health workers",
+                        "Health measures published by the World Health Organization itself, by country and year.",
+                        "Health", "World Health Organization, Global Health Observatory", "https://www.who.int/data/gho", "CC BY-NC-SA 3.0 IGO", cell, names, meta, cols)
+
+
+# ---------- Our World in Data charts: many original sources, already harmonised by country and year ----------
+def owid_charts(id, title, description, domain, source, slugs, licence="CC BY 4.0 (Our World in Data; original sources named per variable)"):
+    cell, names, meta, cols = {}, {}, {}, []
+    q = "?v=1&csvType=full&useColumnShortNames=true"
+    for s in slugs:
+        try:
+            rows = list(csv.DictReader(io.StringIO(text(f"https://ourworldindata.org/grapher/{s}.csv{q}"))))
+            info = J(f"https://ourworldindata.org/grapher/{s}.metadata.json{q}").get("columns", {})
+            fields = [c for c in rows[0] if c not in ("Entity", "Code", "Year")]
+            for f in fields:
+                m = info.get(f, {})
+                vals = {}
+                for r in rows:
+                    if r[f] in ("", None) or not str(r["Year"]).lstrip("-").isdigit():
+                        continue
+                    try:
+                        v = float(r[f])
+                    except ValueError:
+                        continue
+                    code = {"OWID_WRL": "WLD", "OWID_KOS": "XKX"}.get(r["Code"], r["Code"]) or "OWID_" + re.sub(r"[^A-Z0-9]+", "_", r["Entity"].upper()).strip("_")
+                    vals[(code, int(r["Year"]))] = v
+                    names[code] = r["Entity"]
+                if len(vals) < 100:
+                    continue
+                t = m.get("titleShort") or m.get("titleLong") or f.replace("_", " ").capitalize()
+                col = slug(t)
+                if col in meta:
+                    col = slug(t, 40) + "_" + slug(f, 10)
+                cite = m.get("citationShort") or ""
+                meta[col] = dict(title=t, unit=m.get("unit") or m.get("shortUnit") or "", description=((m.get("descriptionShort") or "") + (f" Source: {cite}." if cite else "") + f" Our World in Data chart: {s}.").strip())
+                cols.append(col)
+                for k, v in vals.items():
+                    if 1750 <= k[1] <= THIS_YEAR:
+                        cell.setdefault(k, {})[col] = v
+        except Exception as e:
+            print(f"  owid {s}: {str(e)[:80]}")
+        time.sleep(0.5)
+    assert cols, f"{id}: no chart loaded"
+    return country_year(id, title, description, domain, source, "https://ourworldindata.org", licence, cell, names, meta, cols, min_rows=100)
+
+
+def owid_probe(slugs):
+    """Print which Our World in Data charts exist and what they hold. Used when choosing charts; not part of a normal run."""
+    q = "?v=1&csvType=full&useColumnShortNames=true"
+    for s in slugs:
+        try:
+            rows = list(csv.DictReader(io.StringIO(text(f"https://ourworldindata.org/grapher/{s}.csv{q}", tries=1))))
+            info = J(f"https://ourworldindata.org/grapher/{s}.metadata.json{q}", tries=1).get("columns", {})
+            fields = [c for c in rows[0] if c not in ("Entity", "Code", "Year")]
+            ents, yrs = {r["Entity"] for r in rows}, [int(r["Year"]) for r in rows if str(r["Year"]).lstrip("-").isdigit()]
+            print(f"OWID ok   {s}: {len(rows)} rows, {len(ents)} entities, {min(yrs)}-{max(yrs)}")
+            for f in fields[:14]:
+                m = info.get(f, {})
+                print(f"       {f} | {m.get('titleShort') or m.get('titleLong')} | unit={m.get('unit')!r} | {str(m.get('citationShort'))[:70]}")
+        except Exception as e:
+            print(f"OWID FAIL {s}: {str(e)[:60]}")
+        time.sleep(0.4)
+
+
+# ---------- Penn World Table ----------
+PWT = [("rgdpe", "real_gdp_expenditure_side", "Real GDP, expenditure side (Penn World Table)", "2017 US$, PPP", 1e6), ("rgdpo", "real_gdp_output_side", "Real GDP, output side (Penn World Table)", "2017 US$, PPP", 1e6),
+       ("pop", "population", "Population (Penn World Table)", "people", 1e6), ("emp", "people_employed", "People in work", "people", 1e6), ("avh", "hours_worked_per_worker", "Hours worked per worker in a year", "hours", 1),
+       ("hc", "human_capital_index", "Human capital index", "index (years of schooling and returns to education)", 1), ("ctfp", "productivity_level_vs_usa", "Productivity level compared with the United States", "USA = 1", 1),
+       ("rtfpna", "productivity_index", "Total factor productivity", "index, 2017 = 1", 1), ("labsh", "labour_share_of_income", "Share of national income going to labour", "share, 0 to 1", 1),
+       ("csh_c", "household_consumption_share", "Household consumption as a share of GDP", "share, 0 to 1", 1), ("csh_i", "investment_share", "Investment as a share of GDP", "share, 0 to 1", 1),
+       ("csh_g", "government_consumption_share", "Government consumption as a share of GDP", "share, 0 to 1", 1), ("xr", "exchange_rate", "Exchange rate (Penn World Table)", "national currency per US$", 1),
+       ("pl_gdpo", "price_level", "Price level of GDP", "USA in 2017 = 1", 1)]
+
+
+def pwt():
+    import openpyxl
+    raw, err = None, ""
+    for u in ("https://www.rug.nl/ggdc/docs/pwt1001.xlsx", "https://dataverse.nl/api/access/datafile/354095"):
+        try:
+            raw = fetch(u, tries=2, timeout=300)
+            if raw[:2] == b"PK":
+                break
+            raw = None
+        except Exception as e:
+            err = str(e)[:80]
+    assert raw, "Penn World Table file not reachable: " + err
+    ws = openpyxl.load_workbook(io.BytesIO(raw), read_only=True, data_only=True)["Data"]
+    it = ws.iter_rows(values_only=True)
+    h = [str(c) for c in next(it)]
+    i = {c: k for k, c in enumerate(h)}
+    cell, names = {}, {}
+    for r in it:
+        if not r or not r[i["countrycode"]] or r[i["year"]] is None:
+            continue
+        code, y = r[i["countrycode"]], int(r[i["year"]])
+        names[code] = r[i["country"]]
+        row = {col: float(r[i[f]]) * k for f, col, _, _, k in PWT if f in i and isinstance(r[i[f]], (int, float))}
+        if row:
+            cell[(code, y)] = row
+    meta = {c: dict(title=t, unit=u, description=f"Penn World Table 10.01, variable {f}.") for f, c, t, u, _ in PWT}
+    return country_year("penn-world-table", "Penn World Table: real GDP, productivity, hours worked, human capital",
+                        "The economists' standard table for comparing living standards and productivity across countries and decades, 1950 to 2019.",
+                        "Economy and development", "Groningen Growth and Development Centre, Penn World Table 10.01", "https://www.rug.nl/ggdc/productivity/pwt/", "CC BY 4.0",
+                        cell, names, meta, [c for _, c, _, _, _ in PWT])
+
+
+# ---------- US economy, from the agencies' own series as carried by FRED ----------
+def fred(sid):
+    out = {}
+    for r in csv.reader(io.StringIO(text(f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={sid}"))):
+        if len(r) >= 2 and re.fullmatch(r"\d{4}-\d{2}-\d{2}", r[0]) and r[1] not in ("", "."):
+            try:
+                out[r[0]] = float(r[1])
+            except ValueError:
+                pass
+    if len(out) < 20:
+        raise ValueError(f"{sid}: {len(out)} values")
+    time.sleep(0.4)
+    return out
+
+
+def yoy(s, months=12):
+    """Percent change from the same month a year earlier."""
+    out = {}
+    for d, v in s.items():
+        y, m = int(d[:4]), int(d[5:7])
+        p = s.get(f"{y - 1}{d[4:]}") if months == 12 else None
+        if p:
+            out[d] = (v / p - 1) * 100
+    return out
+
+
+FRED_MONTHLY = [  # FRED id, column, title, unit, multiply by, agency
+    ("UNRATE", "unemployment_rate", "US unemployment rate", "% of labor force", 1, "BLS"), ("CIVPART", "labor_force_participation", "US labor force participation rate", "% of people 16 and over", 1, "BLS"),
+    ("PAYEMS", "nonfarm_payrolls", "US jobs (nonfarm payrolls)", "jobs", 1000, "BLS"), ("JTSJOL", "job_openings", "US job openings", "openings", 1000, "BLS"),
+    ("AHETPI", "average_hourly_earnings", "US average hourly earnings, production workers", "US$ per hour", 1, "BLS"), ("CPIAUCSL", "consumer_price_index", "US consumer price index", "index, 1982-84 = 100", 1, "BLS"),
+    ("CPILFESL", "core_consumer_price_index", "US consumer price index without food and energy", "index, 1982-84 = 100", 1, "BLS"), ("PPIACO", "producer_price_index", "US producer price index, all commodities", "index, 1982 = 100", 1, "BLS"),
+    ("PCEPI", "pce_price_index", "US personal consumption price index", "index, 2017 = 100", 1, "BEA"), ("PSAVERT", "personal_saving_rate", "US personal saving rate", "% of disposable income", 1, "BEA"),
+    ("DSPIC96", "real_disposable_income", "US real disposable personal income", "2017 US$ a year", 1e9, "BEA"), ("TOTALSA", "vehicle_sales", "US vehicle sales", "vehicles a year, annual rate", 1e6, "BEA"),
+    ("FEDFUNDS", "federal_funds_rate", "US federal funds rate", "% a year", 1, "Federal Reserve"), ("GS10", "treasury_10_year_yield", "US 10-year Treasury yield, monthly", "% a year", 1, "Federal Reserve"),
+    ("GS2", "treasury_2_year_yield", "US 2-year Treasury yield, monthly", "% a year", 1, "Federal Reserve"), ("INDPRO", "industrial_production", "US industrial production", "index, 2017 = 100", 1, "Federal Reserve"),
+    ("M2SL", "money_supply_m2", "US money supply (M2)", "current US$", 1e9, "Federal Reserve"), ("RSAFS", "retail_sales", "US retail and food services sales", "current US$ a month", 1e6, "Census Bureau"),
+    ("HOUST", "housing_starts", "US housing starts", "homes a year, annual rate", 1000, "Census Bureau"), ("PERMIT", "building_permits", "US building permits for new homes", "homes a year, annual rate", 1000, "Census Bureau"),
+    ("BOPGSTB", "trade_balance", "US trade balance in goods and services", "current US$ a month", 1e6, "Census Bureau and BEA"), ("HPIPONM226S", "house_price_index", "US house price index, purchases only (FHFA)", "index, January 1991 = 100", 1, "FHFA"),
+]
+FRED_QUARTERLY = [
+    ("GDPC1", "real_gdp", "US real GDP", "2017 US$ a year, annual rate", 1e9, "BEA"), ("GDP", "gdp", "US GDP, current dollars", "current US$ a year, annual rate", 1e9, "BEA"),
+    ("A191RL1Q225SBEA", "real_gdp_growth", "US real GDP growth, quarterly at an annual rate", "% a year", 1, "BEA"), ("A939RX0Q048SBEA", "real_gdp_per_person", "US real GDP per person", "2017 US$ a year", 1, "BEA"),
+    ("GFDEGDQ188S", "federal_debt_share_of_gdp", "US federal debt as a share of GDP", "% of GDP", 1, "Office of Management and Budget"), ("USSTHPI", "house_price_index_all_transactions", "US house price index, all transactions (FHFA)", "index, 1980 Q1 = 100", 1, "FHFA"),
+    ("CP", "corporate_profits_after_tax", "US corporate profits after tax", "current US$ a year, annual rate", 1e9, "BEA"), ("MSPUS", "median_home_sale_price", "US median sale price of houses sold", "current US$", 1, "Census Bureau and HUD"),
+]
+FRED_DAILY = [
+    ("DFF", "federal_funds_rate_daily", "US federal funds rate, daily", "% a year", 1, "Federal Reserve"), ("DGS2", "treasury_2_year", "US 2-year Treasury yield", "% a year", 1, "Federal Reserve"),
+    ("DGS10", "treasury_10_year", "US 10-year Treasury yield", "% a year", 1, "Federal Reserve"), ("DGS30", "treasury_30_year", "US 30-year Treasury yield", "% a year", 1, "Federal Reserve"),
+    ("T10Y2Y", "yield_curve_10_year_minus_2_year", "US yield curve: 10-year minus 2-year Treasury yield", "percentage points", 1, "Federal Reserve"), ("T10YIE", "expected_inflation_10_year", "US expected inflation over 10 years (breakeven rate)", "% a year", 1, "Federal Reserve"),
+    ("DEXUSEU", "dollars_per_euro", "US dollars per euro", "US$ per euro", 1, "Federal Reserve"), ("DEXINUS", "rupees_per_dollar", "Indian rupees per US dollar", "rupees per US$", 1, "Federal Reserve"),
+    ("DEXCHUS", "yuan_per_dollar", "Chinese yuan per US dollar", "yuan per US$", 1, "Federal Reserve"), ("DEXJPUS", "yen_per_dollar", "Japanese yen per US dollar", "yen per US$", 1, "Federal Reserve"),
+]
+
+
+def fred_set(id, title, description, spec_list, step, derived=()):
+    cell, meta, cols, missed = {}, {}, [], []
+    for sid, col, t, u, k, agency in spec_list:
+        try:
+            s = fred(sid)
+            for d, v in s.items():
+                cell.setdefault(d, {})[col] = v * k
+            meta[col] = dict(title=t, unit=u, description=f"Published by {agency}; FRED series {sid}.")
+            cols.append(col)
+            for src, dcol, dt in derived:
+                if src == sid:
+                    for d, v in yoy(s).items():
+                        cell.setdefault(d, {})[dcol] = v
+                    meta[dcol] = dict(title=dt, unit="% a year", description=f"Change in FRED series {sid} from the same month a year earlier, worked out here.")
+                    cols.append(dcol)
+        except Exception as e:
+            missed.append(f"{sid}: {str(e)[:60]}")
+    if missed:
+        print(f"  {id}: not loaded:", "; ".join(missed[:6]))
+    assert len(cols) >= len(spec_list) // 2, f"{id}: only {len(cols)} series loaded"
+    return series(id, title, description, "US", "Economy and development",
+                  "US Bureau of Labor Statistics, Bureau of Economic Analysis, Census Bureau, Federal Reserve and FHFA, via FRED", "https://fred.stlouisfed.org",
+                  PD + ", retrieved from FRED, Federal Reserve Bank of St. Louis", cell, meta, cols, step)
+
+
+def us_monthly():
+    return fred_set("us-economy-monthly", "US economy, monthly: jobs, prices, rates, spending, housing",
+                    "The headline monthly numbers for the United States: unemployment, payrolls, inflation, interest rates, retail sales, housing and trade.",
+                    FRED_MONTHLY, "month", derived=[("CPIAUCSL", "inflation", "US inflation (consumer prices, change over a year)"), ("CPILFESL", "core_inflation", "US core inflation (without food and energy)"),
+                                                    ("PCEPI", "pce_inflation", "US inflation, personal consumption prices"), ("AHETPI", "wage_growth", "US wage growth (average hourly earnings, change over a year)")])
+
+
+def us_quarterly():
+    return fred_set("us-economy-quarterly", "US economy, quarterly: GDP, debt, profits, home prices",
+                    "Quarterly figures for the United States: real GDP and its growth, GDP per person, federal debt against GDP, corporate profits and house prices.", FRED_QUARTERLY, "quarter")
+
+
+def us_daily():
+    return fred_set("us-rates-and-currencies-daily", "US interest rates and exchange rates, daily",
+                    "Daily Treasury yields, the federal funds rate, the yield curve, expected inflation, and the dollar against the euro, rupee, yuan and yen.", FRED_DAILY, "day")
+
+
+# ---------- US Treasury: the national debt, every day ----------
+def us_debt():
+    cell, page, pages = {}, 1, 1
+    while page <= pages:
+        j = J("https://api.fiscaldata.treasury.gov/services/api/fiscal_service/v2/accounting/od/debt_to_penny"
+              f"?fields=record_date,tot_pub_debt_out_amt,debt_held_public_amt,intragov_hold_amt&sort=record_date&page[size]=10000&page[number]={page}")
+        pages = int(j["meta"]["total-pages"])
+        for r in j["data"]:
+            row = {c: float(r[f]) for f, c in (("tot_pub_debt_out_amt", "total_public_debt"), ("debt_held_public_amt", "debt_held_by_the_public"), ("intragov_hold_amt", "intragovernmental_holdings")) if r.get(f) not in (None, "", "null")}
+            if row:
+                cell[r["record_date"]] = row
+        page += 1
+    meta = dict(total_public_debt=dict(title="US national debt", unit="current US$", description="Total public debt outstanding: everything the federal government owes."),
+                debt_held_by_the_public=dict(title="US debt held by the public", unit="current US$", description="Federal debt held by investors outside the government."),
+                intragovernmental_holdings=dict(title="US debt held by government accounts", unit="current US$", description="Federal debt held by government trust funds such as Social Security."))
+    return series("us-national-debt", "US national debt, daily", "What the US federal government owes, to the penny, for every business day since 1993.",
+                  "US", "Government and finance", "US Treasury, Fiscal Data: Debt to the Penny", "https://fiscaldata.treasury.gov/datasets/debt-to-the-penny/", PD, cell, meta, list(meta), "day")
+
+
+# ---------- NOAA: United States climate, monthly since 1895 ----------
+def us_climate():
+    cell, got = {}, []
+    for par, col in (("tavg", "average_temperature_f"), ("pcp", "precipitation_inches"), ("tmax", "average_high_f"), ("tmin", "average_low_f")):
+        raw, base = None, f"https://www.ncei.noaa.gov/access/monitoring/climate-at-a-glance/national/time-series/110/{par}/"
+        for u in (base + f"1/0/1895-{THIS_YEAR}/data.csv", base + f"1/0/1895-{THIS_YEAR}.csv", base + f"all/1/1895-{THIS_YEAR}.csv"):
+            try:
+                raw = text(u, tries=1)
+                if re.search(r"^\d{6},", raw, re.M):
+                    break
+                raw = None
+            except Exception:
+                pass
+        if not raw:
+            print(f"  us-climate: {par} not loaded")
+            continue
+        for line in raw.splitlines():
+            p = line.split(",")
+            if re.fullmatch(r"\d{6}", p[0]) and len(p) > 1 and bd.is_num(p[1]) and float(p[1]) > -99:
+                cell.setdefault(f"{p[0][:4]}-{p[0][4:]}-01", {})[col] = float(p[1])
+        got.append(col)
+        time.sleep(0.5)
+    meta = dict(average_temperature_f=dict(title="US average temperature, monthly", unit="°F", description="Average temperature across the contiguous United States for the month."),
+                precipitation_inches=dict(title="US precipitation, monthly", unit="inches", description="Total precipitation averaged across the contiguous United States for the month."),
+                average_high_f=dict(title="US average daily high temperature, monthly", unit="°F"), average_low_f=dict(title="US average daily low temperature, monthly", unit="°F"))
+    return series("us-climate-monthly", "United States temperature and rainfall, monthly since 1895", "Monthly average temperature and precipitation for the contiguous United States, from NOAA's climate record.",
+                  "US", "Climate and environment", "NOAA National Centers for Environmental Information, Climate at a Glance", "https://www.ncei.noaa.gov/access/monitoring/climate-at-a-glance/", PD, cell, meta, got, "month")
+
+
+# ---------- research and the internet ----------
+def arxiv():
+    cell = {}
+    for r in csv.reader(io.StringIO(text("https://arxiv.org/stats/get_monthly_submissions"))):
+        if len(r) >= 2 and re.fullmatch(r"\d{4}-\d{2}", r[0]) and r[1].isdigit():
+            cell[r[0] + "-01"] = dict(submissions=int(r[1]))
+    last = max(cell)
+    if last[:7] == date.today().strftime("%Y-%m"):
+        del cell[last]                                      # the month in progress
+    return series("arxiv-submissions", "arXiv: new research papers submitted each month", "How many papers researchers posted to arXiv each month since it opened in 1991.",
+                  "World", "Science and technology", "arXiv", "https://arxiv.org/stats/monthly_submissions", "CC0 (arXiv usage statistics)", cell,
+                  dict(submissions=dict(title="Papers submitted to arXiv in the month", unit="papers")), ["submissions"], "month")
+
+
+WIKIS = [("all-projects", "all_wikipedias_and_sister_projects", "Wikimedia page views, all projects"), ("en.wikipedia", "english_wikipedia", "English Wikipedia page views"),
+         ("es.wikipedia", "spanish_wikipedia", "Spanish Wikipedia page views"), ("de.wikipedia", "german_wikipedia", "German Wikipedia page views"),
+         ("ja.wikipedia", "japanese_wikipedia", "Japanese Wikipedia page views"), ("fr.wikipedia", "french_wikipedia", "French Wikipedia page views"),
+         ("ru.wikipedia", "russian_wikipedia", "Russian Wikipedia page views"), ("zh.wikipedia", "chinese_wikipedia", "Chinese Wikipedia page views"),
+         ("hi.wikipedia", "hindi_wikipedia", "Hindi Wikipedia page views"), ("pt.wikipedia", "portuguese_wikipedia", "Portuguese Wikipedia page views"),
+         ("ar.wikipedia", "arabic_wikipedia", "Arabic Wikipedia page views")]
+
+
+def wikipedia():
+    cell, cols, meta, end = {}, [], {}, date.today().strftime("%Y%m") + "0100"
+    for proj, col, title in WIKIS:
+        try:
+            for it in J(f"https://wikimedia.org/api/rest_v1/metrics/pageviews/aggregate/{proj}/all-access/user/monthly/2015070100/{end}")["items"]:
+                t = it["timestamp"]
+                cell.setdefault(f"{t[:4]}-{t[4:6]}-01", {})[col] = it["views"]
+            cols.append(col)
+            meta[col] = dict(title=title + ", monthly", unit="page views", description=f"Views by people (not bots) of {proj} in the month, all devices.")
+        except Exception as e:
+            print(f"  wikipedia {proj}: {str(e)[:70]}")
+        time.sleep(0.3)
+    cell.pop(date.today().strftime("%Y-%m-01"), None)
+    return series("wikipedia-pageviews", "Wikipedia page views, monthly, by language", "How many pages people read on Wikipedia each month since July 2015, in total and for eleven languages.",
+                  "World", "Science and technology", "Wikimedia Foundation, Pageviews API", "https://wikitech.wikimedia.org/wiki/Analytics/AQS/Pageviews", "CC0", cell, meta, cols, "month")
+
+
+def research():
+    """Papers by year for the world (OpenAlex, Crossref) and by country and year (OpenAlex)."""
+    out, cell, meta, cols = [], {}, {}, []
+    oa = "https://api.openalex.org/works"
+    try:
+        tot = {g["key"]: g["count"] for g in J(oa + "?group_by=publication_year")["group_by"]}
+        opn = {g["key"]: g["count"] for g in J(oa + "?filter=is_oa:true&group_by=publication_year")["group_by"]}
+        for y, n in tot.items():
+            if str(y).isdigit() and 1950 <= int(y) < THIS_YEAR:
+                cell.setdefault(f"{y}-01-01", {}).update(works=n, **({"open_access_share": opn[y] / n * 100} if n and y in opn else {}))
+        cols += ["works", "open_access_share"]
+        meta.update(works=dict(title="Research works published in the year (OpenAlex)", unit="works", description="Papers, books, datasets and other scholarly works indexed by OpenAlex, by year of publication."),
+                    open_access_share=dict(title="Share of research works that are free to read (OpenAlex)", unit="% of works"))
+    except Exception as e:
+        print("  openalex world:", str(e)[:80])
+    try:
+        vals = J("https://api.crossref.org/works?rows=0&facet=published:*")["message"]["facets"]["published"]["values"]
+        for y, n in vals.items():
+            if str(y).isdigit() and 1950 <= int(y) < THIS_YEAR:
+                cell.setdefault(f"{y}-01-01", {})["crossref_records"] = n
+        cols.append("crossref_records")
+        meta["crossref_records"] = dict(title="Scholarly records registered with Crossref, by year published", unit="records", description="Journal articles, books, preprints and other items with a Crossref DOI, by publication year.")
+    except Exception as e:
+        print("  crossref:", str(e)[:80])
+    if cols:
+        out.append(series("research-papers-by-year", "Research papers published each year, worldwide", "How much research the world publishes: works indexed by OpenAlex, the share that is free to read, and records registered with Crossref.",
+                          "World", "Science and technology", "OpenAlex and Crossref", "https://openalex.org", "CC0", cell, meta, cols, "year"))
+    # by country: only the last three years are asked again; earlier years are read back from the file
+    try:
+        h, old = prior("research-papers-by-country")
+        a2, nm, cc, names = iso()["a2"], iso()["name"], {}, {}
+        if h:
+            with open(SETS / "research-papers-by-country.csv", newline="", encoding="utf-8") as f:
+                for r in csv.DictReader(f):
+                    if r.get("works"):
+                        cc[(r["code"], int(r["year"]))] = dict(works=float(r["works"]))
+                        names[r["code"]] = r["country"]
+        have = {y for _, y in cc}
+        for y in range(2000, THIS_YEAR):
+            if y in have and y < THIS_YEAR - 3:
+                continue
+            for g in J(f"{oa}?filter=publication_year:{y}&group_by=authorships.countries&per_page=200")["group_by"]:
+                code = a2.get(str(g["key"]).rsplit("/", 1)[-1].upper())
+                if code and g["count"]:
+                    cc[(code, y)] = dict(works=g["count"])
+                    names[code] = nm.get(code, g.get("key_display_name") or code)
+            time.sleep(0.4)
+        out.append(country_year("research-papers-by-country", "Research papers by country and year", "How many research works have at least one author working in each country, by year of publication.",
+                                "Science and technology", "OpenAlex", "https://openalex.org", "CC0", cc, names,
+                                dict(works=dict(title="Research works with an author in the country", unit="works", description="OpenAlex works with at least one author affiliated with an institution in the country. A work with authors in several countries counts once for each.")), ["works"]))
+    except Exception as e:
+        print("  openalex by country:", str(e)[:80])
+    assert out, "no research data loaded"
+    return out
+
+
+def gbif():
+    """Records of living things in the Global Biodiversity Information Facility: by year observed, and by country."""
+    base, out = "https://api.gbif.org/v1/occurrence/search?limit=0", []
+    kingdoms = [("", "all_records", "Records of living things (GBIF)"), ("&kingdomKey=1", "animal_records", "Animal records (GBIF)"), ("&kingdomKey=6", "plant_records", "Plant records (GBIF)"), ("&kingdomKey=5", "fungus_records", "Fungus records (GBIF)")]
+    cell, cc, names, cols = {}, {}, {}, []
+    a2, nm = iso()["a2"], iso()["name"]
+    for q, col, title in kingdoms:
+        try:
+            for c in J(base + q + "&facet=year&facetLimit=500")["facets"][0]["counts"]:
+                if c["name"].isdigit() and 1900 <= int(c["name"]) < THIS_YEAR:
+                    cell.setdefault(f"{c['name']}-01-01", {})[col] = c["count"]
+            for c in J(base + q + "&facet=country&facetLimit=300")["facets"][0]["counts"]:
+                code = a2.get(c["name"])
+                if code:
+                    cc.setdefault((code, THIS_YEAR), {})[col] = c["count"]
+                    names[code] = nm.get(code, code)
+            cols.append(col)
+        except Exception as e:
+            print(f"  gbif {col}: {str(e)[:70]}")
+        time.sleep(0.5)
+    meta = {col: dict(title=title, unit="records", description="Occurrence records shared through GBIF: sightings, specimens and samples of living things.") for _, col, title in kingdoms}
+    ymeta = {c: dict(title=m["title"].replace(" (GBIF)", ", by year observed (GBIF)"), unit=m["unit"], description=m["description"] + " Counted by the year the organism was observed or collected.") for c, m in meta.items()}
+    out.append(series("biodiversity-records-by-year", "Biodiversity records by year observed (GBIF)", "How many sightings and specimens of animals, plants and fungi were recorded in each year, as shared through GBIF.",
+                      "World", "Climate and environment", "Global Biodiversity Information Facility (GBIF)", "https://www.gbif.org", "CC BY 4.0 (GBIF; individual datasets CC0, CC BY or CC BY-NC)", cell, ymeta, cols, "year"))
+    h, _ = prior("biodiversity-records-by-country")                 # keep earlier years' snapshots
+    if h:
+        with open(SETS / "biodiversity-records-by-country.csv", newline="", encoding="utf-8") as f:
+            for r in csv.DictReader(f):
+                if int(r["year"]) != THIS_YEAR:
+                    cc[(r["code"], int(r["year"]))] = {c: float(r[c]) for c in cols if r.get(c)}
+                    names.setdefault(r["code"], r["country"])
+    cmeta = {c: dict(title=m["title"].replace(" (GBIF)", " located in the country (GBIF)"), unit=m["unit"], description=m["description"] + " All records located in the country, counted in the year shown.") for c, m in meta.items()}
+    out.append(country_year("biodiversity-records-by-country", "Biodiversity records by country (GBIF)", "How many records of animals, plants and fungi GBIF holds for each country. More records means more observing, not necessarily more species.",
+                            "Climate and environment", "Global Biodiversity Information Facility (GBIF)", "https://www.gbif.org", "CC BY 4.0 (GBIF; individual datasets CC0, CC BY or CC BY-NC)", cc, names, cmeta, cols, min_rows=100))
+    return out
+
+
+def github_activity():
+    a2, nm, cell, names = iso()["a2"], iso()["name"], {}, {}
+    files = [("developers", "developers", "Developers on GitHub", "accounts", "last"), ("repositories", "repositories", "Repositories on GitHub", "repositories", "last"),
+             ("organizations", "organizations", "Organizations on GitHub", "organizations", "last"), ("git_pushes", "code_pushes", "Code pushes to GitHub in the year", "pushes", "sum")]
+    for f, col, _, _, how in files:
+        by = {}
+        for r in csv.DictReader(io.StringIO(text(f"{RAW}github/innovationgraph/main/data/{f}.csv"))):
+            code = "EUU" if r["iso2_code"] == "EU" else a2.get(r["iso2_code"])
+            if code and r[f].isdigit():
+                by.setdefault((code, int(r["year"])), {})[int(r["quarter"])] = int(r[f])
+                names[code] = "European Union" if code == "EUU" else nm.get(code, code)
+        for k, q in by.items():
+            if how == "last":
+                cell.setdefault(k, {})[col] = q[max(q)]
+            elif len(q) == 4:                               # a flow: only whole years
+                cell.setdefault(k, {})[col] = sum(q.values())
+    meta = {col: dict(title=t, unit=u, description=("Counted at the end of the year (or the latest quarter of the current year)." if how == "last" else "Total over the four quarters of the year; the current year is left out until it is complete.") + " Economies with fewer than 100 are not published.") for _, col, t, u, how in files}
+    return country_year("github-activity-by-country", "Software development on GitHub, by country", "How many developers, repositories and organizations each country has on GitHub, and how much code they push.",
+                        "Science and technology", "GitHub Innovation Graph", "https://innovationgraph.github.com", "CC0", cell, names, meta, [c for _, c, _, _, _ in files], min_rows=300)
+
+
+# ---------- US government: rules, drugs, trials, disasters, banks ----------
+def yearly(id, first, count, cols, recent=2):
+    """{date: {col: n}} for every year from `first`, asking only for the last `recent` years when earlier ones are on disk."""
+    h, old = prior(id)
+    cell = {}
+    for y in range(first, THIS_YEAR + 1):
+        d = f"{y}-01-01"
+        if d in old and y < THIS_YEAR - recent + 1 and all(old[d].get(c, "") != "" for c in cols):
+            cell[d] = {c: float(old[d][c]) for c in cols}
+            continue
+        row = {}
+        for c in cols:
+            try:
+                row[c] = count(y, c)
+            except Exception as e:
+                print(f"  {id} {y} {c}: {str(e)[:60]}")
+            time.sleep(0.25)
+        if row:
+            cell[d] = row
+    return cell
+
+
+def federal_register():
+    kinds = dict(final_rules="conditions[type][]=RULE", proposed_rules="conditions[type][]=PRORULE", notices="conditions[type][]=NOTICE",
+                 presidential_documents="conditions[type][]=PRESDOCU", executive_orders="conditions[presidential_document_type][]=executive_order")
+
+    def count(y, c):
+        return J(f"https://www.federalregister.gov/api/v1/documents.json?per_page=1&conditions[publication_date][year]={y}&{kinds[c]}")["count"]
+    cell = yearly("us-federal-register", 1994, count, list(kinds))
+    meta = dict(final_rules=dict(title="US federal final rules published in the year", unit="documents"), proposed_rules=dict(title="US federal proposed rules published in the year", unit="documents"),
+                notices=dict(title="US federal notices published in the year", unit="documents"), presidential_documents=dict(title="US presidential documents published in the year", unit="documents"),
+                executive_orders=dict(title="US executive orders published in the year", unit="orders"))
+    return series("us-federal-register", "US federal rules, notices and executive orders, by year", "How much the US government regulates and announces: documents published in the Federal Register each year since 1994. The current year is a count so far.",
+                  "US", "Government and finance", "US National Archives, Federal Register", "https://www.federalregister.gov", PD, cell, meta, list(kinds), "year")
+
+
+def fda():
+    feeds = [("drug/event.json?count=receivedate", "drug_side_effect_reports", "US reports of drug side effects received in the month"), ("device/event.json?count=date_received", "device_problem_reports", "US reports of medical device problems received in the month"),
+             ("drug/enforcement.json?count=report_date", "drug_recalls", "US drug recalls reported in the month"), ("food/enforcement.json?count=report_date", "food_recalls", "US food recalls reported in the month"),
+             ("device/enforcement.json?count=report_date", "device_recalls", "US medical device recalls reported in the month")]
+    cell, cols, this = {}, [], date.today().strftime("%Y-%m")
+    for path, col, _ in feeds:
+        try:
+            for r in J("https://api.fda.gov/" + path)["results"]:
+                t = str(r["time"])
+                if len(t) == 8 and "1990" <= t[:4] <= str(THIS_YEAR) and f"{t[:4]}-{t[4:6]}" < this:
+                    k = f"{t[:4]}-{t[4:6]}-01"
+                    cell.setdefault(k, {})[col] = cell.get(k, {}).get(col, 0) + r["count"]
+            cols.append(col)
+        except Exception as e:
+            print(f"  fda {col}: {str(e)[:70]}")
+        time.sleep(1)
+    meta = {col: dict(title=t, unit="reports" if "report" in col else "recalls", description="From openFDA. Reports are unverified and do not show that a product caused harm.") for _, col, t in feeds}
+    return series("us-fda-reports", "US drug and device safety reports and recalls, monthly", "Monthly counts of side-effect reports for drugs, problem reports for medical devices, and recalls of drugs, food and devices.",
+                  "US", "Health", "US Food and Drug Administration, openFDA", "https://open.fda.gov", "CC0 (openFDA)", cell, meta, cols, "month")
+
+
+def clinical_trials():
+    kinds = dict(studies_started="", interventional_studies_started=" AND AREA[StudyType]INTERVENTIONAL", phase_3_trials_started=" AND AREA[Phase]PHASE3")
+
+    def count(y, c):
+        q = urllib.parse.quote(f"AREA[StartDate]RANGE[{y}-01-01,{y}-12-31]{kinds[c]}")
+        return J(f"https://clinicaltrials.gov/api/v2/studies?countTotal=true&pageSize=1&fields=NCTId&filter.advanced={q}")["totalCount"]
+    cell = yearly("clinical-trials-started", 2000, count, list(kinds), recent=4)
+    meta = dict(studies_started=dict(title="Clinical studies started in the year", unit="studies", description="Studies registered on ClinicalTrials.gov by the year they started, worldwide."),
+                interventional_studies_started=dict(title="Clinical trials (interventional studies) started in the year", unit="trials"), phase_3_trials_started=dict(title="Phase 3 clinical trials started in the year", unit="trials"))
+    return series("clinical-trials-started", "Clinical trials started each year", "How many medical studies begin each year, from the world's largest trial registry. The current year is a count so far.",
+                  "World", "Health", "US National Library of Medicine, ClinicalTrials.gov", "https://clinicaltrials.gov", PD, cell, meta, list(kinds), "year")
+
+
+def fema():
+    seen, skip, url = {}, 0, "https://www.fema.gov/api/open/v2/DisasterDeclarationsSummaries?$select=disasterNumber,state,declarationType,incidentType,declarationDate,declarationTitle&$orderby=disasterNumber&$top=10000"
+    while True:
+        rows = J(f"{url}&$skip={skip}".replace(" ", "%20"))["DisasterDeclarationsSummaries"]
+        for r in rows:
+            seen.setdefault(r["disasterNumber"], r)             # one line per county in the source; one per disaster here
+        if len(rows) < 10000:
+            break
+        skip += 10000
+        time.sleep(0.5)
+    kind = {"Hurricane": "hurricanes", "Tropical Storm": "hurricanes", "Typhoon": "hurricanes", "Flood": "floods", "Fire": "fires", "Severe Storm": "severe_storms", "Severe Storm(s)": "severe_storms",
+            "Tornado": "tornadoes", "Snowstorm": "winter_storms", "Severe Ice Storm": "winter_storms", "Winter Storm": "winter_storms", "Freezing": "winter_storms", "Earthquake": "earthquakes", "Drought": "droughts", "Biological": "biological"}
+    cols, cell, rows = ["all_declarations", "major_disasters", "emergencies", "fire_management", "hurricanes", "floods", "fires", "severe_storms", "tornadoes", "winter_storms", "earthquakes", "droughts", "biological", "other"], {}, []
+    for n, r in sorted(seen.items()):
+        y = r["declarationDate"][:4]
+        c = cell.setdefault(f"{y}-01-01", {k: 0 for k in cols})
+        c["all_declarations"] += 1
+        t = {"DR": "major_disasters", "EM": "emergencies", "FM": "fire_management"}.get(r["declarationType"])
+        if t:
+            c[t] += 1
+        c[kind.get(r["incidentType"], "other")] += 1
+        rows.append([n, r["declarationDate"][:10], r["state"], r["declarationType"], r["incidentType"], (r.get("declarationTitle") or "").strip()])
+    label = dict(all_declarations="US federal disaster declarations in the year", major_disasters="US major disaster declarations in the year", emergencies="US emergency declarations in the year", fire_management="US fire management declarations in the year",
+                 hurricanes="US disaster declarations for hurricanes and tropical storms", floods="US disaster declarations for floods", fires="US disaster declarations for fires", severe_storms="US disaster declarations for severe storms",
+                 tornadoes="US disaster declarations for tornadoes", winter_storms="US disaster declarations for snow and ice storms", earthquakes="US disaster declarations for earthquakes", droughts="US disaster declarations for droughts",
+                 biological="US disaster declarations for biological events (such as COVID-19)", other="US disaster declarations for other causes")
+    meta = {c: dict(title=t, unit="declarations", description="Each disaster is counted once for each state or territory it was declared in. The current year is a count so far.") for c, t in label.items()}
+    return [series("us-disaster-declarations", "US disaster declarations by year and cause", "How many disasters the US government has declared each year since 1953, and what caused them.",
+                   "US", "Natural hazards", "Federal Emergency Management Agency, OpenFEMA", "https://www.fema.gov/about/openfema", PD, cell, meta, cols, "year"),
+            table("us-disaster-declarations-list", "Every US disaster declaration since 1953", "One line for each federally declared disaster, with its date, state, type and name.",
+                  "US", "Natural hazards", "Federal Emergency Management Agency, OpenFEMA", "https://www.fema.gov/about/openfema", PD, ["disaster_number"], "declared", "date", None,
+                  ["disaster_number", "declared", "state", "declaration_type", "incident_type", "name"], rows,
+                  dict(state=dict(title="State or territory"), declaration_type=dict(title="Declaration type", description="DR major disaster, EM emergency, FM fire management."), incident_type=dict(title="Cause"), name=dict(title="Name of the disaster")))]
+
+
+def fdic():
+    j = J("https://banks.data.fdic.gov/api/failures?fields=NAME,CERT,CITYST,FAILDATE,RESTYPE1,QBFDEP,QBFASSET,COST&sort_by=FAILDATE&sort_order=ASC&limit=10000&format=json")
+    rows, cell = [], {}
+    for k, it in enumerate(j["data"]):
+        r = it.get("data", it)
+        m = re.fullmatch(r"(\d{1,2})/(\d{1,2})/(\d{4})", str(r.get("FAILDATE", "")))
+        if not m:
+            continue
+        d = f"{m.group(3)}-{int(m.group(1)):02d}-{int(m.group(2)):02d}"
+        assets, dep, cost = (num(r.get(f) * 1000) if isinstance(r.get(f), (int, float)) else "" for f in ("QBFASSET", "QBFDEP", "COST"))
+        rows.append([k + 1, d, r.get("NAME", ""), r.get("CITYST", ""), assets, dep, cost, r.get("RESTYPE1", "")])
+        c = cell.setdefault(d[:4] + "-01-01", dict(bank_failures=0, assets_of_failed_banks=0))
+        c["bank_failures"] += 1
+        c["assets_of_failed_banks"] += assets or 0
+    for y in range(int(min(cell)[:4]), THIS_YEAR + 1):
+        cell.setdefault(f"{y}-01-01", dict(bank_failures=0, assets_of_failed_banks=0))
+    return [series("us-bank-failures", "US bank failures by year", "How many banks failed in the United States each year since 1934, and how large they were. The current year is a count so far.",
+                   "US", "Government and finance", "Federal Deposit Insurance Corporation, BankFind", "https://banks.data.fdic.gov", PD, cell,
+                   dict(bank_failures=dict(title="US bank failures in the year", unit="banks"), assets_of_failed_banks=dict(title="Assets of US banks that failed in the year", unit="current US$")), ["bank_failures", "assets_of_failed_banks"], "year"),
+            table("us-bank-failures-list", "Every US bank failure since 1934", "One line for each failed bank: date, name, place, assets, deposits and the estimated cost to the insurance fund.",
+                  "US", "Government and finance", "Federal Deposit Insurance Corporation, BankFind", "https://banks.data.fdic.gov", PD, ["id"], "failed", "date", None,
+                  ["id", "failed", "bank", "city_and_state", "assets", "deposits", "estimated_cost", "resolution"], rows,
+                  dict(bank=dict(title="Bank"), city_and_state=dict(title="City and state"), assets=dict(title="Assets at failure", unit="current US$"), deposits=dict(title="Deposits at failure", unit="current US$"),
+                       estimated_cost=dict(title="Estimated cost to the insurance fund", unit="current US$"), resolution=dict(title="How it was resolved")))]
+
+
+# ---------- US health and cities ----------
+def flu():
+    cell, states = {}, {}
+    for r in csv.DictReader(io.StringIO(text(f"{RAW}cdcepi/FluSight-forecast-hub/main/target-data/target-hospital-admissions.csv"))):
+        if r["value"] in ("", "NA"):
+            continue
+        col = "united_states" if r["location"] == "US" else slug(r["location_name"])
+        states[col] = "the United States" if r["location"] == "US" else r["location_name"]
+        cell.setdefault(r["date"], {})[col] = float(r["value"])
+    cols = ["united_states"] + sorted(c for c in states if c != "united_states")
+    meta = {c: dict(title=f"Flu hospital admissions in the week, {n}", unit="people admitted", description="People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.") for c, n in states.items()}
+    return series("us-flu-hospital-admissions", "US flu hospital admissions, weekly, by state", "How many people were admitted to hospital with confirmed flu each week, for the country and every state. This is the series the CDC FluSight forecasts are scored against.",
+                  "US", "Health", "Centers for Disease Control and Prevention (NHSN), via the FluSight Forecast Hub", "https://github.com/cdcepi/FluSight-forecast-hub", PD, cell, meta, cols, "week")
+
+
+def socrata(url):
+    return J(url.replace(" ", "%20"), timeout=240)
+
+
+def chicago():
+    rows = socrata("https://data.cityofchicago.org/resource/ijzp-q8t2.json?$select=date_trunc_ym(date) as month,primary_type,count(*) as n&$group=month,primary_type&$limit=50000")
+    pick = {"THEFT": "thefts", "BATTERY": "batteries", "CRIMINAL DAMAGE": "criminal_damage", "ASSAULT": "assaults", "MOTOR VEHICLE THEFT": "vehicle_thefts", "BURGLARY": "burglaries", "ROBBERY": "robberies", "NARCOTICS": "narcotics_offences", "HOMICIDE": "homicides", "WEAPONS VIOLATION": "weapons_violations"}
+    cell, this = {}, date.today().strftime("%Y-%m")
+    for r in rows:
+        m = str(r.get("month", ""))[:7]
+        if not re.fullmatch(r"\d{4}-\d{2}", m) or m >= this:
+            continue
+        c = cell.setdefault(m + "-01", {"all_reported_crimes": 0})
+        c["all_reported_crimes"] += int(r["n"])
+        if r.get("primary_type") in pick:
+            c[pick[r["primary_type"]]] = c.get(pick[r["primary_type"]], 0) + int(r["n"])
+    cols = ["all_reported_crimes"] + list(pick.values())
+    meta = {c: dict(title=f"Chicago: {c.replace('_', ' ')} in the month", unit="incidents", description="Incidents reported to the Chicago Police Department, counted by the month they happened.") for c in cols}
+    return series("chicago-crime-monthly", "Chicago: reported crime by month and type", "Crimes reported in Chicago each month since 2001, in total and for the ten most common types.",
+                  "US", "Government and finance", "City of Chicago Data Portal, Chicago Police Department", "https://data.cityofchicago.org/Public-Safety/Crimes-2001-to-Present/ijzp-q8t2", "Chicago Data Portal terms of use (free to use with attribution)", cell, meta, cols, "month")
+
+
+def nyc():
+    rows = socrata("https://data.cityofnewyork.us/resource/h9gi-nx95.json?$select=date_trunc_ym(crash_date) as month,count(*) as crashes,sum(number_of_persons_injured) as injured,sum(number_of_persons_killed) as killed,"
+                   "sum(number_of_pedestrians_killed) as pedestrians_killed,sum(number_of_cyclist_killed) as cyclists_killed&$group=month&$order=month&$limit=5000")
+    cell, this = {}, date.today().strftime("%Y-%m")
+    for r in rows:
+        m = str(r.get("month", ""))[:7]
+        if re.fullmatch(r"\d{4}-\d{2}", m) and m < this:
+            cell[m + "-01"] = {c: float(r[k]) for k, c in (("crashes", "crashes"), ("injured", "people_injured"), ("killed", "people_killed"), ("pedestrians_killed", "pedestrians_killed"), ("cyclists_killed", "cyclists_killed")) if r.get(k) not in (None, "")}
+    meta = dict(crashes=dict(title="New York City: motor vehicle crashes in the month", unit="crashes"), people_injured=dict(title="New York City: people injured in crashes in the month", unit="people"),
+                people_killed=dict(title="New York City: people killed in crashes in the month", unit="people"), pedestrians_killed=dict(title="New York City: pedestrians killed in crashes in the month", unit="people"),
+                cyclists_killed=dict(title="New York City: cyclists killed in crashes in the month", unit="people"))
+    return series("nyc-traffic-crashes-monthly", "New York City: traffic crashes, injuries and deaths by month", "Motor vehicle collisions reported by the NYPD each month since mid-2012, with the people injured and killed.",
+                  "US", "Government and finance", "NYC Open Data, New York Police Department", "https://data.cityofnewyork.us/Public-Safety/Motor-Vehicle-Collisions-Crashes/h9gi-nx95", "NYC Open Data terms of use (free to use)", cell, meta, list(meta), "month")
+
+
+def us_spending():
+    j = J("https://api.usaspending.gov/api/v2/references/toptier_agencies/")
+    rows, fy = [], None
+    for a in j["results"]:
+        fy = fy or a.get("active_fy")
+        if a.get("budget_authority_amount") is None:
+            continue
+        rows.append([a.get("abbreviation") or slug(a["agency_name"]).upper()[:12], a["agency_name"], int(a.get("active_fy") or fy or THIS_YEAR), num(a.get("budget_authority_amount")), num(a.get("obligated_amount")),
+                     num(a.get("outlay_amount")), num((a.get("percentage_of_total_budget_authority") or 0) * 100)])
+    seen, uniq = set(), []
+    for r in rows:
+        if r[0] not in seen:
+            seen.add(r[0])
+            uniq.append(r)
+    return table("us-federal-spending-by-agency", "US federal spending by agency, this fiscal year", "What each federal agency may spend, has committed and has paid out in the current fiscal year.",
+                 "US", "Government and finance", "US Treasury, USAspending.gov", "https://www.usaspending.gov/agency", PD, ["agency", "fiscal_year"], "fiscal_year", "year",
+                 dict(col="agency", label_col="agency_name", label="Agency"), ["agency", "agency_name", "fiscal_year", "budget_authority", "obligations", "outlays", "share_of_federal_budget"], uniq,
+                 dict(budget_authority=dict(title="Budget authority", unit="current US$", description="What Congress has allowed the agency to spend."), obligations=dict(title="Obligations", unit="current US$", description="What the agency has committed to pay."),
+                      outlays=dict(title="Outlays", unit="current US$", description="What has actually been paid out."), share_of_federal_budget=dict(title="Share of total federal budget authority", unit="% of the total")))
+
+
+def datagov():
+    j = J("https://catalog.data.gov/api/3/action/package_search?rows=0&facet.field=[%22organization%22]&facet.limit=300")["result"]
+    items = j["search_facets"]["organization"]["items"]
+    rows = sorted(([slug(i["name"], 60), i.get("display_name") or i["name"], THIS_YEAR, int(i["count"]), num(i["count"] / j["count"] * 100)] for i in items if i.get("count")), key=lambda r: -r[3])
+    return table("us-open-datasets-by-agency", "US government open datasets, by agency", f"How many datasets each agency lists on data.gov today, out of {j['count']:,} in all.",
+                 "US", "Government and finance", "US General Services Administration, data.gov catalog", "https://catalog.data.gov", PD, ["agency", "year"], "year", "year",
+                 dict(col="agency", label_col="agency_name", label="Agency"), ["agency", "agency_name", "year", "datasets", "share_of_catalog"], rows,
+                 dict(datasets=dict(title="Datasets listed on data.gov", unit="datasets"), share_of_catalog=dict(title="Share of the data.gov catalog", unit="% of all datasets")))
+
+
+BUILDERS = [(lambda s=s: wb_set(s[0], s[1], s[2], s[3], s[4], s[5], **s[6])) for s in WB_SETS] + [
+    imf, un_population, undp, who, pwt, us_monthly, us_quarterly, us_daily, us_debt, us_climate, arxiv, wikipedia, research, gbif, github_activity,
+    federal_register, fda, clinical_trials, fema, fdic, flu, chicago, nyc, us_spending, datagov,
+]
+NAMES = [s[0] for s in WB_SETS] + ["imf", "un_population", "undp", "who", "pwt", "us_monthly", "us_quarterly", "us_daily", "us_debt", "us_climate", "arxiv", "wikipedia", "research", "gbif",
+                                    "github_activity", "federal_register", "fda", "clinical_trials", "fema", "fdic", "flu", "chicago", "nyc", "us_spending", "datagov"]
