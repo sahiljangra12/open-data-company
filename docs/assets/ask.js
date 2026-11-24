@@ -6,7 +6,23 @@
    Needs core.js, concepts.js (word lists) and charts.js. */
 let M = [], V = new Map(), C = {}, PULSE = {}, NAMES = [], LABEL = new Map(), ticket = 0;
 const latestCache = {};
-const COUNTRY_SETS = ["co2-and-greenhouse-gases", "energy", "world-bank-development"];
+const COUNTRY_SETS = ["co2-and-greenhouse-gases", "energy", "world-bank-development"];      // their place names come first, so the usual spelling of a country wins
+/* Three shapes of dataset. A country table (one row for a place and a year) answers lookups, rankings, maps and scatters.
+   A series (one row for a date) answers "what is it now" and "how has it changed". Anything else is a list or a table by
+   state, agency or zone: it is opened in the explorer rather than read aloud. */
+const isCountrySet = d => !!d.entity && d.keys.join("+") === "code+year", isSeriesSet = d => !d.entity && d.keys.length === 1 && d.keys[0] === d.time.col;
+const stepOf = d => d.step || (d.keys[0] === "month" ? "month" : "day");
+const STEP_ADV = { day: "daily", week: "weekly", month: "monthly", quarter: "quarterly", year: "yearly" };
+function whenText(t, step) {                                            // a date as people say it, no finer than the data is
+  const x = String(t), y = x.slice(0, 4), d = new Date(x.length > 10 ? x : x.slice(0, 10) + "T00:00:00Z"), f = o => d.toLocaleDateString("en-US", { ...o, timeZone: "UTC" });
+  if (step === "year" || x.length <= 4 || isNaN(d)) return y;
+  if (step === "quarter") return `the ${["first", "second", "third", "fourth"][Math.floor(d.getUTCMonth() / 3)]} quarter of ${y}`;
+  if (step === "month") return f({ year: "numeric", month: "long" });
+  return (step === "week" ? "the week ending " : "") + f({ year: "numeric", month: "long", day: "numeric" });
+}
+const inOn = step => (step === "day" ? "on" : "in");
+const thisYear = () => +String(M.checked || new Date().toISOString()).slice(0, 4);
+const partialNow = (d, t) => !!d.partial && +String(t).slice(0, 4) >= thisYear();          // a yearly count whose last point is the year still in progress
 const norm = t => String(t).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/₂/g, "2").replace(/[^a-z0-9%$]+/g, " ").trim();
 const isReal = code => code in C && !code.startsWith("OWID_");
 const ordinal = n => { const s = ["th", "st", "nd", "rd"], v = n % 100; return n + (s[(v - 20) % 10] || s[v] || s[0]); };
@@ -40,12 +56,18 @@ const WHICH = /\b(which|what) (country|countries|nation|nations)\b|\bcountries (
 /* ---------- words ---------- */
 function buildPlaces() {
   const seen = new Map(), add = (name, code) => { const n = norm(name); if (n.length >= 3 && !seen.has(n)) seen.set(n, code); };
-  COUNTRY_SETS.forEach(id => { const d = M.find(x => x.id === id); if (!d) return; d.places.forEach(([code, label]) => { add(label, code); if (!LABEL.has(code)) LABEL.set(code, label); }); });
+  const take = d => (d.places || []).forEach(([code, label]) => { add(label, code); if (!LABEL.has(code)) LABEL.set(code, label); });
+  COUNTRY_SETS.forEach(id => { const d = M.find(x => x.id === id); if (d) take(d); });
   Object.entries(C).forEach(([code, c]) => { add(c.name, code); if (!LABEL.has(code)) LABEL.set(code, c.name); });
+  M.filter(d => isCountrySet(d) && !COUNTRY_SETS.includes(d.id)).forEach(take);                                         // other sources' spellings and groupings are understood too
   Object.entries(PLACE_ALIAS).forEach(([n, code]) => seen.set(n, code));
   NAMES = [...seen].sort((a, b) => b[0].length - a[0].length);
 }
 const placeName = code => LABEL.get(code) || code;
+/* the same measure in a table of projections, for questions about years that have not happened yet */
+const FUTURE = { "world-bank-development::population": "un-population-projections::population", "world-bank-development::life_expectancy": "un-population-projections::life_expectancy", "world-bank-development::fertility_rate": "un-population-projections::total_fertility_rate",
+  "world-bank-development::gdp_growth": "imf-projections::real_gdp_growth", "world-bank-development::inflation": "imf-projections::inflation", "world-bank-development::unemployment": "imf-projections::unemployment_rate", "world-bank-development::gdp_current_usd": "imf-projections::gdp", "world-bank-development::gdp_per_capita": "imf-projections::gdp_per_person" };
+function futureOf(id) { const [d, c] = id.split("::"), twin = FUTURE[id] || (d === "un-population" ? `un-population-projections::${c}` : d === "imf-world-economic-outlook" ? `imf-projections::${c}` : null); return twin && V.has(twin) ? twin : null; }
 
 function parse(text) {
   let s = ` ${norm(text)} `; const places = [];
@@ -58,14 +80,14 @@ function parse(text) {
   const rank = BOTTOM.test(s) ? "bottom" : TOP.test(s) || WHICH.test(s) ? "top" : null;
   const quake = /earthquake|quake|seismic|tremor/.test(s);
   const found = [];
-  [ASK_FIRST, CONCEPTS].forEach(listOf => listOf.forEach(([re, id]) => {
+  [ASK_FIRST, CONCEPTS_MORE, CONCEPTS].forEach(listOf => listOf.forEach(([re, id]) => {
     if (!V.has(id)) return; const m = re.exec(s);
     if (m && !found.some(f => f.id === id)) { found.push({ id, at: m.index, text: m[0].trim() }); s = s.replace(new RegExp(`[a-z0-9]*(?:${re.source})[a-z0-9]*`, "g"), x => " ".repeat(x.length)); }      // every mention of the same idea is used up, so "CO2 emitters" is one variable, not two
   }));
   const words = s.replace(TOP, " ").replace(BOTTOM, " ").split(/\s+/).filter(w => w && !STOP.has(w) && !/^\d+$/.test(w));
   let fuzzy = [];
   if (!found.length && words.length && !quake) {
-    fuzzy = [...V.values()].filter(v => v.d.id !== "earthquakes-past-30-days" && v.c.type === "num" && words.every(w => v.q.includes(w))).sort((a, b) => a.c.title.length - b.c.title.length);
+    fuzzy = [...V.values()].filter(v => v.ok && words.every(w => v.q.includes(w) || v.q.includes(w.replace(/(ies|es|s)$/, "")))).sort((a, b) => a.c.title.length - b.c.title.length);
     if (fuzzy.length) found.push({ id: fuzzy[0].id, at: 0, text: "" });
   }
   /* "methane emissions" is one idea: drop a variable that was only matched by a word already in another match's title */
@@ -73,6 +95,7 @@ function parse(text) {
   const keep = found.filter(f => !found.some(g => g !== f && f.text && !f.text.includes(" ") && inTitle(g.id, f.text) && !(g.text && inTitle(f.id, g.text))));
   found.length = 0; found.push(...keep);
   found.sort((a, b) => a.at - b.at);
+  if (year && year > thisYear()) found.forEach(f => { const twin = futureOf(f.id); if (twin) f.id = twin; });                // "population in 2050" is a projection
   /* words the match does not explain: a question with any of these is more than a plain lookup */
   const left = fuzzy.length ? [] : words.filter(w => w.length > 1 && !FILLER.has(w) && !/quake|seismic|tremor/.test(w) && !found.some(f => inTitle(f.id, w)));
   return { vars: found.map(f => f.id).slice(0, 2), places: codes.slice(0, 8), year, rank, n, quake, words, left, weak: fuzzy.length > 0 && words.length < 2 && !codes.length && !rank, others: fuzzy.slice(1, 7).map(v => v.id) };
@@ -203,27 +226,31 @@ async function answerWorld(q, v, P, box) {                              // a var
 async function answerSeries(q, v, P, box) {
   const d = v.d, T = await load(d), tcol = T.c[d.time.col], col = T.c[v.c.name], pts = []; for (let i = 0; i < T.n; i++) if (!isNaN(col[i])) pts.push([tcol[i], col[i]]);
   if (!pts.length) { box.append(note("That series has no values.")); return; }
-  const unit = v.c.unit, monthly = d.keys[0] === "month", when = t => new Date(t).toLocaleDateString("en-US", monthly ? { year: "numeric", month: "long", timeZone: "UTC" } : { year: "numeric", month: "long", day: "numeric", timeZone: "UTC" });
+  const unit = v.c.unit, step = stepOf(d), when = t => whenText(t, step), on = inOn(step), yearly = step === "year";
   const sec = card("Answer", d), head = el("div", "ans-head"), facts = el("ul", "ans-facts"), seg = el("div", "seg"), fig = el("figure", "fig");
-  let last = pts[pts.length - 1], sentence;
+  const open = pts.length > 1 && partialNow(d, pts[pts.length - 1][0]) ? pts[pts.length - 1] : null;                     // the year in progress is reported, but never as the headline
+  let last = open ? pts[pts.length - 2] : pts[pts.length - 1], sentence;
+  const big = x => { const s = say(x, unit), b = el("p", "ans-n"); b.append(el("strong", "", s.n), document.createTextNode(s.tail ? " " + s.tail : "")); return b; };
   if (P.year) {
     const yr = pts.filter(p => String(p[0]).startsWith(String(P.year)));
-    if (yr.length) { const mean = yr.reduce((a, p) => a + p[1], 0) / yr.length, s = say(mean, unit), big = el("p", "ans-n"); big.append(el("strong", "", s.n), document.createTextNode(s.tail ? " " + s.tail : "")); head.append(el("p", "ans-q", `${v.c.title}, average for ${P.year}`), big); facts.append(el("li", "", `Lowest ${full(Math.min(...yr.map(p => p[1])), unit)}, highest ${full(Math.max(...yr.map(p => p[1])), unit)}, from ${plural(yr.length, monthly ? "month" : "day")} of data.`)); sentence = `${v.c.title} averaged ${full(mean, unit)} in ${P.year}.`; }
+    if (yr.length && yearly) { const p = yr[0], so = open && p === open; head.append(el("p", "ans-q", `${v.c.title}, ${P.year}${so ? " so far" : ""}`), big(p[1])); sentence = `${v.c.title}: ${full(p[1], unit)} in ${P.year}${so ? " so far (the year is not over)" : ""}.`; if (so) facts.append(el("li", "", "The year is not over, so this count will still rise.")); }
+    else if (yr.length) { const mean = yr.reduce((a, p) => a + p[1], 0) / yr.length; head.append(el("p", "ans-q", `${v.c.title}, average for ${P.year}`), big(mean)); facts.append(el("li", "", `Lowest ${full(Math.min(...yr.map(p => p[1])), unit)}, highest ${full(Math.max(...yr.map(p => p[1])), unit)}, from ${plural(yr.length, step)} of data.`)); sentence = `${v.c.title} averaged ${full(mean, unit)} in ${P.year}.`; }
     else P.year = null;
   }
   if (!P.year) {
-    const s = say(last[1], unit), big = el("p", "ans-n"); big.append(el("strong", "", s.n), document.createTextNode(s.tail ? " " + s.tail : ""));
-    head.append(el("p", "ans-q", `${v.c.title}, ${when(last[0])}`), big); sentence = `${v.c.title} was ${full(last[1], unit)} ${monthly ? "in" : "on"} ${when(last[0])}.`;
+    head.append(el("p", "ans-q", `${v.c.title}, ${when(last[0])}`), big(last[1])); sentence = `${v.c.title} was ${full(last[1], unit)} ${on} ${when(last[0])}.`;
+    if (open) facts.append(el("li", "", `${when(open[0])} so far: ${full(open[1], unit)}. The year is not over, so the last full year is shown above.`));
     const t0 = Date.parse(last[0]) - 365.25 * 864e5, prev = pts.reduce((a, p) => (Math.abs(Date.parse(p[0]) - t0) < Math.abs(Date.parse(a[0]) - t0) ? p : a));
-    const diff = last[1] - prev[1], rel = /\$/.test(unit) && prev[1] ? ` (${diff >= 0 ? "+" : "−"}${fmtN(Math.abs(diff / prev[1] * 100))}%)` : "";
-    facts.append(el("li", "", `A year earlier, ${when(prev[0])}: ${full(prev[1], unit)}. Change: ${diff >= 0 ? "+" : "−"}${fmtN(Math.abs(diff))}${rel}.`));
-    const hi = pts.reduce((a, p) => (p[1] > a[1] ? p : a)); facts.append(el("li", "", `Highest on record here: ${full(hi[1], unit)}, ${when(hi[0])}. The series starts ${when(pts[0][0])}.`));
+    if (prev !== last) { const diff = last[1] - prev[1], rel = /\$/.test(unit) && prev[1] ? ` (${diff >= 0 ? "+" : "−"}${fmtN(Math.abs(diff / prev[1] * 100))}%)` : "";
+      facts.append(el("li", "", `A year earlier, ${when(prev[0])}: ${full(prev[1], unit)}. Change: ${diff >= 0 ? "+" : "−"}${fmtN(Math.abs(diff))}${rel}.`)); }
+    const full_ = open ? pts.slice(0, -1) : pts, hi = full_.reduce((a, p) => (p[1] > a[1] ? p : a)); facts.append(el("li", "", `Highest on record here: ${full(hi[1], unit)}, ${when(hi[0])}. The series starts ${on} ${when(pts[0][0])}.`));
   }
   if (v.c.description) facts.append(el("li", "what", v.c.description));
-  let span = "all";
-  const draw = () => { const cut = span === "all" ? -Infinity : Date.parse(last[0]) - span * 365.25 * 864e5; [...seg.children].forEach(b => b.setAttribute("aria-pressed", String(b.dataset.s) === String(span)));
+  const spans = yearly ? [["10", "10 years"], ["30", "30 years"], ["all", "All"]] : step === "day" || step === "week" ? [["1", "1 year"], ["5", "5 years"], ["20", "20 years"], ["all", "All"]] : [["5", "5 years"], ["20", "20 years"], ["all", "All"]];
+  let span = "all"; const end = pts[pts.length - 1];
+  const draw = () => { const cut = span === "all" ? -Infinity : Date.parse(end[0]) - span * 365.25 * 864e5; [...seg.children].forEach(b => b.setAttribute("aria-pressed", String(b.dataset.s) === String(span)));
     Charts.line(fig, { series: [{ name: v.c.title, pts: pts.filter(p => Date.parse(p[0]) >= cut) }], x: "date", fmt: x => (/\$/.test(unit) ? "$" : "") + Charts.short(x), unit: say(1, unit).tail, zero: /\$/.test(unit), label: `${v.c.title} over time` }); };
-  [["1", "1 year"], ["5", "5 years"], ["20", "20 years"], ["all", "All"]].forEach(([k, t]) => { const b = el("button", "", t); b.type = "button"; b.dataset.s = k; b.onclick = () => { span = k === "all" ? "all" : +k; draw(); }; seg.append(b); });
+  spans.forEach(([k, t]) => { const b = el("button", "", t); b.type = "button"; b.dataset.s = k; b.onclick = () => { span = k === "all" ? "all" : +k; draw(); }; seg.append(b); });
   sec.append(head, facts, seg, fig);
   const cp = el("button", "link", "Copy the answer with its source"); cp.type = "button"; cp.onclick = () => copy(cp, cite(sentence, d, q));
   acts(sec, [Object.assign(linkBtn("Download the series", d.file, "btn get"), { download: "" }), linkBtn("Open in the explorer", `explore.html#d=${d.id}&v=${v.c.name}`), linkBtn("Test for a trend", `research.html#k=trend&y=${encodeURIComponent(v.id)}`, "link"), cp]);
@@ -254,19 +281,24 @@ async function answerQuakes(q, box) {
 const note = (text, extra) => { const p = el("p", "note", text); if (extra) p.append(" ", extra); return p; };
 
 /* ---------- the tools the AI can ask for: each reads the site's own data, here in the browser ---------- */
+const isCountry = v => !!(v && isCountrySet(v.d));
 let PLACE = new Map();
+const byText = d => (isCountrySet(d) ? "country and year" : `one ${d.region === "US" ? "United States" : "world"} series over time, ${STEP_ADV[stepOf(d)]}`);
+function matchVars(query, n) {                                          // the variables whose names fit some plain words, best first
+  const q = norm(query || ""), words = q.split(" ").filter(w => w && !STOP.has(w) && !VISFILL.has(w)).map(w => (w.length > 3 ? w.replace(/(ies|es|s)$/, "") : w)), hits = new Map();
+  [ASK_FIRST, CONCEPTS_MORE, CONCEPTS].forEach(list => list.forEach(([re, id]) => { if (V.has(id) && re.test(` ${q} `) && !hits.has(id)) hits.set(id, 3 - hits.size / 100); }));
+  if (words.length) V.forEach(v => { if (!v.ok || !(isCountrySet(v.d) || isSeriesSet(v.d))) return; const k = words.filter(w => v.q.includes(w)).length; if (k >= Math.ceil(words.length * 0.6)) hits.set(v.id, Math.max(hits.get(v.id) || 0, k / words.length + 1 / (20 + v.c.title.length))); });
+  return [...hits].sort((a, b) => b[1] - a[1]).slice(0, n).map(([id]) => V.get(id));
+}
 const r6 = x => (x === null || x === undefined || !isFinite(x) ? null : +(+x).toPrecision(6));
 const codeOf = name => { const raw = String(name || "").trim(); if (/^[A-Za-z]{3}$/.test(raw) && LABEL.has(raw.toUpperCase())) return raw.toUpperCase(); const n = norm(raw); return PLACE.get(n) || PLACE.get(n.replace(/^the /, "")) || null; };
 const TOOLS = {
   async find_variables({ query }) {
-    const q = norm(query || ""), words = q.split(" ").filter(w => w && !STOP.has(w)), hits = new Map();
-    [ASK_FIRST, CONCEPTS].forEach(list => list.forEach(([re, id]) => { if (V.has(id) && re.test(` ${q} `) && !hits.has(id)) hits.set(id, 3); }));
-    if (words.length) V.forEach(v => { if (v.c.type !== "num") return; const n = words.filter(w => v.q.includes(w)).length; if (n >= Math.ceil(words.length * 0.6)) hits.set(v.id, Math.max(hits.get(v.id) || 0, n / words.length + 1 / (20 + v.c.title.length))); });
-    return { matches: [...hits].sort((a, b) => b[1] - a[1]).slice(0, 8).map(([id]) => { const v = V.get(id); return { id, title: v.c.title, unit: v.c.unit || "", source: v.d.source, covers: v.d.coverage, by: v.d.entity ? v.d.entity.label.toLowerCase() + " and year" : "one world series over time" }; }) };
+    return { matches: matchVars(query, 8).map(v => ({ id: v.id, title: v.c.title, unit: v.c.unit || "", source: v.d.source, covers: v.d.coverage, by: byText(v.d) })) };
   },
   async get_values({ variable, places, year }, used) {
     const v = V.get(variable); if (!v) return { error: "Unknown variable id. Call find_variables to get the right one." };
-    if (!v.d.entity || v.d.keys.join("+") !== "code+year") return { error: "This variable is one world series, not by country. Call get_series without a place." };
+    if (!isCountry(v)) return { error: isSeriesSet(v.d) ? "This variable is one series over time, not by country. Call get_series without a place." : "This variable is a table that only the explorer page can show." };
     const L = await latest(v.d.id), rec = L.vars[v.c.name]; if (!rec) return { error: "That variable has no numbers." };
     const want = (Array.isArray(places) ? places : [places]).filter(Boolean).slice(0, 8).map(n => [n, codeOf(n)]), codes = [...new Set(want.map(w => w[1]).filter(c => c && L.pos.has(c)))];
     const yr = Number.isInteger(year) ? year : null, S = yr ? await seriesOf(v, [...new Set([...codes, "WLD"])]) : null;
@@ -279,7 +311,7 @@ const TOOLS = {
   },
   async rank({ variable, order, n, year }, used) {
     const v = V.get(variable); if (!v) return { error: "Unknown variable id. Call find_variables to get the right one." };
-    if (!v.d.entity || v.d.keys.join("+") !== "code+year") return { error: "This variable is one world series, so it cannot be ranked by country." };
+    if (!isCountry(v)) return { error: "This variable is not measured by country, so it cannot be ranked by country." };
     const L = await latest(v.d.id), rec = L.vars[v.c.name]; if (!rec) return { error: "That variable has no numbers." };
     const k = Math.max(1, Math.min(20, n || 10)), yr = Number.isInteger(year) ? year : null; let table = [];
     if (yr) { const T = await load(v.d), col = T.c[v.c.name]; for (let i = 0; i < T.n; i++) if (T.c.year[i] === yr && !isNaN(col[i]) && isReal(T.c.code[i])) table.push({ c: T.c.code[i], v: col[i], y: yr }); }
@@ -292,14 +324,16 @@ const TOOLS = {
   async get_series({ variable, place, from, to }, used) {
     const v = V.get(variable); if (!v) return { error: "Unknown variable id. Call find_variables to get the right one." };
     let pts, label = "";
-    if (v.d.entity && v.d.keys.join("+") === "code+year") { const c = codeOf(place || "World"); if (!c) return { error: "This place is not in the dataset" }; pts = (await seriesOf(v, [c])).get(c) || []; label = placeName(c); used.push({ kind: "places", v, places: [c], year: null }); }
-    else if (!v.d.entity) { const T = await load(v.d), t = T.c[v.d.time.col], col = T.c[v.c.name]; pts = []; for (let i = 0; i < T.n; i++) if (!isNaN(col[i])) pts.push([t[i], col[i]]); used.push({ kind: "series", v }); }
+    if (isCountry(v)) { const c = codeOf(place || "World"); if (!c) return { error: "This place is not in the dataset" }; pts = (await seriesOf(v, [c])).get(c) || []; label = placeName(c); used.push({ kind: "places", v, places: [c], year: null }); }
+    else if (isSeriesSet(v.d)) { const T = await load(v.d), t = T.c[v.d.time.col], col = T.c[v.c.name]; pts = []; for (let i = 0; i < T.n; i++) if (!isNaN(col[i])) pts.push([t[i], col[i]]); used.push({ kind: "series", v }); }
     else return { error: "This variable cannot be read as a series here." };
     const yearOf = x => +String(x).slice(0, 4); if (from) pts = pts.filter(p => yearOf(p[0]) >= from); if (to) pts = pts.filter(p => yearOf(p[0]) <= to);
     if (!pts.length) return { error: "No values in that period." };
     const step = Math.max(1, (pts.length - 1) / 23), thin = []; for (let i = 0; i < pts.length - 1; i += step) thin.push(pts[Math.floor(i)]); thin.push(pts[pts.length - 1]);
     const lo = pts.reduce((a, b) => (b[1] < a[1] ? b : a)), hi = pts.reduce((a, b) => (b[1] > a[1] ? b : a)), f = p => ({ when: p[0], value: r6(p[1]) });
-    return { variable: v.c.title, unit: v.c.unit || "", source: v.d.source, place: label || "World series", points_in_period: pts.length, first: f(pts[0]), last: f(pts[pts.length - 1]), lowest: f(lo), highest: f(hi), points: [...new Set(thin)].map(p => [p[0], r6(p[1])]) };
+    const open = !label && partialNow(v.d, pts[pts.length - 1][0]);
+    return { variable: v.c.title, unit: v.c.unit || "", source: v.d.source, place: label || (v.d.region === "US" ? "United States series" : "World series"), ...(label ? {} : { one_point_per: stepOf(v.d) }), ...(open ? { note: `The last point, ${String(pts[pts.length - 1][0]).slice(0, 4)}, covers the year so far and will still rise. Compare full years only.` } : {}),
+      points_in_period: pts.length, first: f(pts[0]), last: f(pts[pts.length - 1]), lowest: f(lo), highest: f(hi), points: [...new Set(thin)].map(p => [p[0], r6(p[1])]) };
   },
   async recent_earthquakes(_, used) {
     const d = M.find(x => x.id === "earthquakes-past-30-days"); if (!d) return { error: "No earthquake data." };
@@ -327,8 +361,17 @@ function aiReady() {
 const TOOL_SAYS = { find_variables: i => `Searching the variables for "${i.query || ""}"`, get_values: i => `Reading ${(V.get(i.variable) || { c: { title: "the data" } }).c.title.toLowerCase()} for ${[].concat(i.places || []).join(", ")}`, rank: i => `Ranking countries by ${(V.get(i.variable) || { c: { title: "that measure" } }).c.title.toLowerCase()}`,
   get_series: i => `Reading the history of ${(V.get(i.variable) || { c: { title: "that measure" } }).c.title.toLowerCase()}${i.place ? " for " + i.place : ""}`, recent_earthquakes: () => "Reading the latest earthquakes",
   show_chart: i => `Drawing a ${i.kind === "map" ? "world map" : i.kind === "scatter" ? "scatter chart" : i.kind === "bar" ? "bar chart" : "line chart"} of ${(V.get(i.variable) || { c: { title: "the data" } }).c.title.toLowerCase()}` };
+/* The service's standing instructions name only the first datasets. Each question therefore carries a short note with the
+   variables on this page that fit its words, so the model reaches every dataset. The note is not kept in the conversation. */
+function hintFor(q) {
+  const room = 1180 - q.length, head = `\n\n(Note added by the site, not typed by the visitor: the site now holds ${M.length} datasets and ${V.size} variables, more than your instructions list, including health, population, government, society, science and the United States economy. find_variables searches all of them.`;
+  if (room < head.length + 1) return "";
+  let out = head, n = 0;
+  for (const v of matchVars(q, 7)) { const item = `${n ? ";" : " Variables that may fit this question:"} ${v.id} (${v.c.title}${v.c.unit ? ", " + v.c.unit.replace(/\s*\(.*$/, "") : ""}; ${byText(v.d)})`; if (out.length + item.length + 2 > room) break; out += item; n++; }
+  return out + (n ? "." : "") + ")";
+}
 async function aiTurn(question, say, box) {
-  const messages = [...AI.memory, { role: "user", content: question }], used = [], cost = { usd: 0, rounds: 0, cached: 0 }; used.box = box;
+  const messages = [...AI.memory, { role: "user", content: question + hintFor(question) }], used = [], cost = { usd: 0, rounds: 0, cached: 0 }; used.box = box;
   for (let round = 0; round < 4; round++) {                             // 4 rounds is 13 messages at most, inside the service's limit
     const c = new AbortController(), t = setTimeout(() => c.abort(), 60000);
     let body = JSON.stringify({ messages });
@@ -370,7 +413,6 @@ function speak(btn, text) {
 
 /* ---------- visuals: one function draws for the AI's show_chart tool and for plain "chart ..." requests ---------- */
 let SHAPE = null;
-const isCountry = v => !!(v && v.d.entity && v.d.keys.join("+") === "code+year");
 const yearOf = x => +String(x).slice(0, 4);
 async function valuesAt(v, yr) {                                       // code -> { v, y } for every place: one year, or each place's newest
   const out = new Map();
@@ -426,7 +468,7 @@ async function visual(spec, box) {
       const S = await seriesOf(v, use);
       series = use.map(c => ({ name: placeName(c), code: c, pts: (S.get(c) || []).filter(p => (!from || p[0] >= from) && (!to || p[0] <= to)) })).filter(x => x.pts.length);
       explore = exploreUrl(v.d, v.c.name, use, from, to);
-    } else if (!v.d.entity) {
+    } else if (isSeriesSet(v.d)) {
       const T = await load(v.d), t = T.c[v.d.time.col], col = T.c[v.c.name], pts = [];
       for (let i = 0; i < T.n; i++) if (!isNaN(col[i]) && (!from || yearOf(t[i]) >= from) && (!to || yearOf(t[i]) <= to)) pts.push([t[i], col[i]]);
       series = pts.length ? [{ name: v.c.title, pts }] : [];
@@ -496,7 +538,7 @@ async function visual(spec, box) {
 }
 /* a plain-words reading of a drawn chart, for requests answered without the AI */
 function describe(out, v) {
-  const unit = v.c.unit || "", when = w => (typeof w === "number" ? w : String(w).slice(0, 10));
+  const unit = v.c.unit || "", when = w => (typeof w === "number" ? w : whenText(w, stepOf(v.d)));
   if (out.series) return out.series.slice(0, 4).map(x => `${out.series.length > 1 || isCountry(v) ? x.place : v.c.title} went from ${full(x.first.value, unit)} in ${when(x.first.when)} to ${full(x.last.value, unit)} in ${when(x.last.when)}${x.highest.when !== x.last.when && x.highest.when !== x.first.when ? `, with a peak of ${full(x.highest.value, unit)} in ${when(x.highest.when)}` : ""}.`).join(" ");
   if (out.rows) { const a = out.rows[0], z = out.rows[out.rows.length - 1]; return out.rows.length > 1 ? `${a.place} is first at ${full(a.value, unit)} (${a.year}); ${z.place} is last of those shown at ${full(z.value, unit)} (${z.year}).` : `${a.place}: ${full(a.value, unit)} (${a.year}).`; }
   if ("correlation" in out) { const r = out.correlation, size = Math.abs(r) >= 0.7 ? "strongly" : Math.abs(r) >= 0.4 ? "moderately" : Math.abs(r) >= 0.2 ? "weakly" : "hardly"; return `Across ${out.countries} countries the two measures ${size === "hardly" ? "hardly move together" : r > 0 ? `rise together ${size}` : `move in opposite directions ${size}`} (correlation ${r.toFixed(2)}). That alone does not show that one causes the other.`; }
@@ -519,13 +561,14 @@ function visualPlan(q, P) {                                            // which 
   if (!P.vars.length) return null;
   const s = q.toLowerCase(), r = rangeOf(q), ranged = "from" in r || "to" in r, year = ranged ? null : P.year, vs = P.vars.map(id => V.get(id)), real = P.places.filter(c => c !== "WLD");
   if (vs.length === 2 && vs.every(isCountry) && !real.length && /scatter|versus|\bvs\b|against|relationship|correlat|plot/.test(s)) return [{ kind: "scatter", variable: vs[0].id, variable_x: vs[1].id, year }];
-  return vs.map(v => {
-    if (!isCountry(v)) return { kind: "line", variable: v.id, ...r };
+  const plan = vs.map(v => {
+    if (!isCountry(v)) return isSeriesSet(v.d) ? { kind: "line", variable: v.id, ...r } : null;
     if (/\bmaps?\b|mapped/.test(s) && !real.length) return { kind: "map", variable: v.id, year };
     if (P.rank && !real.length) return { kind: "bar", variable: v.id, order: P.rank, n: P.n, year };
     if (real.length >= 2 && (year || /\bbars?\b|bar ?chart|histogram|\bpie\b/.test(s))) return { kind: "bar", variable: v.id, places: P.places, year };
     return { kind: "line", variable: v.id, places: P.places, ...r };
-  });
+  }).filter(Boolean);
+  return plan.length ? plan : null;
 }
 
 /* ---------- the conversation ---------- */
@@ -553,14 +596,14 @@ async function lookup(q, P, turn) {                                    // the bu
   const box = turn.box, vs = P.vars.map(id => V.get(id));
   if (P.quake) { box.classList.add("roomy"); box.append(el("p", "readas", "Read as: recent earthquakes worldwide.")); await answerQuakes(q, box); return true; }
   if (!vs.length) return false;
-  const byPlace = vs.some(v => v.d.entity), read = el("p", "readas"); box.classList.add("roomy");
+  const byPlace = vs.some(isCountry), read = el("p", "readas"); box.classList.add("roomy");
   read.append(document.createTextNode(`Read as: ${vs.map(v => `"${v.c.title}" from ${v.d.source}`).join(" and ")}${!byPlace ? "" : P.places.length ? `, for ${P.places.map(placeName).join(", ")}` : P.rank ? ", ranked by country" : ""}${P.year ? `, in ${P.year}` : ""}. `));
   if (P.others.length) { read.append("Not what you meant? Try "); P.others.slice(0, 4).forEach((id, i) => { const o = V.get(id), b = el("button", "link plain", o.c.title); b.type = "button"; b.onclick = () => respond(o.c.title + (P.places.length ? " " + P.places.map(placeName).join(" ") : "")); read.append(i ? ", " : "", b); }); read.append("."); }
   box.append(read);
   for (const v of vs) {
     try {
-      if (!v.d.entity) await answerSeries(q, v, { ...P }, box);
-      else if (v.d.keys.join("+") !== "code+year") box.append(note(`"${v.c.title}" is broken down by ${v.d.entity.label.toLowerCase()}, which is best seen in the explorer.`, linkBtn("Open it in the explorer", `explore.html#d=${v.d.id}&v=${v.c.name}`, "link")));
+      if (isSeriesSet(v.d)) await answerSeries(q, v, { ...P }, box);
+      else if (!isCountry(v)) box.append(note(v.d.entity ? `"${v.c.title}" is broken down by ${v.d.entity.label.toLowerCase()}, which is best seen in the explorer.` : `"${v.c.title}" is a column in a list (${v.d.title}), which is best seen in the explorer.`, linkBtn("Open it in the explorer", `explore.html#d=${v.d.id}&v=${v.c.name}`, "link")));
       else if (P.places.length) await answerPlaces(q, v, { ...P }, box);
       else if (P.rank) await answerRank(q, v, { ...P }, box);
       else await answerWorld(q, v, { ...P }, box);
@@ -581,7 +624,7 @@ function evidence(u, q, box) {
   });
 }
 function closest(words) {                                              // when nothing matches exactly: the nearest variables, so there is always a way forward
-  const hits = []; V.forEach(v => { if (v.c.type !== "num" || v.d.id === "earthquakes-past-30-days") return; const n = words.filter(w => w.length > 2 && !VISFILL.has(w) && v.q.includes(w.replace(/(ies|es|s)$/, ""))).length; if (n) hits.push([n - v.c.title.length / 500, v]); });
+  const hits = []; V.forEach(v => { if (!v.ok) return; const n = words.filter(w => w.length > 2 && !VISFILL.has(w) && v.q.includes(w.replace(/(ies|es|s)$/, ""))).length; if (n) hits.push([n - v.c.title.length / 500, v]); });
   return hits.sort((a, b) => b[0] - a[0]).slice(0, 5).map(h => h[1]);
 }
 async function respond(text, opt = {}) {
@@ -593,7 +636,7 @@ async function respond(text, opt = {}) {
     const P = parse(q), count = q.split(/\s+/).length, follow = /^(and|what about|how about|same for|for|in|versus|vs|compared (to|with))\b/i.test(q), wantsVis = VIS.test(q);
     const bare = P.left.every(w => VISFILL.has(w));                                                                    // nothing in the words but "chart", "it", "since 2000" and the like
     if (!P.vars.length && !P.quake && last.v && ((wantsVis && bare) || (P.places.length && (count <= 4 || follow)))) { P.vars = [last.v]; if (!P.places.length && wantsVis) P.places = last.places; }   // "and China?" or "chart it" keeps the measure
-    if (P.vars.length && !P.places.length && !P.rank && last.places.length && follow && V.get(P.vars[0]).d.entity) P.places = last.places;   // "and its population?" keeps the places
+    if (P.vars.length && !P.places.length && !P.rank && last.places.length && follow && isCountry(V.get(P.vars[0]))) P.places = last.places;   // "and its population?" keeps the places
     const small = count <= 6 && !P.vars.length && !P.places.length && !P.quake && SMALL.find(([re]) => re.test(q));
     if (small && !opt.force) { turn.done(); box.append(el("p", "aitext", small[1])); return; }                       // a greeting needs no model
     const general = GENERAL.test(q), plan = wantsVis && !general ? visualPlan(q, P) : null, ai = await aiReady();
@@ -650,7 +693,9 @@ async function aiBadge() { const on = await aiReady(), b = $("#ai-state"); b.tex
 (async () => {
   const [man, countries, pulse] = await Promise.all([getJSON("data/datasets.json"), getJSON("data/countries.json").catch(() => ({ countries: {} })), getJSON("data/pulse.json").catch(() => ({}))]);
   M = man.datasets; M.checked = man.checked; C = countries.countries || {}; PULSE = pulse;
-  M.forEach(d => d.columns.forEach(c => V.set(`${d.id}::${c.name}`, { id: `${d.id}::${c.name}`, d, c, q: norm(`${c.title} ${c.name.replace(/_/g, " ")} ${c.unit || ""}`) })));
+  M.forEach(d => { const ok = isCountrySet(d) || isSeriesSet(d) || (!!d.entity && d.time.type === "year");                       // lists (earthquakes, bank failures) are never matched by a stray word
+    d.columns.forEach(c => V.set(`${d.id}::${c.name}`, { id: `${d.id}::${c.name}`, d, c, ok: ok && c.type === "num", q: norm(`${c.title} ${c.name.replace(/_/g, " ")} ${c.unit || ""}`) })); });
+  ASK_FIRST.unshift(...CONCEPTS_FIRST);
   buildPlaces(); PLACE = new Map(NAMES);
   const input = $("#q"), form = $("#askform"), grow = () => { input.style.height = "auto"; input.style.height = Math.min(168, input.scrollHeight + 4) + "px"; };
   form.addEventListener("submit", e => { e.preventDefault(); respond(input.value); });
