@@ -69,7 +69,7 @@ const CONCEPTS_MORE = [
   [/mortgages?|home loans?/, "us-mortgage-lending::mortgages_made"], [/mississippi/, "us-river-flow-monthly::mississippi_at_st_louis"], [/colorado river/, "us-river-flow-monthly::colorado_at_lees_ferry"],
   [/potomac/, "us-river-flow-monthly::potomac_near_washington"], [/hudson river/, "us-river-flow-monthly::hudson_at_green_island"], [/river flows?|flow of (the )?rivers?/, "us-river-flow-monthly::mississippi_at_st_louis"],
   [/leading indicators?/, "world-leading-indicators-and-exchange-rates::leading_indicator_usa"], [/real exchange rate/, "world-leading-indicators-and-exchange-rates::real_exchange_rate_united_states"],
-  [/stack ?overflow/, "stack-overflow-activity::questions_asked"], [/maryland/, "maryland-crime::violent_crime_rate"], [/electricity demand|power demand|grid demand/, "us-grid-demand-daily::demand_us48"],
+  [/maryland/, "maryland-crime::violent_crime_rate"], [/electricity demand|power demand|grid demand/, "us-grid-demand-daily::demand_us48"],
   [/bills? (introduced|in congress)|congress bills?/, "us-congress-and-rulemaking::bills_introduced"], [/laws? (passed|enacted)/, "us-congress-and-rulemaking::laws_enacted"], [/public comments?/, "us-congress-and-rulemaking::public_comments_posted"],
   [/rainfall|precipitation/, "environment-indicators::average_precipitation_in_depth"], [/protected (areas?|land)/, "environment-indicators::terrestrial_and_marine_protected_areas"],
 ];

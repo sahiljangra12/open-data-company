@@ -1508,21 +1508,6 @@ def hmda():
                   "US", "Economy and development", "US Federal Financial Institutions Examination Council, HMDA Data Browser", "https://ffiec.cfpb.gov/data-browser/", PD, cell, meta, ["mortgages_made", "amount_lent", "applications_denied"], "year", min_rows=4)
 
 
-# ---------- Stack Overflow: questions and answers each year ----------
-def stackoverflow():
-    def count(y, c):
-        a, b = int(datetime(y, 1, 1, tzinfo=timezone.utc).timestamp()), int(datetime(y + 1, 1, 1, tzinfo=timezone.utc).timestamp())
-        time.sleep(3)                                       # the service turns away callers that ask quickly
-        return J(f"https://api.stackexchange.com/2.3/questions?fromdate={a}&todate={b}&site=stackoverflow&filter=total", tries=1)["total"]
-    cell = yearly("stack-overflow-activity", 2008, count, ["questions_asked"], recent=2)
-    assert len(cell) == THIS_YEAR - 2008 + 1, f"stack-overflow-activity: {len(cell)} of {THIS_YEAR - 2008 + 1} years answered"   # a run with gaps would make an old year look like the latest
-    meta = dict(questions_asked=dict(title="Questions asked on Stack Overflow in the year", unit="questions", description="Questions still on the site, by the year they were asked. The current year is not complete."))
-    out = series("stack-overflow-activity", "Stack Overflow: questions asked each year", "How much programmers ask on the largest question-and-answer site for code.",
-                 "World", "Science and technology", "Stack Exchange API", "https://api.stackexchange.com", "CC BY-SA 4.0", cell, meta, ["questions_asked"], "year", min_rows=8)
-    out["partial"] = True
-    return out
-
-
 # ---------- loaders that wait for a free key ----------
 GRID = [("US48", "the lower 48 states"), ("PJM", "PJM (mid-Atlantic and Midwest)"), ("MISO", "MISO (Midwest and South)"), ("ERCO", "ERCOT (Texas)"), ("CISO", "California ISO"), ("SWPP", "Southwest Power Pool"), ("NYIS", "New York ISO"), ("ISNE", "ISO New England")]
 
@@ -1680,9 +1665,9 @@ def census_states():
 
 BUILDERS = [(lambda s=s: wb_set(s[0], s[1], s[2], s[3], s[4], s[5], **s[6])) for s in WB_SETS] + [(lambda s=s: owid_charts(*s)) for s in OWID_SETS] + [
     imf, un_population, undp, who, pwt, us_monthly, us_quarterly, us_daily, us_debt, us_climate, wikipedia, research, gbif, github_activity,
-    federal_register, fda, clinical_trials, fema, fdic, flu, chicago, nyc, us_spending, nih, eurostat, world_monthly, usgs_water, cdc_overdose, maryland, uk, climate_trace, hmda, stackoverflow,
+    federal_register, fda, clinical_trials, fema, fdic, flu, chicago, nyc, us_spending, nih, eurostat, world_monthly, usgs_water, cdc_overdose, maryland, uk, climate_trace, hmda,
     eia_grid, us_lawmaking, census_states,
 ]
 NAMES = [s[0] for s in WB_SETS] + [s[0] for s in OWID_SETS] + ["imf", "un_population", "undp", "who", "pwt", "us_monthly", "us_quarterly", "us_daily", "us_debt", "us_climate", "wikipedia", "research", "gbif",
-                                    "github_activity", "federal_register", "fda", "clinical_trials", "fema", "fdic", "flu", "chicago", "nyc", "us_spending", "nih", "eurostat", "world_monthly", "usgs_water", "cdc_overdose", "maryland", "uk", "climate_trace", "hmda", "stackoverflow",
+                                    "github_activity", "federal_register", "fda", "clinical_trials", "fema", "fdic", "flu", "chicago", "nyc", "us_spending", "nih", "eurostat", "world_monthly", "usgs_water", "cdc_overdose", "maryland", "uk", "climate_trace", "hmda",
                                     "eia_grid", "us_lawmaking", "census_states"]

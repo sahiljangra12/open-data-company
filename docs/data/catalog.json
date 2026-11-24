@@ -5,9 +5,9 @@
   "via": 29,
   "key": 35,
   "images": 7,
-  "bulk": 10,
+  "bulk": 11,
   "terms": 2,
-  "later": 20
+  "later": 19
  },
  "labels": {
   "live": "On the site",
@@ -2492,10 +2492,10 @@
    "update": "quarterly",
    "api": false,
    "buyers": "Developer-tool companies",
-   "status": "later",
-   "status_label": "Not loaded yet",
+   "status": "bulk",
+   "status_label": "Too large to host",
    "datasets": [],
-   "note": "Its loader is written but has not delivered data yet."
+   "note": "The full dump is too large to host, and its small API turned away this site's requests for being too frequent."
   },
   {
    "name": "Common Crawl",

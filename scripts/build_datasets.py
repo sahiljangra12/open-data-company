@@ -56,7 +56,7 @@ CADENCE = {  # how often each source itself changes; the site checks all of them
     "us-bank-failures": "Whenever a bank fails", "us-bank-failures-list": "Whenever a bank fails", "us-flu-hospital-admissions": "A new week every week",
     "us-nih-research-projects": "Every week",
     "europe-eurostat": "Revised by Eurostat through the year", "world-leading-indicators-and-exchange-rates": "A new month about once a month", "uk-economy-monthly": "A new month every month",
-    "climate-trace-emissions": "A few times a year", "stack-overflow-activity": "Every day", "us-river-flow-monthly": "A new month every month", "us-drug-overdose-deaths": "A new month every month, about four months behind",
+    "climate-trace-emissions": "A few times a year", "us-river-flow-monthly": "A new month every month", "us-drug-overdose-deaths": "A new month every month, about four months behind",
     "maryland-crime": "Rarely; the state's file ends in 2020", "us-mortgage-lending": "Once a year", "us-grid-demand-daily": "Every day", "us-congress-and-rulemaking": "Every day", "us-states-census": "Once a year, in September",
     "chicago-crime-monthly": "Every day, about a week behind", "nyc-traffic-crashes-monthly": "Every day", "us-federal-spending-by-agency": "Once a month",
 }
@@ -74,7 +74,7 @@ ORDER = ["co2-and-greenhouse-gases", "energy", "world-bank-development", "global
          "governance-indicators", "education-indicators", "poverty-and-inequality", "gender-indicators", "labour-indicators", "wellbeing-and-schooling", "top-incomes",
          "trade-and-finance", "food-and-agriculture", "food-supply", "penn-world-table", "technology-and-transport", "environment-indicators", "emissions-by-sector",
          "climate-trace-emissions", "forests-wildlife-and-plastic", "natural-disasters", "conflict-and-security", "renewable-capacity", "space-and-ai", "research-papers-by-year", "research-papers-by-country",
-         "wikipedia-pageviews", "stack-overflow-activity", "github-activity-by-country", "biodiversity-records-by-year", "biodiversity-records-by-country", "clinical-trials-started",
+         "wikipedia-pageviews", "github-activity-by-country", "biodiversity-records-by-year", "biodiversity-records-by-country", "clinical-trials-started",
          "world-leading-indicators-and-exchange-rates", "uk-economy-monthly", "imf-projections", "un-population-projections",
          "crude-oil-prices", "natural-gas-prices", "us-economy-monthly", "us-economy-quarterly", "us-rates-and-currencies-daily", "us-national-debt", "us-mortgage-lending", "us-grid-demand-daily", "us-states-census",
          "us-climate-monthly", "us-flu-hospital-admissions", "us-drug-overdose-deaths", "us-nih-research-projects", "us-river-flow-monthly", "us-fda-reports", "us-disaster-declarations", "us-disaster-declarations-list", "us-federal-register", "us-congress-and-rulemaking",

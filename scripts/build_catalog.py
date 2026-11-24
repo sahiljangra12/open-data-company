@@ -195,7 +195,6 @@ STATUS = {
     "Maryland Open Data": ("live", ["maryland-crime"], "Statewide crime, 1975 to 2020. Other tables are added one at a time."),
     "Climate TRACE": ("live", ["climate-trace-emissions"], "Country totals."),
     "HMDA mortgage records": ("live", ["us-mortgage-lending"], "Yearly national totals. The loan-by-loan files are too large to host."),
-    "Stack Exchange data dump": ("live", ["stack-overflow-activity"], "Questions asked each year, from its API. The full dump is too large to host."),
 
     "EU Open Data Portal": ("via", ["europe-eurostat"], "A catalog; Eurostat's tables are its core."),
     "data.gov.uk": ("via", ["uk-economy-monthly"], "A catalog; the main UK economic series come from the Office for National Statistics."),
@@ -236,7 +235,7 @@ FBI Crime Data Explorer|CourtListener|India data.gov.in|UN Comtrade|WTO Stats|DH
 Global Energy Monitor trackers|Google Earth Engine catalog"""
 IMAGES = "Landsat (USGS)|Sentinel (Copernicus)|MODIS and VIIRS (NASA)|VIIRS night lights (EOG)|WorldPop|JRC Global Surface Water|USDA Cropland Data Layer"
 BULK = """SBA loan data|Hospital price transparency files|BTS airline on-time data|DOL H-1B and PERM disclosures|NOAA Storm Events|OpenStreetMap|GDELT|GH Archive|
-Common Crawl|Wikidata"""
+Stack Exchange data dump|Common Crawl|Wikidata"""
 LATER = {  # open, with a reason it is not loaded yet
     "Open Baltimore": "A catalog of many tables; single tables are added one at a time.",
     "Humanitarian Data Exchange": "A catalog of other publishers' files.",
@@ -244,7 +243,7 @@ LATER = {  # open, with a reason it is not loaded yet
     "CFPB Consumer Complaints": "Its service turned away this site's automatic requests.", "FAO Food Price Index": "Published as a file whose address changes every month.",
 }
 RELATED = {"GH Archive": ["github-activity-by-country"], "Census American Community Survey": [], "NASA Earthdata": ["global-temperature"]}
-NOTES = {"GH Archive": "The full event archive is hundreds of gigabytes. GitHub's own country summary is on the site.", "Wikidata": "A database of facts rather than a table; nothing to load as one file.",
+NOTES = {"Stack Exchange data dump": "The full dump is too large to host, and its small API turned away this site's requests for being too frequent.", "GH Archive": "The full event archive is hundreds of gigabytes. GitHub's own country summary is on the site.", "Wikidata": "A database of facts rather than a table; nothing to load as one file.",
          "Census American Community Survey": "The Census service turned away this site's requests without a key.", "Census County Business Patterns": "The Census service turned away this site's requests without a key.",
          "NASA Earthdata": "Needs a NASA login. NASA's global temperature record is on the site from another NASA file.", "data.gov": "Its catalog search now asks for a key.",
          "WTO Stats": "Needs a key. Trade totals are on the site through the World Bank."}
