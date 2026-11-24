@@ -2085,38 +2085,32 @@ def birds():
 def us_courts():
     k = key("COURTLISTENER_API_TOKEN")
     h = {"Authorization": "Token " + k}
-    id, kinds = "us-court-opinions", dict(court_opinions="", supreme_court_opinions="&court=scotus")
-    _, old = prior(id)
-    cell = {d: {c: float(r[c]) for c in kinds if r.get(c, "") != ""} for d, r in old.items()}
-    budget, misses = 40, 0                                  # the service allows only a slow pace, so each run reads a few more years, newest first
+    id = "us-court-opinions"
+    store = SETS.parent / "cache" / f"{id}.json"            # the service answers only a handful of requests a day, so every answer is kept and the series grows over several days
+    got = json.loads(store.read_text()) if store.exists() else {}
     for y in range(THIS_YEAR, 1949, -1):
-        d = f"{y}-01-01"
-        for c, extra in kinds.items():
-            if budget <= 0 or misses >= 3 or (c in cell.get(d, {}) and y < THIS_YEAR - 1):
-                continue
-            budget -= 1
-            try:
-                n = J(f"https://www.courtlistener.com/api/rest/v4/search/?type=o&filed_after={y}-01-01&filed_before={y}-12-31{extra}", headers=h, tries=1, timeout=120)["count"]
-                assert isinstance(n, int), f"count is {str(n)[:60]}"
-                cell.setdefault(d, {})[c] = n
-                misses = 0
-            except Exception as e:
-                misses += 1
-                print(f"  us_courts {y} {c}: {str(e)[:60]}")
-                time.sleep(45)
-            time.sleep(7)
+        if str(y) in got and y < THIS_YEAR - 1:
+            continue
+        try:
+            n = J(f"https://www.courtlistener.com/api/rest/v4/search/?type=o&filed_after={y}-01-01&filed_before={y}-12-31", headers=h, tries=1, timeout=120)["count"]
+            assert isinstance(n, int), f"count is {str(n)[:60]}"
+            got[str(y)] = n
+        except Exception as e:
+            print(f"  us_courts stopped at {y}: {str(e)[:60]}; {len(got)} years held so far")
+            break                                           # turned away: stop at once and try again on the next run
+        time.sleep(8)
+    store.parent.mkdir(parents=True, exist_ok=True)
+    store.write_text(json.dumps(got, sort_keys=True, indent=0))
+    newest = THIS_YEAR if str(THIS_YEAR) in got else THIS_YEAR - 1
     keep = {}
-    for y in range(THIS_YEAR, 1949, -1):                    # only the unbroken run of years ending with the newest: a gap would make an old year look like the latest
-        d = f"{y}-01-01"
-        if all(c in cell.get(d, {}) for c in kinds):
-            keep[d] = cell[d]
-        else:
+    for y in range(newest, 1949, -1):                       # only the unbroken run of years ending with the newest: a gap would make an old year look like the latest
+        if str(y) not in got:
             break
-    assert len(keep) >= 8, f"us_courts: only {len(keep)} years in a row answered"
-    meta = dict(court_opinions=dict(title="US court opinions published in the year", unit="opinions", description="Written decisions of federal and state courts collected by CourtListener (Free Law Project). Coverage of lower courts is incomplete; the current year is not over. Earlier years are added a few at a time."),
-                supreme_court_opinions=dict(title="US Supreme Court opinions published in the year", unit="opinions", description="CourtListener (Free Law Project)."))
-    out = series(id, "US court opinions, year by year", "How many written decisions US courts publish each year, in all and from the Supreme Court.",
-                 "US", "Government and finance", "CourtListener, Free Law Project", "https://www.courtlistener.com", "Public domain court documents; CourtListener metadata CC BY-ND", keep, meta, list(kinds), "year", min_rows=8)
+        keep[f"{y}-01-01"] = dict(court_opinions=got[str(y)])
+    assert len(keep) >= 8, f"us_courts: {len(keep)} years in a row so far; the series is published once eight are held"
+    meta = dict(court_opinions=dict(title="US court opinions published in the year", unit="opinions", description="Written decisions of federal and state courts collected by CourtListener (Free Law Project). Coverage of lower courts is incomplete; the current year is not over. Earlier years are added a few at a time."))
+    out = series(id, "US court opinions, year by year", "How many written decisions US courts publish each year.",
+                 "US", "Government and finance", "CourtListener, Free Law Project", "https://www.courtlistener.com", "Public domain court documents; CourtListener metadata CC BY-ND", keep, meta, ["court_opinions"], "year", min_rows=8)
     out["partial"] = True
     return out
 
