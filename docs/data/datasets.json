@@ -1,5 +1,5 @@
 {
- "checked": "2026-11-24T11:03:05Z",
+ "checked": "2026-11-24T11:36:33Z",
  "cron": "23 5 * * *",
  "datasets": [
   {
@@ -5692,11 +5692,11 @@
    "time": {
     "col": "time",
     "type": "date",
-    "min": "2026-10-25T10:51:01Z",
+    "min": "2026-10-25T11:24:13Z",
     "max": "2026-11-24T10:29:48Z"
    },
    "entity": null,
-   "rows": 1806,
+   "rows": 1805,
    "columns": [
     {
      "name": "magnitude",
@@ -5704,7 +5704,7 @@
      "unit": "",
      "description": "",
      "type": "num",
-     "filled": 1806
+     "filled": 1805
     },
     {
      "name": "place",
@@ -5712,7 +5712,7 @@
      "unit": "",
      "description": "",
      "type": "str",
-     "filled": 1806
+     "filled": 1805
     },
     {
      "name": "latitude",
@@ -5720,7 +5720,7 @@
      "unit": "degrees",
      "description": "",
      "type": "num",
-     "filled": 1806
+     "filled": 1805
     },
     {
      "name": "longitude",
@@ -5728,7 +5728,7 @@
      "unit": "degrees",
      "description": "",
      "type": "num",
-     "filled": 1806
+     "filled": 1805
     },
     {
      "name": "depth_km",
@@ -5736,7 +5736,7 @@
      "unit": "km",
      "description": "",
      "type": "num",
-     "filled": 1806
+     "filled": 1805
     },
     {
      "name": "magnitude_type",
@@ -5744,7 +5744,7 @@
      "unit": "",
      "description": "",
      "type": "str",
-     "filled": 1806
+     "filled": 1805
     },
     {
      "name": "event_type",
@@ -5752,7 +5752,7 @@
      "unit": "",
      "description": "",
      "type": "str",
-     "filled": 1806
+     "filled": 1805
     },
     {
      "name": "significance",
@@ -5760,7 +5760,7 @@
      "unit": "0-1000",
      "description": "USGS score combining magnitude, felt reports and estimated impact.",
      "type": "num",
-     "filled": 1806
+     "filled": 1805
     },
     {
      "name": "tsunami_flag",
@@ -5768,7 +5768,7 @@
      "unit": "",
      "description": "1 if the event was in an oceanic region and may warrant tsunami information; not a warning.",
      "type": "num",
-     "filled": 1806
+     "filled": 1805
     },
     {
      "name": "felt_reports",
@@ -5784,10 +5784,10 @@
      "unit": "",
      "description": "",
      "type": "str",
-     "filled": 1806
+     "filled": 1805
     }
    ],
-   "bytes": 315831,
+   "bytes": 315645,
    "built": "2026-11-24",
    "coverage": "Rolling 30 days",
    "default_vars": [
@@ -29958,7 +29958,7 @@
    "description": "War and safety by country and year: what armies cost, who holds nuclear warheads, how many people are killed, and how many flee.",
    "region": "World",
    "domain": "Government and finance",
-   "source": "SIPRI, Federation of American Scientists, UNODC, Global Terrorism Database and UNHCR, via Our World in Data",
+   "source": "SIPRI, Federation of American Scientists, UNODC, Global Terrorism Database, UCDP and UNHCR, via Our World in Data",
    "source_url": "https://ourworldindata.org",
    "licence": "CC BY 4.0 (Our World in Data; original sources named per variable)",
    "file": "data/sets/conflict-and-security.csv",
@@ -29977,7 +29977,7 @@
     "label_col": "country",
     "label": "Country or region"
    },
-   "rows": 15458,
+   "rows": 16189,
    "columns": [
     {
      "name": "military_spending",
@@ -30034,12 +30034,20 @@
      "description": "Refugees are people who fled their country of origin and are in need of international protection. They have already been granted asylum status in the country they moved to. This includes all refugees who live in this country, not just those who arrived that year. Source: UNHCR (2026) – with major processing by Our World in Data. Our World in Data chart: refugee-population-by-country-or-territory-o",
      "type": "num",
      "filled": 7778
+    },
+    {
+     "name": "deaths_in_armed_conflicts",
+     "title": "Deaths in armed conflicts (best estimate)",
+     "unit": "deaths",
+     "description": "Best estimate of the number of deaths of combatants and civilians due to fighting in interstate, intrastate, extrasystemic, non-state conflicts, and one-sided violence that were ongoing that year. Source: Uppsala Conflict Data Program (2026); geoBoundaries (2023) – processed by Our World in Data. Our World in Data chart: deaths-in-armed-conflicts.",
+     "type": "num",
+     "filled": 7844
     }
    ],
-   "bytes": 695690,
+   "bytes": 750401,
    "built": "2026-11-24",
    "coverage": "1945 to 2026",
-   "entities": 314,
+   "entities": 323,
    "chart_entities": [
     "WLD",
     "CHN",
@@ -30051,6 +30059,14 @@
    "cadence": "Revised by Our World in Data about once a year",
    "places": [
     [
+     "OWID_ABK",
+     "Abkhazia"
+    ],
+    [
+     "OWID_ABYEI",
+     "Abyei"
+    ],
+    [
      "AFG",
      "Afghanistan"
     ],
@@ -30061,6 +30077,10 @@
     [
      "OWID_AFRICA_SIPRI",
      "Africa (SIPRI)"
+    ],
+    [
+     "OWID_AFRICA_UCDP",
+     "Africa (UCDP)"
     ],
     [
      "UN_AFR",
@@ -30081,6 +30101,10 @@
     [
      "OWID_AMERICAS_SIPRI",
      "Americas (SIPRI)"
+    ],
+    [
+     "OWID_AMERICAS_UCDP",
+     "Americas (UCDP)"
     ],
     [
      "OWID_AMERICAS_UN",
@@ -30125,6 +30149,10 @@
     [
      "UN_ASI",
      "Asia (UN)"
+    ],
+    [
+     "OWID_ASIA_AND_OCEANIA_UCDP",
+     "Asia and Oceania (UCDP)"
     ],
     [
      "OWID_AUSTRALASIA_OCEANIA",
@@ -30429,6 +30457,10 @@
     [
      "OWID_EUROPE_SIPRI",
      "Europe (SIPRI)"
+    ],
+    [
+     "OWID_EUROPE_UCDP",
+     "Europe (UCDP)"
     ],
     [
      "UN_EUR",
@@ -30737,6 +30769,10 @@
     [
      "OWID_MIDDLE_EAST_SIPRI",
      "Middle East (SIPRI)"
+    ],
+    [
+     "OWID_MIDDLE_EAST_UCDP",
+     "Middle East (UCDP)"
     ],
     [
      "MDA",
@@ -31071,6 +31107,10 @@
      "South Korea"
     ],
     [
+     "OWID_SOS",
+     "South Ossetia"
+    ],
+    [
      "SSD",
      "South Sudan"
     ],
@@ -31291,12 +31331,1020 @@
      "Yemen Arab Republic"
     ],
     [
+     "OWID_YPR",
+     "Yemen People's Republic"
+    ],
+    [
      "OWID_YGS",
      "Yugoslavia"
     ],
     [
      "OWID_ZAIRE",
      "Zaire"
+    ],
+    [
+     "ZMB",
+     "Zambia"
+    ],
+    [
+     "ZWE",
+     "Zimbabwe"
+    ]
+   ]
+  },
+  {
+   "id": "renewable-capacity",
+   "title": "Solar and wind power capacity installed",
+   "description": "How much solar and wind generating capacity each country has built.",
+   "region": "World",
+   "domain": "Energy",
+   "source": "International Renewable Energy Agency (IRENA), via Our World in Data",
+   "source_url": "https://ourworldindata.org",
+   "licence": "CC BY 4.0 (Our World in Data; original sources named per variable)",
+   "file": "data/sets/renewable-capacity.csv",
+   "keys": [
+    "code",
+    "year"
+   ],
+   "time": {
+    "col": "year",
+    "type": "year",
+    "min": "2000",
+    "max": "2025"
+   },
+   "entity": {
+    "col": "code",
+    "label_col": "country",
+    "label": "Country or region"
+   },
+   "rows": 4819,
+   "columns": [
+    {
+     "name": "solar_capacity",
+     "title": "Solar power capacity installed",
+     "unit": "gigawatts",
+     "description": "Total solar (on- and off-grid) electricity installed capacity, measured in gigawatts. This includes solar photovoltaic and concentrated solar power. Source: IRENA (2026) – processed by Our World in Data. Our World in Data chart: installed-solar-pv-capacity.",
+     "type": "num",
+     "filled": 4494
+    },
+    {
+     "name": "wind_capacity",
+     "title": "Wind power capacity installed",
+     "unit": "gigawatts",
+     "description": "Total wind (on- and off-grid) electricity installed capacity, measured in gigawatts. This includes onshore and offshore wind. Source: IRENA (2026) – processed by Our World in Data. Our World in Data chart: cumulative-installed-wind-energy-capacity-gigawatts.",
+     "type": "num",
+     "filled": 3343
+    }
+   ],
+   "bytes": 164299,
+   "built": "2026-11-24",
+   "coverage": "2000 to 2025",
+   "entities": 236,
+   "chart_entities": [
+    "WLD",
+    "CHN",
+    "IND",
+    "USA",
+    "BRA",
+    "NGA"
+   ],
+   "cadence": "Revised by Our World in Data about once a year",
+   "places": [
+    [
+     "AFG",
+     "Afghanistan"
+    ],
+    [
+     "OWID_AFR",
+     "Africa"
+    ],
+    [
+     "ALB",
+     "Albania"
+    ],
+    [
+     "DZA",
+     "Algeria"
+    ],
+    [
+     "ASM",
+     "American Samoa"
+    ],
+    [
+     "AND",
+     "Andorra"
+    ],
+    [
+     "AGO",
+     "Angola"
+    ],
+    [
+     "AIA",
+     "Anguilla"
+    ],
+    [
+     "ATG",
+     "Antigua and Barbuda"
+    ],
+    [
+     "ARG",
+     "Argentina"
+    ],
+    [
+     "ARM",
+     "Armenia"
+    ],
+    [
+     "ABW",
+     "Aruba"
+    ],
+    [
+     "OWID_ASI",
+     "Asia"
+    ],
+    [
+     "AUS",
+     "Australia"
+    ],
+    [
+     "AUT",
+     "Austria"
+    ],
+    [
+     "AZE",
+     "Azerbaijan"
+    ],
+    [
+     "BHS",
+     "Bahamas"
+    ],
+    [
+     "BHR",
+     "Bahrain"
+    ],
+    [
+     "BGD",
+     "Bangladesh"
+    ],
+    [
+     "BRB",
+     "Barbados"
+    ],
+    [
+     "BLR",
+     "Belarus"
+    ],
+    [
+     "BEL",
+     "Belgium"
+    ],
+    [
+     "BLZ",
+     "Belize"
+    ],
+    [
+     "BEN",
+     "Benin"
+    ],
+    [
+     "BTN",
+     "Bhutan"
+    ],
+    [
+     "BOL",
+     "Bolivia"
+    ],
+    [
+     "BES",
+     "Bonaire Sint Eustatius and Saba"
+    ],
+    [
+     "BIH",
+     "Bosnia and Herzegovina"
+    ],
+    [
+     "BWA",
+     "Botswana"
+    ],
+    [
+     "BRA",
+     "Brazil"
+    ],
+    [
+     "VGB",
+     "British Virgin Islands"
+    ],
+    [
+     "BRN",
+     "Brunei"
+    ],
+    [
+     "BGR",
+     "Bulgaria"
+    ],
+    [
+     "BFA",
+     "Burkina Faso"
+    ],
+    [
+     "BDI",
+     "Burundi"
+    ],
+    [
+     "KHM",
+     "Cambodia"
+    ],
+    [
+     "CMR",
+     "Cameroon"
+    ],
+    [
+     "CAN",
+     "Canada"
+    ],
+    [
+     "CPV",
+     "Cape Verde"
+    ],
+    [
+     "CYM",
+     "Cayman Islands"
+    ],
+    [
+     "CAF",
+     "Central African Republic"
+    ],
+    [
+     "TCD",
+     "Chad"
+    ],
+    [
+     "CHL",
+     "Chile"
+    ],
+    [
+     "CHN",
+     "China"
+    ],
+    [
+     "COL",
+     "Colombia"
+    ],
+    [
+     "COM",
+     "Comoros"
+    ],
+    [
+     "COG",
+     "Congo"
+    ],
+    [
+     "COK",
+     "Cook Islands"
+    ],
+    [
+     "CRI",
+     "Costa Rica"
+    ],
+    [
+     "CIV",
+     "Cote d'Ivoire"
+    ],
+    [
+     "HRV",
+     "Croatia"
+    ],
+    [
+     "CUB",
+     "Cuba"
+    ],
+    [
+     "CUW",
+     "Curacao"
+    ],
+    [
+     "CYP",
+     "Cyprus"
+    ],
+    [
+     "CZE",
+     "Czechia"
+    ],
+    [
+     "COD",
+     "Democratic Republic of Congo"
+    ],
+    [
+     "DNK",
+     "Denmark"
+    ],
+    [
+     "DJI",
+     "Djibouti"
+    ],
+    [
+     "DMA",
+     "Dominica"
+    ],
+    [
+     "DOM",
+     "Dominican Republic"
+    ],
+    [
+     "TLS",
+     "East Timor"
+    ],
+    [
+     "ECU",
+     "Ecuador"
+    ],
+    [
+     "EGY",
+     "Egypt"
+    ],
+    [
+     "SLV",
+     "El Salvador"
+    ],
+    [
+     "GNQ",
+     "Equatorial Guinea"
+    ],
+    [
+     "ERI",
+     "Eritrea"
+    ],
+    [
+     "EST",
+     "Estonia"
+    ],
+    [
+     "SWZ",
+     "Eswatini"
+    ],
+    [
+     "ETH",
+     "Ethiopia"
+    ],
+    [
+     "OWID_EUR",
+     "Europe"
+    ],
+    [
+     "OWID_EU27",
+     "European Union (27)"
+    ],
+    [
+     "FLK",
+     "Falkland Islands"
+    ],
+    [
+     "FRO",
+     "Faroe Islands"
+    ],
+    [
+     "FJI",
+     "Fiji"
+    ],
+    [
+     "FIN",
+     "Finland"
+    ],
+    [
+     "FRA",
+     "France"
+    ],
+    [
+     "GUF",
+     "French Guiana"
+    ],
+    [
+     "PYF",
+     "French Polynesia"
+    ],
+    [
+     "GAB",
+     "Gabon"
+    ],
+    [
+     "GMB",
+     "Gambia"
+    ],
+    [
+     "GEO",
+     "Georgia"
+    ],
+    [
+     "DEU",
+     "Germany"
+    ],
+    [
+     "GHA",
+     "Ghana"
+    ],
+    [
+     "GRC",
+     "Greece"
+    ],
+    [
+     "GRL",
+     "Greenland"
+    ],
+    [
+     "GRD",
+     "Grenada"
+    ],
+    [
+     "GLP",
+     "Guadeloupe"
+    ],
+    [
+     "GUM",
+     "Guam"
+    ],
+    [
+     "GTM",
+     "Guatemala"
+    ],
+    [
+     "GIN",
+     "Guinea"
+    ],
+    [
+     "GNB",
+     "Guinea-Bissau"
+    ],
+    [
+     "GUY",
+     "Guyana"
+    ],
+    [
+     "HTI",
+     "Haiti"
+    ],
+    [
+     "OWID_HIC",
+     "High-income countries"
+    ],
+    [
+     "HND",
+     "Honduras"
+    ],
+    [
+     "HKG",
+     "Hong Kong"
+    ],
+    [
+     "HUN",
+     "Hungary"
+    ],
+    [
+     "ISL",
+     "Iceland"
+    ],
+    [
+     "IND",
+     "India"
+    ],
+    [
+     "IDN",
+     "Indonesia"
+    ],
+    [
+     "IRN",
+     "Iran"
+    ],
+    [
+     "IRQ",
+     "Iraq"
+    ],
+    [
+     "IRL",
+     "Ireland"
+    ],
+    [
+     "ISR",
+     "Israel"
+    ],
+    [
+     "ITA",
+     "Italy"
+    ],
+    [
+     "JAM",
+     "Jamaica"
+    ],
+    [
+     "JPN",
+     "Japan"
+    ],
+    [
+     "JOR",
+     "Jordan"
+    ],
+    [
+     "KAZ",
+     "Kazakhstan"
+    ],
+    [
+     "KEN",
+     "Kenya"
+    ],
+    [
+     "KIR",
+     "Kiribati"
+    ],
+    [
+     "XKX",
+     "Kosovo"
+    ],
+    [
+     "KWT",
+     "Kuwait"
+    ],
+    [
+     "KGZ",
+     "Kyrgyzstan"
+    ],
+    [
+     "LAO",
+     "Laos"
+    ],
+    [
+     "LVA",
+     "Latvia"
+    ],
+    [
+     "LBN",
+     "Lebanon"
+    ],
+    [
+     "LSO",
+     "Lesotho"
+    ],
+    [
+     "LBR",
+     "Liberia"
+    ],
+    [
+     "LBY",
+     "Libya"
+    ],
+    [
+     "LTU",
+     "Lithuania"
+    ],
+    [
+     "OWID_LIC",
+     "Low-income countries"
+    ],
+    [
+     "OWID_LMC",
+     "Lower-middle-income countries"
+    ],
+    [
+     "LUX",
+     "Luxembourg"
+    ],
+    [
+     "MDG",
+     "Madagascar"
+    ],
+    [
+     "MWI",
+     "Malawi"
+    ],
+    [
+     "MYS",
+     "Malaysia"
+    ],
+    [
+     "MDV",
+     "Maldives"
+    ],
+    [
+     "MLI",
+     "Mali"
+    ],
+    [
+     "MLT",
+     "Malta"
+    ],
+    [
+     "MHL",
+     "Marshall Islands"
+    ],
+    [
+     "MTQ",
+     "Martinique"
+    ],
+    [
+     "MRT",
+     "Mauritania"
+    ],
+    [
+     "MUS",
+     "Mauritius"
+    ],
+    [
+     "MYT",
+     "Mayotte"
+    ],
+    [
+     "MEX",
+     "Mexico"
+    ],
+    [
+     "FSM",
+     "Micronesia (country)"
+    ],
+    [
+     "MDA",
+     "Moldova"
+    ],
+    [
+     "MNG",
+     "Mongolia"
+    ],
+    [
+     "MNE",
+     "Montenegro"
+    ],
+    [
+     "MSR",
+     "Montserrat"
+    ],
+    [
+     "MAR",
+     "Morocco"
+    ],
+    [
+     "MOZ",
+     "Mozambique"
+    ],
+    [
+     "MMR",
+     "Myanmar"
+    ],
+    [
+     "NAM",
+     "Namibia"
+    ],
+    [
+     "NRU",
+     "Nauru"
+    ],
+    [
+     "NPL",
+     "Nepal"
+    ],
+    [
+     "NLD",
+     "Netherlands"
+    ],
+    [
+     "NCL",
+     "New Caledonia"
+    ],
+    [
+     "NZL",
+     "New Zealand"
+    ],
+    [
+     "NIC",
+     "Nicaragua"
+    ],
+    [
+     "NER",
+     "Niger"
+    ],
+    [
+     "NGA",
+     "Nigeria"
+    ],
+    [
+     "NIU",
+     "Niue"
+    ],
+    [
+     "OWID_NAM",
+     "North America"
+    ],
+    [
+     "PRK",
+     "North Korea"
+    ],
+    [
+     "MKD",
+     "North Macedonia"
+    ],
+    [
+     "NOR",
+     "Norway"
+    ],
+    [
+     "OWID_OCE",
+     "Oceania"
+    ],
+    [
+     "OMN",
+     "Oman"
+    ],
+    [
+     "PAK",
+     "Pakistan"
+    ],
+    [
+     "PLW",
+     "Palau"
+    ],
+    [
+     "PSE",
+     "Palestine"
+    ],
+    [
+     "PAN",
+     "Panama"
+    ],
+    [
+     "PNG",
+     "Papua New Guinea"
+    ],
+    [
+     "PRY",
+     "Paraguay"
+    ],
+    [
+     "PER",
+     "Peru"
+    ],
+    [
+     "PHL",
+     "Philippines"
+    ],
+    [
+     "POL",
+     "Poland"
+    ],
+    [
+     "PRT",
+     "Portugal"
+    ],
+    [
+     "PRI",
+     "Puerto Rico"
+    ],
+    [
+     "QAT",
+     "Qatar"
+    ],
+    [
+     "REU",
+     "Reunion"
+    ],
+    [
+     "ROU",
+     "Romania"
+    ],
+    [
+     "RUS",
+     "Russia"
+    ],
+    [
+     "RWA",
+     "Rwanda"
+    ],
+    [
+     "BLM",
+     "Saint Barthelemy"
+    ],
+    [
+     "KNA",
+     "Saint Kitts and Nevis"
+    ],
+    [
+     "LCA",
+     "Saint Lucia"
+    ],
+    [
+     "MAF",
+     "Saint Martin (French part)"
+    ],
+    [
+     "SPM",
+     "Saint Pierre and Miquelon"
+    ],
+    [
+     "VCT",
+     "Saint Vincent and the Grenadines"
+    ],
+    [
+     "WSM",
+     "Samoa"
+    ],
+    [
+     "STP",
+     "Sao Tome and Principe"
+    ],
+    [
+     "SAU",
+     "Saudi Arabia"
+    ],
+    [
+     "SEN",
+     "Senegal"
+    ],
+    [
+     "SRB",
+     "Serbia"
+    ],
+    [
+     "SYC",
+     "Seychelles"
+    ],
+    [
+     "SLE",
+     "Sierra Leone"
+    ],
+    [
+     "SGP",
+     "Singapore"
+    ],
+    [
+     "SXM",
+     "Sint Maarten (Dutch part)"
+    ],
+    [
+     "SVK",
+     "Slovakia"
+    ],
+    [
+     "SVN",
+     "Slovenia"
+    ],
+    [
+     "SLB",
+     "Solomon Islands"
+    ],
+    [
+     "SOM",
+     "Somalia"
+    ],
+    [
+     "ZAF",
+     "South Africa"
+    ],
+    [
+     "OWID_SAM",
+     "South America"
+    ],
+    [
+     "SGS",
+     "South Georgia and the South Sandwich Islands"
+    ],
+    [
+     "KOR",
+     "South Korea"
+    ],
+    [
+     "SSD",
+     "South Sudan"
+    ],
+    [
+     "ESP",
+     "Spain"
+    ],
+    [
+     "LKA",
+     "Sri Lanka"
+    ],
+    [
+     "SDN",
+     "Sudan"
+    ],
+    [
+     "SUR",
+     "Suriname"
+    ],
+    [
+     "SWE",
+     "Sweden"
+    ],
+    [
+     "CHE",
+     "Switzerland"
+    ],
+    [
+     "SYR",
+     "Syria"
+    ],
+    [
+     "TWN",
+     "Taiwan"
+    ],
+    [
+     "TJK",
+     "Tajikistan"
+    ],
+    [
+     "TZA",
+     "Tanzania"
+    ],
+    [
+     "THA",
+     "Thailand"
+    ],
+    [
+     "TGO",
+     "Togo"
+    ],
+    [
+     "TKL",
+     "Tokelau"
+    ],
+    [
+     "TON",
+     "Tonga"
+    ],
+    [
+     "TTO",
+     "Trinidad and Tobago"
+    ],
+    [
+     "TUN",
+     "Tunisia"
+    ],
+    [
+     "TUR",
+     "Turkey"
+    ],
+    [
+     "TKM",
+     "Turkmenistan"
+    ],
+    [
+     "TCA",
+     "Turks and Caicos Islands"
+    ],
+    [
+     "TUV",
+     "Tuvalu"
+    ],
+    [
+     "UGA",
+     "Uganda"
+    ],
+    [
+     "UKR",
+     "Ukraine"
+    ],
+    [
+     "ARE",
+     "United Arab Emirates"
+    ],
+    [
+     "GBR",
+     "United Kingdom"
+    ],
+    [
+     "USA",
+     "United States"
+    ],
+    [
+     "VIR",
+     "United States Virgin Islands"
+    ],
+    [
+     "OWID_UMC",
+     "Upper-middle-income countries"
+    ],
+    [
+     "URY",
+     "Uruguay"
+    ],
+    [
+     "UZB",
+     "Uzbekistan"
+    ],
+    [
+     "VUT",
+     "Vanuatu"
+    ],
+    [
+     "VEN",
+     "Venezuela"
+    ],
+    [
+     "VNM",
+     "Vietnam"
+    ],
+    [
+     "WLD",
+     "World"
+    ],
+    [
+     "YEM",
+     "Yemen"
     ],
     [
      "ZMB",
@@ -38806,6 +39854,44 @@
    "coverage": "2022 to 2026",
    "step": "week",
    "cadence": "A new week every week"
+  },
+  {
+   "id": "us-nih-research-projects",
+   "title": "US medical research projects funded each year",
+   "description": "How many research projects the US National Institutes of Health pays for in each fiscal year.",
+   "region": "US",
+   "domain": "Health",
+   "source": "US National Institutes of Health, RePORTER",
+   "source_url": "https://reporter.nih.gov",
+   "licence": "Public domain (US federal data)",
+   "file": "data/sets/us-nih-research-projects.csv",
+   "keys": [
+    "date"
+   ],
+   "time": {
+    "col": "date",
+    "type": "date",
+    "min": "1990-01-01",
+    "max": "2026-01-01"
+   },
+   "entity": null,
+   "rows": 37,
+   "columns": [
+    {
+     "name": "projects_funded",
+     "title": "Research projects funded by the US National Institutes of Health",
+     "unit": "projects",
+     "description": "Project records in NIH RePORTER for each US government fiscal year (October to September), including continuing awards. The current year is not complete.",
+     "type": "num",
+     "filled": 37
+    }
+   ],
+   "bytes": 688,
+   "built": "2026-11-24",
+   "coverage": "1990 to 2026",
+   "step": "year",
+   "partial": true,
+   "cadence": "Every week"
   },
   {
    "id": "us-fda-reports",

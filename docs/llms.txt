@@ -11,7 +11,7 @@ When you answer a question with these numbers, give the value, its year and the 
 - Newest value of every variable for every country (JSON, country-and-year datasets): https://sahiljangra12.github.io/open-data-company/data/latest/<dataset id>.json
 - Country list with World Bank region and income group (JSON): https://sahiljangra12.github.io/open-data-company/data/countries.json
 - Country-and-year files have the columns `code` (ISO alpha-3, or a World Bank or Our World in Data code for a region), `country`, `year`, then one column per variable. Empty cells mean no data.
-- Last checked: 2026-11-24T11:03:05Z. Checked daily at about 05:23 UTC.
+- Last checked: 2026-11-24T11:36:33Z. Checked daily at about 05:23 UTC.
 
 ## Datasets
 
@@ -64,7 +64,7 @@ The concentration of carbon dioxide in the air, measured at Mauna Loa since 1958
 
 Every earthquake of magnitude 2.5 or greater recorded worldwide in the past 30 days, with location, depth and magnitude.
 
-- File: https://sahiljangra12.github.io/open-data-company/data/sets/earthquakes-past-30-days.csv (1,806 rows, 316 KB)
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/earthquakes-past-30-days.csv (1,805 rows, 316 KB)
 - Keys: id, time. Covers Rolling 30 days.
 - Source: US Geological Survey, Earthquake Hazards Program (https://earthquake.usgs.gov/earthquakes/feed/). Licence: Public domain (US federal data).
 - Variables: `magnitude` Magnitude; `place` Nearest place; `latitude` Latitude (degrees); `longitude` Longitude (degrees); `depth_km` Depth (km); `magnitude_type` Magnitude type; `event_type` Event type; `significance` Significance score (0-1000); `tsunami_flag` Tsunami flag; `felt_reports` Felt reports (reports); `url` USGS event page
@@ -271,10 +271,19 @@ How many people natural disasters kill and affect in each country each year, and
 
 War and safety by country and year: what armies cost, who holds nuclear warheads, how many people are killed, and how many flee.
 
-- File: https://sahiljangra12.github.io/open-data-company/data/sets/conflict-and-security.csv (15,458 rows, 696 KB)
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/conflict-and-security.csv (16,189 rows, 750 KB)
 - Keys: code, year. Covers 1945 to 2026.
-- Source: SIPRI, Federation of American Scientists, UNODC, Global Terrorism Database and UNHCR, via Our World in Data (https://ourworldindata.org). Licence: CC BY 4.0 (Our World in Data; original sources named per variable).
-- Variables: `military_spending` Military spending (constant 2024 US$); `nuclear_warheads` Nuclear warheads (warheads); `homicide_rate` Homicide rate (homicides per 100,000 people); `terrorism_deaths` Deaths from terrorist attacks (deaths); `terrorist_attacks` Terrorist attacks (attacks); `refugees_by_origin` Refugees, by the country they fled (people); `refugees_hosted` Refugees, by the country hosting them (people)
+- Source: SIPRI, Federation of American Scientists, UNODC, Global Terrorism Database, UCDP and UNHCR, via Our World in Data (https://ourworldindata.org). Licence: CC BY 4.0 (Our World in Data; original sources named per variable).
+- Variables: `military_spending` Military spending (constant 2024 US$); `nuclear_warheads` Nuclear warheads (warheads); `homicide_rate` Homicide rate (homicides per 100,000 people); `terrorism_deaths` Deaths from terrorist attacks (deaths); `terrorist_attacks` Terrorist attacks (attacks); `refugees_by_origin` Refugees, by the country they fled (people); `refugees_hosted` Refugees, by the country hosting them (people); `deaths_in_armed_conflicts` Deaths in armed conflicts (best estimate) (deaths)
+
+### Solar and wind power capacity installed
+
+How much solar and wind generating capacity each country has built.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/renewable-capacity.csv (4,819 rows, 164 KB)
+- Keys: code, year. Covers 2000 to 2025.
+- Source: International Renewable Energy Agency (IRENA), via Our World in Data (https://ourworldindata.org). Licence: CC BY 4.0 (Our World in Data; original sources named per variable).
+- Variables: `solar_capacity` Solar power capacity installed (gigawatts); `wind_capacity` Wind power capacity installed (gigawatts)
 
 ### Objects launched into space, and AI research
 
@@ -437,6 +446,15 @@ How many people were admitted to hospital with confirmed flu each week, for the 
 - Keys: date. Covers 2022 to 2026.
 - Source: Centers for Disease Control and Prevention (NHSN), via the FluSight Forecast Hub (https://github.com/cdcepi/FluSight-forecast-hub). Licence: Public domain (US federal data).
 - Variables: `united_states` Flu hospital admissions in the week, the United States (people admitted); `alabama` Flu hospital admissions in the week, Alabama (people admitted); `alaska` Flu hospital admissions in the week, Alaska (people admitted); `arizona` Flu hospital admissions in the week, Arizona (people admitted); `arkansas` Flu hospital admissions in the week, Arkansas (people admitted); `california` Flu hospital admissions in the week, California (people admitted); `colorado` Flu hospital admissions in the week, Colorado (people admitted); `connecticut` Flu hospital admissions in the week, Connecticut (people admitted); `delaware` Flu hospital admissions in the week, Delaware (people admitted); `district_of_columbia` Flu hospital admissions in the week, District of Columbia (people admitted); `florida` Flu hospital admissions in the week, Florida (people admitted); `georgia` Flu hospital admissions in the week, Georgia (people admitted); `hawaii` Flu hospital admissions in the week, Hawaii (people admitted); `idaho` Flu hospital admissions in the week, Idaho (people admitted); `illinois` Flu hospital admissions in the week, Illinois (people admitted); `indiana` Flu hospital admissions in the week, Indiana (people admitted); `iowa` Flu hospital admissions in the week, Iowa (people admitted); `kansas` Flu hospital admissions in the week, Kansas (people admitted); `kentucky` Flu hospital admissions in the week, Kentucky (people admitted); `louisiana` Flu hospital admissions in the week, Louisiana (people admitted); `maine` Flu hospital admissions in the week, Maine (people admitted); `maryland` Flu hospital admissions in the week, Maryland (people admitted); `massachusetts` Flu hospital admissions in the week, Massachusetts (people admitted); `michigan` Flu hospital admissions in the week, Michigan (people admitted); `minnesota` Flu hospital admissions in the week, Minnesota (people admitted); `mississippi` Flu hospital admissions in the week, Mississippi (people admitted); `missouri` Flu hospital admissions in the week, Missouri (people admitted); `montana` Flu hospital admissions in the week, Montana (people admitted); `nebraska` Flu hospital admissions in the week, Nebraska (people admitted); `nevada` Flu hospital admissions in the week, Nevada (people admitted); `new_hampshire` Flu hospital admissions in the week, New Hampshire (people admitted); `new_jersey` Flu hospital admissions in the week, New Jersey (people admitted); `new_mexico` Flu hospital admissions in the week, New Mexico (people admitted); `new_york` Flu hospital admissions in the week, New York (people admitted); `north_carolina` Flu hospital admissions in the week, North Carolina (people admitted); `north_dakota` Flu hospital admissions in the week, North Dakota (people admitted); `ohio` Flu hospital admissions in the week, Ohio (people admitted); `oklahoma` Flu hospital admissions in the week, Oklahoma (people admitted); `oregon` Flu hospital admissions in the week, Oregon (people admitted); `pennsylvania` Flu hospital admissions in the week, Pennsylvania (people admitted); `puerto_rico` Flu hospital admissions in the week, Puerto Rico (people admitted); `rhode_island` Flu hospital admissions in the week, Rhode Island (people admitted); `south_carolina` Flu hospital admissions in the week, South Carolina (people admitted); `south_dakota` Flu hospital admissions in the week, South Dakota (people admitted); `tennessee` Flu hospital admissions in the week, Tennessee (people admitted); `texas` Flu hospital admissions in the week, Texas (people admitted); `utah` Flu hospital admissions in the week, Utah (people admitted); `vermont` Flu hospital admissions in the week, Vermont (people admitted); `virginia` Flu hospital admissions in the week, Virginia (people admitted); `washington` Flu hospital admissions in the week, Washington (people admitted); `west_virginia` Flu hospital admissions in the week, West Virginia (people admitted); `wisconsin` Flu hospital admissions in the week, Wisconsin (people admitted); `wyoming` Flu hospital admissions in the week, Wyoming (people admitted)
+
+### US medical research projects funded each year
+
+How many research projects the US National Institutes of Health pays for in each fiscal year.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-nih-research-projects.csv (37 rows, 1 KB)
+- Keys: date. Covers 1990 to 2026.
+- Source: US National Institutes of Health, RePORTER (https://reporter.nih.gov). Licence: Public domain (US federal data).
+- Variables: `projects_funded` Research projects funded by the US National Institutes of Health (projects)
 
 ### US drug and device safety reports and recalls, monthly
 

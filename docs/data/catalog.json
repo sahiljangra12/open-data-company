@@ -1,13 +1,13 @@
 {
  "count": 136,
  "tally": {
-  "live": 27,
-  "via": 23,
+  "live": 28,
+  "via": 24,
   "key": 29,
   "images": 7,
   "bulk": 12,
   "terms": 2,
-  "later": 36
+  "later": 34
  },
  "labels": {
   "live": "On the site",
@@ -895,10 +895,15 @@
    "update": "weekly",
    "api": true,
    "buyers": "Universities, biotech, grant consultants",
-   "status": "later",
-   "status_label": "Not loaded yet",
-   "datasets": [],
-   "note": "Its loader is written but has not delivered data yet."
+   "status": "live",
+   "status_label": "On the site",
+   "datasets": [
+    {
+     "id": "us-nih-research-projects",
+     "title": "US medical research projects funded each year"
+    }
+   ],
+   "note": "Projects funded each fiscal year."
   },
   {
    "name": "USDA NASS Quick Stats",
@@ -1326,6 +1331,10 @@
     {
      "id": "top-incomes",
      "title": "Income going to the top 1% and top 10%"
+    },
+    {
+     "id": "renewable-capacity",
+     "title": "Solar and wind power capacity installed"
     },
     {
      "id": "space-and-ai",
@@ -1773,10 +1782,15 @@
    "update": "annual",
    "api": false,
    "buyers": "Renewables developers, investors",
-   "status": "later",
-   "status_label": "Not loaded yet",
-   "datasets": [],
-   "note": "Its loader is written but has not delivered data yet."
+   "status": "via",
+   "status_label": "On the site, through another publisher",
+   "datasets": [
+    {
+     "id": "renewable-capacity",
+     "title": "Solar and wind power capacity installed"
+    }
+   ],
+   "note": "Solar and wind capacity, through Our World in Data."
   },
   {
    "name": "Global Energy Monitor trackers",
