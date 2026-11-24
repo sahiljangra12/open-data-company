@@ -158,9 +158,10 @@ Error = (forecast - normalized actual) / normalized actual. Positive means the f
 
 `docs/vendor/` holds SheetJS Community Edition 0.20.3 (Apache 2.0; reads and writes spreadsheets) and hyparquet
 (MIT; reads Parquet). Versions and where each file came from are in `docs/vendor/README.md`.
-The Earth photographs in `docs/img/` (the globe textures, the night-lights band and the four topic pictures) are NASA
+The Earth photographs in `docs/img/` (the globe textures and the night-lights band) are NASA
 Earth Observatory's Blue Marble and Black Marble imagery, which NASA releases without copyright; they were taken from the
 `three-globe` package's examples and cropped. The pictures in the guide (`shot-*.jpg`) are screenshots of the site's own
-pages; the four pictures in "Four ways to use it" on the home page are drawn as inline SVG in `docs/index.html`.
+pages; the four pictures in "Four ways to use it" on the home page are drawn as inline SVG in `docs/index.html`,
+and the four topic pictures above the dataset list (`topic-*.svg`) are drawn for this site.
 The fallback globe's land outline and the world map's country shapes come from Natural Earth (public domain) through the `world-atlas` package.
 The typefaces are Barlow and Barlow Condensed (SIL Open Font License), served from `docs/fonts/`.

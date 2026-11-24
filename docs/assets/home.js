@@ -296,8 +296,8 @@ function stories(list) {
 
 /* ---------- dataset list ---------- */
 const DOMAIN = { "Economy and development": "var(--s1)", "Energy": "var(--s4)", "Climate and emissions": "var(--s3)", "Natural hazards": "var(--s8)" };   // identity colours for the four topics
-const TOPIC = { "Climate and emissions": ["topic-climate.jpg", "Greenland and the North Atlantic, seen from orbit"], "Energy": ["topic-energy.jpg", "Europe at night, seen from orbit"],
-  "Economy and development": ["topic-economy.jpg", "Africa, Europe and the Middle East, seen from orbit"], "Natural hazards": ["topic-hazards.jpg", "East Asia and the western Pacific, seen from orbit"] };
+const TOPIC = { "Climate and emissions": ["topic-climate.svg", "Factory chimneys sending smoke into a hot sky"], "Energy": ["topic-energy.svg", "Wind turbines and solar panels on green hills"],
+  "Economy and development": ["topic-economy.svg", "A city skyline with a construction crane and a rising line"], "Natural hazards": ["topic-hazards.svg", "An earthquake: waves spreading from a crack in the ground, and the trace it leaves on a seismograph"] };
 function rows(D, sparks) {
   const box = $("#rows"), topics = $("#topics"); let region = "", topic = "";
   Object.keys(TOPIC).forEach(name => {
