@@ -426,6 +426,18 @@ function worldMap(shape, layers, D) {
   draw();
 }
 
+/* ---------- the "Ask" picture carries the real, current figure and its recent history ---------- */
+function askArt(list) {
+  const st = (list || []).find(s => s.id === "life"), india = st && st.series.find(s => s.name === "India");
+  if (!india || india.pts.length < 4) return;
+  const pts = india.pts.slice(-18), last = pts[pts.length - 1], lo = Math.min(...pts.map(p => p[1])), hi = Math.max(...pts.map(p => p[1]));
+  const xy = pts.map((p, i) => [188 + i / (pts.length - 1) * 108, 136 - (p[1] - lo) / (hi - lo || 1) * 40]);
+  $("#art-ask-n").textContent = last[1].toFixed(1); $("#art-ask-y").textContent = last[0];
+  $("#art-ask-line").setAttribute("points", xy.map(p => p.map(v => v.toFixed(1)).join(",")).join(" "));
+  $("#art-ask-dot").setAttribute("cx", xy[xy.length - 1][0]); $("#art-ask-dot").setAttribute("cy", xy[xy.length - 1][1]);
+  $("#art-ask-u").setAttribute("x", 24 + $("#art-ask-n").getComputedTextLength() + 8);
+}
+
 /* ---------- photo band: one fact that belongs to the picture ---------- */
 function band(b) {
   if (!b) return;
@@ -459,7 +471,7 @@ function fresh(man, log) {
   liveFeed(makeGlobe($("#globe"), land), pulse.quakes);
   ticker(pulse.tickers || []);
   counters(pulse.counters || {});
-  stories(pulse.stories || []);
+  stories(pulse.stories || []); askArt(pulse.stories);
   rows(sets.datasets, pulse.sparks || {});
   search(sets.datasets);
   worldMap(shape, pulse.maps || [], sets.datasets);

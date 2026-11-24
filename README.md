@@ -160,6 +160,7 @@ Error = (forecast - normalized actual) / normalized actual. Positive means the f
 (MIT; reads Parquet). Versions and where each file came from are in `docs/vendor/README.md`.
 The Earth photographs in `docs/img/` (the globe textures, the night-lights band and the four topic pictures) are NASA
 Earth Observatory's Blue Marble and Black Marble imagery, which NASA releases without copyright; they were taken from the
-`three-globe` package's examples and cropped. The pictures of the site's own pages (`shot-*.jpg`) are screenshots.
+`three-globe` package's examples and cropped. The pictures in the guide (`shot-*.jpg`) are screenshots of the site's own
+pages; the four pictures in "Four ways to use it" on the home page are drawn as inline SVG in `docs/index.html`.
 The fallback globe's land outline and the world map's country shapes come from Natural Earth (public domain) through the `world-atlas` package.
 The typefaces are Barlow and Barlow Condensed (SIL Open Font License), served from `docs/fonts/`.

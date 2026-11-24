@@ -420,7 +420,25 @@ figure{margin:0}
 .ways{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:22px}
 .way{display:flex;flex-direction:column;text-decoration:none;border:1px solid var(--line2);background:var(--bg);transition:border-color .25s,transform .25s}
 .way:hover{border-color:var(--accent);transform:translateY(-3px)}
-.way img{display:block;width:100%;height:auto;aspect-ratio:16/10;object-fit:cover;object-position:top left;border-bottom:1px solid var(--line);background:var(--panel)}
+/* the four pictures are drawn, not photographed: each shows the tool at work, in the theme's own colours */
+.art{display:block;width:100%;height:auto;border-bottom:1px solid var(--line)}
+.art text{font-family:var(--body);fill:var(--ink)}
+.art .t10{font-size:10px}.art .t11{font-size:11px}.art .t13{font-size:13px}.art .t16{font-size:16px}
+.art .soft{fill:var(--ink2)}.art .inv{fill:var(--bg);font-weight:600}
+.art .tag{font:600 10.5px var(--display);letter-spacing:.1em}.art .tag.on{fill:#fff;font-size:12px}.art .tag.c{fill:var(--accent-text)}.art .tag.big2{font-size:17px}
+.art .big{font:600 60px var(--display);letter-spacing:.01em}
+.art .paper{fill:var(--bg)}.art .hair{stroke:var(--line2);stroke-width:1}.art .edge{stroke:var(--ink);stroke-width:2}
+.art .edgeline{fill:none;stroke:var(--ink);stroke-width:2}.art .hairline{fill:none;stroke:var(--line);stroke-width:1}
+.art .ink{fill:var(--ink)}.art .wash{fill:var(--wash)}.art .fillc{fill:var(--accent)}.art .fillg{fill:var(--go)}
+.art .onstroke{fill:none;stroke:#fff;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.art .cell{fill:var(--ink3);opacity:.38}.art .cellc{fill:var(--s1);opacity:.75}
+.art .line{fill:none;stroke:var(--s1);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}.art .dot{fill:var(--s1);stroke:var(--bg);stroke-width:2}
+.art .axis{fill:none;stroke:var(--line2);stroke-width:1.5}.art .dots{fill:var(--s7);fill-opacity:.72}.art .fit{fill:none;stroke:var(--ink);stroke-width:2.2;stroke-linecap:round}
+.art .arrow{fill:none;stroke:var(--ink);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.art .b1{fill:var(--s1)}.art .b3{fill:var(--s3)}.art .b4{fill:var(--s4)}
+.a1 .bg{fill:color-mix(in srgb,var(--s1) 13%,var(--bg))}.a2 .bg{fill:color-mix(in srgb,var(--s3) 14%,var(--bg))}
+.a3 .bg{fill:color-mix(in srgb,var(--s7) 13%,var(--bg))}.a4 .bg{fill:color-mix(in srgb,var(--s4) 16%,var(--bg))}
+.way:hover .art .bg{filter:saturate(1.5)}
 .way div{display:flex;flex-direction:column;flex:1;padding:22px 22px 24px}
 .way h3{font-size:24px}
 .way p{color:var(--ink2);font-size:15.5px;margin:10px 0 20px;flex:1}
