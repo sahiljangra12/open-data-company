@@ -209,7 +209,7 @@ def wb_set(id, title, description, domain, source, codes, source_param=None, rel
                 label = (labels or {}).get(ind, ind)
             if len(got) < 50:
                 raise ValueError(f"{len(got)} values")
-            t, u = relabel(label) if relabel else split_unit(label)
+            t, u = relabel(label, ind) if relabel else split_unit(label)
             col = slug(t)
             if col in meta:
                 col = slug(t, 40) + "_" + slug(ind.split(".")[-1])
@@ -232,19 +232,24 @@ def wb_set(id, title, description, domain, source, codes, source_param=None, rel
     return country_year(id, title, description, domain, source, source_url, "CC BY 4.0", cell, names, meta, cols)
 
 
-def wgi_label(label):
-    name, kind = (label.split(":", 1) + [""])[:2]
-    return (name.strip(), "score from -2.5 (weak) to 2.5 (strong)") if "Estimate" in kind else (name.strip() + ", percentile rank", "percentile, 0 (lowest) to 100")
+WGI = {"CC": "Control of corruption", "GE": "Government effectiveness", "PV": "Political stability and absence of violence", "RQ": "Regulatory quality", "RL": "Rule of law", "VA": "Voice and accountability"}
+
+
+def wgi_label(label, ind):
+    name = WGI[ind.split(".")[0]]
+    if ind.endswith(".EST"):
+        return name, "estimate, about -2.5 (weak) to 2.5 (strong)"
+    kind = label.split(" - ", 1)[-1].strip() if " - " in label else "governance score, 0 to 100"
+    return (f"{name}, score out of 100", "score, 0 (weakest) to 100 (strongest)") if "100" in kind else (f"{name}, {kind[:1].lower() + kind[1:]}", "")
 
 
 WB_SETS = [
     ("governance-indicators", "Governance: corruption, rule of law, stability and three more",
-     "Six measures of how countries are governed, each as a score and as a rank among all countries, for every year since 1996.",
+     "Six measures of how countries are governed, each as an estimate and as a score out of 100, for the years since 1996.",
      "Government and finance", "World Bank, Worldwide Governance Indicators",
-     ["CC.EST", "CC.PER.RNK", "GE.EST", "GE.PER.RNK", "PV.EST", "PV.PER.RNK", "RQ.EST", "RQ.PER.RNK", "RL.EST", "RL.PER.RNK", "VA.EST", "VA.PER.RNK"],
+     ["CC.EST", "CC.SC", "GE.EST", "GE.SC", "PV.EST", "PV.SC", "RQ.EST", "RQ.SC", "RL.EST", "RL.SC", "VA.EST", "VA.SC"],
      dict(source_param=3, relabel=wgi_label, source_url="https://www.worldbank.org/en/publication/worldwide-governance-indicators", data360="WGI",
-          labels={a + b: f"{n}: {k}" for a, n in (("CC", "Control of Corruption"), ("GE", "Government Effectiveness"), ("PV", "Political Stability and Absence of Violence/Terrorism"),
-                                                   ("RQ", "Regulatory Quality"), ("RL", "Rule of Law"), ("VA", "Voice and Accountability")) for b, k in ((".EST", "Estimate"), (".PER.RNK", "Percentile Rank"))})),
+          labels={a + b: f"{n}: {k}" for a, n in WGI.items() for b, k in ((".EST", "governance estimate"), (".SC", "governance score, 0 to 100"))})),
     ("health-indicators", "Health: spending, disease, mothers and children, causes of death",
      "Health systems and outcomes by country and year, compiled by the World Bank from the World Health Organization, UNICEF and UN agencies.",
      "Health", "World Bank, World Development Indicators (WHO, UNICEF and UN sources)",
@@ -548,6 +553,16 @@ OWID_NAMES = {
 }
 
 
+OWID_TIDY = [  # (what their title looks like, our column prefix, our title, unit)
+    (r"Annual number of people affected by (.+)$", "people_affected_by_", "People affected by {}", "people"),
+    (r"Annual rate of deaths from (.+)$", "death_rate_from_", "Death rate from {}", "deaths per 100,000 people"),
+    (r"Annual number of people left homeless by (.+)$", "people_left_homeless_by_", "People left homeless by {}", "people"),
+    (r"Annual economic damages as a share of GDP from (.+)$", "damage_share_of_gdp_from_", "Economic damage from {}, share of GDP", "% of GDP"),
+]
+MAIN_HAZARDS = r"all natural disasters|floods|storms|droughts|earthquakes|extreme temperatures|wildfires"
+OWID_KEEP = {"natural-disasters": lambda t: t == "Deaths from natural disasters" or re.search(r"^(People affected by|Death rate from) (" + MAIN_HAZARDS + ")$", t) or "all natural disasters" in t}
+
+
 def owid_charts(id, title, description, domain, source, slugs, licence="CC BY 4.0 (Our World in Data; original sources named per variable)"):
     cell, names, meta, cols = {}, {}, {}, []
     q = "?v=1&csvType=full&useColumnShortNames=true"
@@ -576,8 +591,17 @@ def owid_charts(id, title, description, domain, source, slugs, licence="CC BY 4.
                 if col in OWID_NAMES:
                     col, t, u = OWID_NAMES[col]
                     unit = u or unit
-                if col in meta:
-                    col = slug(t, 40) + "_" + slug(f, 10)
+                for pattern, c2, t2, u2 in OWID_TIDY:
+                    hit = re.match(pattern, t)
+                    if hit:
+                        what = hit.group(1).replace("all disasters", "all natural disasters")
+                        col, t, unit = c2 + slug(what), t2.format(what), u2 or unit
+                        break
+                if id in OWID_KEEP and not OWID_KEEP[id](t):
+                    continue
+                n = 2
+                while col in meta:
+                    col, n = f"{slug(t, 44)}_{n}", n + 1
                 cite = m.get("citationShort") or ""
                 meta[col] = dict(title=t, unit=unit, description=((m.get("descriptionShort") or "") + (f" Source: {cite}." if cite else "") + f" Our World in Data chart: {s}.").strip())
                 cols.append(col)
@@ -1180,7 +1204,7 @@ OWID_SETS = [
     ("forests-wildlife-and-plastic", "Forest loss, threatened wildlife and plastic in the ocean", "Pressure on nature by country: forest cleared each year, tree cover lost, how close species are to extinction, and plastic reaching the sea.",
      "Climate and environment", "FAO, Global Forest Watch, IUCN Red List and Meijer et al., via Our World in Data", ["annual-deforestation", "tree-cover-loss", "red-list-index", "plastic-waste-emitted-to-the-ocean"]),
     ("natural-disasters", "Natural disasters: deaths, people affected and damage", "How many people natural disasters kill and affect in each country each year, and what they cost.",
-     "Natural hazards", "EM-DAT, CRED, UCLouvain, via Our World in Data", ["deaths-from-natural-disasters", "total-affected-by-natural-disasters", "economic-damage-from-natural-disasters", "natural-disaster-death-rates", "number-homeless-from-natural-disasters", "economic-damages-from-natural-disasters-as-a-share-of-gdp"]),
+     "Natural hazards", "EM-DAT, CRED, UCLouvain, via Our World in Data", ["deaths-from-natural-disasters", "total-affected-by-natural-disasters", "natural-disaster-death-rates", "number-homeless-from-natural-disasters", "economic-damages-from-natural-disasters-as-a-share-of-gdp"]),
     ("food-supply", "Food supply: calories and meat per person", "How much food is available per person in each country: daily calories and meat.",
      "Economy and development", "Food and Agriculture Organization (FAOSTAT), via Our World in Data", ["daily-per-capita-caloric-supply", "meat-supply-per-person"]),
     ("top-incomes", "Income going to the top 1% and top 10%", "How much of each country's income goes to its highest earners, before tax.",

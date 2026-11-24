@@ -43,11 +43,38 @@ CADENCE = {  # how often each source itself changes; the site checks all of them
     "crude-oil-prices": "New trading days about once a week",
     "natural-gas-prices": "New trading days about once a week",
     "pjm-summer-peak-forecasts": "Once a year, in January",
+    "imf-world-economic-outlook": "Twice a year, in April and October", "imf-projections": "Twice a year, in April and October",
+    "un-population": "Every two years", "un-population-projections": "Every two years",
+    "human-development-index": "Once a year", "who-health-observatory": "Revised by WHO through the year", "penn-world-table": "Every few years",
+    "us-economy-monthly": "New months through the month, as each agency reports", "us-economy-quarterly": "A new quarter every three months, then revised",
+    "us-rates-and-currencies-daily": "Every business day", "us-national-debt": "Every business day", "us-climate-monthly": "A new month about once a month",
+    "wikipedia-pageviews": "A new month at the start of each month", "research-papers-by-year": "Counts grow every day as papers are indexed",
+    "research-papers-by-country": "Counts grow every day as papers are indexed", "biodiversity-records-by-year": "Records are added every day",
+    "biodiversity-records-by-country": "Records are added every day", "github-activity-by-country": "A new quarter every three months",
+    "us-federal-register": "Every business day", "us-fda-reports": "Every week or so", "clinical-trials-started": "Every day",
+    "us-disaster-declarations": "Whenever a disaster is declared", "us-disaster-declarations-list": "Whenever a disaster is declared",
+    "us-bank-failures": "Whenever a bank fails", "us-bank-failures-list": "Whenever a bank fails", "us-flu-hospital-admissions": "A new week every week",
+    "chicago-crime-monthly": "Every day, about a week behind", "nyc-traffic-crashes-monthly": "Every day", "us-federal-spending-by-agency": "Once a month",
 }
+WORLD_BANK_SETS = ["governance-indicators", "health-indicators", "education-indicators", "gender-indicators", "poverty-and-inequality", "environment-indicators",
+                   "trade-and-finance", "technology-and-transport", "labour-indicators", "food-and-agriculture"]
+OWID_SETS = ["democracy-and-rights", "conflict-and-security", "emissions-by-sector", "wellbeing-and-schooling", "forests-wildlife-and-plastic", "natural-disasters",
+             "food-supply", "top-incomes", "space-and-ai"]
+CADENCE.update({i: "Revised by the World Bank a few times a year" for i in WORLD_BANK_SETS})
+CADENCE.update({i: "Revised by Our World in Data about once a year" for i in OWID_SETS})
 
 
-ORDER = ["co2-and-greenhouse-gases", "energy", "world-bank-development", "global-temperature", "atmospheric-co2",
-         "earthquakes-past-30-days", "crude-oil-prices", "natural-gas-prices", "pjm-summer-peak-forecasts"]   # home page order: world first
+# Home page order: the world first, then the United States; within each, the sets people ask about most.
+ORDER = ["co2-and-greenhouse-gases", "energy", "world-bank-development", "global-temperature", "atmospheric-co2", "earthquakes-past-30-days",
+         "imf-world-economic-outlook", "un-population", "health-indicators", "who-health-observatory", "human-development-index", "democracy-and-rights",
+         "governance-indicators", "education-indicators", "poverty-and-inequality", "gender-indicators", "labour-indicators", "wellbeing-and-schooling", "top-incomes",
+         "trade-and-finance", "food-and-agriculture", "food-supply", "penn-world-table", "technology-and-transport", "environment-indicators", "emissions-by-sector",
+         "forests-wildlife-and-plastic", "natural-disasters", "conflict-and-security", "space-and-ai", "research-papers-by-year", "research-papers-by-country",
+         "wikipedia-pageviews", "github-activity-by-country", "biodiversity-records-by-year", "biodiversity-records-by-country", "clinical-trials-started",
+         "imf-projections", "un-population-projections",
+         "crude-oil-prices", "natural-gas-prices", "us-economy-monthly", "us-economy-quarterly", "us-rates-and-currencies-daily", "us-national-debt",
+         "us-climate-monthly", "us-flu-hospital-admissions", "us-fda-reports", "us-disaster-declarations", "us-disaster-declarations-list", "us-federal-register",
+         "us-federal-spending-by-agency", "us-bank-failures", "us-bank-failures-list", "chicago-crime-monthly", "nyc-traffic-crashes-monthly", "pjm-summer-peak-forecasts"]
 
 
 def get(url, tries=3):
@@ -870,6 +897,8 @@ def main():
     out += [d for i, d in old.items() if i not in keep]     # a failed build keeps the last good version
     out.sort(key=lambda d: ORDER.index(d["id"]) if d["id"] in ORDER else len(ORDER))
     for d in out:
+        if d["id"] not in DEFAULTS and d.get("entity") and d["keys"] == ["code", "year"]:
+            d["chart_entities"] = C                         # a country table with nothing chosen for it: the same six places as the others
         d.update(DEFAULTS.get(d["id"], {}))
         d["cadence"] = CADENCE.get(d["id"], "")
         d.pop("default_entities", None)

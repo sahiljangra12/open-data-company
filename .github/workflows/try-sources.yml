@@ -2,6 +2,8 @@ name: Try data sources
 
 # Run by hand. Builds chosen datasets into a scratch folder on GitHub's servers and prints what came back.
 # Nothing is saved or published: this is for checking a new source before it joins the daily refresh.
+# With "full" set to yes on a branch other than main, it runs the whole refresh and saves the result to that branch,
+# so the site can be checked against real data before the branch is merged.
 on:
   workflow_dispatch:
     inputs:
@@ -13,14 +15,18 @@ on:
         description: "Our World in Data chart names to look up, comma separated"
         required: false
         type: string
+      full:
+        description: "yes = run the whole refresh and save it to this branch (never main)"
+        required: false
+        type: string
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   try:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -34,3 +40,17 @@ jobs:
         run: |
           if [ -n "$PROBE" ]; then python scripts/build_datasets.py --probe-owid "$PROBE"; fi
           if [ -n "$ONLY" ]; then python scripts/build_datasets.py --try --only "$ONLY"; fi
+      - name: Whole refresh, saved to this branch
+        if: inputs.full == 'yes' && github.ref_name != 'main'
+        run: |
+          python scripts/build_datasets.py
+          python scripts/build_catalog.py
+          python scripts/build_scorecard.py
+          python scripts/build_site.py
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/data docs/*.html docs/llms.txt docs/sitemap.xml
+          git diff --cached --quiet && echo "No changes" && exit 0
+          git commit -q -m "Refresh datasets (branch rehearsal)"
+          git pull -q --rebase origin "$GITHUB_REF_NAME"
+          git push -q
