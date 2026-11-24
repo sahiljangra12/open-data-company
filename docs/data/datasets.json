@@ -1711,7 +1711,7 @@
   {
    "id": "world-bank-development",
    "title": "World development indicators",
-   "description": "Core economic, social and infrastructure indicators for every country and World Bank region, by year. Only population and GDP are loaded in this build; the full indicator set loads when the World Bank API is reachable.",
+   "description": "Core economic, social and infrastructure indicators for every country and World Bank region, by year.",
    "region": "World",
    "domain": "Economy and development",
    "source": "World Bank, World Development Indicators",
@@ -1733,7 +1733,7 @@
     "label_col": "country",
     "label": "Country or region"
    },
-   "rows": 17458,
+   "rows": 17226,
    "columns": [
     {
      "name": "population",
@@ -1741,7 +1741,15 @@
      "unit": "people",
      "description": "World Bank indicator SP.POP.TOTL.",
      "type": "num",
-     "filled": 17394
+     "filled": 17196
+    },
+    {
+     "name": "population_growth",
+     "title": "Population growth",
+     "unit": "% per year",
+     "description": "World Bank indicator SP.POP.GROW.",
+     "type": "num",
+     "filled": 16933
     },
     {
      "name": "gdp_current_usd",
@@ -1749,11 +1757,219 @@
      "unit": "current US$",
      "description": "World Bank indicator NY.GDP.MKTP.CD.",
      "type": "num",
-     "filled": 13979
+     "filled": 14547
+    },
+    {
+     "name": "gdp_growth",
+     "title": "GDP growth",
+     "unit": "% per year",
+     "description": "World Bank indicator NY.GDP.MKTP.KD.ZG.",
+     "type": "num",
+     "filled": 14135
+    },
+    {
+     "name": "gdp_per_capita",
+     "title": "GDP per capita",
+     "unit": "current US$",
+     "description": "World Bank indicator NY.GDP.PCAP.CD.",
+     "type": "num",
+     "filled": 14547
+    },
+    {
+     "name": "gdp_per_capita_ppp",
+     "title": "GDP per capita, PPP",
+     "unit": "current international $",
+     "description": "World Bank indicator NY.GDP.PCAP.PP.CD.",
+     "type": "num",
+     "filled": 8604
+    },
+    {
+     "name": "inflation",
+     "title": "Inflation, consumer prices",
+     "unit": "% per year",
+     "description": "World Bank indicator FP.CPI.TOTL.ZG.",
+     "type": "num",
+     "filled": 11364
+    },
+    {
+     "name": "unemployment",
+     "title": "Unemployment (modeled ILO estimate)",
+     "unit": "% of labor force",
+     "description": "World Bank indicator SL.UEM.TOTL.ZS.",
+     "type": "num",
+     "filled": 8071
+    },
+    {
+     "name": "female_labor_participation",
+     "title": "Labor force participation, female",
+     "unit": "% of women 15+",
+     "description": "World Bank indicator SL.TLF.CACT.FE.ZS.",
+     "type": "num",
+     "filled": 8302
+    },
+    {
+     "name": "exports_share_gdp",
+     "title": "Exports of goods and services",
+     "unit": "% of GDP",
+     "description": "World Bank indicator NE.EXP.GNFS.ZS.",
+     "type": "num",
+     "filled": 11207
+    },
+    {
+     "name": "imports_share_gdp",
+     "title": "Imports of goods and services",
+     "unit": "% of GDP",
+     "description": "World Bank indicator NE.IMP.GNFS.ZS.",
+     "type": "num",
+     "filled": 11259
+    },
+    {
+     "name": "fdi_inflows_share_gdp",
+     "title": "Foreign direct investment, net inflows",
+     "unit": "% of GDP",
+     "description": "World Bank indicator BX.KLT.DINV.WD.GD.ZS.",
+     "type": "num",
+     "filled": 11836
+    },
+    {
+     "name": "agriculture_share_gdp",
+     "title": "Agriculture, value added",
+     "unit": "% of GDP",
+     "description": "World Bank indicator NV.AGR.TOTL.ZS.",
+     "type": "num",
+     "filled": 11205
+    },
+    {
+     "name": "industry_share_gdp",
+     "title": "Industry, value added",
+     "unit": "% of GDP",
+     "description": "World Bank indicator NV.IND.TOTL.ZS.",
+     "type": "num",
+     "filled": 11196
+    },
+    {
+     "name": "services_share_gdp",
+     "title": "Services, value added",
+     "unit": "% of GDP",
+     "description": "World Bank indicator NV.SRV.TOTL.ZS.",
+     "type": "num",
+     "filled": 10622
+    },
+    {
+     "name": "life_expectancy",
+     "title": "Life expectancy at birth",
+     "unit": "years",
+     "description": "World Bank indicator SP.DYN.LE00.IN.",
+     "type": "num",
+     "filled": 16931
+    },
+    {
+     "name": "infant_mortality",
+     "title": "Infant mortality rate",
+     "unit": "per 1,000 live births",
+     "description": "World Bank indicator SP.DYN.IMRT.IN.",
+     "type": "num",
+     "filled": 13370
+    },
+    {
+     "name": "fertility_rate",
+     "title": "Fertility rate",
+     "unit": "births per woman",
+     "description": "World Bank indicator SP.DYN.TFRT.IN.",
+     "type": "num",
+     "filled": 16933
+    },
+    {
+     "name": "urban_population_share",
+     "title": "Urban population",
+     "unit": "% of total",
+     "description": "World Bank indicator SP.URB.TOTL.IN.ZS.",
+     "type": "num",
+     "filled": 17226
+    },
+    {
+     "name": "health_spending_share_gdp",
+     "title": "Current health expenditure",
+     "unit": "% of GDP",
+     "description": "World Bank indicator SH.XPD.CHEX.GD.ZS.",
+     "type": "num",
+     "filled": 5620
+    },
+    {
+     "name": "education_spending_share_gdp",
+     "title": "Government expenditure on education",
+     "unit": "% of GDP",
+     "description": "World Bank indicator SE.XPD.TOTL.GD.ZS.",
+     "type": "num",
+     "filled": 6265
+    },
+    {
+     "name": "adult_literacy",
+     "title": "Adult literacy rate",
+     "unit": "% of people 15+",
+     "description": "World Bank indicator SE.ADT.LITR.ZS.",
+     "type": "num",
+     "filled": 2665
+    },
+    {
+     "name": "gini_index",
+     "title": "Gini index",
+     "unit": "0-100",
+     "description": "World Bank indicator SI.POV.GINI.",
+     "type": "num",
+     "filled": 2434
+    },
+    {
+     "name": "extreme_poverty_share",
+     "title": "Poverty headcount at the international poverty line",
+     "unit": "% of population",
+     "description": "World Bank indicator SI.POV.DDAY.",
+     "type": "num",
+     "filled": 2864
+    },
+    {
+     "name": "electricity_access",
+     "title": "Access to electricity",
+     "unit": "% of population",
+     "description": "World Bank indicator EG.ELC.ACCS.ZS.",
+     "type": "num",
+     "filled": 8005
+    },
+    {
+     "name": "renewable_energy_share",
+     "title": "Renewable energy consumption",
+     "unit": "% of final energy",
+     "description": "World Bank indicator EG.FEC.RNEW.ZS.",
+     "type": "num",
+     "filled": 8110
+    },
+    {
+     "name": "internet_users",
+     "title": "Individuals using the Internet",
+     "unit": "% of population",
+     "description": "World Bank indicator IT.NET.USER.ZS.",
+     "type": "num",
+     "filled": 6812
+    },
+    {
+     "name": "basic_water_access",
+     "title": "People using at least basic drinking water services",
+     "unit": "% of population",
+     "description": "World Bank indicator SH.H2O.BASW.ZS.",
+     "type": "num",
+     "filled": 6298
+    },
+    {
+     "name": "forest_area_share",
+     "title": "Forest area",
+     "unit": "% of land area",
+     "description": "World Bank indicator AG.LND.FRST.ZS.",
+     "type": "num",
+     "filled": 8748
     }
    ],
-   "bytes": 809300,
-   "built": "2026-11-23",
+   "bytes": 4711854,
+   "built": "2026-11-24",
    "default_vars": [
     "population",
     "gdp_current_usd"
@@ -1764,7 +1980,7 @@
     "IND",
     "WLD"
    ],
-   "entities": 265
+   "entities": 261
   },
   {
    "id": "crude-oil-prices",
