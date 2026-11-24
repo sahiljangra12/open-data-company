@@ -644,3 +644,22 @@ table.xtab td.num{padding-left:12px}
 #code h2,#faq h2{font-size:clamp(26px,3.2vw,42px)}
 #code .grid{margin-top:8px}
 #code a,.gstep a:not(.btn),.faq a,.clock small a,.hint a{color:var(--accent-text);text-underline-offset:3px}
+
+/* Phones: every control is at least a finger wide and tall */
+@media(max-width:760px){
+  .brand{display:inline-flex;align-items:center;min-height:44px}
+  .menu-btn,.theme{min-height:44px;padding:0 14px;font-size:13px}
+  .quick a,.quick button,.toc a,.seg button,.pill,.presets button,.tabs button{display:inline-flex;align-items:center;justify-content:center;min-height:44px}
+  .quick a,.quick button,.toc a{padding-top:0;padding-bottom:0;text-align:left}
+  .toc a{padding-top:6px;padding-bottom:6px}
+  footer nav{gap:0 22px}
+  footer nav a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;min-width:44px;padding:0}
+  .link{display:inline-flex;align-items:center;min-height:44px}
+  .pacts{padding-top:0}
+  .chip{padding-top:4px;padding-bottom:4px}
+  .chip button{min-width:36px;min-height:36px;margin-right:-6px}
+  .tick,.filters label{min-height:44px}
+  .tick input,.filters label input{width:22px;height:22px}
+  select{min-height:44px}
+  h3 a,main b>a{display:inline-block;padding:9px 0}
+}
