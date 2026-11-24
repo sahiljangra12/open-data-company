@@ -11,7 +11,7 @@ When you answer a question with these numbers, give the value, its year and the 
 - Newest value of every variable for every country (JSON, country-and-year datasets): https://sahiljangra12.github.io/open-data-company/data/latest/<dataset id>.json
 - Country list with World Bank region and income group (JSON): https://sahiljangra12.github.io/open-data-company/data/countries.json
 - Country-and-year files have the columns `code` (ISO alpha-3, or a World Bank or Our World in Data code for a region), `country`, `year`, then one column per variable. Empty cells mean no data.
-- Last checked: 2026-11-24T08:42:03Z. Checked daily at about 05:23 UTC.
+- Last checked: 2026-11-24T11:03:05Z. Checked daily at about 05:23 UTC.
 
 ## Datasets
 
@@ -44,12 +44,12 @@ Core economic, social and infrastructure indicators for every country and World 
 
 ### Global temperature, monthly
 
-How much warmer or cooler the planet's surface was each month than a long-term average, from NASA and NOAA.
+How much warmer or cooler the planet's surface was each month than a long-term average, from NASA, NOAA and Berkeley Earth.
 
-- File: https://sahiljangra12.github.io/open-data-company/data/sets/global-temperature.csv (2,119 rows, 51 KB)
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/global-temperature.csv (2,119 rows, 65 KB)
 - Keys: month. Covers 1850 to 2026.
-- Source: NASA GISTEMP and NOAA Climate at a Glance, via DataHub (https://github.com/datasets/global-temp). Licence: CC BY 4.0 packaging of US federal data.
-- Variables: `nasa_anomaly_c` Global temperature against the 1951-1980 average (NASA) (°C); `noaa_anomaly_c` Global temperature against the 20th-century average (NOAA) (°C)
+- Source: NASA GISTEMP and NOAA Climate at a Glance, via DataHub; Berkeley Earth (https://github.com/datasets/global-temp). Licence: NASA and NOAA columns: US federal data (CC BY 4.0 packaging). Berkeley Earth column: CC BY-NC 4.0, non-commercial use only.
+- Variables: `nasa_anomaly_c` Global temperature against the 1951-1980 average (NASA) (°C); `noaa_anomaly_c` Global temperature against the 20th-century average (NOAA) (°C); `berkeley_anomaly_c` Global temperature against the 1951-1980 average (Berkeley Earth) (°C)
 
 ### CO2 in the atmosphere, monthly
 
@@ -64,10 +64,307 @@ The concentration of carbon dioxide in the air, measured at Mauna Loa since 1958
 
 Every earthquake of magnitude 2.5 or greater recorded worldwide in the past 30 days, with location, depth and magnitude.
 
-- File: https://sahiljangra12.github.io/open-data-company/data/sets/earthquakes-past-30-days.csv (1,807 rows, 316 KB)
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/earthquakes-past-30-days.csv (1,806 rows, 316 KB)
 - Keys: id, time. Covers Rolling 30 days.
 - Source: US Geological Survey, Earthquake Hazards Program (https://earthquake.usgs.gov/earthquakes/feed/). Licence: Public domain (US federal data).
 - Variables: `magnitude` Magnitude; `place` Nearest place; `latitude` Latitude (degrees); `longitude` Longitude (degrees); `depth_km` Depth (km); `magnitude_type` Magnitude type; `event_type` Event type; `significance` Significance score (0-1000); `tsunami_flag` Tsunami flag; `felt_reports` Felt reports (reports); `url` USGS event page
+
+### IMF World Economic Outlook: growth, inflation, debt, jobs
+
+The IMF's own figures for every economy, from 1980 to this year. The latest years are estimates.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/imf-world-economic-outlook.csv (10,010 rows, 913 KB)
+- Keys: code, year. Covers 1980 to 2026.
+- Source: International Monetary Fund, World Economic Outlook (https://www.imf.org/external/datamapper/datasets/WEO). Licence: Free to use with attribution (IMF copyright and usage terms).
+- Variables: `real_gdp_growth` Real GDP growth (IMF) (% per year); `gdp` GDP, current prices (IMF) (current US$); `gdp_per_person` GDP per person, current prices (IMF) (current US$); `gdp_per_person_ppp` GDP per person, purchasing power parity (IMF) (current international $); `share_of_world_gdp` Share of world GDP, purchasing power parity (IMF) (% of world GDP); `inflation` Inflation, average consumer prices (IMF) (% per year); `inflation_end_of_year` Inflation, end of year (IMF) (% per year); `unemployment_rate` Unemployment rate (IMF) (% of labor force); `population` Population (IMF) (people); `current_account_balance` Current account balance (IMF) (% of GDP); `government_debt` Government gross debt (IMF) (% of GDP); `government_balance` Government net lending or borrowing (IMF) (% of GDP)
+
+### Population, births, deaths and migration since 1950 (UN)
+
+The United Nations' demographic figures for every country: population, age, fertility, life expectancy, deaths and migration.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/un-population.csv (18,326 rows, 2.7 MB)
+- Keys: code, year. Covers 1950 to 2026.
+- Source: United Nations, World Population Prospects 2024 (https://population.un.org/wpp/). Licence: CC BY 3.0 IGO.
+- Variables: `population` Population (UN) (people); `population_density` Population density (UN) (people per km²); `median_age` Median age (years); `population_growth_rate` Population growth rate (UN) (% per year); `total_fertility_rate` Total fertility rate (UN) (births per woman); `birth_rate` Birth rate (UN) (births per 1,000 people); `death_rate` Death rate (UN) (deaths per 1,000 people); `life_expectancy` Life expectancy at birth (UN) (years); `life_expectancy_men` Life expectancy at birth, men (UN) (years); `life_expectancy_women` Life expectancy at birth, women (UN) (years); `infant_mortality_rate` Infant mortality rate (UN) (deaths per 1,000 live births); `under_5_mortality_rate` Under-five mortality rate (UN) (deaths per 1,000 live births); `births` Births in the year (births); `deaths` Deaths in the year (deaths); `net_migration` Net migration in the year (UN) (people); `net_migration_rate` Net migration rate (per 1,000 people); `sex_ratio` Sex ratio (men per 100 women); `natural_change_rate` Rate of natural change (per 1,000 people)
+
+### Health: spending, disease, mothers and children, causes of death
+
+Health systems and outcomes by country and year, compiled by the World Bank from the World Health Organization, UNICEF and UN agencies.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/health-indicators.csv (16,965 rows, 2.1 MB)
+- Keys: code, year. Covers 1960 to 2024.
+- Source: World Bank, World Development Indicators (WHO, UNICEF and UN sources) (https://data.worldbank.org). Licence: CC BY 4.0.
+- Variables: `current_health_expenditure_per_capita` Current health expenditure per capita (current US$); `out_of_pocket_expenditure` Out-of-pocket expenditure (% of current health expenditure); `domestic_general_government_health_expenditure` Domestic general government health expenditure (% of GDP); `hospital_beds` Hospital beds (per 1,000 people); `nurses_and_midwives` Nurses and midwives (per 1,000 people); `immunization_dpt` Immunization, DPT (% of children ages 12-23 months); `incidence_of_tuberculosis` Incidence of tuberculosis (per 100,000 people); `prevalence_of_hiv_total` Prevalence of HIV, total (% of population ages 15-49); `incidence_of_malaria` Incidence of malaria (per 1,000 population at risk); `prevalence_of_stunting_height_for_age_modeled` Prevalence of stunting, height for age (modeled estimate) (% of children under 5); `prevalence_of_wasting_weight_for_height` Prevalence of wasting, weight for height (% of children under 5); `prevalence_of_overweight_weight_for_height_modeled` Prevalence of overweight, weight for height (modeled estimate) (% of children under 5); `prevalence_of_anemia_among_women_of_reproductive_age` Prevalence of anemia among women of reproductive age (% of women ages 15-49); `births_attended_by_skilled_health_staff` Births attended by skilled health staff (% of total); `adolescent_fertility_rate` Adolescent fertility rate (births per 1,000 women ages 15-19); `mortality_rate_neonatal` Mortality rate, neonatal (per 1,000 live births); `death_rate_crude` Death rate, crude (per 1,000 people); `birth_rate_crude` Birth rate, crude (per 1,000 people); `cause_of_death_by_communicable_diseases_and` Cause of death, by communicable diseases and maternal, prenatal and nutrition conditions (% of total); `cause_of_death_by_non_communicable_diseases` Cause of death, by non-communicable diseases (% of total); `cause_of_death_by_injury` Cause of death, by injury (% of total); `suicide_mortality_rate` Suicide mortality rate (per 100,000 population); `mortality_caused_by_road_traffic_injury` Mortality caused by road traffic injury (per 100,000 population); `prevalence_of_current_tobacco_use` Prevalence of current tobacco use (% of adults); `total_alcohol_consumption_per_capita` Total alcohol consumption per capita (liters of pure alcohol, projected estimates, 15+ years of age); `diabetes_prevalence` Diabetes prevalence (% of population ages 20 to 79); `mortality_from_cvd_cancer_diabetes_or_crd_between` Mortality from CVD, cancer, diabetes or CRD between exact ages 30 and 70 (%); `people_using_safely_managed_drinking_water_services` People using safely managed drinking water services (% of population); `people_using_safely_managed_sanitation_services` People using safely managed sanitation services (% of population); `mortality_rate_attributed_to_household_and_ambient` Mortality rate attributed to household and ambient air pollution, age-standardized (per 100,000 population); `life_expectancy_at_birth_female` Life expectancy at birth, female (years); `life_expectancy_at_birth_male` Life expectancy at birth, male (years); `pregnant_women_receiving_prenatal_care` Pregnant women receiving prenatal care (%); `contraceptive_prevalence_any_method` Contraceptive prevalence, any method (% of married women ages 15-49)
+
+### WHO health observatory: healthy life, obesity, blood pressure, health workers
+
+Health measures published by the World Health Organization itself, by country and year.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/who-health-observatory.csv (9,506 rows, 712 KB)
+- Keys: code, year. Covers 1980 to 2025.
+- Source: World Health Organization, Global Health Observatory (https://www.who.int/data/gho). Licence: CC BY-NC-SA 3.0 IGO.
+- Variables: `healthy_life_expectancy` Healthy life expectancy at birth (WHO) (years); `life_expectancy_at_60` Life expectancy at age 60 (WHO) (years); `adults_with_obesity` Adults with obesity (WHO) (% of adults); `adults_overweight` Adults who are overweight (WHO) (% of adults); `adults_with_raised_blood_pressure` Adults with raised blood pressure (WHO) (% of adults); `adults_not_active_enough` Adults who are not physically active enough (WHO) (% of adults); `medical_doctors` Medical doctors (WHO) (per 10,000 people); `nurses_and_midwives` Nurses and midwives (WHO) (per 10,000 people); `dentists` Dentists (WHO) (per 10,000 people); `pharmacists` Pharmacists (WHO) (per 10,000 people); `alcohol_per_adult` Alcohol consumed per adult in a year (WHO) (litres of pure alcohol); `adults_using_tobacco` Adults who use tobacco (WHO) (% of adults); `suicide_rate` Suicide rate (WHO) (per 100,000 people); `road_traffic_death_rate` Road traffic death rate (WHO) (per 100,000 people)
+
+### Human Development Index and its parts (UNDP)
+
+The UN's measure of how well people live: health, schooling and income in one index, with versions adjusted for inequality, gender and pressure on the planet.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/human-development-index.csv (6,567 rows, 481 KB)
+- Keys: code, year. Covers 1990 to 2023.
+- Source: United Nations Development Programme, Human Development Report (https://hdr.undp.org/data-center). Licence: CC BY 3.0 IGO.
+- Variables: `human_development_index` Human Development Index (index, 0 to 1); `expected_years_of_schooling` Expected years of schooling (years); `mean_years_of_schooling` Mean years of schooling (years); `gni_per_person_ppp` Gross national income per person (UNDP) (2021 PPP $); `inequality_adjusted_hdi` Inequality-adjusted Human Development Index (index, 0 to 1); `gender_inequality_index` Gender Inequality Index (index, 0 (equal) to 1); `gender_development_index` Gender Development Index (ratio of women's HDI to men's); `planetary_pressures_adjusted_hdi` Planetary pressures-adjusted Human Development Index (index, 0 to 1); `material_footprint_per_person` Material footprint per person (tonnes)
+
+### Democracy, human rights, press freedom and corruption
+
+How free and how clean countries are: democracy and rights scores from V-Dem, press freedom from Reporters Without Borders, and perceived corruption from Transparency International.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/democracy-and-rights.csv (35,496 rows, 1.9 MB)
+- Keys: code, year. Covers 1789 to 2025.
+- Source: V-Dem, Reporters Without Borders and Transparency International, via Our World in Data (https://ourworldindata.org). Licence: CC BY 4.0 (Our World in Data; original sources named per variable).
+- Variables: `electoral_democracy_index` Electoral democracy index (V-Dem) (index, 0 (least democratic) to 1 (most)); `liberal_democracy_index` Liberal democracy index (V-Dem) (index, 0 (least democratic) to 1 (most)); `human_rights_index` Human rights index (V-Dem) (index, 0 (least protected) to 1 (most)); `rule_of_law_index` Rule of law index (V-Dem) (index, 0 (weakest) to 1 (strongest)); `womens_political_empowerment_index` Women's political empowerment index (V-Dem) (index, 0 (least) to 1 (most)); `press_freedom_index` Press freedom index (Reporters Without Borders) (score, 0 to 100 (most free)); `corruption_perceptions_index` Corruption Perceptions Index (Transparency International) (score, 0 (highly corrupt) to 100 (very clean))
+
+### Governance: corruption, rule of law, stability and three more
+
+Six measures of how countries are governed, each as an estimate and as a score out of 100, for the years since 1996.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/governance-indicators.csv (5,508 rows, 732 KB)
+- Keys: code, year. Covers 1996 to 2025.
+- Source: World Bank, Worldwide Governance Indicators (https://www.worldbank.org/en/publication/worldwide-governance-indicators). Licence: CC BY 4.0.
+- Variables: `control_of_corruption` Control of corruption (estimate, about -2.5 (weak) to 2.5 (strong)); `control_of_corruption_score_out_of_100` Control of corruption, score out of 100 (score, 0 (weakest) to 100 (strongest)); `government_effectiveness` Government effectiveness (estimate, about -2.5 (weak) to 2.5 (strong)); `government_effectiveness_score_out_of_100` Government effectiveness, score out of 100 (score, 0 (weakest) to 100 (strongest)); `political_stability_and_absence_of_violence` Political stability and absence of violence (estimate, about -2.5 (weak) to 2.5 (strong)); `political_stability_and_absence_of_violence_score` Political stability and absence of violence, score out of 100 (score, 0 (weakest) to 100 (strongest)); `regulatory_quality` Regulatory quality (estimate, about -2.5 (weak) to 2.5 (strong)); `regulatory_quality_score_out_of_100` Regulatory quality, score out of 100 (score, 0 (weakest) to 100 (strongest)); `rule_of_law` Rule of law (estimate, about -2.5 (weak) to 2.5 (strong)); `rule_of_law_score_out_of_100` Rule of law, score out of 100 (score, 0 (weakest) to 100 (strongest)); `voice_and_accountability` Voice and accountability (estimate, about -2.5 (weak) to 2.5 (strong)); `voice_and_accountability_score_out_of_100` Voice and accountability, score out of 100 (score, 0 (weakest) to 100 (strongest))
+
+### Education: enrolment, completion, literacy, teachers and learning
+
+Schooling by country and year, compiled by the World Bank from the UNESCO Institute for Statistics.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/education-indicators.csv (12,528 rows, 1.3 MB)
+- Keys: code, year. Covers 1970 to 2025.
+- Source: World Bank, World Development Indicators (UNESCO Institute for Statistics) (https://data.worldbank.org). Licence: CC BY 4.0.
+- Variables: `school_enrollment_preprimary` School enrollment, preprimary (% gross); `school_enrollment_primary` School enrollment, primary (% net); `primary_completion_rate_total` Primary completion rate, total (% of relevant age group); `school_enrollment_secondary` School enrollment, secondary (% net); `lower_secondary_completion_rate_total` Lower secondary completion rate, total (% of relevant age group); `literacy_rate_youth_total` Literacy rate, youth total (% of people ages 15-24); `literacy_rate_adult_female` Literacy rate, adult female (% of females ages 15 and above); `literacy_rate_adult_male` Literacy rate, adult male (% of males ages 15 and above); `children_out_of_school_primary` Children out of school, primary; `children_out_of_school` Children out of school (% of primary school age); `pupil_teacher_ratio_primary` Pupil-teacher ratio, primary; `pupil_teacher_ratio_secondary` Pupil-teacher ratio, secondary; `government_expenditure_on_education_total` Government expenditure on education, total (% of government expenditure); `school_enrollment_primary_and_secondary_gross` School enrollment, primary and secondary (gross), gender parity index (GPI); `school_enrollment_tertiary_gross_gender_parity_index` School enrollment, tertiary (gross), gender parity index (GPI); `compulsory_education_duration` Compulsory education, duration (years); `trained_teachers_in_primary_education` Trained teachers in primary education (% of total teachers); `learning_poverty_share_of_children_at_the_end_of` Learning poverty: Share of Children at the End-of-Primary age below minimum reading proficiency adjusted by Out-of-School Children (%); `educational_attainment_at_least_bachelor_s_or` Educational attainment, at least Bachelor's or equivalent, population 25+, total (%) (cumulative); `educational_attainment_at_least_completed_upper` Educational attainment, at least completed upper secondary, population 25+, total (%) (cumulative); `human_capital_index_hci` Human Capital Index (HCI) (scale 0-1); `school_enrollment_tertiary_female` School enrollment, tertiary, female (% gross)
+
+### Poverty and inequality: poverty lines, income shares, shared prosperity
+
+Who is poor and how income is shared, by country and year, from household surveys compiled by the World Bank.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/poverty-and-inequality.csv (4,454 rows, 247 KB)
+- Keys: code, year. Covers 1963 to 2025.
+- Source: World Bank, Poverty and Inequality Platform, via World Development Indicators (https://data.worldbank.org). Licence: CC BY 4.0.
+- Variables: `poverty_headcount_ratio_at_usd_4_20_a_day_2021_ppp` Poverty headcount ratio at $4.20 a day (2021 PPP) (% of population); `poverty_headcount_ratio_at_usd_8_30_a_day_2021_ppp` Poverty headcount ratio at $8.30 a day (2021 PPP) (% of population); `poverty_headcount_ratio_at_national_poverty_lines` Poverty headcount ratio at national poverty lines (% of population); `poverty_gap_at_usd_3_00_a_day_2021_ppp` Poverty gap at $3.00 a day (2021 PPP) (%); `income_share_held_by_lowest_20_pct` Income share held by lowest 20% (% of all income); `income_share_held_by_highest_20_pct` Income share held by highest 20% (% of all income); `income_share_held_by_highest_10_pct` Income share held by highest 10% (% of all income); `income_share_held_by_lowest_10_pct` Income share held by lowest 10% (% of all income); `proportion_of_people_living_below_50_percent_of` Proportion of people living below 50 percent of median income (%); `poverty_headcount_ratio_at_societal_poverty_line` Poverty headcount ratio at societal poverty line (% of population); `population_living_in_slums` Population living in slums (% of urban population)
+
+### Women and men: work, law, management, marriage and money
+
+How women's lives compare with men's by country and year: work, legal rights, leadership, marriage and access to finance.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/gender-indicators.csv (17,226 rows, 1.2 MB)
+- Keys: code, year. Covers 1960 to 2025.
+- Source: World Bank, World Development Indicators and Gender Data Portal (https://data.worldbank.org). Licence: CC BY 4.0.
+- Variables: `labor_force_participation_rate_male_pct_of_male` Labor force participation rate, male (% of male population ages 15+) (modeled ILO estimate); `ratio_of_female_to_male_labor_force_participation` Ratio of female to male labor force participation rate (%) (modeled ILO estimate); `female_share_of_employment_in_senior_and_middle` Female share of employment in senior and middle management (%); `women_who_were_first_married_by_age_18` Women who were first married by age 18 (% of women ages 20-24); `proportion_of_women_subjected_to_physical_and_or` Proportion of women subjected to physical and/or sexual violence in the last 12 months (% of ever-partnered women ages 15-49); `firms_with_female_participation_in_ownership` Firms with female participation in ownership (% of firms); `unemployment_female_pct_of_female_labor_force` Unemployment, female (% of female labor force) (modeled ILO estimate); `unemployment_male_pct_of_male_labor_force` Unemployment, male (% of male labor force) (modeled ILO estimate); `account_ownership_at_a_financial_institution_or` Account ownership at a financial institution or with a mobile-money-service provider, female (% of population ages 15+); `account_ownership_at_a_financial_zs` Account ownership at a financial institution or with a mobile-money-service provider, male (% of population ages 15+); `population_female` Population, female (% of total population); `wage_and_salaried_workers_female_pct_of_female` Wage and salaried workers, female (% of female employment) (modeled ILO estimate); `vulnerable_employment_female_pct_of_female` Vulnerable employment, female (% of female employment) (modeled ILO estimate); `school_enrollment_secondary_female` School enrollment, secondary, female (% gross); `proportion_of_women_in_ministerial_level_positions` Proportion of women in ministerial level positions (%)
+
+### Work: employment, youth out of work, sectors and kinds of jobs
+
+Jobs by country and year: who works, in which sector and on what terms, from International Labour Organization estimates compiled by the World Bank.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/labour-indicators.csv (8,477 rows, 1.1 MB)
+- Keys: code, year. Covers 1970 to 2025.
+- Source: World Bank, World Development Indicators (International Labour Organization, ILOSTAT) (https://data.worldbank.org). Licence: CC BY 4.0.
+- Variables: `employment_to_population_ratio_15_total_pct` Employment to population ratio, 15+, total (%) (modeled ILO estimate); `labor_force_participation_rate_total_pct_of_total` Labor force participation rate, total (% of total population ages 15+) (modeled ILO estimate); `unemployment_youth_total_pct_of_total_labor_force` Unemployment, youth total (% of total labor force ages 15-24) (modeled ILO estimate); `share_of_youth_not_in_education_employment_or` Share of youth not in education, employment or training, total (% of youth population); `employment_in_agriculture_pct_of_total_employment` Employment in agriculture (% of total employment) (modeled ILO estimate); `employment_in_industry_pct_of_total_employment` Employment in industry (% of total employment) (modeled ILO estimate); `employment_in_services_pct_of_total_employment` Employment in services (% of total employment) (modeled ILO estimate); `self_employed_total_pct_of_total_employment` Self-employed, total (% of total employment) (modeled ILO estimate); `wage_and_salaried_workers_total_pct_of_total` Wage and salaried workers, total (% of total employment) (modeled ILO estimate); `vulnerable_employment_total_pct_of_total_employment` Vulnerable employment, total (% of total employment) (modeled ILO estimate); `labor_force_total` Labor force, total; `gdp_per_person_employed` GDP per person employed (constant 2021 PPP $); `children_in_employment_total` Children in employment, total (% of children ages 7-14); `unemployment_with_advanced_education` Unemployment with advanced education (% of total labor force with advanced education); `part_time_employment_total` Part time employment, total (% of total employment); `employers_total_pct_of_total_employment` Employers, total (% of total employment) (modeled ILO estimate)
+
+### Happiness, working hours and years of schooling
+
+How people say their lives are going, how long they work, and how long they stay in school.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/wellbeing-and-schooling.csv (8,618 rows, 265 KB)
+- Keys: code, year. Covers 1870 to 2025.
+- Source: World Happiness Report, Penn World Table, Barro and Lee, and the World Bank, via Our World in Data (https://ourworldindata.org). Licence: CC BY 4.0 (Our World in Data; original sources named per variable).
+- Variables: `life_satisfaction` Life satisfaction (happiness score) (score, 0 (worst possible life) to 10 (best)); `working_hours_per_worker` Working hours per worker in a year (hours a year); `average_years_of_schooling` Average years of schooling (years); `learning_adjusted_years_of_schooling` Learning-adjusted years of schooling (years)
+
+### Income going to the top 1% and top 10%
+
+How much of each country's income goes to its highest earners, before tax.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/top-incomes.csv (3,765 rows, 132 KB)
+- Keys: code, year. Covers 1820 to 2024.
+- Source: World Inequality Database, via Our World in Data (https://ourworldindata.org). Licence: CC BY 4.0 (Our World in Data; original sources named per variable).
+- Variables: `income_share_top_1_pct` Share of income going to the richest 1% (before tax) (% of all income); `income_share_top_10_pct` Share of income going to the richest 10% (before tax) (% of all income)
+
+### Trade, money and government finance
+
+Trade, debt, reserves, remittances, banking and public finances by country and year.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/trade-and-finance.csv (15,929 rows, 3.4 MB)
+- Keys: code, year. Covers 1960 to 2025.
+- Source: World Bank, World Development Indicators (IMF, WTO, UNCTAD and national sources) (https://data.worldbank.org). Licence: CC BY 4.0.
+- Variables: `trade` Trade (% of GDP); `merchandise_exports` Merchandise exports (current US$); `merchandise_imports` Merchandise imports (current US$); `merchandise_trade` Merchandise trade (% of GDP); `tariff_rate_applied_weighted_mean_all_products` Tariff rate, applied, weighted mean, all products (%); `personal_remittances_received` Personal remittances, received (% of GDP); `personal_remittances_received_dt` Personal remittances, received (current US$); `total_reserves` Total reserves (includes gold, current US$); `external_debt_stocks` External debt stocks (% of GNI); `central_government_debt_total` Central government debt, total (% of GDP); `expense` Expense (% of GDP); `revenue_excluding_grants` Revenue, excluding grants (% of GDP); `domestic_credit_to_private_sector` Domestic credit to private sector (% of GDP); `market_capitalization_of_listed_domestic_companies` Market capitalization of listed domestic companies (% of GDP); `lending_interest_rate` Lending interest rate (%); `real_interest_rate` Real interest rate (%); `bank_capital_to_assets_ratio` Bank capital to assets ratio (%); `bank_nonperforming_loans_to_total_gross_loans` Bank nonperforming loans to total gross loans (%); `account_ownership_at_a_financial_institution_or` Account ownership at a financial institution or with a mobile-money-service provider (% of population ages 15+); `commercial_bank_branches` Commercial bank branches (per 100,000 adults); `automated_teller_machines_atms` Automated teller machines (ATMs) (per 100,000 adults); `foreign_direct_investment_net_inflows` Foreign direct investment, net inflows (BoP, current US$); `foreign_direct_investment_net_outflows` Foreign direct investment, net outflows (% of GDP); `net_oda_received` Net ODA received (% of GNI); `net_oda_received_per_capita` Net ODA received per capita (current US$); `inflation_gdp_deflator` Inflation, GDP deflator (annual %); `ppp_conversion_factor_gdp` PPP conversion factor, GDP (LCU per international $); `gdp_ppp` GDP, PPP (current international $); `gdp` GDP (constant 2015 US$); `gdp_per_capita` GDP per capita (constant 2015 US$); `gdp_per_capita_growth` GDP per capita growth (annual %); `households_and_npishs_final_consumption_expenditure` Households and NPISHs final consumption expenditure (% of GDP); `general_government_final_consumption_expenditure` General government final consumption expenditure (% of GDP); `new_business_density` New business density (new registrations per 1,000 people ages 15-64); `logistics_performance_index_overall` Logistics performance index: Overall (1=low to 5=high)
+
+### Food and farming: yields, production, fisheries, hunger
+
+Farming and food by country and year, compiled by the World Bank from the Food and Agriculture Organization (FAOSTAT).
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/food-and-agriculture.csv (17,226 rows, 2.0 MB)
+- Keys: code, year. Covers 1960 to 2025.
+- Source: World Bank, World Development Indicators (Food and Agriculture Organization, FAOSTAT) (https://data.worldbank.org). Licence: CC BY 4.0.
+- Variables: `cereal_yield` Cereal yield (kg per hectare); `cereal_production` Cereal production (metric tons); `food_production_index` Food production index (2014-2016 = 100); `crop_production_index` Crop production index (2014-2016 = 100); `livestock_production_index` Livestock production index (2014-2016 = 100); `fertilizer_consumption` Fertilizer consumption (kilograms per hectare of arable land); `total_fisheries_production` Total fisheries production (metric tons); `aquaculture_production` Aquaculture production (metric tons); `capture_fisheries_production` Capture fisheries production (metric tons); `agricultural_irrigated_land` Agricultural irrigated land (% of total agricultural land); `land_under_cereal_production` Land under cereal production (hectares); `prevalence_of_severe_food_insecurity_in_the` Prevalence of severe food insecurity in the population (%); `prevalence_of_moderate_or_severe_food_insecurity_in` Prevalence of moderate or severe food insecurity in the population (%); `agriculture_forestry_and_fishing_value_added_per` Agriculture, forestry, and fishing, value added per worker (constant 2015 US$); `food_imports` Food imports (% of merchandise imports); `food_exports` Food exports (% of merchandise exports); `rural_population` Rural population (% of total population); `rural_population_totl` Rural population
+
+### Food supply: calories and meat per person
+
+How much food is available per person in each country: daily calories and meat.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/food-supply.csv (13,444 rows, 562 KB)
+- Keys: code, year. Covers 1750 to 2023.
+- Source: Food and Agriculture Organization (FAOSTAT), via Our World in Data (https://ourworldindata.org). Licence: CC BY 4.0 (Our World in Data; original sources named per variable).
+- Variables: `daily_calorie_supply_per_person` Daily calorie supply per person (kilocalories per day); `meat_supply_per_person` Meat supply per person (kilograms a year)
+
+### Penn World Table: real GDP, productivity, hours worked, human capital
+
+The economists' standard table for comparing living standards and productivity across countries and decades, 1950 to 2019.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/penn-world-table.csv (10,819 rows, 1.5 MB)
+- Keys: code, year. Covers 1950 to 2019.
+- Source: Groningen Growth and Development Centre, Penn World Table 10.01 (https://www.rug.nl/ggdc/productivity/pwt/). Licence: CC BY 4.0.
+- Variables: `real_gdp_expenditure_side` Real GDP, expenditure side (Penn World Table) (2017 US$, PPP); `real_gdp_output_side` Real GDP, output side (Penn World Table) (2017 US$, PPP); `population` Population (Penn World Table) (people); `people_employed` People in work (people); `hours_worked_per_worker` Hours worked per worker in a year (hours); `human_capital_index` Human capital index (index (years of schooling and returns to education)); `productivity_level_vs_usa` Productivity level compared with the United States (USA = 1); `productivity_index` Total factor productivity (index, 2017 = 1); `labour_share_of_income` Share of national income going to labour (share, 0 to 1); `household_consumption_share` Household consumption as a share of GDP (share, 0 to 1); `investment_share` Investment as a share of GDP (share, 0 to 1); `government_consumption_share` Government consumption as a share of GDP (share, 0 to 1); `exchange_rate` Exchange rate (Penn World Table) (national currency per US$); `price_level` Price level of GDP (USA in 2017 = 1)
+
+### Technology and transport: broadband, patents, research, flights, ports, rail
+
+How connected and inventive countries are, by year: internet and phones, patents and research, air, sea and rail traffic, tourism.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/technology-and-transport.csv (15,138 rows, 1.3 MB)
+- Keys: code, year. Covers 1960 to 2025.
+- Source: World Bank, World Development Indicators (ITU, WIPO, UNESCO, ICAO and UN sources) (https://data.worldbank.org). Licence: CC BY 4.0.
+- Variables: `fixed_broadband_subscriptions` Fixed broadband subscriptions (per 100 people); `secure_internet_servers` Secure Internet servers (per 1 million people); `fixed_telephone_subscriptions` Fixed telephone subscriptions (per 100 people); `patent_applications_residents` Patent applications, residents; `patent_applications_nonresidents` Patent applications, nonresidents; `scientific_and_technical_journal_articles` Scientific and technical journal articles; `researchers_in_r_d` Researchers in R&D (per million people); `high_technology_exports` High-technology exports (current US$); `ict_goods_exports` ICT goods exports (% of total goods exports); `ict_service_exports` ICT service exports (% of service exports, BoP); `air_transport_passengers_carried` Air transport, passengers carried; `air_transport_registered_carrier_departures` Air transport, registered carrier departures worldwide; `air_transport_freight` Air transport, freight (million ton-km); `container_port_traffic` Container port traffic (TEU: 20 foot equivalent units); `rail_lines` Rail lines (total route-km); `railways_passengers_carried` Railways, passengers carried (million passenger-km); `international_tourism_receipts` International tourism, receipts (current US$); `international_tourism_number_of_departures` International tourism, number of departures
+
+### Environment: protected land and sea, water, threatened species, land
+
+Nature and natural resources by country and year, compiled by the World Bank from FAO, the IUCN Red List, AQUASTAT and UN Environment.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/environment-indicators.csv (16,837 rows, 2.1 MB)
+- Keys: code, year. Covers 1961 to 2025.
+- Source: World Bank, World Development Indicators (FAO, IUCN, AQUASTAT and UN sources) (https://data.worldbank.org). Licence: CC BY 4.0.
+- Variables: `terrestrial_and_marine_protected_areas` Terrestrial and marine protected areas (% of total territorial area); `terrestrial_protected_areas` Terrestrial protected areas (% of total land area); `marine_protected_areas` Marine protected areas (% of territorial waters); `forest_area` Forest area (sq. km); `annual_freshwater_withdrawals_total` Annual freshwater withdrawals, total (% of internal resources); `annual_freshwater_withdrawals_total_k3` Annual freshwater withdrawals, total (billion cubic meters); `renewable_internal_freshwater_resources_per_capita` Renewable internal freshwater resources per capita (cubic meters); `level_of_water_stress_freshwater_withdrawal_as_a` Level of water stress: freshwater withdrawal as a proportion of available freshwater resources; `mammal_species_threatened` Mammal species, threatened; `bird_species_threatened` Bird species, threatened; `fish_species_threatened` Fish species, threatened; `plant_species_higher_threatened` Plant species (higher), threatened; `pm2_5_air_pollution_population_exposed_to_levels` PM2.5 air pollution, population exposed to levels exceeding WHO guideline value (% of total); `arable_land` Arable land (% of land area); `arable_land_pc` Arable land (hectares per person); `land_area` Land area (sq. km); `surface_area` Surface area (sq. km); `total_natural_resources_rents` Total natural resources rents (% of GDP); `forest_rents` Forest rents (% of GDP); `land_area_where_elevation_is_below_5_meters` Land area where elevation is below 5 meters (% of total land area); `population_living_in_areas_where_elevation_is_below` Population living in areas where elevation is below 5 meters (% of total population); `energy_use` Energy use (kg of oil equivalent per capita); `access_to_clean_fuels_and_technologies_for_cooking` Access to clean fuels and technologies for cooking (% of population); `access_to_electricity_rural` Access to electricity, rural (% of rural population); `average_precipitation_in_depth` Average precipitation in depth (mm per year); `total_greenhouse_gas_emissions_excluding_lulucf_per` Total greenhouse gas emissions excluding LULUCF per capita (t CO2e/capita)
+
+### Greenhouse gas emissions by sector
+
+Where each country's emissions come from: electricity and heat, transport, industry, buildings, farming, land use and waste.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/emissions-by-sector.csv (6,969 rows, 694 KB)
+- Keys: code, year. Covers 1990 to 2023.
+- Source: Climate Watch (World Resources Institute), via Our World in Data (https://ourworldindata.org). Licence: CC BY 4.0 (Our World in Data; original sources named per variable).
+- Variables: `ghg_agriculture` Greenhouse gas emissions from agriculture (tonnes of CO2 equivalent); `ghg_land_use_change_and_forestry` Greenhouse gas emissions from land-use change and forestry (tonnes of CO2 equivalent); `ghg_waste` Greenhouse gas emissions from waste (tonnes of CO2 equivalent); `ghg_buildings` Greenhouse gas emissions from buildings (tonnes of CO2 equivalent); `ghg_industry` Greenhouse gas emissions from industry (tonnes of CO2 equivalent); `ghg_manufacturing_and_construction` Greenhouse gas emissions from manufacturing and construction (tonnes of CO2 equivalent); `ghg_transport` Greenhouse gas emissions from transport (tonnes of CO2 equivalent); `ghg_electricity_and_heat` Greenhouse gas emissions from electricity and heat (tonnes of CO2 equivalent); `ghg_fugitive` Greenhouse gas emissions from leaks (fugitive emissions) (tonnes of CO2 equivalent); `ghg_other_fuel_combustion` Greenhouse gas emissions from other fuel burning (tonnes of CO2 equivalent); `ghg_aviation_and_shipping` Greenhouse gas emissions from aviation and shipping (tonnes of CO2 equivalent)
+
+### Forest loss, threatened wildlife and plastic in the ocean
+
+Pressure on nature by country: forest cleared each year, tree cover lost, how close species are to extinction, and plastic reaching the sea.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/forests-wildlife-and-plastic.csv (12,332 rows, 413 KB)
+- Keys: code, year. Covers 1980 to 2025.
+- Source: FAO, Global Forest Watch, IUCN Red List and Meijer et al., via Our World in Data (https://ourworldindata.org). Licence: CC BY 4.0 (Our World in Data; original sources named per variable).
+- Variables: `deforestation` Deforestation (hectares per year); `tree_cover_loss` Tree cover loss (hectares); `red_list_index` Red List Index (survival of species) (index, 1 (no species threatened) to 0 (all extinct)); `plastic_waste_emitted_to_the_ocean` Plastic waste emitted to the ocean (tonnes per year)
+
+### Natural disasters: deaths, people affected and damage
+
+How many people natural disasters kill and affect in each country each year, and what they cost.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/natural-disasters.csv (9,538 rows, 673 KB)
+- Keys: code, year. Covers 1900 to 2025.
+- Source: EM-DAT, CRED, UCLouvain, via Our World in Data (https://ourworldindata.org). Licence: CC BY 4.0 (Our World in Data; original sources named per variable).
+- Variables: `deaths_from_natural_disasters` Deaths from natural disasters (deaths); `people_affected_by_droughts` People affected by droughts (people); `people_affected_by_earthquakes` People affected by earthquakes (people); `people_affected_by_floods` People affected by floods (people); `people_affected_by_storms` People affected by storms (people); `people_affected_by_wildfires` People affected by wildfires (people); `people_affected_by_extreme_temperatures` People affected by extreme temperatures (people); `people_affected_by_all_natural_disasters` People affected by all natural disasters (people); `death_rate_from_droughts` Death rate from droughts (deaths per 100,000 people); `death_rate_from_earthquakes` Death rate from earthquakes (deaths per 100,000 people); `death_rate_from_floods` Death rate from floods (deaths per 100,000 people); `death_rate_from_storms` Death rate from storms (deaths per 100,000 people); `death_rate_from_wildfires` Death rate from wildfires (deaths per 100,000 people); `death_rate_from_extreme_temperatures` Death rate from extreme temperatures (deaths per 100,000 people); `death_rate_from_all_natural_disasters` Death rate from all natural disasters (deaths per 100,000 people); `people_left_homeless_by_all_natural_disasters` People left homeless by all natural disasters (people); `damage_share_of_gdp_from_all_natural_disasters` Economic damage from all natural disasters, share of GDP (% of GDP)
+
+### Military spending, nuclear weapons, homicide, terrorism and refugees
+
+War and safety by country and year: what armies cost, who holds nuclear warheads, how many people are killed, and how many flee.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/conflict-and-security.csv (15,458 rows, 696 KB)
+- Keys: code, year. Covers 1945 to 2026.
+- Source: SIPRI, Federation of American Scientists, UNODC, Global Terrorism Database and UNHCR, via Our World in Data (https://ourworldindata.org). Licence: CC BY 4.0 (Our World in Data; original sources named per variable).
+- Variables: `military_spending` Military spending (constant 2024 US$); `nuclear_warheads` Nuclear warheads (warheads); `homicide_rate` Homicide rate (homicides per 100,000 people); `terrorism_deaths` Deaths from terrorist attacks (deaths); `terrorist_attacks` Terrorist attacks (attacks); `refugees_by_origin` Refugees, by the country they fled (people); `refugees_hosted` Refugees, by the country hosting them (people)
+
+### Objects launched into space, and AI research
+
+Satellites and other objects launched each year by country, and research papers on artificial intelligence.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/space-and-ai.csv (2,525 rows, 63 KB)
+- Keys: code, year. Covers 1957 to 2025.
+- Source: UN Office for Outer Space Affairs and CSET, via Our World in Data (https://ourworldindata.org). Licence: CC BY 4.0 (Our World in Data; original sources named per variable).
+- Variables: `objects_launched_into_space` Objects launched into space in the year (objects); `ai_research_papers` Research papers on artificial intelligence (publications)
+
+### Research papers published each year, worldwide
+
+How much research the world publishes: works indexed by OpenAlex, the share that is free to read, records registered with Crossref, and preprints posted to arXiv.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/research-papers-by-year.csv (76 rows, 3 KB)
+- Keys: date. Covers 1950 to 2025.
+- Source: OpenAlex, Crossref and arXiv (https://openalex.org). Licence: CC0.
+- Variables: `works` Research works published in the year (OpenAlex) (works); `open_access_share` Share of research works that are free to read (OpenAlex) (% of works); `crossref_records` Scholarly records registered with Crossref, by year published (records); `arxiv_papers` Papers submitted to arXiv in the year (papers)
+
+### Research papers by country and year
+
+How many research works have at least one author working in each country, by year of publication.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/research-papers-by-country.csv (5,200 rows, 124 KB)
+- Keys: code, year. Covers 2000 to 2025.
+- Source: OpenAlex (https://openalex.org). Licence: CC0.
+- Variables: `works` Research works with an author in the country (works)
+
+### Wikipedia page views, monthly, by language
+
+How many pages people read on Wikipedia each month since July 2015, in total and for nine languages.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/wikipedia-pageviews.csv (136 rows, 16 KB)
+- Keys: date. Covers 2015 to 2026.
+- Source: Wikimedia Foundation, Pageviews API (https://wikitech.wikimedia.org/wiki/Analytics/AQS/Pageviews). Licence: CC0.
+- Variables: `all_wikipedias_and_sister_projects` Wikimedia page views, all projects, monthly (page views); `english_wikipedia` English Wikipedia page views, monthly (page views); `spanish_wikipedia` Spanish Wikipedia page views, monthly (page views); `german_wikipedia` German Wikipedia page views, monthly (page views); `japanese_wikipedia` Japanese Wikipedia page views, monthly (page views); `french_wikipedia` French Wikipedia page views, monthly (page views); `russian_wikipedia` Russian Wikipedia page views, monthly (page views); `chinese_wikipedia` Chinese Wikipedia page views, monthly (page views); `hindi_wikipedia` Hindi Wikipedia page views, monthly (page views); `portuguese_wikipedia` Portuguese Wikipedia page views, monthly (page views)
+
+### Software development on GitHub, by country
+
+How many developers, repositories and organizations each country has on GitHub, and how much code they push.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/github-activity-by-country.csv (1,607 rows, 66 KB)
+- Keys: code, year. Covers 2020 to 2026.
+- Source: GitHub Innovation Graph (https://innovationgraph.github.com). Licence: CC0.
+- Variables: `developers` Developers on GitHub (accounts); `repositories` Repositories on GitHub (repositories); `organizations` Organizations on GitHub (organizations); `code_pushes` Code pushes to GitHub in the year (pushes)
+
+### Biodiversity records by year observed (GBIF)
+
+How many sightings and specimens of animals, plants and fungi were recorded in each year, as shared through GBIF.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/biodiversity-records-by-year.csv (126 rows, 5 KB)
+- Keys: date. Covers 1900 to 2025.
+- Source: Global Biodiversity Information Facility (GBIF) (https://www.gbif.org). Licence: CC BY 4.0 (GBIF; individual datasets CC0, CC BY or CC BY-NC).
+- Variables: `all_records` Records of living things, by year observed (GBIF) (records); `animal_records` Animal records, by year observed (GBIF) (records); `plant_records` Plant records, by year observed (GBIF) (records); `fungus_records` Fungus records, by year observed (GBIF) (records)
+
+### Biodiversity records by country (GBIF)
+
+How many records of animals, plants and fungi GBIF holds for each country. More records means more observing, not necessarily more species.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/biodiversity-records-by-country.csv (250 rows, 12 KB)
+- Keys: code, year. Covers 2026.
+- Source: Global Biodiversity Information Facility (GBIF) (https://www.gbif.org). Licence: CC BY 4.0 (GBIF; individual datasets CC0, CC BY or CC BY-NC).
+- Variables: `all_records` Records of living things located in the country (GBIF) (records); `animal_records` Animal records located in the country (GBIF) (records); `plant_records` Plant records located in the country (GBIF) (records); `fungus_records` Fungus records located in the country (GBIF) (records)
+
+### Clinical trials started each year
+
+How many medical studies begin each year, from the world's largest trial registry.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/clinical-trials-started.csv (27 rows, 1 KB)
+- Keys: date. Covers 2000 to 2026.
+- Source: US National Library of Medicine, ClinicalTrials.gov (https://clinicaltrials.gov). Licence: Public domain (US federal data).
+- Variables: `studies_started` Clinical studies started in the year (studies); `interventional_studies_started` Clinical trials (interventional studies) started in the year (trials); `phase_3_trials_started` Phase 3 clinical trials started in the year (trials)
+
+### IMF projections for the next five years
+
+What the IMF expects for growth, inflation, debt and jobs in each economy over the coming years. Projections, not measurements.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/imf-projections.csv (1,111 rows, 103 KB)
+- Keys: code, year. Covers 2027 to 2031.
+- Source: International Monetary Fund, World Economic Outlook (https://www.imf.org/external/datamapper/datasets/WEO). Licence: Free to use with attribution (IMF copyright and usage terms).
+- Variables: `real_gdp_growth` Real GDP growth, IMF projection (% per year); `gdp` GDP, current prices, IMF projection (current US$); `gdp_per_person` GDP per person, current prices, IMF projection (current US$); `gdp_per_person_ppp` GDP per person, purchasing power parity, IMF projection (current international $); `share_of_world_gdp` Share of world GDP, purchasing power parity, IMF projection (% of world GDP); `inflation` Inflation, average consumer prices, IMF projection (% per year); `inflation_end_of_year` Inflation, end of year, IMF projection (% per year); `unemployment_rate` Unemployment rate, IMF projection (% of labor force); `population` Population, IMF projection (people); `current_account_balance` Current account balance, IMF projection (% of GDP); `government_debt` Government gross debt, IMF projection (% of GDP); `government_balance` Government net lending or borrowing, IMF projection (% of GDP)
+
+### Population projections to 2100 (UN)
+
+Where the United Nations expects each country's population, ageing, births and life expectancy to go by 2100, in its medium scenario.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/un-population-projections.csv (17,612 rows, 2.6 MB)
+- Keys: code, year. Covers 2027 to 2100.
+- Source: United Nations, World Population Prospects 2024 (https://population.un.org/wpp/). Licence: CC BY 3.0 IGO.
+- Variables: `population` Population, UN projection (people); `population_density` Population density, UN projection (people per km²); `median_age` Median age, UN projection (years); `population_growth_rate` Population growth rate, UN projection (% per year); `total_fertility_rate` Total fertility rate, UN projection (births per woman); `birth_rate` Birth rate, UN projection (births per 1,000 people); `death_rate` Death rate, UN projection (deaths per 1,000 people); `life_expectancy` Life expectancy at birth, UN projection (years); `life_expectancy_men` Life expectancy at birth, men, UN projection (years); `life_expectancy_women` Life expectancy at birth, women, UN projection (years); `infant_mortality_rate` Infant mortality rate, UN projection (deaths per 1,000 live births); `under_5_mortality_rate` Under-five mortality rate, UN projection (deaths per 1,000 live births); `births` Births in the year, UN projection (births); `deaths` Deaths in the year, UN projection (deaths); `net_migration` Net migration in the year, UN projection (people); `net_migration_rate` Net migration rate, UN projection (per 1,000 people); `sex_ratio` Sex ratio, UN projection (men per 100 women); `natural_change_rate` Rate of natural change, UN projection (per 1,000 people)
 
 ### Crude oil benchmark prices, daily
 
@@ -86,6 +383,141 @@ Daily Henry Hub natural gas spot price, the US benchmark.
 - Keys: date. Covers 1997 to 2026.
 - Source: US Energy Information Administration, via DataHub (https://github.com/datasets/natural-gas). Licence: Public domain (US federal data; PDDL packaging).
 - Variables: `henry_hub_usd_per_mmbtu` Henry Hub spot price (US$ per million Btu)
+
+### US economy, monthly: jobs, prices, rates, spending, housing
+
+The headline monthly numbers for the United States: unemployment, payrolls, inflation, interest rates, retail sales, housing and trade.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-economy-monthly.csv (1,366 rows, 190 KB)
+- Keys: date. Covers 1913 to 2026.
+- Source: US Bureau of Labor Statistics, Bureau of Economic Analysis, Census Bureau, Federal Reserve and FHFA, via FRED (https://fred.stlouisfed.org). Licence: Public domain (US federal data), retrieved from FRED, Federal Reserve Bank of St. Louis.
+- Variables: `unemployment_rate` US unemployment rate (% of labor force); `labor_force_participation` US labor force participation rate (% of people 16 and over); `nonfarm_payrolls` US jobs (nonfarm payrolls) (jobs); `job_openings` US job openings (openings); `average_hourly_earnings` US average hourly earnings, production workers (US$ per hour); `wage_growth` US wage growth (average hourly earnings, change over a year) (% a year); `consumer_price_index` US consumer price index (index, 1982-84 = 100); `inflation` US inflation (consumer prices, change over a year) (% a year); `core_consumer_price_index` US consumer price index without food and energy (index, 1982-84 = 100); `core_inflation` US core inflation (without food and energy) (% a year); `producer_price_index` US producer price index, all commodities (index, 1982 = 100); `pce_price_index` US personal consumption price index (index, 2017 = 100); `pce_inflation` US inflation, personal consumption prices (% a year); `personal_saving_rate` US personal saving rate (% of disposable income); `real_disposable_income` US real disposable personal income (2017 US$ a year); `vehicle_sales` US vehicle sales (vehicles a year, annual rate); `federal_funds_rate` US federal funds rate (% a year); `treasury_10_year_yield` US 10-year Treasury yield, monthly (% a year); `treasury_2_year_yield` US 2-year Treasury yield, monthly (% a year); `industrial_production` US industrial production (index, 2017 = 100); `money_supply_m2` US money supply (M2) (current US$); `retail_sales` US retail and food services sales (current US$ a month); `housing_starts` US housing starts (homes a year, annual rate); `building_permits` US building permits for new homes (homes a year, annual rate); `trade_balance` US trade balance in goods and services (current US$ a month); `house_price_index` US house price index, purchases only (FHFA) (index, January 1991 = 100)
+
+### US economy, quarterly: GDP, debt, profits, home prices
+
+Quarterly figures for the United States: real GDP and its growth, GDP per person, federal debt against GDP, corporate profits and house prices.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-economy-quarterly.csv (319 rows, 26 KB)
+- Keys: date. Covers 1947 to 2026.
+- Source: US Bureau of Labor Statistics, Bureau of Economic Analysis, Census Bureau, Federal Reserve and FHFA, via FRED (https://fred.stlouisfed.org). Licence: Public domain (US federal data), retrieved from FRED, Federal Reserve Bank of St. Louis.
+- Variables: `real_gdp` US real GDP (2017 US$ a year, annual rate); `gdp` US GDP, current dollars (current US$ a year, annual rate); `real_gdp_growth` US real GDP growth, quarterly at an annual rate (% a year); `real_gdp_per_person` US real GDP per person (2017 US$ a year); `federal_debt_share_of_gdp` US federal debt as a share of GDP (% of GDP); `house_price_index_all_transactions` US house price index, all transactions (FHFA) (index, 1980 Q1 = 100); `corporate_profits_after_tax` US corporate profits after tax (current US$ a year, annual rate); `median_home_sale_price` US median sale price of houses sold (current US$)
+
+### US interest rates and exchange rates, daily
+
+Daily Treasury yields, the federal funds rate, the yield curve, expected inflation, and the dollar against the euro, rupee, yuan and yen.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-rates-and-currencies-daily.csv (26,442 rows, 1.2 MB)
+- Keys: date. Covers 1954 to 2026.
+- Source: US Bureau of Labor Statistics, Bureau of Economic Analysis, Census Bureau, Federal Reserve and FHFA, via FRED (https://fred.stlouisfed.org). Licence: Public domain (US federal data), retrieved from FRED, Federal Reserve Bank of St. Louis.
+- Variables: `federal_funds_rate_daily` US federal funds rate, daily (% a year); `treasury_2_year` US 2-year Treasury yield (% a year); `treasury_10_year` US 10-year Treasury yield (% a year); `treasury_30_year` US 30-year Treasury yield (% a year); `yield_curve_10_year_minus_2_year` US yield curve: 10-year minus 2-year Treasury yield (percentage points); `expected_inflation_10_year` US expected inflation over 10 years (breakeven rate) (% a year); `dollars_per_euro` US dollars per euro (US$ per euro); `rupees_per_dollar` Indian rupees per US dollar (rupees per US$); `yuan_per_dollar` Chinese yuan per US dollar (yuan per US$); `yen_per_dollar` Japanese yen per US dollar (yen per US$)
+
+### US national debt, daily
+
+What the US federal government owes, to the penny, for every business day since 1993.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-national-debt.csv (8,439 rows, 387 KB)
+- Keys: date. Covers 1993 to 2026.
+- Source: US Treasury, Fiscal Data: Debt to the Penny (https://fiscaldata.treasury.gov/datasets/debt-to-the-penny/). Licence: Public domain (US federal data).
+- Variables: `total_public_debt` US national debt (current US$); `debt_held_by_the_public` US debt held by the public (current US$); `intragovernmental_holdings` US debt held by government accounts (current US$)
+
+### United States temperature and rainfall, monthly since 1895
+
+Monthly average temperature and precipitation for the contiguous United States, from NOAA's climate record.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-climate-monthly.csv (1,582 rows, 55 KB)
+- Keys: date. Covers 1895 to 2026.
+- Source: NOAA National Centers for Environmental Information, Climate at a Glance (https://www.ncei.noaa.gov/access/monitoring/climate-at-a-glance/). Licence: Public domain (US federal data).
+- Variables: `average_temperature_f` US average temperature, monthly (°F); `precipitation_inches` US precipitation, monthly (inches); `average_high_f` US average daily high temperature, monthly (°F); `average_low_f` US average daily low temperature, monthly (°F)
+
+### US flu hospital admissions, weekly, by state
+
+How many people were admitted to hospital with confirmed flu each week, for the country and every state. This is the series the CDC FluSight forecasts are scored against.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-flu-hospital-admissions.csv (250 rows, 42 KB)
+- Keys: date. Covers 2022 to 2026.
+- Source: Centers for Disease Control and Prevention (NHSN), via the FluSight Forecast Hub (https://github.com/cdcepi/FluSight-forecast-hub). Licence: Public domain (US federal data).
+- Variables: `united_states` Flu hospital admissions in the week, the United States (people admitted); `alabama` Flu hospital admissions in the week, Alabama (people admitted); `alaska` Flu hospital admissions in the week, Alaska (people admitted); `arizona` Flu hospital admissions in the week, Arizona (people admitted); `arkansas` Flu hospital admissions in the week, Arkansas (people admitted); `california` Flu hospital admissions in the week, California (people admitted); `colorado` Flu hospital admissions in the week, Colorado (people admitted); `connecticut` Flu hospital admissions in the week, Connecticut (people admitted); `delaware` Flu hospital admissions in the week, Delaware (people admitted); `district_of_columbia` Flu hospital admissions in the week, District of Columbia (people admitted); `florida` Flu hospital admissions in the week, Florida (people admitted); `georgia` Flu hospital admissions in the week, Georgia (people admitted); `hawaii` Flu hospital admissions in the week, Hawaii (people admitted); `idaho` Flu hospital admissions in the week, Idaho (people admitted); `illinois` Flu hospital admissions in the week, Illinois (people admitted); `indiana` Flu hospital admissions in the week, Indiana (people admitted); `iowa` Flu hospital admissions in the week, Iowa (people admitted); `kansas` Flu hospital admissions in the week, Kansas (people admitted); `kentucky` Flu hospital admissions in the week, Kentucky (people admitted); `louisiana` Flu hospital admissions in the week, Louisiana (people admitted); `maine` Flu hospital admissions in the week, Maine (people admitted); `maryland` Flu hospital admissions in the week, Maryland (people admitted); `massachusetts` Flu hospital admissions in the week, Massachusetts (people admitted); `michigan` Flu hospital admissions in the week, Michigan (people admitted); `minnesota` Flu hospital admissions in the week, Minnesota (people admitted); `mississippi` Flu hospital admissions in the week, Mississippi (people admitted); `missouri` Flu hospital admissions in the week, Missouri (people admitted); `montana` Flu hospital admissions in the week, Montana (people admitted); `nebraska` Flu hospital admissions in the week, Nebraska (people admitted); `nevada` Flu hospital admissions in the week, Nevada (people admitted); `new_hampshire` Flu hospital admissions in the week, New Hampshire (people admitted); `new_jersey` Flu hospital admissions in the week, New Jersey (people admitted); `new_mexico` Flu hospital admissions in the week, New Mexico (people admitted); `new_york` Flu hospital admissions in the week, New York (people admitted); `north_carolina` Flu hospital admissions in the week, North Carolina (people admitted); `north_dakota` Flu hospital admissions in the week, North Dakota (people admitted); `ohio` Flu hospital admissions in the week, Ohio (people admitted); `oklahoma` Flu hospital admissions in the week, Oklahoma (people admitted); `oregon` Flu hospital admissions in the week, Oregon (people admitted); `pennsylvania` Flu hospital admissions in the week, Pennsylvania (people admitted); `puerto_rico` Flu hospital admissions in the week, Puerto Rico (people admitted); `rhode_island` Flu hospital admissions in the week, Rhode Island (people admitted); `south_carolina` Flu hospital admissions in the week, South Carolina (people admitted); `south_dakota` Flu hospital admissions in the week, South Dakota (people admitted); `tennessee` Flu hospital admissions in the week, Tennessee (people admitted); `texas` Flu hospital admissions in the week, Texas (people admitted); `utah` Flu hospital admissions in the week, Utah (people admitted); `vermont` Flu hospital admissions in the week, Vermont (people admitted); `virginia` Flu hospital admissions in the week, Virginia (people admitted); `washington` Flu hospital admissions in the week, Washington (people admitted); `west_virginia` Flu hospital admissions in the week, West Virginia (people admitted); `wisconsin` Flu hospital admissions in the week, Wisconsin (people admitted); `wyoming` Flu hospital admissions in the week, Wyoming (people admitted)
+
+### US drug and device safety reports and recalls, monthly
+
+Monthly counts of side-effect reports for drugs, problem reports for medical devices, and recalls of drugs, food and devices.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-fda-reports.csv (274 rows, 9 KB)
+- Keys: date. Covers 2004 to 2026.
+- Source: US Food and Drug Administration, openFDA (https://open.fda.gov). Licence: CC0 (openFDA).
+- Variables: `drug_side_effect_reports` US reports of drug side effects received in the month (reports); `device_problem_reports` US reports of medical device problems received in the month (reports); `drug_recalls` US drug recalls reported in the month (recalls); `food_recalls` US food recalls reported in the month (recalls); `device_recalls` US medical device recalls reported in the month (recalls)
+
+### US disaster declarations by year and cause
+
+How many disasters the US government has declared each year since 1953, and what caused them.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-disaster-declarations.csv (74 rows, 4 KB)
+- Keys: date. Covers 1953 to 2026.
+- Source: Federal Emergency Management Agency, OpenFEMA (https://www.fema.gov/about/openfema). Licence: Public domain (US federal data).
+- Variables: `all_declarations` US federal disaster declarations in the year (declarations); `major_disasters` US major disaster declarations in the year (declarations); `emergencies` US emergency declarations in the year (declarations); `fire_management` US fire management declarations in the year (declarations); `hurricanes` US disaster declarations for hurricanes and tropical storms (declarations); `floods` US disaster declarations for floods (declarations); `fires` US disaster declarations for fires (declarations); `severe_storms` US disaster declarations for severe storms (declarations); `tornadoes` US disaster declarations for tornadoes (declarations); `winter_storms` US disaster declarations for snow and ice storms (declarations); `earthquakes` US disaster declarations for earthquakes (declarations); `droughts` US disaster declarations for droughts (declarations); `biological` US disaster declarations for biological events (such as COVID-19) (declarations); `other` US disaster declarations for other causes (declarations)
+
+### Every US disaster declaration since 1953
+
+One line for each federally declared disaster, with its date, state, type and name.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-disaster-declarations-list.csv (5,286 rows, 297 KB)
+- Keys: disaster_number. Covers 1953 to 2026.
+- Source: Federal Emergency Management Agency, OpenFEMA (https://www.fema.gov/about/openfema). Licence: Public domain (US federal data).
+- Variables: `declared` Declared; `state` State or territory; `declaration_type` Declaration type; `incident_type` Cause; `name` Name of the disaster
+
+### US federal rules and executive orders, by year
+
+How much the US government regulates: final rules, proposed rules, presidential documents and executive orders published in the Federal Register each year since 1995.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-federal-register.csv (32 rows, 1 KB)
+- Keys: date. Covers 1995 to 2026.
+- Source: US National Archives, Federal Register (https://www.federalregister.gov). Licence: Public domain (US federal data).
+- Variables: `final_rules` US federal final rules published in the year (documents); `proposed_rules` US federal proposed rules published in the year (documents); `presidential_documents` US presidential documents published in the year (documents); `executive_orders` US executive orders published in the year (orders)
+
+### US federal spending by agency, this fiscal year
+
+What each federal agency may spend, has committed and has paid out in the current fiscal year.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-federal-spending-by-agency.csv (111 rows, 10 KB)
+- Keys: agency, fiscal_year. Covers 2026.
+- Source: US Treasury, USAspending.gov (https://www.usaspending.gov/agency). Licence: Public domain (US federal data).
+- Variables: `budget_authority` Budget authority (current US$); `obligations` Obligations (current US$); `outlays` Outlays (current US$); `share_of_federal_budget` Share of total federal budget authority (% of the total)
+
+### US bank failures by year
+
+How many banks failed in the United States each year since 1934, and how large they were.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-bank-failures.csv (93 rows, 2 KB)
+- Keys: date. Covers 1934 to 2026.
+- Source: Federal Deposit Insurance Corporation, BankFind (https://banks.data.fdic.gov). Licence: Public domain (US federal data).
+- Variables: `bank_failures` US bank failures in the year (banks); `assets_of_failed_banks` Assets of US banks that failed in the year (current US$)
+
+### Every US bank failure since 1934
+
+One line for each failed bank: date, name, place, assets, deposits and the estimated cost to the insurance fund.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-bank-failures-list.csv (4,117 rows, 349 KB)
+- Keys: id. Covers 1934 to 2026.
+- Source: Federal Deposit Insurance Corporation, BankFind (https://banks.data.fdic.gov). Licence: Public domain (US federal data).
+- Variables: `failed` Failed; `bank` Bank; `city_and_state` City and state; `assets` Assets at failure (current US$); `deposits` Deposits at failure (current US$); `estimated_cost` Estimated cost to the insurance fund (current US$); `resolution` How it was resolved
+
+### Chicago: reported crime by month and type
+
+Crimes reported in Chicago each month since 2001, in total and for the ten most common types.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/chicago-crime-monthly.csv (310 rows, 20 KB)
+- Keys: date. Covers 2001 to 2026.
+- Source: City of Chicago Data Portal, Chicago Police Department (https://data.cityofchicago.org/Public-Safety/Crimes-2001-to-Present/ijzp-q8t2). Licence: Chicago Data Portal terms of use (free to use with attribution).
+- Variables: `all_reported_crimes` Chicago: all reported crimes in the month (incidents); `thefts` Chicago: thefts in the month (incidents); `batteries` Chicago: batteries in the month (incidents); `criminal_damage` Chicago: criminal damage in the month (incidents); `assaults` Chicago: assaults in the month (incidents); `vehicle_thefts` Chicago: vehicle thefts in the month (incidents); `burglaries` Chicago: burglaries in the month (incidents); `robberies` Chicago: robberies in the month (incidents); `narcotics_offences` Chicago: narcotics offences in the month (incidents); `homicides` Chicago: homicides in the month (incidents); `weapons_violations` Chicago: weapons violations in the month (incidents)
+
+### New York City: traffic crashes, injuries and deaths by month
+
+Motor vehicle collisions reported by the NYPD each month since mid-2012, with the people injured and killed.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/nyc-traffic-crashes-monthly.csv (172 rows, 5 KB)
+- Keys: date. Covers 2012 to 2026.
+- Source: NYC Open Data, New York Police Department (https://data.cityofnewyork.us/Public-Safety/Motor-Vehicle-Collisions-Crashes/h9gi-nx95). Licence: NYC Open Data terms of use (free to use).
+- Variables: `crashes` New York City: motor vehicle crashes in the month (crashes); `people_injured` New York City: people injured in crashes in the month (people); `people_killed` New York City: people killed in crashes in the month (people); `pedestrians_killed` New York City: pedestrians killed in crashes in the month (people); `cyclists_killed` New York City: cyclists killed in crashes in the month (people)
 
 ### PJM summer peak load: forecasts and actuals by zone
 
