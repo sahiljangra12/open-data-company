@@ -175,6 +175,32 @@ def main():
                 text = t.locator(".aitext").first.inner_text() if t.locator(".aitext").count() else ""
                 print("\nPublic page, Q: Draw a chart of Kenya's internet use and Nigeria's, and tell me who is ahead.\n   charts: " + str(t.locator(".viz h4").all_text_contents()) + "\n   A: " + text.replace("\n", "\n      "), flush=True)
                 check("the public page draws a chart inside the chat", t.locator(".viz svg, .viz .barrow").count() >= 1 and "Kenya" in text)
+                # the wider data: the service's own instructions do not list these datasets, so this shows the page's note reaches the model
+                def put(q, n):
+                    public.fill("#q", q)
+                    public.click("#ask-go")
+                    public.wait_for_function("n => document.querySelectorAll('.turn').length > n && !document.querySelector('.thinking') && !document.querySelector('#ask-go').disabled", arg=n, timeout=120000)
+                    t = public.locator(".turn").last
+                    text = t.locator(".aitext").first.inner_text() if t.locator(".aitext").count() else ""
+                    print(f"\nPublic page, Q: {q}\n   data read: " + str(t.locator("details.evidence summary").all_text_contents()) + "\n   A: " + text.replace("\n", "\n      "), flush=True)
+                    return t, text
+                public.wait_for_timeout(2500)
+                t, text = put("Which countries are the most democratic, and why might that be?", 2)
+                ev = " ".join(t.locator("details.evidence summary").all_text_contents())
+                check("the AI answers from a dataset added later (democracy)", "democracy" in ev.lower() and t.locator(".acts.small").count() > 0, ev[:200])
+                public.wait_for_timeout(2500)
+                t, text = put("How has the US federal funds rate moved since 2019? Explain briefly.", 3)
+                ev = " ".join(t.locator("details.evidence summary").all_text_contents())
+                check("the AI reads a monthly US series added later", "federal funds" in ev.lower() and "%" in text, ev[:200])
+                public.wait_for_timeout(2500)
+                public.fill("#q", "US unemployment rate")
+                public.click("#ask-go")
+                public.wait_for_function("document.querySelectorAll('.turn').length > 4 && !document.querySelector('.thinking') && !document.querySelector('#ask-go').disabled", timeout=60000)
+                t = public.locator(".turn").last
+                check("a plain question about a new series is answered without the AI", t.locator(".answer").count() == 1 and "US unemployment rate" in t.inner_text() and t.locator(".acts.small").count() == 0, t.inner_text()[:160])
+                n_sets = public.evaluate("fetch('data/datasets.json').then(r => r.json()).then(j => j.datasets.length)")
+                print(f"\n   datasets on the public site: {n_sets}", flush=True)
+                check("the public site holds the wider set of datasets", n_sets >= 55, n_sets)
                 g = public.evaluate("(()=>{const c=document.querySelector('#chat').getBoundingClientRect(),a=document.querySelector('#askbar').getBoundingClientRect();return [Math.round(c.bottom)<=innerHeight+1, Math.abs(a.bottom-c.bottom)<=3, getComputedStyle(document.querySelector('#thread')).overflowY]})()")
                 check("the public page is a chat window with the composer at its foot", g[0] and g[1] and g[2] == "auto", g)
                 public.goto(SITE + "/open-data-company/?v=" + os.urandom(3).hex())
