@@ -1903,25 +1903,6 @@ def foods():
                  ["food_id", "food", "year"] + cols, rows, meta, min_rows=50)
 
 
-def datagov():
-    k = key("DATA_GOV_API_KEY")
-    q, j, why = "action/package_search?rows=0&facet.limit=80&facet.field=" + urllib.parse.quote('["organization"]'), None, ""
-    for base in ("https://api.gsa.gov/technology/datagov/v3/", "https://catalog.data.gov/api/3/"):
-        try:
-            j = J(base + q, headers={"x-api-key": k}, tries=2)
-            break
-        except Exception as e:
-            why += f" {base[8:30]}: {str(e)[:60]};"
-    assert j, "datagov:" + why
-    res = j["result"]
-    items = (res.get("search_facets") or {}).get("organization", {}).get("items") or []
-    assert res.get("count") and len(items) >= 10, "datagov: " + json.dumps(j)[:200]
-    rows = [["all", "All publishers", THIS_YEAR, res["count"], 100]] + [[i["name"], i.get("display_name") or i["name"], THIS_YEAR, i["count"], round(100 * i["count"] / res["count"], 2)] for i in sorted(items, key=lambda i: -i["count"])]
-    return table("us-data-gov-catalog", "data.gov: datasets listed by each publisher", "How many datasets each US government body lists in the national open data catalog today.",
-                 "US", "Government and finance", "US General Services Administration, data.gov", "https://catalog.data.gov", PD, ["publisher", "year"], "year", "year", dict(col="publisher", label_col="publisher_name", label="Publisher"),
-                 ["publisher", "publisher_name", "year", "datasets", "share_of_catalog"], rows, dict(datasets=dict(title="Datasets listed on data.gov", unit="datasets"), share_of_catalog=dict(title="Share of the whole catalog", unit="% of datasets")), min_rows=10)
-
-
 # ---------- addresses to look at before writing a loader; not part of a normal run ----------
 PROBES = ["https://www.fao.org/fileadmin/templates/worldfood/Reports_and_docs/Food_price_indices_data.csv",
           "https://www.fao.org/media/docs/worldfoodsituationlibraries/default-document-library/food_price_indices_data.csv",
@@ -1954,8 +1935,8 @@ def probe_urls():
 BUILDERS = [(lambda s=s: wb_set(s[0], s[1], s[2], s[3], s[4], s[5], **s[6])) for s in WB_SETS] + [(lambda s=s: owid_charts(*s)) for s in OWID_SETS] + [
     imf, un_population, undp, who, pwt, us_monthly, us_quarterly, us_daily, us_debt, us_climate, wikipedia, research, gbif, github_activity,
     federal_register, fda, clinical_trials, fema, fdic, flu, chicago, nyc, us_spending, nih, eurostat, world_monthly, usgs_water, cdc_overdose, maryland, uk, climate_trace, hmda, cdc_places,
-    eia_grid, us_lawmaking, census_states, us_crops, us_elections, us_crime, us_colleges, us_ev_charging, foods, datagov,
+    eia_grid, us_lawmaking, census_states, us_crops, us_elections, us_crime, us_colleges, us_ev_charging, foods,
 ]
 NAMES = [s[0] for s in WB_SETS] + [s[0] for s in OWID_SETS] + ["imf", "un_population", "undp", "who", "pwt", "us_monthly", "us_quarterly", "us_daily", "us_debt", "us_climate", "wikipedia", "research", "gbif",
                                     "github_activity", "federal_register", "fda", "clinical_trials", "fema", "fdic", "flu", "chicago", "nyc", "us_spending", "nih", "eurostat", "world_monthly", "usgs_water", "cdc_overdose", "maryland", "uk", "climate_trace", "hmda", "cdc_places",
-                                    "eia_grid", "us_lawmaking", "census_states", "us_crops", "us_elections", "us_crime", "us_colleges", "us_ev_charging", "foods", "datagov"]
+                                    "eia_grid", "us_lawmaking", "census_states", "us_crops", "us_elections", "us_crime", "us_colleges", "us_ev_charging", "foods"]

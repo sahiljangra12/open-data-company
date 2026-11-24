@@ -246,7 +246,7 @@ LATER = {  # open, with a reason it is not loaded yet
 RELATED = {"GH Archive": ["github-activity-by-country"], "Census American Community Survey": [], "NASA Earthdata": ["global-temperature"]}
 NOTES = {"Stack Exchange data dump": "The full dump is too large to host, and its small API turned away this site's requests for being too frequent.", "GH Archive": "The full event archive is hundreds of gigabytes. GitHub's own country summary is on the site.", "Wikidata": "A database of facts rather than a table; nothing to load as one file.",
          "Census American Community Survey": "The Census service turned away this site's requests without a key.", "Census County Business Patterns": "The Census service turned away this site's requests without a key.",
-         "NASA Earthdata": "Needs a NASA login. NASA's global temperature record is on the site from another NASA file.", "data.gov": "Its catalog search now asks for a key.",
+         "NASA Earthdata": "Needs a NASA login. NASA's global temperature record is on the site from another NASA file.", "data.gov": "Its catalog search did not answer this site's requests, with or without a key.",
          "WTO Stats": "Needs a key. Trade totals are on the site through the World Bank."}
 for group, state, note in ((KEY, "key", "Free, but the source asks for a key or account that only the site's owner can create."),
                            (IMAGES, "images", "Satellite pictures or map layers rather than tables. They need a mapping tool, not a table of numbers."),
@@ -266,7 +266,6 @@ KEY_READY = {
     "College Scorecard": (["us-colleges"], "DATA_GOV_API_KEY", "live", "The thousand largest colleges: cost, graduation and earnings."),
     "NREL data (NSRDB, ATB)": (["us-ev-charging-stations"], "DATA_GOV_API_KEY", "live", "Electric vehicle charging stations, from the Alternative Fuels Data Center that NREL keeps. Its solar and cost models are not tables."),
     "USDA FoodData Central": (["food-nutrients"], "DATA_GOV_API_KEY", "live", "Nutrients in a few hundred everyday foods."),
-    "data.gov": (["us-data-gov-catalog"], "DATA_GOV_API_KEY", "live", "How many datasets each publisher lists."),
     "ERCOT data": (["us-grid-demand-daily"], "EIA_API_KEY", "via", GRID_NOTE), "CAISO OASIS": (["us-grid-demand-daily"], "EIA_API_KEY", "via", GRID_NOTE), "MISO market data": (["us-grid-demand-daily"], "EIA_API_KEY", "via", GRID_NOTE),
     "NYISO market data": (["us-grid-demand-daily"], "EIA_API_KEY", "via", GRID_NOTE), "ISO New England data": (["us-grid-demand-daily"], "EIA_API_KEY", "via", GRID_NOTE), "SPP data": (["us-grid-demand-daily"], "EIA_API_KEY", "via", GRID_NOTE),
 }
