@@ -2085,22 +2085,38 @@ def birds():
 def us_courts():
     k = key("COURTLISTENER_API_TOKEN")
     h = {"Authorization": "Token " + k}
-    kinds = dict(court_opinions="", supreme_court_opinions="&court=scotus")
-    state = dict(shown=False)
-
-    def count(y, c):
-        j = J(f"https://www.courtlistener.com/api/rest/v4/search/?type=o&filed_after={y}-01-01&filed_before={y}-12-31{kinds[c]}", headers=h, tries=2, timeout=120)
-        if not state["shown"]:
-            print("  us_courts sample:", json.dumps({a: j.get(a) for a in ("count", "next")})[:200])
-            state["shown"] = True
-        n = j["count"]
-        assert isinstance(n, int), f"count is {str(n)[:60]}"
-        return n
-    cell = yearly("us-court-opinions", 1950, count, list(kinds), recent=2)
-    meta = dict(court_opinions=dict(title="US court opinions published in the year", unit="opinions", description="Written decisions of federal and state courts collected by CourtListener (Free Law Project). Coverage of older years and of lower courts is incomplete; the current year is not over."),
+    id, kinds = "us-court-opinions", dict(court_opinions="", supreme_court_opinions="&court=scotus")
+    _, old = prior(id)
+    cell = {d: {c: float(r[c]) for c in kinds if r.get(c, "") != ""} for d, r in old.items()}
+    budget, misses = 40, 0                                  # the service allows only a slow pace, so each run reads a few more years, newest first
+    for y in range(THIS_YEAR, 1949, -1):
+        d = f"{y}-01-01"
+        for c, extra in kinds.items():
+            if budget <= 0 or misses >= 3 or (c in cell.get(d, {}) and y < THIS_YEAR - 1):
+                continue
+            budget -= 1
+            try:
+                n = J(f"https://www.courtlistener.com/api/rest/v4/search/?type=o&filed_after={y}-01-01&filed_before={y}-12-31{extra}", headers=h, tries=1, timeout=120)["count"]
+                assert isinstance(n, int), f"count is {str(n)[:60]}"
+                cell.setdefault(d, {})[c] = n
+                misses = 0
+            except Exception as e:
+                misses += 1
+                print(f"  us_courts {y} {c}: {str(e)[:60]}")
+                time.sleep(45)
+            time.sleep(7)
+    keep = {}
+    for y in range(THIS_YEAR, 1949, -1):                    # only the unbroken run of years ending with the newest: a gap would make an old year look like the latest
+        d = f"{y}-01-01"
+        if all(c in cell.get(d, {}) for c in kinds):
+            keep[d] = cell[d]
+        else:
+            break
+    assert len(keep) >= 8, f"us_courts: only {len(keep)} years in a row answered"
+    meta = dict(court_opinions=dict(title="US court opinions published in the year", unit="opinions", description="Written decisions of federal and state courts collected by CourtListener (Free Law Project). Coverage of lower courts is incomplete; the current year is not over. Earlier years are added a few at a time."),
                 supreme_court_opinions=dict(title="US Supreme Court opinions published in the year", unit="opinions", description="CourtListener (Free Law Project)."))
-    out = series("us-court-opinions", "US court opinions, year by year", "How many written decisions US courts publish each year, in all and from the Supreme Court.",
-                 "US", "Government and finance", "CourtListener, Free Law Project", "https://www.courtlistener.com", "Public domain court documents; CourtListener metadata CC BY-ND", cell, meta, list(kinds), "year", min_rows=20)
+    out = series(id, "US court opinions, year by year", "How many written decisions US courts publish each year, in all and from the Supreme Court.",
+                 "US", "Government and finance", "CourtListener, Free Law Project", "https://www.courtlistener.com", "Public domain court documents; CourtListener metadata CC BY-ND", keep, meta, list(kinds), "year", min_rows=8)
     out["partial"] = True
     return out
 
