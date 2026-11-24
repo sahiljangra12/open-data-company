@@ -34,7 +34,7 @@ const CONCEPTS_MORE = [
   [/corrupt/, "democracy-and-rights::corruption_perceptions_index"], [/rule of law/, "governance-indicators::rule_of_law"], [/political stability/, "governance-indicators::political_stability_and_absence_of_violence"],
   [/government effectiveness|best governed|well governed/, "governance-indicators::government_effectiveness"], [/regulatory quality/, "governance-indicators::regulatory_quality"],
   [/women s political|women in politics/, "democracy-and-rights::womens_political_empowerment_index"],
-  [/happiness|happiest|happy|unhappiest|unhappy|life satisfaction/, "wellbeing-and-schooling::life_satisfaction"], [/working hours|hours worked|work(s|ing)? the (most|longest|least)|work week/, "wellbeing-and-schooling::working_hours_per_worker"],
+  [/happ(y|i)\w*|unhapp\w*|life satisfaction/, "wellbeing-and-schooling::life_satisfaction"], [/working hours|hours worked|work(s|ing)? the (most|longest|least)|work week/, "wellbeing-and-schooling::working_hours_per_worker"],
   [/years of school\w*/, "wellbeing-and-schooling::average_years_of_schooling"], [/human development|\bhdi\b/, "human-development-index::human_development_index"], [/gender inequality/, "human-development-index::gender_inequality_index"],
   [/obes/, "who-health-observatory::adults_with_obesity"], [/overweight/, "who-health-observatory::adults_overweight"], [/smok|tobacco|cigarette/, "who-health-observatory::adults_using_tobacco"],
   [/alcohol|drinking|drinks? the most/, "who-health-observatory::alcohol_per_adult"], [/suicide/, "who-health-observatory::suicide_rate"], [/road (traffic )?(deaths?|fatalit\w+|accidents?)|traffic deaths?/, "who-health-observatory::road_traffic_death_rate"],
