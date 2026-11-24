@@ -5677,11 +5677,11 @@
    "time": {
     "col": "time",
     "type": "date",
-    "min": "2026-10-25T06:04:22Z",
-    "max": "2026-11-24T04:57:59Z"
+    "min": "2026-10-25T06:31:37Z",
+    "max": "2026-11-24T05:45:58Z"
    },
    "entity": null,
-   "rows": 1814,
+   "rows": 1818,
    "columns": [
     {
      "name": "magnitude",
@@ -5689,7 +5689,7 @@
      "unit": "",
      "description": "",
      "type": "num",
-     "filled": 1814
+     "filled": 1818
     },
     {
      "name": "place",
@@ -5697,7 +5697,7 @@
      "unit": "",
      "description": "",
      "type": "str",
-     "filled": 1814
+     "filled": 1818
     },
     {
      "name": "latitude",
@@ -5705,7 +5705,7 @@
      "unit": "degrees",
      "description": "",
      "type": "num",
-     "filled": 1814
+     "filled": 1818
     },
     {
      "name": "longitude",
@@ -5713,7 +5713,7 @@
      "unit": "degrees",
      "description": "",
      "type": "num",
-     "filled": 1814
+     "filled": 1818
     },
     {
      "name": "depth_km",
@@ -5721,7 +5721,7 @@
      "unit": "km",
      "description": "",
      "type": "num",
-     "filled": 1814
+     "filled": 1818
     },
     {
      "name": "magnitude_type",
@@ -5729,7 +5729,7 @@
      "unit": "",
      "description": "",
      "type": "str",
-     "filled": 1814
+     "filled": 1818
     },
     {
      "name": "event_type",
@@ -5737,7 +5737,7 @@
      "unit": "",
      "description": "",
      "type": "str",
-     "filled": 1814
+     "filled": 1818
     },
     {
      "name": "significance",
@@ -5745,7 +5745,7 @@
      "unit": "0-1000",
      "description": "USGS score combining magnitude, felt reports and estimated impact.",
      "type": "num",
-     "filled": 1814
+     "filled": 1818
     },
     {
      "name": "tsunami_flag",
@@ -5753,7 +5753,7 @@
      "unit": "",
      "description": "1 if the event was in an oceanic region and may warrant tsunami information; not a warning.",
      "type": "num",
-     "filled": 1814
+     "filled": 1818
     },
     {
      "name": "felt_reports",
@@ -5769,10 +5769,10 @@
      "unit": "",
      "description": "",
      "type": "str",
-     "filled": 1814
+     "filled": 1818
     }
    ],
-   "bytes": 317230,
+   "bytes": 317920,
    "built": "2026-11-24",
    "coverage": "Rolling 30 days",
    "default_vars": [
