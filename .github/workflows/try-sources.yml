@@ -1,0 +1,36 @@
+name: Try data sources
+
+# Run by hand. Builds chosen datasets into a scratch folder on GitHub's servers and prints what came back.
+# Nothing is saved or published: this is for checking a new source before it joins the daily refresh.
+on:
+  workflow_dispatch:
+    inputs:
+      only:
+        description: "Builder names to try, comma separated"
+        required: false
+        type: string
+      probe:
+        description: "Our World in Data chart names to look up, comma separated"
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  try:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install --quiet openpyxl
+      - name: Try
+        env:
+          ONLY: ${{ inputs.only }}
+          PROBE: ${{ inputs.probe }}
+        run: |
+          if [ -n "$PROBE" ]; then python scripts/build_datasets.py --probe-owid "$PROBE"; fi
+          if [ -n "$ONLY" ]; then python scripts/build_datasets.py --try --only "$ONLY"; fi
