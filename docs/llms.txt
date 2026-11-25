@@ -11,7 +11,7 @@ When you answer a question with these numbers, give the value, its year and the 
 - Newest value of every variable for every country (JSON, country-and-year datasets): https://sahiljangra12.github.io/open-data-company/data/latest/<dataset id>.json
 - Country list with World Bank region and income group (JSON): https://sahiljangra12.github.io/open-data-company/data/countries.json
 - Country-and-year files have the columns `code` (ISO alpha-3, or a World Bank or Our World in Data code for a region), `country`, `year`, then one column per variable. Empty cells mean no data.
-- Last checked: 2026-11-24T21:52:01Z. Checked daily at about 05:23 UTC.
+- Last checked: 2026-11-25T16:30:24Z. Checked daily at about 05:23 UTC.
 
 ## Datasets
 
@@ -64,7 +64,7 @@ The concentration of carbon dioxide in the air, measured at Mauna Loa since 1958
 
 Every earthquake of magnitude 2.5 or greater recorded worldwide in the past 30 days, with location, depth and magnitude.
 
-- File: https://sahiljangra12.github.io/open-data-company/data/sets/earthquakes-past-30-days.csv (1,832 rows, 320 KB)
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/earthquakes-past-30-days.csv (1,818 rows, 318 KB)
 - Keys: id, time. Covers Rolling 30 days.
 - Source: US Geological Survey, Earthquake Hazards Program (https://earthquake.usgs.gov/earthquakes/feed/). Licence: Public domain (US federal data).
 - Variables: `magnitude` Magnitude; `place` Nearest place; `latitude` Latitude (degrees); `longitude` Longitude (degrees); `depth_km` Depth (km); `magnitude_type` Magnitude type; `event_type` Event type; `significance` Significance score (0-1000); `tsunami_flag` Tsunami flag; `felt_reports` Felt reports (reports); `url` USGS event page
@@ -379,7 +379,7 @@ How many records of animals, plants and fungi GBIF holds for each country. More 
 
 How many birdwatching lists are sent in each day, and how many kinds of bird they report, for the United States, India and the United Kingdom.
 
-- File: https://sahiljangra12.github.io/open-data-company/data/sets/bird-observations-daily.csv (31 rows, 1 KB)
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/bird-observations-daily.csv (32 rows, 1 KB)
 - Keys: date. Covers 2026.
 - Source: eBird, Cornell Lab of Ornithology (https://ebird.org). Licence: eBird API terms: free for non-commercial use with the source named.
 - Variables: `checklists_us` Bird checklists sent in from the United States that day (checklists); `species_us` Bird species reported in the United States that day (species); `checklists_india` Bird checklists sent in from India that day (checklists); `species_india` Bird species reported in India that day (species); `checklists_uk` Bird checklists sent in from the United Kingdom that day (checklists); `species_uk` Bird species reported in the United Kingdom that day (species)
@@ -469,7 +469,7 @@ Quarterly figures for the United States: real GDP and its growth, GDP per person
 
 Daily Treasury yields, the federal funds rate, the yield curve, expected inflation, and the dollar against the euro, rupee, yuan and yen.
 
-- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-rates-and-currencies-daily.csv (26,444 rows, 1.2 MB)
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-rates-and-currencies-daily.csv (26,445 rows, 1.2 MB)
 - Keys: date. Covers 1954 to 2026.
 - Source: US Bureau of Labor Statistics, Bureau of Economic Analysis, Census Bureau, Federal Reserve and FHFA, via FRED (https://fred.stlouisfed.org). Licence: Public domain (US federal data), retrieved from FRED, Federal Reserve Bank of St. Louis.
 - Variables: `federal_funds_rate_daily` US federal funds rate, daily (% a year); `treasury_2_year` US 2-year Treasury yield (% a year); `treasury_10_year` US 10-year Treasury yield (% a year); `treasury_30_year` US 30-year Treasury yield (% a year); `yield_curve_10_year_minus_2_year` US yield curve: 10-year minus 2-year Treasury yield (percentage points); `expected_inflation_10_year` US expected inflation over 10 years (breakeven rate) (% a year); `dollars_per_euro` US dollars per euro (US$ per euro); `rupees_per_dollar` Indian rupees per US dollar (rupees per US$); `yuan_per_dollar` Chinese yuan per US dollar (yuan per US$); `yen_per_dollar` Japanese yen per US dollar (yen per US$)
@@ -496,7 +496,7 @@ How many home loans US lenders made each year, how much they lent, and how many 
 
 How much electricity the main US power grids deliver each day, from the grid operators' own reports.
 
-- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-grid-demand-daily.csv (2,884 rows, 210 KB)
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-grid-demand-daily.csv (2,885 rows, 210 KB)
 - Keys: date. Covers 2019 to 2026.
 - Source: US Energy Information Administration, Hourly Electric Grid Monitor (data from PJM, MISO, ERCOT, CAISO, SPP, NYISO and ISO New England) (https://www.eia.gov/electricity/gridmonitor/). Licence: Public domain (US federal data).
 - Variables: `demand_us48` Electricity demand in the lower 48 states, daily (megawatt-hours in the day); `demand_pjm` Electricity demand in PJM (mid-Atlantic and Midwest), daily (megawatt-hours in the day); `demand_miso` Electricity demand in MISO (Midwest and South), daily (megawatt-hours in the day); `demand_erco` Electricity demand in ERCOT (Texas), daily (megawatt-hours in the day); `demand_ciso` Electricity demand in California ISO, daily (megawatt-hours in the day); `demand_swpp` Electricity demand in Southwest Power Pool, daily (megawatt-hours in the day); `demand_nyis` Electricity demand in New York ISO, daily (megawatt-hours in the day); `demand_isne` Electricity demand in ISO New England, daily (megawatt-hours in the day)
@@ -604,10 +604,10 @@ How many research projects the US National Institutes of Health pays for in each
 
 How much water eight major US rivers carry, month by month, from stream gauges that have run for decades.
 
-- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-river-flow-monthly.csv (922 rows, 51 KB)
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-river-flow-monthly.csv (922 rows, 56 KB)
 - Keys: date. Covers 1950 to 2026.
 - Source: US Geological Survey, National Water Information System (https://waterdata.usgs.gov). Licence: Public domain (US federal data).
-- Variables: `mississippi_at_st_louis` Flow of the Mississippi River at St. Louis, monthly average (cubic feet per second); `missouri_at_hermann` Flow of the Missouri River at Hermann, monthly average (cubic feet per second); `ohio_at_louisville` Flow of the Ohio River at Louisville, monthly average (cubic feet per second); `columbia_at_the_dalles` Flow of the Columbia River at The Dalles, monthly average (cubic feet per second); `colorado_at_lees_ferry` Flow of the Colorado River at Lees Ferry, monthly average (cubic feet per second); `potomac_near_washington` Flow of the Potomac River near Washington, DC, monthly average (cubic feet per second); `hudson_at_green_island` Flow of the Hudson River at Green Island, monthly average (cubic feet per second)
+- Variables: `mississippi_at_st_louis` Flow of the Mississippi River at St. Louis, monthly average (cubic feet per second); `missouri_at_hermann` Flow of the Missouri River at Hermann, monthly average (cubic feet per second); `ohio_at_louisville` Flow of the Ohio River at Louisville, monthly average (cubic feet per second); `columbia_at_the_dalles` Flow of the Columbia River at The Dalles, monthly average (cubic feet per second); `colorado_at_lees_ferry` Flow of the Colorado River at Lees Ferry, monthly average (cubic feet per second); `potomac_near_washington` Flow of the Potomac River near Washington, DC, monthly average (cubic feet per second); `hudson_at_green_island` Flow of the Hudson River at Green Island, monthly average (cubic feet per second); `sacramento_at_freeport` Flow of the Sacramento River at Freeport, monthly average (cubic feet per second)
 
 ### US drug and device safety reports and recalls, monthly
 
@@ -631,7 +631,7 @@ How many disasters the US government has declared each year since 1953, and what
 
 One line for each federally declared disaster, with its date, state, type and name.
 
-- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-disaster-declarations-list.csv (5,286 rows, 297 KB)
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-disaster-declarations-list.csv (5,288 rows, 297 KB)
 - Keys: disaster_number. Covers 1953 to 2026.
 - Source: Federal Emergency Management Agency, OpenFEMA (https://www.fema.gov/about/openfema). Licence: Public domain (US federal data).
 - Variables: `declared` Declared; `state` State or territory; `declaration_type` Declaration type; `incident_type` Cause; `name` Name of the disaster
@@ -671,6 +671,15 @@ Violent crime, property crime, homicides and vehicle thefts reported by US polic
 - Keys: date. Covers 2015 to 2026.
 - Source: US Federal Bureau of Investigation, Crime Data Explorer (https://cde.ucr.cjis.gov). Licence: Public domain (US federal data).
 - Variables: `violent_crimes` US violent crimes reported to police in the month (offences); `property_crimes` US property crimes reported to police in the month (offences); `homicides` US homicides reported to police in the month (offences); `motor_vehicle_thefts` US motor vehicle thefts reported to police in the month (offences)
+
+### US court opinions, year by year
+
+How many written decisions US courts publish each year.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-court-opinions.csv (10 rows, 1 KB)
+- Keys: date. Covers 2017 to 2026.
+- Source: CourtListener, Free Law Project (https://www.courtlistener.com). Licence: Public domain court documents; CourtListener metadata CC BY-ND.
+- Variables: `court_opinions` US court opinions published in the year (opinions)
 
 ### US federal spending by agency, this fiscal year
 

@@ -1,9 +1,9 @@
 {
  "count": 136,
  "tally": {
-  "live": 47,
+  "live": 48,
   "via": 35,
-  "key": 16,
+  "key": 15,
   "images": 7,
   "bulk": 11,
   "terms": 2,
@@ -1299,10 +1299,15 @@
    "update": "daily",
    "api": true,
    "buyers": "Law firms, legal tech",
-   "status": "key",
-   "status_label": "Needs a free key",
-   "datasets": [],
-   "note": "Its loader is written and waits only for a free key, added as the GitHub secret COURTLISTENER_API_TOKEN."
+   "status": "live",
+   "status_label": "On the site",
+   "datasets": [
+    {
+     "id": "us-court-opinions",
+     "title": "US court opinions, year by year"
+    }
+   ],
+   "note": "Court opinions published each year."
   },
   {
    "name": "World Bank Open Data",
