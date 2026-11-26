@@ -87,6 +87,9 @@ jobs:
         run: bash agent/start_model.sh
       - name: Write the daily brief
         run: python agent/run.py brief
+      - name: Live check of a question (only when the agent's code changed)
+        if: github.event_name == 'push'
+        run: python agent/run.py ask "Which three countries emit the most CO2 per person, and how does India compare?"
       - name: Model log, if the brief fell back
         if: always()
         run: tail -25 ~/model-server.log || true

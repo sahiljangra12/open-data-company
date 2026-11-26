@@ -143,7 +143,12 @@ Three ways it runs:
 3. **By hand.** Actions, "Data Agent", Run workflow: type a question to read the answer in the run summary, or leave it
    empty to rewrite the brief.
 
-A run takes a few minutes, since the model thinks on a 4-core machine. If the model cannot be started, the agent still
+**Figure check.** A small model can miscopy a number, so nothing it writes is published unchecked: every figure in a
+brief or an answer is matched against what the tools returned in that run (allowing for rounding and for thousands,
+millions and billions). Unmatched figures are sent back to the model to correct, up to twice. A brief that still fails is
+replaced by a plain summary of the change log; an answer that still fails is posted with the unmatched figures named.
+
+A run takes five to ten minutes, since the model thinks on a 4-core machine. If the model cannot be started, the agent still
 answers from the data alone and says so. Optional repository variables: `AGENT_MODEL` picks another open model
 from the Ollama library (for example `qwen3:8b`); `AGENT_PUBLIC=false` makes it answer only issues
 opened by the owner and collaborators.

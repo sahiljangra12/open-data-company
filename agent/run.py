@@ -275,6 +275,7 @@ def cmd_brief():
         log("falling back to change-log brief:", ex)
         why = "the model's draft did not pass the figure check" if "figures" in str(ex) or "usable" in str(ex) else "the AI model could not be reached for this run"
         text, model, trace = fallback_brief(ch, why), None, []
+    text = re.sub(r"\n+[*_]+(All figures|Note:)[^\n]*[*_]+\s*$", "", text.strip())      # a closing remark the model likes to add
     path = ROOT / "docs" / "data" / "brief.json"
     old = json.loads(path.read_text(encoding="utf-8"))["briefs"] if path.exists() else []
     now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
