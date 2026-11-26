@@ -29,6 +29,15 @@ class Stand(BaseHTTPRequestHandler):
     def do_POST(self):
         body = json.loads(self.rfile.read(int(self.headers["Content-Length"])))
         SEEN.append(body)
+        if self.path == "/api/chat":             # Ollama's own protocol, the one used in the workflow
+            assert body["think"] is False and body["stream"] is False
+            tools = [m for m in body["messages"] if m["role"] == "tool"]
+            if not tools:
+                return self.send({"message": {"role": "assistant", "content": "", "tool_calls": [
+                    {"function": {"name": "rank", "arguments": {"dataset": "co2-and-greenhouse-gases", "variable": "co2", "n": 2}}}]}, "done_reason": "stop"})
+            assert tools[0]["tool_name"] == "rank"
+            top = json.loads(tools[0]["content"])["ranking"][0]
+            return self.send({"message": {"role": "assistant", "content": f"{top['place']} emits the most."}, "done_reason": "stop", "prompt_eval_count": 9, "eval_count": 5})
         assert self.path == "/v1/chat/completions", self.path
         n = sum(1 for m in body["messages"] if m["role"] == "assistant")
         call = lambda name, args: self.send({"choices": [{"message": {"role": "assistant", "content": None, "tool_calls": [
@@ -50,6 +59,7 @@ def main():
     threading.Thread(target=srv.serve_forever, daemon=True).start()
     os.environ["AGENT_API_URL"] = f"http://127.0.0.1:{srv.server_port}/v1"
     os.environ["AGENT_MODEL"] = "stand-in"
+    os.environ["AGENT_API_STYLE"] = "openai"
     import brain, run, tools
 
     # the tools, against the real files
@@ -72,6 +82,18 @@ def main():
     assert all("tools" in b for b in SEEN) and SEEN[0]["messages"][0]["role"] == "system"
     assert "No tool named" in [m for m in SEEN[-1]["messages"] if m["role"] == "tool"][-1]["content"]
 
+    # the same loop over Ollama's own protocol
+    import importlib
+    os.environ["AGENT_API_STYLE"] = "ollama"
+    importlib.reload(brain)
+    run.brain = brain
+    text, model, tr2 = run.answer("Who emits the most CO2?")
+    assert text == "China emits the most." and [t["tool"] for t in tr2] == ["rank"], (text, tr2)
+
+    # text that thinks aloud, or that read no tool, is never published
+    assert not run.usable("Okay, let's tackle this user query step by step.", trace) and not run.usable("India 2.2 t.", [])
+    assert run.usable("India 2.2 t, United States 14.5 t (2025).", trace)
+
     # history is kept inside the free tier's input limit
     msgs = [{"role": "system", "content": "s"}, {"role": "user", "content": "q"}] + [{"role": "tool", "tool_call_id": str(i), "content": "x" * 2500} for i in range(12)]
     brain.compact(msgs)
@@ -79,7 +101,6 @@ def main():
 
     # no model reachable: the agent still answers from the data, and says so
     os.environ["AGENT_API_URL"] = "http://127.0.0.1:9/v1"
-    import importlib
     importlib.reload(brain)
     run.brain = brain
     text, model, trace = run.answer("co2 emissions per capita")

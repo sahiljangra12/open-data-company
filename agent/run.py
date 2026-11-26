@@ -20,8 +20,7 @@ import brain, tools  # noqa: E402
 
 SITE = tools.SITE
 REPO = os.environ.get("GITHUB_REPOSITORY", "sahiljangra12/open-data-company")
-SYSTEM = f"""/no_think
-You are the Data Agent of Open Data Company, an open data site ({SITE}). You run inside GitHub Actions.
+SYSTEM = f"""You are the Data Agent of Open Data Company, an open data site ({SITE}). You run inside GitHub Actions.
 Rules:
 - Every figure you give must come from a tool result in this conversation. Never state a number from memory.
 - Start with find_variables or search_datasets to get the right dataset id and variable name, then read the values.
@@ -62,12 +61,19 @@ def fallback_answer(question):
     return "\n".join(lines)
 
 
+def usable(text, trace):
+    """A small model sometimes thinks aloud or answers without reading anything. Such text is never published."""
+    t = text.strip()
+    aloud = re.match(r"(okay|ok|alright|first|let me|let's|i need to|i should|the user)\b", t, re.I) or "the user" in t.lower()[:400]
+    return bool(t) and bool(trace) and not aloud and len(t) < 2600
+
+
 def answer(question):
     question = question.strip()[:1500]
     try:
         text, model, trace = brain.run(SYSTEM, question, tools.SPEC, tools.call, log=log)
-        if not text:
-            raise brain.Unavailable("empty answer")
+        if not usable(text, trace):
+            raise brain.Unavailable("the model's answer was not usable (empty, thinking aloud, or no tool was read)")
     except brain.Unavailable as ex:
         log("falling back to data-only answer:", ex)
         text, model, trace = fallback_answer(question), None, []
@@ -206,8 +212,8 @@ def cmd_brief():
     changes = json.dumps(ch["checks"], ensure_ascii=False)[:3500]
     try:
         text, model, trace = brain.run(SYSTEM, BRIEF_TASK.format(changes=changes), tools.SPEC, tools.call, max_steps=7, log=log)
-        if not text:
-            raise brain.Unavailable("empty brief")
+        if not usable(text, trace) or "###" not in text:
+            raise brain.Unavailable("the model's brief was not usable (empty, thinking aloud, wrong shape, or no tool was read)")
     except brain.Unavailable as ex:
         log("falling back to change-log brief:", ex)
         text, model, trace = fallback_brief(ch), None, []
