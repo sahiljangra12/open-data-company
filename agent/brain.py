@@ -1,20 +1,20 @@
 """The Data Agent's brain: an open language model that runs on the same machine as the agent.
 
-In GitHub Actions, agent/start_model.sh downloads llama.cpp and an open model (Qwen3 4B by default, Apache 2.0) and
-starts llama.cpp's server on 127.0.0.1:8080. This file talks to it with the OpenAI chat-completions protocol, tools
-included. No key, no outside service, no cost: the model is a file and the runner does the thinking.
+In GitHub Actions, agent/start_model.sh downloads Ollama and an open model (Qwen3 4B by default, Apache 2.0) and
+starts it on 127.0.0.1:11434. This file talks to it with the OpenAI chat-completions protocol, tools included.
+No key, no outside AI service, no cost: the model is a file and the runner does the thinking.
 
 Because the protocol is the common one, the same code can use any other server that speaks it:
-    AGENT_API_URL    base address, default http://127.0.0.1:8080/v1
+    AGENT_API_URL    base address, default http://127.0.0.1:11434/v1
     AGENT_API_KEY    sent as a bearer token when set (a local server needs none)
-    AGENT_MODEL      model name passed in the request and shown under answers
+    AGENT_MODEL      model name passed in the request and shown under answers, default qwen3:4b
 
 A small model on a CPU is slow and has a short memory, so the loop keeps its history compact and stops after a few steps.
 """
-import json, os, re, urllib.error, urllib.request
+import json, os, re, time, urllib.error, urllib.request
 
-API = os.environ.get("AGENT_API_URL", "http://127.0.0.1:8080/v1").rstrip("/")
-MODEL = os.environ.get("AGENT_MODEL") or "Qwen3 4B"
+API = (os.environ.get("AGENT_API_URL") or "http://127.0.0.1:11434/v1").rstrip("/")
+MODEL = os.environ.get("AGENT_MODEL") or "qwen3:4b"
 LOCAL = "127.0.0.1" in API or "localhost" in API
 
 
@@ -60,13 +60,21 @@ def run(system, task, tools_spec, call_tool, max_steps=6, log=print):
         final = step == max_steps - 1
         if final:
             messages.append({"role": "user", "content": "Write the final answer now from what the tools returned. No more tool calls."})
+        t0 = time.time()
         body = {"model": MODEL, "messages": messages, "temperature": 0.2, "max_tokens": 900}
         if LOCAL:
-            body["chat_template_kwargs"] = {"enable_thinking": False}     # answer directly; thinking aloud is slow on a CPU
+            body["reasoning_effort"] = "none"                             # answer directly; thinking aloud is slow on a CPU
         if not final:
             body["tools"] = tools_spec
         try:
-            res = _post("/chat/completions", body)
+            try:
+                res = _post("/chat/completions", body)
+            except urllib.error.HTTPError as ex:
+                if ex.code != 400 or "reasoning_effort" not in body:
+                    raise
+                log("server refused reasoning_effort, retrying without:", ex.read()[:200].decode(errors="replace"))
+                body.pop("reasoning_effort")
+                res = _post("/chat/completions", body)
         except urllib.error.HTTPError as ex:
             raise Unavailable(f"HTTP {ex.code} {ex.read()[:300].decode(errors='replace')}") from None
         except Exception as ex:  # noqa: BLE001
@@ -75,9 +83,9 @@ def run(system, task, tools_spec, call_tool, max_steps=6, log=print):
         calls = msg.get("tool_calls") or []
         text = clean(msg.get("content"))
         messages.append({"role": "assistant", "content": text, **({"tool_calls": calls} if calls else {})})
-        t = res.get("timings") or {}
-        log(f"step {step + 1}: {len(calls)} tool call(s), {len(text)} chars of text"
-            + (f", {t.get('prompt_n')} tokens read, {t.get('predicted_n')} written at {t.get('predicted_per_second', 0):.1f}/s" if t else ""))
+        u = res.get("usage") or {}
+        log(f"step {step + 1}: {len(calls)} tool call(s), {len(text)} chars of text, "
+            f"{u.get('prompt_tokens')} tokens read, {u.get('completion_tokens')} written, {time.time() - t0:.0f} s")
         if not calls:
             return text, MODEL, trace
         for c in calls:

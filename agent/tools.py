@@ -2,7 +2,7 @@
 site's own files in docs/data or calls a public API that needs no key.
 
 Every tool returns a dict that can be turned into JSON. TOOLS maps a name to its function; SPEC is the description the
-model sees (the common function-calling format, which llama.cpp's server and most model services accept).
+model sees (the common function-calling format, which Ollama and most model services accept).
 """
 import csv, json, math, re, urllib.parse, urllib.request
 from functools import lru_cache

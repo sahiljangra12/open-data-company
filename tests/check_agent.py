@@ -1,6 +1,6 @@
 """Checks the Data Agent without spending any model allowance.
 
-A stand-in server plays the part of the model server (llama.cpp in the workflow): it answers the chat calls with a
+A stand-in server plays the part of the model server (Ollama in the workflow): it answers the chat calls with a
 scripted sequence (three tool calls, one of them to a tool that does not exist, then a final text). The real loop, the real tools and the real data files are used.
 
     python tests/check_agent.py

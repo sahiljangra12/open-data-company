@@ -1,39 +1,38 @@
 #!/usr/bin/env bash
-# Start the Data Agent's brain on this machine: an open model run by llama.cpp's server, which speaks the same
-# chat-with-tools protocol as the big hosted services. Nothing leaves the runner and no key is needed.
+# Start the Data Agent's brain on this machine: an open model run by Ollama (the llama.cpp engine with a small server
+# around it), which speaks the same chat-with-tools protocol as the big hosted services. Nothing leaves the runner
+# and no key is needed.
 #
-#   AGENT_HF_MODEL   the model, as <Hugging Face repository>:<quantisation>   (default below)
-#   LLAMA_CACHE      where the model file is kept between runs (the workflow caches this folder)
+#   AGENT_MODEL     the model, by its name in the Ollama library (default qwen3:4b, Apache 2.0)
+#   OLLAMA_MODELS   where the model file is kept between runs (the workflow caches this folder)
 #
-# On a GitHub-hosted runner (4 cores, 16 GB) a 4-billion-parameter model at 4-bit answers a question in a few minutes.
+# On a GitHub-hosted runner (4 cores, 16 GB) a 4-billion-parameter model answers a question in a few minutes.
 set -euo pipefail
-MODEL="${AGENT_HF_MODEL:-Qwen/Qwen3-4B-GGUF:Q4_K_M}"
-export LLAMA_CACHE="${LLAMA_CACHE:-$HOME/agent-models}"
-BIN="$HOME/llama-bin"
-mkdir -p "$LLAMA_CACHE" "$BIN"
+MODEL="${AGENT_MODEL:-qwen3:4b}"
+export OLLAMA_MODELS="${OLLAMA_MODELS:-$HOME/agent-models}"
+export OLLAMA_HOST=127.0.0.1:11434
+export OLLAMA_CONTEXT_LENGTH=8192          # room for the tool descriptions and a few tool results
+export OLLAMA_KEEP_ALIVE=30m
+DIR="$HOME/ollama"
+mkdir -p "$OLLAMA_MODELS" "$DIR"
 
-if [ -z "$(find "$BIN" -type f -name llama-server | head -1)" ]; then
-  echo "Downloading llama.cpp (latest release, Linux x64, CPU)"
-  cd "$BIN"
-  gh release view --repo ggml-org/llama.cpp --json tagName,assets -q '.tagName, (.assets[].name)' | tee assets.txt
-  ASSET="$(grep -iE '(ubuntu|linux)' assets.txt | grep -iE '(x64|x86_64|amd64)' | grep -viE 'vulkan|cuda|rocm|sycl|opencl|hip|openvino|arm|s390|riscv|android' | head -1)"
-  [ -n "$ASSET" ] || { echo "No Linux x64 CPU build among the release files above"; exit 1; }
-  echo "Using $ASSET"
-  gh release download --repo ggml-org/llama.cpp --pattern "$ASSET" --clobber
-  for f in *; do case "$f" in *.zip) unzip -q -o "$f" ;; *.tar.gz|*.tgz) tar -xzf "$f" ;; esac; done
-  cd - >/dev/null
+if [ ! -x "$DIR/bin/ollama" ]; then
+  echo "Downloading Ollama for Linux x64"
+  if curl -fsSL --retry 3 https://ollama.com/download/ollama-linux-amd64.tar.zst -o /tmp/ollama.tar.zst; then
+    tar --zstd -xf /tmp/ollama.tar.zst -C "$DIR"
+  else
+    curl -fsSL --retry 3 https://ollama.com/download/ollama-linux-amd64.tgz -o /tmp/ollama.tgz
+    tar -xzf /tmp/ollama.tgz -C "$DIR"
+  fi
+  rm -f /tmp/ollama.tar.zst /tmp/ollama.tgz
 fi
-SERVER="$(find "$BIN" -type f -name llama-server | head -1)"
-[ -n "$SERVER" ] || { echo "llama-server was not in the release archive"; find "$BIN" | head -40; exit 1; }
-chmod +x "$SERVER"
-export LD_LIBRARY_PATH="$(dirname "$SERVER"):${LD_LIBRARY_PATH:-}"
+"$DIR/bin/ollama" --version || true
 
-echo "Starting $SERVER with $MODEL"
-nohup "$SERVER" -hf "$MODEL" --host 127.0.0.1 --port 8080 --ctx-size 8192 --threads "$(nproc)" --jinja --reasoning-budget 0 \
-  --parallel 1 > "$HOME/llama-server.log" 2>&1 &
-for i in $(seq 1 180); do                       # the first run downloads about 2.5 GB; later runs read the cache
-  if curl -sf http://127.0.0.1:8080/health >/dev/null; then echo "Model ready after $((i * 5)) s"; exit 0; fi
-  if ! pgrep -f llama-server >/dev/null; then echo "llama-server stopped:"; tail -40 "$HOME/llama-server.log"; exit 1; fi
-  sleep 5
-done
-echo "Model did not become ready in time:"; tail -40 "$HOME/llama-server.log"; exit 1
+nohup "$DIR/bin/ollama" serve > "$HOME/model-server.log" 2>&1 &
+for i in $(seq 1 30); do curl -sf http://$OLLAMA_HOST/api/version >/dev/null && break; sleep 1; done
+curl -sf http://$OLLAMA_HOST/api/version || { echo "Ollama did not start:"; tail -30 "$HOME/model-server.log"; exit 1; }
+echo
+echo "Fetching $MODEL (about 2.5 GB the first time; later runs read the cache)"
+"$DIR/bin/ollama" pull "$MODEL" 2>&1 | tail -2
+"$DIR/bin/ollama" list
+echo "Model ready"

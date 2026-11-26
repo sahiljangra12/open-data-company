@@ -4,11 +4,11 @@ name: Data Agent
 #   - After each daily refresh it writes the daily brief (docs/brief.html, docs/data/brief.json).
 #   - When someone opens an issue titled "Ask: ..." it answers in a comment.
 #   - Run by hand from the Actions tab: type a question to get the answer in the run summary, or leave it empty to rewrite the brief.
-# The model is an open one (Qwen3 4B, Apache 2.0) that agent/start_model.sh runs on this runner with llama.cpp.
+# The model is an open one (Qwen3 4B, Apache 2.0) that agent/start_model.sh runs on this runner with Ollama.
 # No key, no outside AI service, no cost. The model file (about 2.5 GB) is cached between runs.
 # Repository variables (Settings, Secrets and variables, Actions, Variables), all optional:
-#   AGENT_HF_MODEL  another open model, as <Hugging Face repository>:<quantisation>, e.g. Qwen/Qwen3-8B-GGUF:Q4_K_M
-#   AGENT_PUBLIC    set to false to answer only issues opened by the owner and collaborators
+#   AGENT_MODEL    another open model from the Ollama library, e.g. qwen3:8b (slower, better) or qwen3:1.7b (faster)
+#   AGENT_PUBLIC   set to false to answer only issues opened by the owner and collaborators
 on:
   workflow_run:
     workflows: ["Refresh datasets"]
@@ -47,17 +47,16 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: ~/agent-models
-          key: agent-model-${{ vars.AGENT_HF_MODEL || 'qwen3-4b-q4' }}
+          key: agent-model-${{ vars.AGENT_MODEL || 'qwen3:4b' }}
       - name: Start the model on this runner
         continue-on-error: true                 # without a model the agent still answers from the data alone
         env:
-          GH_TOKEN: ${{ github.token }}
-          AGENT_HF_MODEL: ${{ vars.AGENT_HF_MODEL }}
+          AGENT_MODEL: ${{ vars.AGENT_MODEL }}
         run: bash agent/start_model.sh
       - name: Answer
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}     # only to post the comment on the issue
-          AGENT_MODEL: ${{ vars.AGENT_HF_MODEL }}
+          AGENT_MODEL: ${{ vars.AGENT_MODEL }}
           QUESTION: ${{ inputs.question }}      # read from the environment, never pasted into a command
         run: |
           if [ "$GITHUB_EVENT_NAME" = "issues" ]; then python agent/run.py issue; else python agent/run.py ask; fi
@@ -81,20 +80,19 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: ~/agent-models
-          key: agent-model-${{ vars.AGENT_HF_MODEL || 'qwen3-4b-q4' }}
+          key: agent-model-${{ vars.AGENT_MODEL || 'qwen3:4b' }}
       - name: Start the model on this runner
         continue-on-error: true                 # without a model the agent still answers from the data alone
         env:
-          GH_TOKEN: ${{ github.token }}
-          AGENT_HF_MODEL: ${{ vars.AGENT_HF_MODEL }}
+          AGENT_MODEL: ${{ vars.AGENT_MODEL }}
         run: bash agent/start_model.sh
       - name: Write the daily brief
         env:
-          AGENT_MODEL: ${{ vars.AGENT_HF_MODEL }}
+          AGENT_MODEL: ${{ vars.AGENT_MODEL }}
         run: python agent/run.py brief
       - name: Model log, if the brief fell back
         if: always()
-        run: tail -25 ~/llama-server.log || true
+        run: tail -25 ~/model-server.log || true
       - name: Commit the brief
         run: |
           git config user.name "github-actions[bot]"
