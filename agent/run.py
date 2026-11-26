@@ -130,7 +130,8 @@ def figure_check(given="", must_read=True, question=""):
             return ("These figures in your answer match nothing in the tool results: " + ", ".join(loose) + ". Read the values with rank, "
                     "get_values or get_series if you have not, then rewrite the whole answer. Copy each figure digit by digit from the tool "
                     "results and leave out any statement you cannot support. Reply with the corrected answer only.")
-        missing = [p for p in named_places(question) if p.lower() not in read.lower()]
+        outs = " ".join(t["out"] for t in trace).lower()
+        missing = [p for p in named_places(question) if p.lower() not in outs]
         if missing:
             return ("The question asks about " + ", ".join(missing) + ", but you have not read a value for it. Call get_values with the same "
                     "dataset and variable and places " + json.dumps(missing) + ", then rewrite the whole answer including it.")

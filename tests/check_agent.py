@@ -121,7 +121,7 @@ def main():
     assert json.loads(tools.call("get_values", {"dataset": "co2-and-greenhouse-gases", "variable": "CO₂ emissions per capita", "places": ["India"]}))["values"][0]["value"]
 
     # a claimed rise or fall needs two figures; a country the question names must have been read
-    chk = run.figure_check("", question="How does India compare with the US?")
+    chk = run.figure_check("How does India compare with the US?", question="How does India compare with the US?")
     tr = [{"tool": "rank", "args": {}, "out": '{"place": "Qatar", "value": 31.471}'}]
     assert "India" in chk("Qatar leads with 31.471 t.", tr) and "United States" in chk("Qatar leads with 31.471 t.", tr)
     tr.append({"tool": "get_values", "args": {}, "out": '{"place": "India", "value": 2.188} {"place": "United States", "value": 14.5}'})
