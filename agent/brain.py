@@ -7,14 +7,14 @@ No key, no outside AI service, no cost: the model is a file and the runner does 
 The same loop can also use any server that speaks the OpenAI chat-completions protocol:
     AGENT_API_URL    base address, default http://127.0.0.1:11434/v1
     AGENT_API_KEY    sent as a bearer token when set (a local server needs none)
-    AGENT_MODEL      model name passed in the request and shown under answers, default qwen3:4b
+    AGENT_MODEL      model name passed in the request and shown under answers (start_model.sh sets it)
 
 A small model on a CPU is slow and has a short memory, so the loop keeps its history compact and stops after a few steps.
 """
 import json, os, re, time, urllib.error, urllib.request
 
 API = (os.environ.get("AGENT_API_URL") or "http://127.0.0.1:11434/v1").rstrip("/")
-MODEL = os.environ.get("AGENT_MODEL") or "qwen3:4b"
+MODEL = os.environ.get("AGENT_MODEL") or "qwen3:4b-instruct"
 OLLAMA = (os.environ.get("AGENT_API_STYLE") or ("ollama" if ":11434" in API else "openai")) == "ollama"
 
 
@@ -112,6 +112,7 @@ def run(system, task, tools_spec, call_tool, max_steps=6, log=print):
         log(f"step {step + 1}: {len(calls)} tool call(s), {len(text)} chars of text, {note}, {time.time() - t0:.0f} s")
         if not calls:
             if cut:
+                log("cut-off text began:", repr(text[:300]))
                 raise Unavailable("the model ran out of room before finishing its answer")
             return text, MODEL, trace
         for cid, name, args in calls:

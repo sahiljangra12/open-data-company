@@ -73,6 +73,7 @@ def answer(question):
     try:
         text, model, trace = brain.run(SYSTEM, question, tools.SPEC, tools.call, log=log)
         if not usable(text, trace):
+            log("unusable answer began:", repr(text[:300]))
             raise brain.Unavailable("the model's answer was not usable (empty, thinking aloud, or no tool was read)")
     except brain.Unavailable as ex:
         log("falling back to data-only answer:", ex)
@@ -213,6 +214,7 @@ def cmd_brief():
     try:
         text, model, trace = brain.run(SYSTEM, BRIEF_TASK.format(changes=changes), tools.SPEC, tools.call, max_steps=7, log=log)
         if not usable(text, trace) or "###" not in text:
+            log("unusable brief began:", repr(text[:300]))
             raise brain.Unavailable("the model's brief was not usable (empty, thinking aloud, wrong shape, or no tool was read)")
     except brain.Unavailable as ex:
         log("falling back to change-log brief:", ex)
