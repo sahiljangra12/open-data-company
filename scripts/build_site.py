@@ -28,7 +28,7 @@ def header(page):
 
 
 FOOTER = ('<footer><div class="wrap"><nav aria-label="Footer"><a href="ask.html">Data AI</a><a href="datasets.html">Datasets</a><a href="explore.html">Explorer</a>'
-          '<a href="research.html">Researcher mode</a><a href="mydata.html">Your data</a><a href="updates.html">Updates</a><a href="guide.html">Guide</a>'
+          '<a href="research.html">Researcher mode</a><a href="mydata.html">Your data</a><a href="updates.html">Updates</a><a href="brief.html">Daily brief</a><a href="guide.html">Guide</a>'
           '<a href="catalog.html">Sources we are working through</a><a href="scorecard.html">Case study: grid forecast scorecard</a>'
           f'<a href="llms.txt">Plain-text index for AI systems</a><a href="{REPO}">GitHub</a></nav>'
           '<p>Open Data Company is a working name. Everything here is free to use. Each dataset keeps its own source and licence, shown beside it.</p>'
@@ -176,13 +176,14 @@ def llms(man):
             f"- [Explorer]({SITE}explore.html): choose variables, places and years, then download",
             f"- [Researcher mode]({SITE}research.html): test a hypothesis on the data",
             f"- [Your data]({SITE}mydata.html): open your own file in the browser and analyse it",
-            f"- [Updates]({SITE}updates.html): refresh times and what changed", ""]
+            f"- [Updates]({SITE}updates.html): refresh times and what changed",
+            f"- [Daily brief]({SITE}brief.html): a short note on what changed, written each day by the site's Data Agent (JSON: {SITE}data/brief.json)", ""]
     return "\n".join(out)
 
 
 def sitemap(man):
     day = man.get("checked", "")[:10]
-    pages = ["", "ask.html", "datasets.html", "explore.html", "research.html", "mydata.html", "updates.html", "guide.html", "catalog.html", "scorecard.html"]
+    pages = ["", "ask.html", "datasets.html", "explore.html", "research.html", "mydata.html", "updates.html", "brief.html", "guide.html", "catalog.html", "scorecard.html"]
     mod = f"<lastmod>{day}</lastmod>" if day else ""
     urls = "".join(f"<url><loc>{SITE}{p}</loc>{mod}</url>" for p in pages if p == "" or (DOCS / p).exists())
     return f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{urls}</urlset>\n'

@@ -1,0 +1,84 @@
+name: Data Agent
+
+# The site's own small AI system, run entirely on GitHub. Code in agent/.
+#   - After each daily refresh it writes the daily brief (docs/brief.html, docs/data/brief.json).
+#   - When someone opens an issue titled "Ask: ..." it answers in a comment.
+#   - Run by hand from the Actions tab: type a question to get the answer in the run summary, or leave it empty to rewrite the brief.
+# The model is a free one on GitHub Models, reached with this run's own token ("models: read" below). No key is stored.
+# Repository variables (Settings, Secrets and variables, Actions, Variables), all optional:
+#   AGENT_MODEL    force one model id from the GitHub Models catalog, e.g. openai/gpt-4o-mini
+#   AGENT_PUBLIC   set to false to answer only issues opened by the owner and collaborators
+on:
+  workflow_run:
+    workflows: ["Refresh datasets"]
+    types: [completed]
+  issues:
+    types: [opened]
+  workflow_dispatch:
+    inputs:
+      question:
+        description: "A question for the agent (leave empty to write the daily brief)"
+        required: false
+        type: string
+  push:
+    branches: [main]
+    paths: ["agent/**", "tests/check_agent.py", ".github/workflows/data-agent.yml"]
+
+permissions:
+  contents: write
+  issues: write
+  models: read
+
+jobs:
+  answer:
+    if: >-
+      (github.event_name == 'workflow_dispatch' && inputs.question != '') ||
+      (github.event_name == 'issues'
+        && (startsWith(github.event.issue.title, 'Ask:') || contains(github.event.issue.labels.*.name, 'ask'))
+        && (vars.AGENT_PUBLIC != 'false' || contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.issue.author_association)))
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    concurrency: data-agent-answer        # one question at a time, so the free allowance is not burned in a burst
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Answer
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          AGENT_MODEL: ${{ vars.AGENT_MODEL }}
+          QUESTION: ${{ inputs.question }}      # read from the environment, never pasted into a command
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = "issues" ]; then python agent/run.py issue; else python agent/run.py ask; fi
+
+  brief:
+    if: >-
+      github.event_name == 'push' ||
+      (github.event_name == 'workflow_dispatch' && inputs.question == '') ||
+      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    concurrency: data-agent-brief
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python tests/check_agent.py          # the loop and the tools against a stand-in model; spends nothing
+      - name: Write the daily brief
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          AGENT_MODEL: ${{ vars.AGENT_MODEL }}
+        run: python agent/run.py brief
+      - name: Commit the brief
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/brief.html docs/data/brief.json
+          git diff --cached --quiet && echo "No changes" && exit 0
+          git commit -m "Daily brief"
+          git pull --rebase origin main
+          git push

@@ -38,6 +38,7 @@ Five things a visitor can do:
 | `scripts/build_catalog.py` | Source list for the catalog, with the standing of each source checked against the datasets that were actually built |
 | `scripts/build_scorecard.py` | PJM forecast-versus-actual scorecard |
 | `scripts/build_land.mjs`, `scripts/build_worldmap.mjs` | One-off: land points for the fallback globe and country outlines for the map |
+| `agent/`, `.github/workflows/data-agent.yml` | The Data Agent: the site's own AI system on GitHub Actions; writes `docs/brief.html` daily and answers questions posted as issues |
 | `.github/workflows/refresh.yml` | Rebuilds everything every day and commits changes |
 | `.github/workflows/try-sources.yml` | Run by hand: tries chosen builders on GitHub's servers and prints what came back, without saving anything; on a branch it can also rehearse the whole refresh |
 | `.github/workflows/check-stats.yml` | Runs both test suites when the statistics, the readers or the vendored libraries change |
@@ -103,6 +104,34 @@ passages of its own site that fit a question inside the visitor's browser, which
 best one. When this service reports allowance left (`"site_search": true` and `"ai": true` on a GET), the box posts
 `{mode: "site", site, question, passages}` and shows the model's short answer instead. One answer is one small call with no
 tools, paid from the same daily and monthly budget; when the budget is used the box keeps answering from the passages.
+
+## Data Agent: the site's own AI system, run on GitHub
+
+`agent/` is a small AI agent that lives in this repository and runs on GitHub Actions. It is separate from Data AI
+(which answers in the visitor's browser through Netlify): this one needs no outside service at all.
+
+| Part | File | What it is |
+|---|---|---|
+| Tools | `agent/tools.py` | Ten plain Python functions written for this site, no connectors and no packages: `search_datasets`, `find_variables`, `describe_dataset`, `get_values`, `rank`, `get_series`, `recent_changes` read the files in `docs/data`; `world_bank_live`, `earthquakes_live`, `weather_live` call public APIs that need no key |
+| Brain | `agent/brain.py` | A chat model on GitHub Models, reached with the workflow's own `GITHUB_TOKEN` (`models: read`). Free, no key stored. The model is picked from GitHub's live catalog; the loop keeps its history inside the free tier's limits |
+| Runner | `agent/run.py` | Gives the model its task and rules (every figure must come from a tool result), runs the loop, publishes the result |
+| Workflow | `.github/workflows/data-agent.yml` | When it runs, below |
+| Check | `tests/check_agent.py` | The real loop and tools against a stand-in model server. Spends nothing; runs before every brief |
+
+Three ways it runs:
+
+1. **Daily brief.** After each "Refresh datasets" run it reads the change log, checks the newest figures with its tools and
+   writes `docs/brief.html` and `docs/data/brief.json` (the last 30 briefs).
+2. **Questions as issues.** An issue titled `Ask: ...` (the "Ask the Data Agent" template) gets its answer as a comment.
+3. **By hand.** Actions, "Data Agent", Run workflow: type a question to read the answer in the run summary, or leave it
+   empty to rewrite the brief.
+
+If no model can be reached (allowance used up, service down), the agent still answers from the data alone and says so.
+Optional repository variables: `AGENT_MODEL` forces one model id; `AGENT_PUBLIC=false` makes it answer only issues
+opened by the owner and collaborators.
+
+**Add a tool:** write a function in `agent/tools.py` that returns a dict, add it to `TOOLS`, and describe it in `SPEC`.
+The model can use it on the next run. Try locally with `GITHUB_TOKEN=<a token with models:read> python agent/run.py ask "..."`.
 
 ## Your data
 

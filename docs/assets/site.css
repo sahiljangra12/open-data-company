@@ -817,3 +817,12 @@ td.stand .sets span{color:var(--ink2);font-size:13.5px}
 .tag.st-images,.tag.st-bulk,.tag.st-later{color:var(--ink2)}
 .tag.st-terms{border-color:var(--bad);color:var(--bad)}
 td.stand .tag{white-space:normal}
+
+/* daily brief (written by the Data Agent) */
+.card.brief{border:1px solid var(--line2);border-left:3px solid var(--accent);padding:22px 26px;max-width:900px}
+.card.brief p{font-size:16.5px;color:var(--ink);margin:0 0 12px}
+.card.brief p.hint{font-size:14px;color:var(--ink3)}
+.card.brief h3{margin:18px 0 8px}
+.card.brief ul,.faq ul{margin:0 0 12px;padding-left:20px}
+.card.brief li,.faq li{margin:0 0 8px;color:var(--ink2);max-width:80ch}
+.faq h3{font-size:17px;margin:10px 0 6px}

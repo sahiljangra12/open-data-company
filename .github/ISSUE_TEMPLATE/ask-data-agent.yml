@@ -1,0 +1,12 @@
+name: Ask the Data Agent
+description: Ask a question about the data. The site's agent answers in a comment, with figures, years and sources.
+title: "Ask: "
+labels: ["ask"]
+body:
+  - type: textarea
+    id: question
+    attributes:
+      label: Your question
+      description: "For example: Which five countries get the largest share of their electricity from solar? How has the Brent oil price moved since 2020?"
+    validations:
+      required: true

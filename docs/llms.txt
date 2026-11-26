@@ -752,3 +752,4 @@ Summer peak demand for each PJM transmission zone: the forecasts published in Ja
 - [Researcher mode](https://sahiljangra12.github.io/open-data-company/research.html): test a hypothesis on the data
 - [Your data](https://sahiljangra12.github.io/open-data-company/mydata.html): open your own file in the browser and analyse it
 - [Updates](https://sahiljangra12.github.io/open-data-company/updates.html): refresh times and what changed
+- [Daily brief](https://sahiljangra12.github.io/open-data-company/brief.html): a short note on what changed, written each day by the site's Data Agent (JSON: https://sahiljangra12.github.io/open-data-company/data/brief.json)
