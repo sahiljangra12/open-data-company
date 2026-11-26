@@ -1,5 +1,5 @@
 {
- "checked": "2026-11-25T16:30:24Z",
+ "checked": "2026-11-26T15:48:44Z",
  "cron": "23 5 * * *",
  "datasets": [
   {
@@ -5692,11 +5692,11 @@
    "time": {
     "col": "time",
     "type": "date",
-    "min": "2026-10-26T16:02:31Z",
-    "max": "2026-11-25T13:39:19Z"
+    "min": "2026-10-27T15:26:03Z",
+    "max": "2026-11-26T14:35:26Z"
    },
    "entity": null,
-   "rows": 1818,
+   "rows": 1813,
    "columns": [
     {
      "name": "magnitude",
@@ -5704,7 +5704,7 @@
      "unit": "",
      "description": "",
      "type": "num",
-     "filled": 1818
+     "filled": 1813
     },
     {
      "name": "place",
@@ -5712,7 +5712,7 @@
      "unit": "",
      "description": "",
      "type": "str",
-     "filled": 1818
+     "filled": 1813
     },
     {
      "name": "latitude",
@@ -5720,7 +5720,7 @@
      "unit": "degrees",
      "description": "",
      "type": "num",
-     "filled": 1818
+     "filled": 1813
     },
     {
      "name": "longitude",
@@ -5728,7 +5728,7 @@
      "unit": "degrees",
      "description": "",
      "type": "num",
-     "filled": 1818
+     "filled": 1813
     },
     {
      "name": "depth_km",
@@ -5736,7 +5736,7 @@
      "unit": "km",
      "description": "",
      "type": "num",
-     "filled": 1818
+     "filled": 1813
     },
     {
      "name": "magnitude_type",
@@ -5744,7 +5744,7 @@
      "unit": "",
      "description": "",
      "type": "str",
-     "filled": 1818
+     "filled": 1813
     },
     {
      "name": "event_type",
@@ -5752,7 +5752,7 @@
      "unit": "",
      "description": "",
      "type": "str",
-     "filled": 1818
+     "filled": 1813
     },
     {
      "name": "significance",
@@ -5760,7 +5760,7 @@
      "unit": "0-1000",
      "description": "USGS score combining magnitude, felt reports and estimated impact.",
      "type": "num",
-     "filled": 1818
+     "filled": 1813
     },
     {
      "name": "tsunami_flag",
@@ -5768,7 +5768,7 @@
      "unit": "",
      "description": "1 if the event was in an oceanic region and may warrant tsunami information; not a warning.",
      "type": "num",
-     "filled": 1818
+     "filled": 1813
     },
     {
      "name": "felt_reports",
@@ -5776,7 +5776,7 @@
      "unit": "reports",
      "description": "",
      "type": "num",
-     "filled": 303
+     "filled": 304
     },
     {
      "name": "url",
@@ -5784,11 +5784,11 @@
      "unit": "",
      "description": "",
      "type": "str",
-     "filled": 1818
+     "filled": 1813
     }
    ],
-   "bytes": 317986,
-   "built": "2026-11-25",
+   "bytes": 317191,
+   "built": "2026-11-26",
    "coverage": "Rolling 30 days",
    "default_vars": [
     "magnitude",
@@ -21364,8 +21364,8 @@
      "filled": 4398
     }
    ],
-   "bytes": 238285,
-   "built": "2026-11-24",
+   "bytes": 238286,
+   "built": "2026-11-26",
    "coverage": "2000 to 2025",
    "entities": 204,
    "chart_entities": [
@@ -23446,36 +23446,36 @@
     "col": "year",
     "type": "year",
     "min": "1750",
-    "max": "2023"
+    "max": "2024"
    },
    "entity": {
     "col": "code",
     "label_col": "country",
     "label": "Country or region"
    },
-   "rows": 13444,
+   "rows": 13662,
    "columns": [
     {
      "name": "daily_calorie_supply_per_person",
      "title": "Daily calorie supply per person",
      "unit": "kilocalories per day",
-     "description": "Source: Food and Agriculture Organization of the United Nations (2025) and other sources – with major processing by Our World in Data. Our World in Data chart: daily-per-capita-caloric-supply.",
+     "description": "Source: Food and Agriculture Organization of the United Nations (2026) and other sources – with major processing by Our World in Data. Our World in Data chart: daily-per-capita-caloric-supply.",
      "type": "num",
-     "filled": 13444
+     "filled": 13662
     },
     {
      "name": "meat_supply_per_person",
      "title": "Meat supply per person",
      "unit": "kilograms a year",
-     "description": "Quantity that is available for consumption at the end of the supply chain. It does not account for consumer waste, so the quantity that is actually consumed may be lower. Source: Food and Agriculture Organization of the United Nations (2025) – processed by Our World in Data. Our World in Data chart: meat-supply-per-person.",
+     "description": "Quantity that is available for consumption at the end of the supply chain. It does not account for consumer waste, so the quantity that is actually consumed may be lower. Source: Food and Agriculture Organization of the United Nations (2026) – processed by Our World in Data. Our World in Data chart: meat-supply-per-person.",
      "type": "num",
-     "filled": 13221
+     "filled": 13439
     }
    ],
-   "bytes": 562204,
-   "built": "2026-11-24",
-   "coverage": "1750 to 2023",
-   "entities": 244,
+   "bytes": 575677,
+   "built": "2026-11-26",
+   "coverage": "1750 to 2024",
+   "entities": 243,
    "chart_entities": [
     "WLD",
     "CHN",
@@ -24241,10 +24241,6 @@
     [
      "OWID_SRM",
      "Serbia and Montenegro"
-    ],
-    [
-     "SYC",
-     "Seychelles"
     ],
     [
      "SLE",
@@ -35643,8 +35639,8 @@
      "filled": 35
     }
    ],
-   "bytes": 3070,
-   "built": "2026-11-25",
+   "bytes": 3066,
+   "built": "2026-11-26",
    "coverage": "1950 to 2025",
    "step": "year",
    "cadence": "Counts grow every day as papers are indexed"
@@ -37827,8 +37823,8 @@
      "filled": 249
     }
    ],
-   "bytes": 11837,
-   "built": "2026-11-24",
+   "bytes": 11840,
+   "built": "2026-11-26",
    "coverage": "2026",
    "entities": 250,
    "chart_entities": [
@@ -38860,10 +38856,10 @@
     "col": "date",
     "type": "date",
     "min": "2026-10-22",
-    "max": "2026-11-22"
+    "max": "2026-11-23"
    },
    "entity": null,
-   "rows": 32,
+   "rows": 33,
    "columns": [
     {
      "name": "checklists_us",
@@ -38871,7 +38867,7 @@
      "unit": "checklists",
      "description": "eBird, Cornell Lab of Ornithology: lists of birds seen, sent in by birdwatchers. The newest three days are left out because lists are still arriving.",
      "type": "num",
-     "filled": 32
+     "filled": 33
     },
     {
      "name": "species_us",
@@ -38879,7 +38875,7 @@
      "unit": "species",
      "description": "eBird, Cornell Lab of Ornithology.",
      "type": "num",
-     "filled": 32
+     "filled": 33
     },
     {
      "name": "checklists_india",
@@ -38887,7 +38883,7 @@
      "unit": "checklists",
      "description": "eBird, Cornell Lab of Ornithology: lists of birds seen, sent in by birdwatchers. The newest three days are left out because lists are still arriving.",
      "type": "num",
-     "filled": 32
+     "filled": 33
     },
     {
      "name": "species_india",
@@ -38895,7 +38891,7 @@
      "unit": "species",
      "description": "eBird, Cornell Lab of Ornithology.",
      "type": "num",
-     "filled": 32
+     "filled": 33
     },
     {
      "name": "checklists_uk",
@@ -38903,7 +38899,7 @@
      "unit": "checklists",
      "description": "eBird, Cornell Lab of Ornithology: lists of birds seen, sent in by birdwatchers. The newest three days are left out because lists are still arriving.",
      "type": "num",
-     "filled": 32
+     "filled": 33
     },
     {
      "name": "species_uk",
@@ -38911,11 +38907,11 @@
      "unit": "species",
      "description": "eBird, Cornell Lab of Ornithology.",
      "type": "num",
-     "filled": 32
+     "filled": 33
     }
    ],
-   "bytes": 1358,
-   "built": "2026-11-25",
+   "bytes": 1397,
+   "built": "2026-11-26",
    "coverage": "2026",
    "step": "day",
    "cadence": "Every day"
@@ -41389,10 +41385,10 @@
     "col": "date",
     "type": "date",
     "min": "1986-01-02",
-    "max": "2026-11-17"
+    "max": "2026-11-24"
    },
    "entity": null,
-   "rows": 10239,
+   "rows": 10244,
    "columns": [
     {
      "name": "brent_usd_per_barrel",
@@ -41400,7 +41396,7 @@
      "unit": "US$ per barrel",
      "description": "",
      "type": "num",
-     "filled": 9132
+     "filled": 9137
     },
     {
      "name": "wti_usd_per_barrel",
@@ -41408,11 +41404,11 @@
      "unit": "US$ per barrel",
      "description": "",
      "type": "num",
-     "filled": 9547
+     "filled": 9552
     }
    ],
-   "bytes": 235846,
-   "built": "2026-11-24",
+   "bytes": 235964,
+   "built": "2026-11-26",
    "coverage": "1986 to 2026",
    "cadence": "New trading days about once a week"
   },
@@ -41433,10 +41429,10 @@
     "col": "date",
     "type": "date",
     "min": "1997-01-07",
-    "max": "2026-11-17"
+    "max": "2026-11-24"
    },
    "entity": null,
-   "rows": 5732,
+   "rows": 5737,
    "columns": [
     {
      "name": "henry_hub_usd_per_mmbtu",
@@ -41444,11 +41440,11 @@
      "unit": "US$ per million Btu",
      "description": "",
      "type": "num",
-     "filled": 5732
+     "filled": 5737
     }
    ],
-   "bytes": 96874,
-   "built": "2026-11-24",
+   "bytes": 96958,
+   "built": "2026-11-26",
    "coverage": "1997 to 2026",
    "cadence": "New trading days about once a week"
   },
@@ -41799,10 +41795,10 @@
     "col": "date",
     "type": "date",
     "min": "1954-07-01",
-    "max": "2026-11-24"
+    "max": "2026-11-25"
    },
    "entity": null,
-   "rows": 26445,
+   "rows": 26446,
    "columns": [
     {
      "name": "federal_funds_rate_daily",
@@ -41810,7 +41806,7 @@
      "unit": "% a year",
      "description": "Published by Federal Reserve; FRED series DFF.",
      "type": "num",
-     "filled": 26444
+     "filled": 26445
     },
     {
      "name": "treasury_2_year",
@@ -41818,7 +41814,7 @@
      "unit": "% a year",
      "description": "Published by Federal Reserve; FRED series DGS2.",
      "type": "num",
-     "filled": 12616
+     "filled": 12617
     },
     {
      "name": "treasury_10_year",
@@ -41826,7 +41822,7 @@
      "unit": "% a year",
      "description": "Published by Federal Reserve; FRED series DGS10.",
      "type": "num",
-     "filled": 16208
+     "filled": 16209
     },
     {
      "name": "treasury_30_year",
@@ -41834,7 +41830,7 @@
      "unit": "% a year",
      "description": "Published by Federal Reserve; FRED series DGS30.",
      "type": "num",
-     "filled": 12438
+     "filled": 12439
     },
     {
      "name": "yield_curve_10_year_minus_2_year",
@@ -41842,7 +41838,7 @@
      "unit": "percentage points",
      "description": "Published by Federal Reserve; FRED series T10Y2Y.",
      "type": "num",
-     "filled": 12617
+     "filled": 12618
     },
     {
      "name": "expected_inflation_10_year",
@@ -41850,7 +41846,7 @@
      "unit": "% a year",
      "description": "Published by Federal Reserve; FRED series T10YIE.",
      "type": "num",
-     "filled": 5978
+     "filled": 5979
     },
     {
      "name": "dollars_per_euro",
@@ -41885,8 +41881,8 @@
      "filled": 14008
     }
    ],
-   "bytes": 1166991,
-   "built": "2026-11-25",
+   "bytes": 1167036,
+   "built": "2026-11-26",
    "coverage": "1954 to 2026",
    "step": "day",
    "cadence": "Every business day"
@@ -41908,10 +41904,10 @@
     "col": "date",
     "type": "date",
     "min": "1993-04-01",
-    "max": "2026-11-23"
+    "max": "2026-11-24"
    },
    "entity": null,
-   "rows": 8440,
+   "rows": 8441,
    "columns": [
     {
      "name": "total_public_debt",
@@ -41919,7 +41915,7 @@
      "unit": "current US$",
      "description": "Total public debt outstanding: everything the federal government owes.",
      "type": "num",
-     "filled": 8440
+     "filled": 8441
     },
     {
      "name": "debt_held_by_the_public",
@@ -41927,7 +41923,7 @@
      "unit": "current US$",
      "description": "Federal debt held by investors outside the government.",
      "type": "num",
-     "filled": 5482
+     "filled": 5483
     },
     {
      "name": "intragovernmental_holdings",
@@ -41935,11 +41931,11 @@
      "unit": "current US$",
      "description": "Federal debt held by government trust funds such as Social Security.",
      "type": "num",
-     "filled": 5482
+     "filled": 5483
     }
    ],
-   "bytes": 387306,
-   "built": "2026-11-24",
+   "bytes": 387362,
+   "built": "2026-11-26",
    "coverage": "1993 to 2026",
    "step": "day",
    "cadence": "Every business day"
@@ -42014,10 +42010,10 @@
     "col": "date",
     "type": "date",
     "min": "2019-01-01",
-    "max": "2026-11-24"
+    "max": "2026-11-23"
    },
    "entity": null,
-   "rows": 2885,
+   "rows": 2884,
    "columns": [
     {
      "name": "demand_us48",
@@ -42025,7 +42021,7 @@
      "unit": "megawatt-hours in the day",
      "description": "US Energy Information Administration, Hourly Electric Grid Monitor, balancing authority US48.",
      "type": "num",
-     "filled": 2885
+     "filled": 2884
     },
     {
      "name": "demand_pjm",
@@ -42033,7 +42029,7 @@
      "unit": "megawatt-hours in the day",
      "description": "US Energy Information Administration, Hourly Electric Grid Monitor, balancing authority PJM.",
      "type": "num",
-     "filled": 2884
+     "filled": 2883
     },
     {
      "name": "demand_miso",
@@ -42041,7 +42037,7 @@
      "unit": "megawatt-hours in the day",
      "description": "US Energy Information Administration, Hourly Electric Grid Monitor, balancing authority MISO.",
      "type": "num",
-     "filled": 2885
+     "filled": 2884
     },
     {
      "name": "demand_erco",
@@ -42049,7 +42045,7 @@
      "unit": "megawatt-hours in the day",
      "description": "US Energy Information Administration, Hourly Electric Grid Monitor, balancing authority ERCO.",
      "type": "num",
-     "filled": 2885
+     "filled": 2884
     },
     {
      "name": "demand_ciso",
@@ -42057,7 +42053,7 @@
      "unit": "megawatt-hours in the day",
      "description": "US Energy Information Administration, Hourly Electric Grid Monitor, balancing authority CISO.",
      "type": "num",
-     "filled": 2885
+     "filled": 2884
     },
     {
      "name": "demand_swpp",
@@ -42065,7 +42061,7 @@
      "unit": "megawatt-hours in the day",
      "description": "US Energy Information Administration, Hourly Electric Grid Monitor, balancing authority SWPP.",
      "type": "num",
-     "filled": 2885
+     "filled": 2884
     },
     {
      "name": "demand_nyis",
@@ -42073,7 +42069,7 @@
      "unit": "megawatt-hours in the day",
      "description": "US Energy Information Administration, Hourly Electric Grid Monitor, balancing authority NYIS.",
      "type": "num",
-     "filled": 2885
+     "filled": 2884
     },
     {
      "name": "demand_isne",
@@ -42081,11 +42077,11 @@
      "unit": "megawatt-hours in the day",
      "description": "US Energy Information Administration, Hourly Electric Grid Monitor, balancing authority ISNE.",
      "type": "num",
-     "filled": 2885
+     "filled": 2884
     }
    ],
-   "bytes": 209678,
-   "built": "2026-11-25",
+   "bytes": 209605,
+   "built": "2026-11-26",
    "coverage": "2019 to 2026",
    "step": "day",
    "cadence": "Every day"
@@ -42870,8 +42866,8 @@
      "filled": 199
     }
    ],
-   "bytes": 5635,
-   "built": "2026-11-24",
+   "bytes": 5634,
+   "built": "2026-11-26",
    "coverage": "2010 to 2026",
    "step": "month",
    "cadence": "Every day"
@@ -44179,11 +44175,11 @@
      "Germanna Community College"
     ],
     [
-     "115001",
+     "104708",
      "Glendale Community College"
     ],
     [
-     "104708",
+     "115001",
      "Glendale Community College"
     ],
     [
@@ -48822,10 +48818,10 @@
     "col": "date",
     "type": "date",
     "min": "2022-02-05",
-    "max": "2026-11-14"
+    "max": "2026-11-21"
    },
    "entity": null,
-   "rows": 250,
+   "rows": 251,
    "columns": [
     {
      "name": "united_states",
@@ -48833,7 +48829,7 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 250
+     "filled": 251
     },
     {
      "name": "alabama",
@@ -48841,7 +48837,7 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 250
+     "filled": 251
     },
     {
      "name": "alaska",
@@ -48849,7 +48845,7 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 250
+     "filled": 251
     },
     {
      "name": "arizona",
@@ -48857,7 +48853,7 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 250
+     "filled": 251
     },
     {
      "name": "arkansas",
@@ -48865,7 +48861,7 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 250
+     "filled": 251
     },
     {
      "name": "california",
@@ -48873,7 +48869,7 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 250
+     "filled": 251
     },
     {
      "name": "colorado",
@@ -48881,7 +48877,7 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 250
+     "filled": 251
     },
     {
      "name": "connecticut",
@@ -48889,7 +48885,7 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 250
+     "filled": 251
     },
     {
      "name": "delaware",
@@ -48897,7 +48893,7 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 250
+     "filled": 251
     },
     {
      "name": "district_of_columbia",
@@ -48905,7 +48901,7 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 250
+     "filled": 251
     },
     {
      "name": "florida",
@@ -48913,7 +48909,7 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 250
+     "filled": 251
     },
     {
      "name": "georgia",
@@ -48921,7 +48917,7 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 250
+     "filled": 251
     },
     {
      "name": "hawaii",
@@ -48929,7 +48925,7 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 250
+     "filled": 251
     },
     {
      "name": "idaho",
@@ -48937,7 +48933,7 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 250
+     "filled": 251
     },
     {
      "name": "illinois",
@@ -48945,7 +48941,7 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 250
+     "filled": 251
     },
     {
      "name": "indiana",
@@ -48953,7 +48949,7 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 250
+     "filled": 251
     },
     {
      "name": "iowa",
@@ -48961,7 +48957,7 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 250
+     "filled": 251
     },
     {
      "name": "kansas",
@@ -48969,7 +48965,7 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 250
+     "filled": 251
     },
     {
      "name": "kentucky",
@@ -48977,7 +48973,7 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 250
+     "filled": 251
     },
     {
      "name": "louisiana",
@@ -48985,7 +48981,7 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 250
+     "filled": 251
     },
     {
      "name": "maine",
@@ -48993,7 +48989,7 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 250
+     "filled": 251
     },
     {
      "name": "maryland",
@@ -49001,7 +48997,7 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 250
+     "filled": 251
     },
     {
      "name": "massachusetts",
@@ -49009,7 +49005,7 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 233
+     "filled": 234
     },
     {
      "name": "michigan",
@@ -49017,7 +49013,7 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 250
+     "filled": 251
     },
     {
      "name": "minnesota",
@@ -49025,7 +49021,7 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 236
+     "filled": 237
     },
     {
      "name": "mississippi",
@@ -49033,7 +49029,7 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 250
+     "filled": 251
     },
     {
      "name": "missouri",
@@ -49041,7 +49037,7 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 250
+     "filled": 251
     },
     {
      "name": "montana",
@@ -49049,7 +49045,7 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 250
+     "filled": 251
     },
     {
      "name": "nebraska",
@@ -49057,7 +49053,7 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 250
+     "filled": 251
     },
     {
      "name": "nevada",
@@ -49065,7 +49061,7 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 250
+     "filled": 251
     },
     {
      "name": "new_hampshire",
@@ -49073,7 +49069,7 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 250
+     "filled": 251
     },
     {
      "name": "new_jersey",
@@ -49081,7 +49077,7 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 250
+     "filled": 251
     },
     {
      "name": "new_mexico",
@@ -49089,7 +49085,7 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 250
+     "filled": 251
     },
     {
      "name": "new_york",
@@ -49097,7 +49093,7 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 250
+     "filled": 251
     },
     {
      "name": "north_carolina",
@@ -49105,7 +49101,7 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 250
+     "filled": 251
     },
     {
      "name": "north_dakota",
@@ -49113,7 +49109,7 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 250
+     "filled": 251
     },
     {
      "name": "ohio",
@@ -49121,7 +49117,7 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 250
+     "filled": 251
     },
     {
      "name": "oklahoma",
@@ -49129,7 +49125,7 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 250
+     "filled": 251
     },
     {
      "name": "oregon",
@@ -49137,7 +49133,7 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 250
+     "filled": 251
     },
     {
      "name": "pennsylvania",
@@ -49145,7 +49141,7 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 250
+     "filled": 251
     },
     {
      "name": "puerto_rico",
@@ -49153,7 +49149,7 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 250
+     "filled": 251
     },
     {
      "name": "rhode_island",
@@ -49161,7 +49157,7 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 250
+     "filled": 251
     },
     {
      "name": "south_carolina",
@@ -49169,7 +49165,7 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 250
+     "filled": 251
     },
     {
      "name": "south_dakota",
@@ -49177,7 +49173,7 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 250
+     "filled": 251
     },
     {
      "name": "tennessee",
@@ -49185,7 +49181,7 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 250
+     "filled": 251
     },
     {
      "name": "texas",
@@ -49193,7 +49189,7 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 250
+     "filled": 251
     },
     {
      "name": "utah",
@@ -49201,7 +49197,7 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 250
+     "filled": 251
     },
     {
      "name": "vermont",
@@ -49209,7 +49205,7 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 250
+     "filled": 251
     },
     {
      "name": "virginia",
@@ -49217,7 +49213,7 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 250
+     "filled": 251
     },
     {
      "name": "washington",
@@ -49225,7 +49221,7 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 250
+     "filled": 251
     },
     {
      "name": "west_virginia",
@@ -49233,7 +49229,7 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 245
+     "filled": 246
     },
     {
      "name": "wisconsin",
@@ -49241,7 +49237,7 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 250
+     "filled": 251
     },
     {
      "name": "wyoming",
@@ -49249,11 +49245,11 @@
      "unit": "people admitted",
      "description": "People newly admitted to hospital with confirmed influenza in the week ending on the date, as reported by hospitals to CDC.",
      "type": "num",
-     "filled": 250
+     "filled": 251
     }
    ],
-   "bytes": 42176,
-   "built": "2026-11-24",
+   "bytes": 42385,
+   "built": "2026-11-26",
    "coverage": "2022 to 2026",
    "step": "week",
    "cadence": "A new week every week"
@@ -49778,18 +49774,10 @@
      "description": "US Geological Survey stream gauge 01358000: the average of the daily mean flow in each month with at least 25 days recorded.",
      "type": "num",
      "filled": 887
-    },
-    {
-     "name": "sacramento_at_freeport",
-     "title": "Flow of the Sacramento River at Freeport, monthly average",
-     "unit": "cubic feet per second",
-     "description": "US Geological Survey stream gauge 11447650: the average of the daily mean flow in each month with at least 25 days recorded.",
-     "type": "num",
-     "filled": 789
     }
    ],
-   "bytes": 55713,
-   "built": "2026-11-25",
+   "bytes": 50927,
+   "built": "2026-11-26",
    "coverage": "1950 to 2026",
    "step": "month",
    "cadence": "A new month every month"
@@ -50336,11 +50324,11 @@
    "time": {
     "col": "date",
     "type": "date",
-    "min": "2017-01-01",
+    "min": "2014-01-01",
     "max": "2026-01-01"
    },
    "entity": null,
-   "rows": 10,
+   "rows": 13,
    "columns": [
     {
      "name": "court_opinions",
@@ -50348,12 +50336,12 @@
      "unit": "opinions",
      "description": "Written decisions of federal and state courts collected by CourtListener (Free Law Project). Coverage of lower courts is incomplete; the current year is not over. Earlier years are added a few at a time.",
      "type": "num",
-     "filled": 10
+     "filled": 13
     }
    ],
-   "bytes": 204,
-   "built": "2026-11-25",
-   "coverage": "2017 to 2026",
+   "bytes": 261,
+   "built": "2026-11-26",
+   "coverage": "2014 to 2026",
    "step": "year",
    "partial": true,
    "cadence": "Every day"

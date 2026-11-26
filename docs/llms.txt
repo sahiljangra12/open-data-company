@@ -11,7 +11,7 @@ When you answer a question with these numbers, give the value, its year and the 
 - Newest value of every variable for every country (JSON, country-and-year datasets): https://sahiljangra12.github.io/open-data-company/data/latest/<dataset id>.json
 - Country list with World Bank region and income group (JSON): https://sahiljangra12.github.io/open-data-company/data/countries.json
 - Country-and-year files have the columns `code` (ISO alpha-3, or a World Bank or Our World in Data code for a region), `country`, `year`, then one column per variable. Empty cells mean no data.
-- Last checked: 2026-11-25T16:30:24Z. Checked daily at about 05:23 UTC.
+- Last checked: 2026-11-26T15:48:44Z. Checked daily at about 05:23 UTC.
 
 ## Datasets
 
@@ -64,7 +64,7 @@ The concentration of carbon dioxide in the air, measured at Mauna Loa since 1958
 
 Every earthquake of magnitude 2.5 or greater recorded worldwide in the past 30 days, with location, depth and magnitude.
 
-- File: https://sahiljangra12.github.io/open-data-company/data/sets/earthquakes-past-30-days.csv (1,818 rows, 318 KB)
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/earthquakes-past-30-days.csv (1,813 rows, 317 KB)
 - Keys: id, time. Covers Rolling 30 days.
 - Source: US Geological Survey, Earthquake Hazards Program (https://earthquake.usgs.gov/earthquakes/feed/). Licence: Public domain (US federal data).
 - Variables: `magnitude` Magnitude; `place` Nearest place; `latitude` Latitude (degrees); `longitude` Longitude (degrees); `depth_km` Depth (km); `magnitude_type` Magnitude type; `event_type` Event type; `significance` Significance score (0-1000); `tsunami_flag` Tsunami flag; `felt_reports` Felt reports (reports); `url` USGS event page
@@ -226,8 +226,8 @@ Farming and food by country and year, compiled by the World Bank from the Food a
 
 How much food is available per person in each country: daily calories and meat.
 
-- File: https://sahiljangra12.github.io/open-data-company/data/sets/food-supply.csv (13,444 rows, 562 KB)
-- Keys: code, year. Covers 1750 to 2023.
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/food-supply.csv (13,662 rows, 576 KB)
+- Keys: code, year. Covers 1750 to 2024.
 - Source: Food and Agriculture Organization (FAOSTAT), via Our World in Data (https://ourworldindata.org). Licence: CC BY 4.0 (Our World in Data; original sources named per variable).
 - Variables: `daily_calorie_supply_per_person` Daily calorie supply per person (kilocalories per day); `meat_supply_per_person` Meat supply per person (kilograms a year)
 
@@ -379,7 +379,7 @@ How many records of animals, plants and fungi GBIF holds for each country. More 
 
 How many birdwatching lists are sent in each day, and how many kinds of bird they report, for the United States, India and the United Kingdom.
 
-- File: https://sahiljangra12.github.io/open-data-company/data/sets/bird-observations-daily.csv (32 rows, 1 KB)
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/bird-observations-daily.csv (33 rows, 1 KB)
 - Keys: date. Covers 2026.
 - Source: eBird, Cornell Lab of Ornithology (https://ebird.org). Licence: eBird API terms: free for non-commercial use with the source named.
 - Variables: `checklists_us` Bird checklists sent in from the United States that day (checklists); `species_us` Bird species reported in the United States that day (species); `checklists_india` Bird checklists sent in from India that day (checklists); `species_india` Bird species reported in India that day (species); `checklists_uk` Bird checklists sent in from the United Kingdom that day (checklists); `species_uk` Bird species reported in the United Kingdom that day (species)
@@ -433,7 +433,7 @@ Where the United Nations expects each country's population, ageing, births and l
 
 Daily spot prices for Brent, the international benchmark, and WTI, the US benchmark.
 
-- File: https://sahiljangra12.github.io/open-data-company/data/sets/crude-oil-prices.csv (10,239 rows, 236 KB)
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/crude-oil-prices.csv (10,244 rows, 236 KB)
 - Keys: date. Covers 1986 to 2026.
 - Source: US Energy Information Administration, via DataHub (https://github.com/datasets/oil-prices). Licence: Public domain (US federal data; PDDL packaging).
 - Variables: `brent_usd_per_barrel` Brent spot price (US$ per barrel); `wti_usd_per_barrel` WTI spot price (US$ per barrel)
@@ -442,7 +442,7 @@ Daily spot prices for Brent, the international benchmark, and WTI, the US benchm
 
 Daily Henry Hub natural gas spot price, the US benchmark.
 
-- File: https://sahiljangra12.github.io/open-data-company/data/sets/natural-gas-prices.csv (5,732 rows, 97 KB)
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/natural-gas-prices.csv (5,737 rows, 97 KB)
 - Keys: date. Covers 1997 to 2026.
 - Source: US Energy Information Administration, via DataHub (https://github.com/datasets/natural-gas). Licence: Public domain (US federal data; PDDL packaging).
 - Variables: `henry_hub_usd_per_mmbtu` Henry Hub spot price (US$ per million Btu)
@@ -469,7 +469,7 @@ Quarterly figures for the United States: real GDP and its growth, GDP per person
 
 Daily Treasury yields, the federal funds rate, the yield curve, expected inflation, and the dollar against the euro, rupee, yuan and yen.
 
-- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-rates-and-currencies-daily.csv (26,445 rows, 1.2 MB)
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-rates-and-currencies-daily.csv (26,446 rows, 1.2 MB)
 - Keys: date. Covers 1954 to 2026.
 - Source: US Bureau of Labor Statistics, Bureau of Economic Analysis, Census Bureau, Federal Reserve and FHFA, via FRED (https://fred.stlouisfed.org). Licence: Public domain (US federal data), retrieved from FRED, Federal Reserve Bank of St. Louis.
 - Variables: `federal_funds_rate_daily` US federal funds rate, daily (% a year); `treasury_2_year` US 2-year Treasury yield (% a year); `treasury_10_year` US 10-year Treasury yield (% a year); `treasury_30_year` US 30-year Treasury yield (% a year); `yield_curve_10_year_minus_2_year` US yield curve: 10-year minus 2-year Treasury yield (percentage points); `expected_inflation_10_year` US expected inflation over 10 years (breakeven rate) (% a year); `dollars_per_euro` US dollars per euro (US$ per euro); `rupees_per_dollar` Indian rupees per US dollar (rupees per US$); `yuan_per_dollar` Chinese yuan per US dollar (yuan per US$); `yen_per_dollar` Japanese yen per US dollar (yen per US$)
@@ -478,7 +478,7 @@ Daily Treasury yields, the federal funds rate, the yield curve, expected inflati
 
 What the US federal government owes, to the penny, for every business day since 1993.
 
-- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-national-debt.csv (8,440 rows, 387 KB)
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-national-debt.csv (8,441 rows, 387 KB)
 - Keys: date. Covers 1993 to 2026.
 - Source: US Treasury, Fiscal Data: Debt to the Penny (https://fiscaldata.treasury.gov/datasets/debt-to-the-penny/). Licence: Public domain (US federal data).
 - Variables: `total_public_debt` US national debt (current US$); `debt_held_by_the_public` US debt held by the public (current US$); `intragovernmental_holdings` US debt held by government accounts (current US$)
@@ -496,7 +496,7 @@ How many home loans US lenders made each year, how much they lent, and how many 
 
 How much electricity the main US power grids deliver each day, from the grid operators' own reports.
 
-- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-grid-demand-daily.csv (2,885 rows, 210 KB)
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-grid-demand-daily.csv (2,884 rows, 210 KB)
 - Keys: date. Covers 2019 to 2026.
 - Source: US Energy Information Administration, Hourly Electric Grid Monitor (data from PJM, MISO, ERCOT, CAISO, SPP, NYISO and ISO New England) (https://www.eia.gov/electricity/gridmonitor/). Licence: Public domain (US federal data).
 - Variables: `demand_us48` Electricity demand in the lower 48 states, daily (megawatt-hours in the day); `demand_pjm` Electricity demand in PJM (mid-Atlantic and Midwest), daily (megawatt-hours in the day); `demand_miso` Electricity demand in MISO (Midwest and South), daily (megawatt-hours in the day); `demand_erco` Electricity demand in ERCOT (Texas), daily (megawatt-hours in the day); `demand_ciso` Electricity demand in California ISO, daily (megawatt-hours in the day); `demand_swpp` Electricity demand in Southwest Power Pool, daily (megawatt-hours in the day); `demand_nyis` Electricity demand in New York ISO, daily (megawatt-hours in the day); `demand_isne` Electricity demand in ISO New England, daily (megawatt-hours in the day)
@@ -568,7 +568,7 @@ Monthly average temperature and precipitation for the contiguous United States, 
 
 How many people were admitted to hospital with confirmed flu each week, for the country and every state. This is the series the CDC FluSight forecasts are scored against.
 
-- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-flu-hospital-admissions.csv (250 rows, 42 KB)
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-flu-hospital-admissions.csv (251 rows, 42 KB)
 - Keys: date. Covers 2022 to 2026.
 - Source: Centers for Disease Control and Prevention (NHSN), via the FluSight Forecast Hub (https://github.com/cdcepi/FluSight-forecast-hub). Licence: Public domain (US federal data).
 - Variables: `united_states` Flu hospital admissions in the week, the United States (people admitted); `alabama` Flu hospital admissions in the week, Alabama (people admitted); `alaska` Flu hospital admissions in the week, Alaska (people admitted); `arizona` Flu hospital admissions in the week, Arizona (people admitted); `arkansas` Flu hospital admissions in the week, Arkansas (people admitted); `california` Flu hospital admissions in the week, California (people admitted); `colorado` Flu hospital admissions in the week, Colorado (people admitted); `connecticut` Flu hospital admissions in the week, Connecticut (people admitted); `delaware` Flu hospital admissions in the week, Delaware (people admitted); `district_of_columbia` Flu hospital admissions in the week, District of Columbia (people admitted); `florida` Flu hospital admissions in the week, Florida (people admitted); `georgia` Flu hospital admissions in the week, Georgia (people admitted); `hawaii` Flu hospital admissions in the week, Hawaii (people admitted); `idaho` Flu hospital admissions in the week, Idaho (people admitted); `illinois` Flu hospital admissions in the week, Illinois (people admitted); `indiana` Flu hospital admissions in the week, Indiana (people admitted); `iowa` Flu hospital admissions in the week, Iowa (people admitted); `kansas` Flu hospital admissions in the week, Kansas (people admitted); `kentucky` Flu hospital admissions in the week, Kentucky (people admitted); `louisiana` Flu hospital admissions in the week, Louisiana (people admitted); `maine` Flu hospital admissions in the week, Maine (people admitted); `maryland` Flu hospital admissions in the week, Maryland (people admitted); `massachusetts` Flu hospital admissions in the week, Massachusetts (people admitted); `michigan` Flu hospital admissions in the week, Michigan (people admitted); `minnesota` Flu hospital admissions in the week, Minnesota (people admitted); `mississippi` Flu hospital admissions in the week, Mississippi (people admitted); `missouri` Flu hospital admissions in the week, Missouri (people admitted); `montana` Flu hospital admissions in the week, Montana (people admitted); `nebraska` Flu hospital admissions in the week, Nebraska (people admitted); `nevada` Flu hospital admissions in the week, Nevada (people admitted); `new_hampshire` Flu hospital admissions in the week, New Hampshire (people admitted); `new_jersey` Flu hospital admissions in the week, New Jersey (people admitted); `new_mexico` Flu hospital admissions in the week, New Mexico (people admitted); `new_york` Flu hospital admissions in the week, New York (people admitted); `north_carolina` Flu hospital admissions in the week, North Carolina (people admitted); `north_dakota` Flu hospital admissions in the week, North Dakota (people admitted); `ohio` Flu hospital admissions in the week, Ohio (people admitted); `oklahoma` Flu hospital admissions in the week, Oklahoma (people admitted); `oregon` Flu hospital admissions in the week, Oregon (people admitted); `pennsylvania` Flu hospital admissions in the week, Pennsylvania (people admitted); `puerto_rico` Flu hospital admissions in the week, Puerto Rico (people admitted); `rhode_island` Flu hospital admissions in the week, Rhode Island (people admitted); `south_carolina` Flu hospital admissions in the week, South Carolina (people admitted); `south_dakota` Flu hospital admissions in the week, South Dakota (people admitted); `tennessee` Flu hospital admissions in the week, Tennessee (people admitted); `texas` Flu hospital admissions in the week, Texas (people admitted); `utah` Flu hospital admissions in the week, Utah (people admitted); `vermont` Flu hospital admissions in the week, Vermont (people admitted); `virginia` Flu hospital admissions in the week, Virginia (people admitted); `washington` Flu hospital admissions in the week, Washington (people admitted); `west_virginia` Flu hospital admissions in the week, West Virginia (people admitted); `wisconsin` Flu hospital admissions in the week, Wisconsin (people admitted); `wyoming` Flu hospital admissions in the week, Wyoming (people admitted)
@@ -604,10 +604,10 @@ How many research projects the US National Institutes of Health pays for in each
 
 How much water eight major US rivers carry, month by month, from stream gauges that have run for decades.
 
-- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-river-flow-monthly.csv (922 rows, 56 KB)
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-river-flow-monthly.csv (922 rows, 51 KB)
 - Keys: date. Covers 1950 to 2026.
 - Source: US Geological Survey, National Water Information System (https://waterdata.usgs.gov). Licence: Public domain (US federal data).
-- Variables: `mississippi_at_st_louis` Flow of the Mississippi River at St. Louis, monthly average (cubic feet per second); `missouri_at_hermann` Flow of the Missouri River at Hermann, monthly average (cubic feet per second); `ohio_at_louisville` Flow of the Ohio River at Louisville, monthly average (cubic feet per second); `columbia_at_the_dalles` Flow of the Columbia River at The Dalles, monthly average (cubic feet per second); `colorado_at_lees_ferry` Flow of the Colorado River at Lees Ferry, monthly average (cubic feet per second); `potomac_near_washington` Flow of the Potomac River near Washington, DC, monthly average (cubic feet per second); `hudson_at_green_island` Flow of the Hudson River at Green Island, monthly average (cubic feet per second); `sacramento_at_freeport` Flow of the Sacramento River at Freeport, monthly average (cubic feet per second)
+- Variables: `mississippi_at_st_louis` Flow of the Mississippi River at St. Louis, monthly average (cubic feet per second); `missouri_at_hermann` Flow of the Missouri River at Hermann, monthly average (cubic feet per second); `ohio_at_louisville` Flow of the Ohio River at Louisville, monthly average (cubic feet per second); `columbia_at_the_dalles` Flow of the Columbia River at The Dalles, monthly average (cubic feet per second); `colorado_at_lees_ferry` Flow of the Colorado River at Lees Ferry, monthly average (cubic feet per second); `potomac_near_washington` Flow of the Potomac River near Washington, DC, monthly average (cubic feet per second); `hudson_at_green_island` Flow of the Hudson River at Green Island, monthly average (cubic feet per second)
 
 ### US drug and device safety reports and recalls, monthly
 
@@ -676,8 +676,8 @@ Violent crime, property crime, homicides and vehicle thefts reported by US polic
 
 How many written decisions US courts publish each year.
 
-- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-court-opinions.csv (10 rows, 1 KB)
-- Keys: date. Covers 2017 to 2026.
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-court-opinions.csv (13 rows, 1 KB)
+- Keys: date. Covers 2014 to 2026.
 - Source: CourtListener, Free Law Project (https://www.courtlistener.com). Licence: Public domain court documents; CourtListener metadata CC BY-ND.
 - Variables: `court_opinions` US court opinions published in the year (opinions)
 
