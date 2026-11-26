@@ -305,7 +305,8 @@ Error = (forecast - normalized actual) / normalized actual. Positive means the f
 ## Third-party code
 
 `docs/vendor/` holds SheetJS Community Edition 0.20.3 (Apache 2.0; reads and writes spreadsheets) and hyparquet
-(MIT; reads Parquet). Versions and where each file came from are in `docs/vendor/README.md`.
+(MIT; reads Parquet), and WebLLM 0.2.89 (Apache 2.0; runs the chat app's on-device model). Versions and where each file
+came from are in `docs/vendor/README.md`.
 The Earth photographs in `docs/img/` (the globe textures and the night-lights band) are NASA
 Earth Observatory's Blue Marble and Black Marble imagery, which NASA releases without copyright; they were taken from the
 `three-globe` package's examples and cropped. The pictures in the guide (`shot-*.jpg`) are screenshots of the site's own
