@@ -37,7 +37,7 @@ def log(*a):
 
 def footer(model, trace):
     used = ", ".join(dict.fromkeys(t["tool"] for t in trace)) or "none"
-    who = f"`{model}` on GitHub Models" if model else "no model (data-only fallback)"
+    who = f"{model}, an open model run on GitHub's own runner" if model else "no model (data-only fallback)"
     return f"\n\n---\n<sub>Data Agent · {who} · tools used: {used} · [how it works](https://github.com/{REPO}/tree/main/agent)</sub>"
 
 
@@ -176,7 +176,8 @@ def brief_page(briefs):
     import build_site as site
     b = briefs[0]
     when = datetime.fromisoformat(b["at"].replace("Z", "+00:00")).strftime("%d %B %Y, %H:%M UTC").lstrip("0")
-    who = f'the model <code>{html.escape(b["model"])}</code> on GitHub Models' if b.get("model") else "the change log alone (no model was reachable)"
+    who = (f'{html.escape(b["model"])}, an open model that runs on GitHub\'s own machines during the run (no outside AI service)'
+           if b.get("model") else "the change log alone (no model was reachable)")
     used = ", ".join(f"<code>{html.escape(t)}</code>" for t in b.get("tools", [])) or "none"
     older = "".join(f'<details><summary>{html.escape(o["at"][:10])}</summary>{md_html(o["markdown"])}</details>' for o in briefs[1:15])
     new_issue = f"https://github.com/{REPO}/issues/new?template=ask-data-agent.yml"
@@ -188,7 +189,7 @@ def brief_page(briefs):
 </div>
 <p class="hint">Written by {who}. Tools it called: {used}. Every figure was read from the <a href="datasets.html">datasets</a> or a live public source during the run; <a href="updates.html">see the full change log</a>.</p></section>
 <section><h2>Ask the agent yourself</h2>
-<p>The same agent answers questions posted as GitHub issues, usually within a minute or two, with the figures, their years and their sources. For instant answers in the browser, use <a href="ask.html">Data AI</a>.</p>
+<p>The same agent answers questions posted as GitHub issues, usually within about ten minutes, with the figures, their years and their sources. For instant answers in the browser, use <a href="ask.html">Data AI</a>.</p>
 <p><a class="btn solid" href="{new_issue}">Ask on GitHub</a> <a class="btn" href="https://github.com/{REPO}/tree/main/agent">How the agent is built</a></p></section>
 {f'<section><h2>Earlier briefs</h2><div class="faq" style="margin-top:18px">{older}</div></section>' if older else ''}
 <p class="hint">The briefs are also available to programs as <a href="data/brief.json">data/brief.json</a>.</p>
@@ -203,7 +204,7 @@ def cmd_brief():
     ch = tools.recent_changes(1)
     changes = json.dumps(ch["checks"], ensure_ascii=False)[:3500]
     try:
-        text, model, trace = brain.run(SYSTEM, BRIEF_TASK.format(changes=changes), tools.SPEC, tools.call, max_steps=8, log=log)
+        text, model, trace = brain.run(SYSTEM, BRIEF_TASK.format(changes=changes), tools.SPEC, tools.call, max_steps=7, log=log)
         if not text:
             raise brain.Unavailable("empty brief")
     except brain.Unavailable as ex:

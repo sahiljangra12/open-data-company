@@ -108,12 +108,12 @@ tools, paid from the same daily and monthly budget; when the budget is used the 
 ## Data Agent: the site's own AI system, run on GitHub
 
 `agent/` is a small AI agent that lives in this repository and runs on GitHub Actions. It is separate from Data AI
-(which answers in the visitor's browser through Netlify): this one needs no outside service at all.
+(which answers in the visitor's browser through Netlify): this one needs no outside AI service at all.
 
 | Part | File | What it is |
 |---|---|---|
 | Tools | `agent/tools.py` | Ten plain Python functions written for this site, no connectors and no packages: `search_datasets`, `find_variables`, `describe_dataset`, `get_values`, `rank`, `get_series`, `recent_changes` read the files in `docs/data`; `world_bank_live`, `earthquakes_live`, `weather_live` call public APIs that need no key |
-| Brain | `agent/brain.py` | A chat model on GitHub Models, reached with the workflow's own `GITHUB_TOKEN` (`models: read`). Free, no key stored. The model is picked from GitHub's live catalog; the loop keeps its history inside the free tier's limits |
+| Brain | `agent/brain.py`, `agent/start_model.sh` | An open model (Qwen3 4B, Apache 2.0) that the workflow runs on GitHub's own runner with llama.cpp. No key, no outside AI service, no cost; the model file is cached between runs. The loop keeps its history short to suit a small model on a CPU. (GitHub Models, GitHub's hosted model service, was retired on 30 July 2026, so the agent does not depend on it.) |
 | Runner | `agent/run.py` | Gives the model its task and rules (every figure must come from a tool result), runs the loop, publishes the result |
 | Workflow | `.github/workflows/data-agent.yml` | When it runs, below |
 | Check | `tests/check_agent.py` | The real loop and tools against a stand-in model server. Spends nothing; runs before every brief |
@@ -126,12 +126,14 @@ Three ways it runs:
 3. **By hand.** Actions, "Data Agent", Run workflow: type a question to read the answer in the run summary, or leave it
    empty to rewrite the brief.
 
-If no model can be reached (allowance used up, service down), the agent still answers from the data alone and says so.
-Optional repository variables: `AGENT_MODEL` forces one model id; `AGENT_PUBLIC=false` makes it answer only issues
+A run takes a few minutes, since the model thinks on a 4-core machine. If the model cannot be started, the agent still
+answers from the data alone and says so. Optional repository variables: `AGENT_HF_MODEL` picks another open model
+(`<Hugging Face repository>:<quantisation>`); `AGENT_PUBLIC=false` makes it answer only issues
 opened by the owner and collaborators.
 
 **Add a tool:** write a function in `agent/tools.py` that returns a dict, add it to `TOOLS`, and describe it in `SPEC`.
-The model can use it on the next run. Try locally with `GITHUB_TOKEN=<a token with models:read> python agent/run.py ask "..."`.
+The model can use it on the next run. To try it on your own computer, run `bash agent/start_model.sh` (or any server
+that speaks the OpenAI chat protocol, set in `AGENT_API_URL`), then `python agent/run.py ask "..."`.
 
 ## Your data
 

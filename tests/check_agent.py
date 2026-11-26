@@ -1,7 +1,7 @@
 """Checks the Data Agent without spending any model allowance.
 
-A stand-in server plays the part of GitHub Models: it lists a catalog, then answers the chat calls with a scripted
-sequence (two tool calls, then a final text). The real loop, the real tools and the real data files are used.
+A stand-in server plays the part of the model server (llama.cpp in the workflow): it answers the chat calls with a
+scripted sequence (three tool calls, one of them to a tool that does not exist, then a final text). The real loop, the real tools and the real data files are used.
 
     python tests/check_agent.py
 """
@@ -26,13 +26,10 @@ class Stand(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(b)
 
-    def do_GET(self):
-        self.send([{"id": "openai/gpt-4o-mini", "capabilities": ["tool-calling", "streaming"]}, {"id": "x/no-tools", "capabilities": []}])
-
     def do_POST(self):
         body = json.loads(self.rfile.read(int(self.headers["Content-Length"])))
         SEEN.append(body)
-        assert self.headers["Authorization"] == "Bearer test-token"
+        assert self.path == "/v1/chat/completions", self.path
         n = sum(1 for m in body["messages"] if m["role"] == "assistant")
         call = lambda name, args: self.send({"choices": [{"message": {"role": "assistant", "content": None, "tool_calls": [
             {"id": f"c{n}", "type": "function", "function": {"name": name, "arguments": json.dumps(args)}}]}}]})
@@ -45,15 +42,14 @@ class Stand(BaseHTTPRequestHandler):
         else:
             last = [m for m in body["messages"] if m["role"] == "tool"][1]["content"]
             v = json.loads(last)["values"]
-            self.send({"choices": [{"message": {"role": "assistant", "content": f"India {v[0]['value']} t, United States {v[1]['value']} t ({v[0]['when']})."}}]})
+            self.send({"choices": [{"message": {"role": "assistant", "content": f"<think>private notes</think>India {v[0]['value']} t, United States {v[1]['value']} t ({v[0]['when']})."}}]})
 
 
 def main():
     srv = HTTPServer(("127.0.0.1", 0), Stand)
     threading.Thread(target=srv.serve_forever, daemon=True).start()
-    os.environ["AGENT_API_URL"] = f"http://127.0.0.1:{srv.server_port}"
-    os.environ["GITHUB_TOKEN"] = "test-token"
-    os.environ.pop("AGENT_MODEL", None)
+    os.environ["AGENT_API_URL"] = f"http://127.0.0.1:{srv.server_port}/v1"
+    os.environ["AGENT_MODEL"] = "stand-in"
     import brain, run, tools
 
     # the tools, against the real files
@@ -70,7 +66,7 @@ def main():
 
     # the loop
     text, model, trace = run.answer("Compare CO2 per person in India and the USA")
-    assert model == "openai/gpt-4o-mini", model
+    assert model == "stand-in", model
     assert [t["tool"] for t in trace] == ["find_variables", "get_values", "no_such_tool"], trace
     assert text.startswith("India ") and "United States" in text, text
     assert all("tools" in b for b in SEEN) and SEEN[0]["messages"][0]["role"] == "system"
@@ -79,10 +75,10 @@ def main():
     # history is kept inside the free tier's input limit
     msgs = [{"role": "system", "content": "s"}, {"role": "user", "content": "q"}] + [{"role": "tool", "tool_call_id": str(i), "content": "x" * 2500} for i in range(12)]
     brain.compact(msgs)
-    assert sum(len(m["content"]) for m in msgs) <= 16000 and len(msgs[-1]["content"]) == 2500
+    assert sum(len(m["content"]) for m in msgs) <= 14000 and len(msgs[-1]["content"]) == 2500
 
     # no model reachable: the agent still answers from the data, and says so
-    os.environ["AGENT_API_URL"] = "http://127.0.0.1:9"
+    os.environ["AGENT_API_URL"] = "http://127.0.0.1:9/v1"
     import importlib
     importlib.reload(brain)
     run.brain = brain

@@ -1,62 +1,48 @@
-"""The Data Agent's brain: a chat model on GitHub Models, reached with the repository's own GITHUB_TOKEN.
+"""The Data Agent's brain: an open language model that runs on the same machine as the agent.
 
-Inside GitHub Actions the workflow grants `models: read`, so no key is stored anywhere and nothing is paid. The free
-tier has small per-request limits (about 8,000 tokens in, 4,000 out on most models) and a daily request allowance, so
-the loop below keeps its history short and stops after a few steps.
+In GitHub Actions, agent/start_model.sh downloads llama.cpp and an open model (Qwen3 4B by default, Apache 2.0) and
+starts llama.cpp's server on 127.0.0.1:8080. This file talks to it with the OpenAI chat-completions protocol, tools
+included. No key, no outside service, no cost: the model is a file and the runner does the thinking.
 
-The model is chosen from GitHub's live catalog: the first of PREFERRED that is listed and can call tools, else any
-listed model that can. Set the repository variable AGENT_MODEL to force one. AGENT_API_URL points the client at another
-OpenAI-compatible server (the test uses a stand-in).
+Because the protocol is the common one, the same code can use any other server that speaks it:
+    AGENT_API_URL    base address, default http://127.0.0.1:8080/v1
+    AGENT_API_KEY    sent as a bearer token when set (a local server needs none)
+    AGENT_MODEL      model name passed in the request and shown under answers
+
+A small model on a CPU is slow and has a short memory, so the loop keeps its history compact and stops after a few steps.
 """
-import json, os, sys, time, urllib.error, urllib.request
+import json, os, re, urllib.error, urllib.request
 
-API = os.environ.get("AGENT_API_URL", "https://models.github.ai").rstrip("/")
-PREFERRED = ["openai/gpt-4.1-mini", "openai/gpt-4o-mini", "openai/gpt-4.1", "openai/gpt-4o", "mistral-ai/mistral-medium-2505",
-             "meta/llama-4-maverick-17b-128e-instruct-fp8"]
+API = os.environ.get("AGENT_API_URL", "http://127.0.0.1:8080/v1").rstrip("/")
+MODEL = os.environ.get("AGENT_MODEL") or "Qwen3 4B"
+LOCAL = "127.0.0.1" in API or "localhost" in API
 
 
 class Unavailable(Exception):
-    """No model could be reached: no token, no allowance left, or the service is down."""
+    """The model could not be reached or gave nothing usable."""
 
 
-HEADERS = {"Accept": "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28", "User-Agent": "open-data-company-agent"}
-
-
-def _read(req, timeout):
+def _post(path, body, timeout=900):
+    headers = {"Content-Type": "application/json", "Accept": "application/json", "User-Agent": "open-data-company-agent"}
+    if os.environ.get("AGENT_API_KEY"):
+        headers["Authorization"] = "Bearer " + os.environ["AGENT_API_KEY"]
+    req = urllib.request.Request(API + path, data=json.dumps(body).encode(), method="POST", headers=headers)
     with urllib.request.urlopen(req, timeout=timeout) as r:
         raw = r.read()
-        if r.headers.get("Content-Encoding") == "gzip":
-            import gzip
-            raw = gzip.decompress(raw)
         try:
             return json.loads(raw.decode("utf-8-sig"))
         except ValueError:
-            raise ValueError(f"not JSON: HTTP {r.status}, {r.headers.get('Content-Type')}, {len(raw)} bytes, starts {raw[:160]!r}") from None
+            raise ValueError(f"not JSON: HTTP {r.status}, {r.headers.get('Content-Type')}, starts {raw[:160]!r}") from None
 
 
-def _post(path, body, token, timeout=90):
-    req = urllib.request.Request(API + path, data=json.dumps(body).encode(), method="POST",
-                                 headers={**HEADERS, "Authorization": f"Bearer {token}", "Content-Type": "application/json"})
-    return _read(req, timeout)
+def clean(text):
+    """Drop a reasoning model's private notes, which some servers leave inside the reply."""
+    text = re.sub(r"<think>.*?</think>", "", text or "", flags=re.S)
+    return re.sub(r"^.*?</think>", "", text, flags=re.S).strip()
 
 
-def models(token):
-    forced = os.environ.get("AGENT_MODEL", "").strip()
-    if forced:
-        return [forced]
-    try:
-        cat = _read(urllib.request.Request(API + "/catalog/models", headers={**HEADERS, "Authorization": f"Bearer {token}"}), 30)
-        able = [m["id"] for m in cat if "tool-calling" in (m.get("capabilities") or [])]
-    except Exception as ex:  # noqa: BLE001 - without the catalog, fall back to the usual names
-        print("catalog error:", ex, file=sys.stderr)
-        return PREFERRED[:3]
-    first = [m for m in PREFERRED if m in able]
-    low = [m for m in able if m not in first and any(k in m for k in ("mini", "small", "nano", "flash"))]
-    return (first + low)[:4] or able[:3] or PREFERRED[:3]
-
-
-def compact(messages, budget=16000):
-    """Shrink the oldest tool results until the conversation fits the free tier's input limit (≈4 characters a token)."""
+def compact(messages, budget=14000):
+    """Shrink the oldest tool results until the conversation fits the model's memory (about 4 characters a token)."""
     size = lambda: sum(len(m.get("content") or "") + len(json.dumps(m.get("tool_calls") or "")) for m in messages)
     for m in messages[2:]:
         if size() <= budget:
@@ -65,57 +51,47 @@ def compact(messages, budget=16000):
             m["content"] = m["content"][:300] + '…"(shortened to save space)"'
 
 
-def run(system, task, tools_spec, call_tool, max_steps=7, log=print):
+def run(system, task, tools_spec, call_tool, max_steps=6, log=print):
     """The agent loop. Returns (answer_text, model_used, trace) where trace lists each tool call."""
-    token = os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_MODELS_TOKEN")
-    if not token:
-        raise Unavailable("No GITHUB_TOKEN in the environment.")
-    candidates = models(token)
     messages = [{"role": "system", "content": system}, {"role": "user", "content": task}]
-    trace, model, last_err = [], None, None
+    trace, seen = [], set()
     for step in range(max_steps):
         compact(messages)
         final = step == max_steps - 1
-        body = {"messages": messages, "temperature": 0.2, "max_tokens": 1500}
+        if final:
+            messages.append({"role": "user", "content": "Write the final answer now from what the tools returned. No more tool calls."})
+        body = {"model": MODEL, "messages": messages, "temperature": 0.2, "max_tokens": 900}
+        if LOCAL:
+            body["chat_template_kwargs"] = {"enable_thinking": False}     # answer directly; thinking aloud is slow on a CPU
         if not final:
             body["tools"] = tools_spec
-        else:
-            messages.append({"role": "user", "content": "Write the final answer now from what the tools returned. No more tool calls."})
-        res = None
-        for m in ([model] if model else candidates):
-            for attempt in range(2):
-                try:
-                    res = _post("/inference/chat/completions", {**body, "model": m}, token)
-                    model = m
-                    break
-                except urllib.error.HTTPError as ex:
-                    last_err = f"{m}: HTTP {ex.code} {ex.read()[:200].decode(errors='replace')}"
-                    log("model error:", last_err)
-                    if ex.code == 429 and attempt == 0:
-                        time.sleep(min(int(ex.headers.get("Retry-After") or 10), 30))
-                        continue
-                    break
-                except Exception as ex:  # noqa: BLE001
-                    last_err = f"{m}: {ex}"
-                    log("model error:", last_err)
-                    break
-            if res:
-                break
-        if not res:
-            raise Unavailable(last_err or "no model answered")
+        try:
+            res = _post("/chat/completions", body)
+        except urllib.error.HTTPError as ex:
+            raise Unavailable(f"HTTP {ex.code} {ex.read()[:300].decode(errors='replace')}") from None
+        except Exception as ex:  # noqa: BLE001
+            raise Unavailable(str(ex)) from None
         msg = res["choices"][0]["message"]
         calls = msg.get("tool_calls") or []
-        messages.append({"role": "assistant", "content": msg.get("content") or "", **({"tool_calls": calls} if calls else {})})
+        text = clean(msg.get("content"))
+        messages.append({"role": "assistant", "content": text, **({"tool_calls": calls} if calls else {})})
+        t = res.get("timings") or {}
+        log(f"step {step + 1}: {len(calls)} tool call(s), {len(text)} chars of text"
+            + (f", {t.get('prompt_n')} tokens read, {t.get('predicted_n')} written at {t.get('predicted_per_second', 0):.1f}/s" if t else ""))
         if not calls:
-            return (msg.get("content") or "").strip(), model, trace
+            return text, MODEL, trace
         for c in calls:
             name = c["function"]["name"]
-            try:
-                args = json.loads(c["function"].get("arguments") or "{}")
-            except json.JSONDecodeError:
-                args = {}
-            out = call_tool(name, args)
+            args = c["function"].get("arguments") or {}
+            if isinstance(args, str):
+                try:
+                    args = json.loads(args or "{}")
+                except json.JSONDecodeError:
+                    args = {}
+            key = name + json.dumps(args, sort_keys=True)
+            out = call_tool(name, args) if key not in seen else json.dumps({"note": "You already made this exact call. Use the earlier result and write the answer."})
+            seen.add(key)
             trace.append({"tool": name, "args": args})
-            log(f"tool {name}({json.dumps(args, ensure_ascii=False)[:160]}) -> {len(out)} chars")
-            messages.append({"role": "tool", "tool_call_id": c["id"], "content": out})
-    return "", model, trace
+            log(f"  tool {name}({json.dumps(args, ensure_ascii=False)[:160]}) -> {len(out)} chars")
+            messages.append({"role": "tool", "tool_call_id": c.get("id") or f"call{len(trace)}", "content": out})
+    return "", MODEL, trace
