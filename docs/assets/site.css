@@ -826,3 +826,15 @@ td.stand .tag{white-space:normal}
 .card.brief ul,.faq ul{margin:0 0 12px;padding-left:20px}
 .card.brief li,.faq li{margin:0 0 8px;color:var(--ink2);max-width:80ch}
 .faq h3{font-size:17px;margin:10px 0 6px}
+/* ---------- Data AI: small tables in an answer, and questions to ask next ---------- */
+.anstable{overflow-x:auto;margin:10px 0 14px}
+.anstable table{border-collapse:collapse;font-size:15px;width:100%}
+.anstable th,.anstable td{text-align:left;padding:8px 16px 8px 0;border-bottom:1px solid var(--line);vertical-align:top;background:transparent;white-space:normal}
+.anstable th{border-bottom:1px solid var(--line2);min-width:84px}
+.anstable td:first-child,.anstable th:first-child{min-width:112px}
+.anstable td:not(:first-child),.anstable th:not(:first-child){font-variant-numeric:tabular-nums}
+.anstable tr:last-child td{border-bottom:0}
+.nextq{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.nextq button{font:400 15px/1.35 var(--body);text-align:left;padding:9px 13px;border:1px solid var(--line2);background:var(--bg);color:var(--ink);cursor:pointer;min-height:42px}
+.nextq button:hover{border-color:var(--accent);background:var(--accent);color:#fff}
+.nextq button:focus-visible{outline:2px solid var(--accent-text);outline-offset:2px}

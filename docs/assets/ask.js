@@ -297,11 +297,41 @@ function matchVars(query, n) {                                          // the v
   if (words.length) V.forEach(v => { if (!v.ok || !(isCountrySet(v.d) || isSeriesSet(v.d))) return; const k = words.filter(w => v.q.includes(w)).length; if (k >= Math.ceil(words.length * 0.6)) hits.set(v.id, Math.max(hits.get(v.id) || 0, k / words.length + 1 / (20 + v.c.title.length))); });
   return [...hits].sort((a, b) => b[1] - a[1]).slice(0, n).map(([id]) => V.get(id));
 }
+let TABLES = null;
+function matchTables(query, n) {                                       // the tables (one row for each state, college, food and so on) that fit some plain words, best first
+  TABLES = TABLES || M.filter(d => !isCountrySet(d) && !isSeriesSet(d)).map(d => ({ d, q: ` ${norm([d.title, d.entity ? d.entity.label : "", ...d.columns.map(c => `${c.name.replace(/_/g, " ")} ${c.title || ""}`)].join(" "))} ` }));
+  const words = [...new Set(norm(query || "").split(" ").filter(w => w.length > 2 && !STOP.has(w) && !VISFILL.has(w)).map(w => (w.length > 3 ? w.replace(/(ies|es|s)$/, "") : w)))];
+  const rare = w => 1 / Math.max(1, TABLES.filter(t => t.q.includes(w)).length);                                       // a word found in few tables says more than one found in all of them
+  return TABLES.map(t => [t.d, words.reduce((a, w) => a + (t.q.includes(w) ? rare(w) : 0), 0)]).filter(x => x[1] > 0).sort((a, b) => b[1] - a[1]).slice(0, n).map(x => x[0]);
+}
+const canRows = () => !!(AI.can && AI.can.tools && AI.can.tools.includes("get_rows"));                                 // only the newer service has the tool that reads tables
 const r6 = x => (x === null || x === undefined || !isFinite(x) ? null : +(+x).toPrecision(6));
 const codeOf = name => { const raw = String(name || "").trim(); if (/^[A-Za-z]{3}$/.test(raw) && LABEL.has(raw.toUpperCase())) return raw.toUpperCase(); const n = norm(raw); return PLACE.get(n) || PLACE.get(n.replace(/^the /, "")) || null; };
 const TOOLS = {
   async find_variables({ query }) {
-    return { matches: matchVars(query, 8).map(v => ({ id: v.id, title: v.c.title, unit: v.c.unit || "", source: v.d.source, covers: v.d.coverage, by: byText(v.d) })) };
+    const out = { matches: matchVars(query, 8).map(v => ({ id: v.id, title: v.c.title, unit: v.c.unit || "", source: v.d.source, covers: v.d.coverage, by: byText(v.d) })) };
+    if (canRows()) { const t = matchTables(query, 3); if (t.length) out.tables = t.map(d => ({ dataset: d.id, title: d.title, read_with: "get_rows", columns: d.columns.filter(c => c.type === "num").map(c => c.name).slice(0, 12) })); }
+    return out;
+  },
+  async get_rows({ dataset, find, sort_by, order, n, year, columns }, used) {
+    const d = M.find(x => x.id === dataset); if (!d) return { error: "No dataset has that id. The ids are listed in your instructions." };
+    if (isCountrySet(d) || isSeriesSet(d)) return { error: "This dataset is not a table of rows. Use get_values, rank or get_series with one of its variables." };
+    const T = await load(d), nums = d.columns.filter(c => c.type === "num").map(c => c.name), ent = d.entity, tc = d.time.col, strs = d.columns.filter(c => c.type === "str" && c.name !== tc && !/^(url|id)$/.test(c.name)).map(c => c.name),
+      lab = ent ? ent.label_col : strs.find(c => /^(name|title|bank|place|college|food)$/.test(c)) || strs[0];
+    let cols = [].concat(columns || []).filter(c => T.c[c] && c !== lab); if (!cols.length) cols = nums.slice(0, 8).concat(ent ? [] : strs.filter(c => c !== lab).slice(0, 4)); if (sort_by && !T.c[sort_by]) return { error: `No column named ${sort_by}. Columns: ${nums.join(", ")}` }; if (sort_by) cols = [sort_by, ...cols.filter(c => c !== sort_by)];                                      // the column it is ranked by comes first
+    let rows = [...Array(T.n).keys()];
+    const yearly = d.time.type === "year";
+    if (yearly && year) rows = rows.filter(i => T.c[tc][i] === +year);
+    else if (yearly && ent) { const best = new Map(), need = sort_by || cols[0]; rows.forEach(i => { if (need && isNaN(T.c[need][i])) return; const k = T.c[ent.col][i], j = best.get(k); if (j === undefined || T.c[tc][i] > T.c[tc][j]) best.set(k, i); }); rows = [...best.values()]; }   // the newest year each row has a figure for
+    const text = i => norm((ent ? [T.c[lab][i], T.c[ent.col][i]] : strs.map(c => T.c[c][i])).filter(Boolean).join(" "));
+    if (find) { const want = norm(find).split(" ").filter(Boolean); rows = rows.filter(i => { const t = ` ${text(i)} `; return want.every(w => t.includes(w)); }); if (!rows.length) return { error: `Nothing in this table is named like "${find}".`, dataset: d.title }; }
+    if (sort_by) rows = rows.filter(i => !isNaN(T.c[sort_by][i])).sort((a, b) => (order === "bottom" ? 1 : -1) * (T.c[sort_by][a] - T.c[sort_by][b]));
+    else if (!find) rows.sort((a, b) => (T.c[tc][b] > T.c[tc][a] ? 1 : T.c[tc][b] < T.c[tc][a] ? -1 : 0));
+    const total = rows.length, take = rows.slice(0, Math.max(1, Math.min(+n || 8, 15)));
+    const out = { table: d.title, source: d.source, rows_matching: total, columns: Object.fromEntries(cols.map(c => { const m = d.columns.find(x => x.name === c) || {}; return [c, `${m.title || c}${m.unit ? " (" + m.unit + ")" : ""}`]; })),
+      rows: take.map(i => ({ name: lab ? T.c[lab][i] : undefined, [yearly ? "year" : "date"]: yearly ? T.c[tc][i] : String(T.c[tc][i]).slice(0, 10), ...Object.fromEntries(cols.map(c => [c, typeof T.c[c][i] === "number" ? (isNaN(T.c[c][i]) ? null : r6(T.c[c][i])) : T.c[c][i]])) })) };
+    used.push({ kind: "rows", d, out });
+    return out;
   },
   async get_values({ variable, places, year }, used) {
     const v = V.get(variable); if (!v) return { error: "Unknown variable id. Call find_variables to get the right one." };
@@ -363,37 +393,59 @@ TOOLS.show_chart = async (input, used) => {                            // draws 
 const AI = { url: typeof DATA_AI_URL === "string" ? DATA_AI_URL : "", state: null, memory: [] };
 function aiReady() {
   if (!AI.url) return Promise.resolve(false);
-  return AI.state || (AI.state = (async () => { try { const c = new AbortController(), t = setTimeout(() => c.abort(), 5000), r = await fetch(AI.url, { signal: c.signal }); clearTimeout(t); const j = await r.json(); return !!(j && j.ok && j.ai); } catch (e) { return false; } })());
+  return AI.state || (AI.state = (async () => { try { const c = new AbortController(), t = setTimeout(() => c.abort(), 5000), r = await fetch(AI.url, { signal: c.signal }); clearTimeout(t); const j = await r.json(); AI.can = j || {}; return !!(j && j.ok && j.ai); } catch (e) { return false; } })());
 }
-const TOOL_SAYS = { find_variables: i => `Searching the variables for "${i.query || ""}"`, get_values: i => `Reading ${(V.get(i.variable) || { c: { title: "the data" } }).c.title.toLowerCase()} for ${[].concat(i.places || []).join(", ")}`, rank: i => `Ranking countries by ${(V.get(i.variable) || { c: { title: "that measure" } }).c.title.toLowerCase()}`,
+const TOOL_SAYS = { get_rows: i => `Reading the table ${((M.find(x => x.id === i.dataset) || {}).title || "").toLowerCase() || "asked for"}${i.find ? " for " + i.find : ""}`, find_variables: i => `Searching the variables for "${i.query || ""}"`, get_values: i => `Reading ${(V.get(i.variable) || { c: { title: "the data" } }).c.title.toLowerCase()} for ${[].concat(i.places || []).join(", ")}`, rank: i => `Ranking countries by ${(V.get(i.variable) || { c: { title: "that measure" } }).c.title.toLowerCase()}`,
   get_series: i => `Reading the history of ${(V.get(i.variable) || { c: { title: "that measure" } }).c.title.toLowerCase()}${i.place ? " for " + i.place : ""}`, recent_earthquakes: () => "Reading the latest earthquakes",
   show_chart: i => `Drawing a ${i.kind === "map" ? "world map" : i.kind === "scatter" ? "scatter chart" : i.kind === "bar" ? "bar chart" : "line chart"} of ${(V.get(i.variable) || { c: { title: "the data" } }).c.title.toLowerCase()}` };
 /* The service's standing instructions name only the first datasets. Each question therefore carries a short note with the
    variables on this page that fit its words, so the model reaches every dataset. The note is not kept in the conversation. */
 function hintFor(q) {
-  const room = 1180 - q.length, head = `\n\n(Note added by the site, not typed by the visitor: the site now holds ${M.length} datasets and ${V.size} variables, more than your instructions list, including health, population, government, society, science and the United States economy. find_variables searches all of them.`;
+  const knowsAll = canRows();                                           // the newer service reads the list of datasets from the site itself
+  const room = 1180 - q.length, head = "\n\n(Note added by the site, not typed by the visitor" + (knowsAll ? "." : `: the site now holds ${M.length} datasets and ${V.size} variables, more than your instructions list, including health, population, government, society, science and the United States economy. find_variables searches all of them.`);
   if (room < head.length + 1) return "";
   let out = head, n = 0;
   for (const v of matchVars(q, 7)) { const item = `${n ? ";" : " Variables that may fit this question:"} ${v.id} (${v.c.title}${v.c.unit ? ", " + v.c.unit.replace(/\s*\(.*$/, "") : ""}; ${byText(v.d)})`; if (out.length + item.length + 2 > room) break; out += item; n++; }
-  return out + (n ? "." : "") + ")";
+  if (n) out += ".";
+  if (knowsAll) { const t = matchTables(q, 2).map(d => d.id); const item = ` Tables that may fit, read with get_rows: ${t.join(", ")}.`; if (t.length && out.length + item.length + 2 <= room) { out += item; n++; } }
+  return knowsAll && !n ? "" : out + ")";
 }
-async function aiTurn(question, say, box) {
+/* A streamed reply is one line of JSON for each piece of text, then one last line with the whole reply. */
+async function readLines(r, onText) {
+  const reader = r.body.getReader(), dec = new TextDecoder(); let buf = "", last = null;
+  for (;;) {
+    const { value, done } = await reader.read(); if (value) buf += dec.decode(value, { stream: true });
+    let i; while ((i = buf.indexOf("\n")) >= 0) { const line = buf.slice(0, i).trim(); buf = buf.slice(i + 1); if (!line) continue; const o = JSON.parse(line); if (o.t === "text") onText(o.d || ""); else last = o; }
+    if (last) { (async () => { try { while (!(await reader.read()).done); } catch (e) { /* nothing more was coming */ } })(); break; }   // the whole reply is here: carry on, and let the line close by itself
+    if (done) break;
+  }
+  return last;
+}
+const NEXT = /(?:^|\n)[ \t]*>>[ \t]*([^\n]+)\s*$/;                     // the model ends an answer with ">> question | question": those become buttons
+async function aiTurn(question, say, box, live) {
   const messages = [...AI.memory, { role: "user", content: question + hintFor(question) }], used = [], cost = { usd: 0, rounds: 0, cached: 0 }; used.box = box;
+  const stop = AI.stop = new AbortController(), stopped = () => Object.assign(new Error("Stopped by the visitor"), { reason: "stopped" });
   for (let round = 0; round < 4; round++) {                             // 4 rounds is 13 messages at most, inside the service's limit
-    const c = new AbortController(), t = setTimeout(() => c.abort(), 60000);
-    let body = JSON.stringify({ messages });
-    for (let i = 0; body.length > 52000 && i < messages.length - 1; i++) { const m = messages[i]; if (m.role === "user" && Array.isArray(m.content)) { m.content = m.content.map(b => ({ ...b, content: '{"note":"left out to save space; ask again if needed"}' })); body = JSON.stringify({ messages }); } }
-    let r, j; try { r = await fetch(AI.url, { method: "POST", headers: { "content-type": "application/json" }, body, signal: c.signal }); j = await r.json(); } finally { clearTimeout(t); }
+    if (stop.signal.aborted) throw stopped();
+    const c = new AbortController(), t = setTimeout(() => c.abort(), 60000), end = () => c.abort(); stop.signal.addEventListener("abort", end);
+    let body = JSON.stringify({ messages, stream: true });
+    for (let i = 0; body.length > 52000 && i < messages.length - 1; i++) { const m = messages[i]; if (m.role === "user" && Array.isArray(m.content)) { m.content = m.content.map(b => ({ ...b, content: '{"note":"left out to save space; ask again if needed"}' })); body = JSON.stringify({ messages, stream: true }); } }
+    let r, j, shown = ""; try { r = await fetch(AI.url, { method: "POST", headers: { "content-type": "application/json" }, body, signal: c.signal });
+      j = r.ok && r.body && (r.headers.get("content-type") || "").includes("ndjson") ? await readLines(r, piece => { shown += piece; if (live) live(shown); }) : await r.json(); }
+    catch (e) { if (stop.signal.aborted) throw stopped(); throw e; } finally { clearTimeout(t); stop.signal.removeEventListener("abort", end); }
     if (!r.ok || !j || !j.ok) throw Object.assign(new Error("The AI service did not answer"), { reason: (j && j.reason) || "error" });
     messages.push({ role: "assistant", content: j.content });
     cost.rounds++; if (j.usage) { cost.usd += j.usage.usd || 0; cost.cached += j.usage.cache_read || 0; }
     const calls = j.content.filter(b => b.type === "tool_use");
     if (j.stop_reason !== "tool_use" || !calls.length) {
       let text = j.content.filter(b => b.type === "text").map(b => b.text).join("\n\n").trim(); if (!text) throw Object.assign(new Error("Empty answer"), { reason: "error" });
+      const nm = NEXT.exec(text), next = nm ? nm[1].split("|").map(x => x.trim().replace(/^["“]|["”]$/g, "")).filter(x => x.length > 5 && x.length < 90).slice(0, 3) : [];
+      if (nm) text = text.slice(0, nm.index).trim() || text;
       if (j.stop_reason === "max_tokens") text += " …";                                                                // the reply reached its length limit
       AI.memory = [...AI.memory, { role: "user", content: question }, { role: "assistant", content: text }].slice(-6);
-      return { text, used, cost };
+      return { text, used, cost, next };
     }
+    if (live) live("");                                                                                                 // words before a tool call are not the answer
     say(calls.map(k => (TOOL_SAYS[k.name] || (() => "Reading the data"))(k.input || {})).join(". ") + ".");
     const results = await Promise.all(calls.map(async k => { let out; try { out = TOOLS[k.name] ? await TOOLS[k.name](k.input || {}, used) : { error: "No such tool" }; } catch (e) { console.warn(e); out = { error: "The data could not be read just now." }; } return { type: "tool_result", tool_use_id: k.id, content: JSON.stringify(out).slice(0, 5000) }; }));
     messages.push({ role: "user", content: results });
@@ -405,8 +457,12 @@ function mdLite(text) {
   const out = document.createDocumentFragment(), inline = (node, s) => { String(s).split(/(\*\*[^*]+\*\*)/g).forEach(part => { if (/^\*\*[^*]+\*\*$/.test(part)) node.append(el("strong", "", part.slice(2, -2))); else if (part) node.append(document.createTextNode(part.replace(/(^|\s)[*_]([^*_\s][^*_]*)[*_](?=\s|[.,;:!?]|$)/g, "$1$2"))); }); return node; };
   String(text).replace(/\r/g, "").split(/\n{2,}/).forEach(block => {
     const lines = block.split("\n").filter(l => l.trim() !== ""); if (!lines.length) return;
-    let list = null;
-    lines.forEach(line => { const b = /^\s*(?:[-*•]|\d+[.)])\s+(.*)$/.exec(line), h = /^\s*#{1,6}\s+(.*)$/.exec(line);
+    let list = null, table = null;
+    lines.forEach(line => { const b = /^\s*(?:[-*•]|\d+[.)])\s+(.*)$/.exec(line), h = /^\s*#{1,6}\s+(.*)$/.exec(line), row = /^\s*\|(.+)\|\s*$/.exec(line);
+      if (row) { list = null; if (/^[\s:|-]+$/.test(row[1])) return;                                                    // the line of dashes under a table's heading
+        if (!table) { const wrap = el("div", "anstable"), t = el("table"); t.append(el("thead"), el("tbody")); wrap.append(t); out.append(wrap); table = t; }
+        const first = !table.tHead.rows.length, tr = el("tr"); row[1].split("|").forEach(c => inline(tr.appendChild(el(first ? "th" : "td")), c.trim())); (first ? table.tHead : table.tBodies[0]).append(tr); return; }
+      table = null;
       if (b) { if (!list) { list = el(/^\s*\d/.test(line) ? "ol" : "ul"); out.append(list); } list.append(inline(el("li"), b[1])); }
       else { list = null; out.append(inline(el("p", h ? "lead-line" : ""), h ? h[1] : line)); } });
   });
@@ -592,7 +648,7 @@ function newTurn(q) {
   ub.append(el("p", "you", q)); ucol.append(ub, el("p", "stamp", `You, ${at}`)); mine.append(ucol);
   reply.append(viz, status); acol.append(reply, meta); theirs.append(face, acol); root.append(mine, theirs); $("#thread").append(root);
   $("#fresh-chat").hidden = false; toEnd();
-  return { root, box: reply, viz, say: t => { words.textContent = t; toEnd(); }, done: () => status.remove(), label: t => { meta.textContent = `Data AI, ${at}. ${t}`; },
+  return { root, box: reply, viz, say: t => { status.hidden = false; words.textContent = t; toEnd(); }, quiet: () => { status.hidden = true; }, done: () => status.remove(), label: t => { meta.textContent = `Data AI, ${at}. ${t}`; },
     settle: () => { const t = $("#thread"); t.scrollTop = Math.max(0, root.offsetTop - 14); } };          // show the question at the top with its answer under it
 }
 const SMALL = [[/^(hi|hello|hey|hola|namaste|good (morning|afternoon|evening))\b/i, "Hello. Ask me for a number, a comparison, a ranking or a chart, for example \"India life expectancy\", \"top 10 CO2 emitters\" or \"chart oil price since 2020\". I'll answer with the year and the source."],
@@ -622,17 +678,38 @@ async function lookup(q, P, turn) {                                    // the bu
 /* the data an AI answer was built on, folded away until asked for */
 function evidence(u, q, box) {
   const d = el("details", "evidence"), s = el("summary"), body = el("div");
-  s.textContent = "Data behind this answer: " + (u.kind === "quakes" ? "recent earthquakes, US Geological Survey" : `${u.v.c.title}${u.kind === "places" ? " for " + u.places.map(placeName).join(", ") : u.kind === "rank" ? ", countries ranked" : ""} (${u.v.d.source})`);
+  s.textContent = "Data behind this answer: " + (u.kind === "rows" ? `${u.d.title} (${u.d.source})` : u.kind === "quakes" ? "recent earthquakes, US Geological Survey" : `${u.v.c.title}${u.kind === "places" ? " for " + u.places.map(placeName).join(", ") : u.kind === "rank" ? ", countries ranked" : ""} (${u.v.d.source})`);
   d.append(s, body); box.append(d);
   d.addEventListener("toggle", async () => {
     if (!d.open || d.dataset.done) return; d.dataset.done = "1"; box.classList.add("roomy");
-    try { if (u.kind === "places") await answerPlaces(q, u.v, { places: u.places, year: u.year, rank: null, n: 10 }, body); else if (u.kind === "rank") await answerRank(q, u.v, { places: [], year: u.year, rank: u.order, n: Math.min(u.n, 15) }, body); else if (u.kind === "series") await answerSeries(q, u.v, { year: null }, body); else await answerQuakes(q, body); }
+    try { if (u.kind === "rows") { const all = Object.keys(u.out.columns), rows = u.out.rows, wrap = el("div", "anstable"), t = el("table"), head = el("thead"), tb = el("tbody"), th = el("tr");
+        const when = r => (r.year ? String(r.year) : r.date || ""), show = x => (x === null || x === undefined ? "" : typeof x === "number" ? fmtN(x) : String(x));
+        if (rows.length === 1) {                                                                                        // one row reads best down the page: a measure on each line
+          [rows[0].name || u.d.title, when(rows[0])].forEach(x => th.append(el("th", "", x)));
+          all.forEach(c => { if (rows[0][c] === null || rows[0][c] === undefined || rows[0][c] === "") return; const tr = el("tr"); tr.append(el("td", "", u.out.columns[c]), el("td", "", show(rows[0][c]))); tb.append(tr); });
+        } else {                                                                                                        // several rows: the first few columns, with the rest in the explorer
+          const names = all.slice(0, 4); ["", ...names.map(c => u.out.columns[c])].forEach(x => th.append(el("th", "", x)));
+          rows.forEach(r => { const tr = el("tr"); tr.append(el("td", "", [r.name, when(r)].filter(Boolean).join(", "))); names.forEach(c => tr.append(el("td", "", show(r[c])))); tb.append(tr); });
+        }
+        head.append(th); t.append(head, tb); wrap.append(t); body.append(wrap, note(`From ${u.d.source}.`, linkBtn("Open the whole table in the explorer", `explore.html#d=${u.d.id}`, "link"))); }
+      else if (u.kind === "places") await answerPlaces(q, u.v, { places: u.places, year: u.year, rank: null, n: 10 }, body); else if (u.kind === "rank") await answerRank(q, u.v, { places: [], year: u.year, rank: u.order, n: Math.min(u.n, 15) }, body); else if (u.kind === "series") await answerSeries(q, u.v, { year: null }, body); else await answerQuakes(q, body); }
     catch (e) { console.warn(e); body.append(note("That data could not be loaded just now.")); }
   });
 }
 function closest(words) {                                              // when nothing matches exactly: the nearest variables, so there is always a way forward
   const hits = []; V.forEach(v => { if (!v.ok) return; const n = words.filter(w => w.length > 2 && !VISFILL.has(w) && v.q.includes(w.replace(/(ies|es|s)$/, ""))).length; if (n) hits.push([n - v.c.title.length / 500, v]); });
   return hits.sort((a, b) => b[0] - a[0]).slice(0, 5).map(h => h[1]);
+}
+function nextChips(box, list) {                                       // questions that lead on from an answer, as buttons under it
+  if (!list || !list.length) return; const nx = el("div", "nextq"); nx.setAttribute("aria-label", "Questions you could ask next");
+  list.forEach(t => { const b = el("button", "", t); b.type = "button"; b.onclick = () => respond(t); nx.append(b); }); box.append(nx);
+}
+function nextFor(q, P) {                                              // after an answer read straight from the data: only questions the same reading of the words would answer
+  const v = V.get(P.vars[0]); if (!v || P.quake) return [];
+  const t = v.c.title, vis = VIS.test(q), names = (P.places.length ? P.places : []).slice(0, 3).map(placeName), out = [];
+  if (isCountry(v)) { if (names.length && !vis) out.push(`Chart ${t} ${names.join(" ")}`); if (!P.rank) out.push(`Top 10 ${t}`); if (!/\bmaps?\b/i.test(q)) out.push(`Map of ${t}`); if (names.length === 1 && vis) out.push(`${t} ${names[0]}`); }
+  else if (!vis) out.push(`Chart ${t}`, `Chart ${t} since 2015`);
+  return out.filter(x => { try { return norm(x) !== norm(q) && parse(x).vars[0] === v.id; } catch (e) { return false; } }).slice(0, 3);
 }
 async function respond(text, opt = {}) {
   const q = String(text).trim(); if (!q || busy) return;
@@ -650,23 +727,27 @@ async function respond(text, opt = {}) {
     const drawable = plan && !WHY.test(q) && !P.weak && P.left.every(w => VISFILL.has(w));                                  // the words name data we hold and nothing more: draw it without the AI
     const simple = drawable || (!wantsVis && (P.quake || P.vars.length > 0) && !EXPLAIN.test(q) && !general && !P.weak && P.left.length === 0 && !(follow && last.ai));   // a follow-up to an AI answer stays with the AI
     if (ai && (opt.force || !simple)) {
+      const ans = el("div", "aitext"), go = $("#ask-go"); go.disabled = false; go.textContent = "Stop"; go.setAttribute("aria-label", "Stop this answer");
+      const live = t => { if (!t) { ans.remove(); return; } ans.replaceChildren(mdLite(t.replace(/(?:^|\n)[ \t]*>[^\n]*$/, ""))); if (!ans.isConnected) { turn.quiet(); box.append(ans); } toEnd(); };   // a half-written line of follow-up questions is not shown
       try {
-        const a = await aiTurn(opt.prompt || q, turn.say, turn.viz); turn.done(); last.ai = true; turn.label("Written by AI");
+        const a = await aiTurn(opt.prompt || q, turn.say, turn.viz, live); turn.done(); last.ai = true; turn.label("Written by AI");
         turn.root.dataset.rounds = a.cost.rounds; turn.root.dataset.usd = a.cost.usd.toFixed(6); turn.root.dataset.cached = a.cost.cached;
-        const ans = el("div", "aitext"); ans.append(mdLite(a.text)); box.append(ans);
+        ans.replaceChildren(mdLite(a.text)); box.append(ans);
         const seen = new Set(), drawn = new Set(a.used.filter(u => u.kind === "viz" && u.v).map(u => u.v.id)); let shown = 0;
         for (const u of a.used) {
           if (u.v) { last.v = u.v.id; if (u.places && u.places.length) last.places = u.places; }
-          const key = u.kind + (u.v ? u.v.id : "") + (u.places || []).join() + (u.order || ""); if (u.kind === "viz" || seen.has(key) || shown >= 3 || (u.v && drawn.has(u.v.id))) continue; seen.add(key); shown++;
+          const key = u.kind + (u.v ? u.v.id : u.d ? u.d.id : "") + (u.places || []).join() + (u.order || ""); if (u.kind === "viz" || seen.has(key) || shown >= 3 || (u.v && drawn.has(u.v.id))) continue; seen.add(key); shown++;
           evidence(u, q, box);
         }
         box.append(el("p", "ainote", a.used.length ? "Written by an AI model. The figures were read from the datasets named here; any explanation around them is general knowledge and can be wrong." : "Written by an AI model from general knowledge, not from this site's data. It can be wrong or out of date, so check anything that matters."));
         const tools = el("div", "acts small"), cp = el("button", "link", "Copy the answer"), rd = el("button", "link", "Read it aloud"); cp.type = rd.type = "button";
         cp.onclick = () => copy(cp, `${a.text.replace(/\*\*/g, "")}\n\nFrom Data AI, Open Data Company: ${SITE}ask.html?q=${encodeURIComponent(q).replace(/%20/g, "+")}`); rd.onclick = () => speak(rd, a.text);
         tools.append(cp); if ("speechSynthesis" in window) tools.append(rd); box.append(tools);
+        nextChips(box, a.next);
         return;
       } catch (e) {
-        console.warn("AI unavailable, using the built-in lookup", e); if (e.reason === "budget" || e.reason === "off") AI.state = Promise.resolve(false); aiBadge();
+        if (e.reason === "stopped") { turn.done(); turn.viz.replaceChildren(); turn.label("Stopped"); if (!ans.isConnected || !ans.textContent.trim()) ans.remove(); box.append(el("p", "ainote", ans.isConnected ? "Stopped here, so this answer is not complete." : "Stopped before an answer was written.")); return; }
+        ans.remove(); console.warn("AI unavailable, using the built-in lookup", e); if (e.reason === "budget" || e.reason === "off") AI.state = Promise.resolve(false); aiBadge();
         turn.viz.replaceChildren();
         box.append(el("p", "ainote", e.reason === "budget" ? "The AI's allowance for now is used up, so this answer comes straight from the data." : e.reason === "busy" ? "The AI is busy right now, so this answer comes straight from the data." : "The AI could not be reached just now, so this answer comes straight from the data."));
       }
@@ -680,10 +761,10 @@ async function respond(text, opt = {}) {
       if (said.length) {
         if (/\bpie\b/i.test(q)) said.push("Shown as bars, which compare sizes more clearly than a pie.");
         box.append(el("p", "aitext", said.filter(Boolean).join(" ")));
-        last.v = P.vars[0]; if (P.places.length) last.places = P.places; explain(); return;
+        last.v = P.vars[0]; if (P.places.length) last.places = P.places; explain(); nextChips(box, nextFor(q, P)); return;
       }
     }
-    if (await lookup(q, P, turn)) { explain(); return; }
+    if (await lookup(q, P, turn)) { explain(); nextChips(box, nextFor(q, P)); return; }
     const hello = SMALL.find(([re]) => re.test(q)); if (hello) { box.append(el("p", "aitext", hello[1])); return; }
     /* nothing matched and no AI to hand it to: say what was understood and offer the nearest things that can be answered */
     const near = general ? [] : closest(P.words), p = el("div", "aitext"); turn.label("");
@@ -693,7 +774,7 @@ async function respond(text, opt = {}) {
       .forEach(([label, ask]) => { const b = el("button", "", label); b.type = "button"; b.onclick = () => respond(ask); picks.append(b); });
     p.append(picks); const more = el("p", "hint"); more.append("Or ", Object.assign(el("a", "", "search the list of every variable"), { href: `datasets.html?q=${encodeURIComponent(P.words.filter(w => !VISFILL.has(w)).join(" "))}` }), "."); p.append(more); box.append(p);
   } catch (e) { console.error(e); turn.done(); box.append(note("Something went wrong while answering. Please ask again.")); }
-  finally { busy = false; $("#ask-go").disabled = false; turn.settle(); if (matchMedia("(pointer:fine)").matches) input.focus({ preventScroll: true }); }
+  finally { busy = false; AI.stop = null; const go = $("#ask-go"); go.disabled = false; go.textContent = "Send"; go.removeAttribute("aria-label"); turn.settle(); if (matchMedia("(pointer:fine)").matches) input.focus({ preventScroll: true }); }
 }
 async function aiBadge() { const on = await aiReady(), b = $("#ai-state"); b.textContent = on ? "AI answers are on. Figures come from the datasets." : "Answering straight from the datasets. The AI part is resting."; b.classList.toggle("on", on); }
 
@@ -705,7 +786,7 @@ async function aiBadge() { const on = await aiReady(), b = $("#ai-state"); b.tex
   ASK_FIRST.unshift(...CONCEPTS_FIRST);
   buildPlaces(); PLACE = new Map(NAMES);
   const input = $("#q"), form = $("#askform"), grow = () => { input.style.height = "auto"; input.style.height = Math.min(168, input.scrollHeight + 4) + "px"; };
-  form.addEventListener("submit", e => { e.preventDefault(); respond(input.value); });
+  form.addEventListener("submit", e => { e.preventDefault(); if (busy) { if (AI.stop) AI.stop.abort(); return; } respond(input.value); });   // while an answer is being written the button reads Stop
   input.addEventListener("input", grow);
   input.addEventListener("keydown", e => { if (e.key === "Enter" && !e.shiftKey && !e.isComposing) { e.preventDefault(); respond(input.value); } });   // Enter sends, Shift+Enter starts a new line
   ["India life expectancy", "Top 10 CO2 emitters", "Chart India's CO2 emissions since 1990", "Map of life expectancy", "Which countries are the happiest?", "US unemployment rate", "Why is the world getting warmer?", "Earthquakes today"]

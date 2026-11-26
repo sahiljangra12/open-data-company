@@ -43,6 +43,7 @@ def main():
     check("service answers its health check", status == 200 and health.get("ok") is True, f"HTTP {status} {text[:160]}")
     check("the website is allowed to call it", headers.get("access-control-allow-origin") == SITE, headers.get("access-control-allow-origin"))
     check("AI is switched on", health.get("ai") is True, health)
+    check("this is the version that writes answers as they come and can read tables", health.get("stream") is True and "get_rows" in (health.get("tools") or []), {k: health.get(k) for k in ("stream", "tools")})
     print(f"   allowance left before this run: {health.get('left')}", flush=True)
     status, headers, _ = call("OPTIONS", SITE)
     check("browser preflight is accepted", status == 204 and "POST" in (headers.get("access-control-allow-methods") or ""), status)
@@ -66,6 +67,8 @@ def main():
         errors = []
         page.on("pageerror", lambda e: errors.append(str(e)))
         page.route("https://earthquake.usgs.gov/**", lambda r: r.abort())
+        replies = []                                              # every reply from the service, to see how answers arrived
+        page.on("response", lambda r: replies.append(r) if "/api/data-ai" in r.url and r.request.method == "POST" else None)
         if "DATA_AI_URL" in os.environ:                       # test another deployment of the service than the one the page names
             def swap(route):
                 r = route.fetch()
@@ -86,9 +89,10 @@ def main():
             page.wait_for_timeout(2500)                           # pace the questions: one visitor is allowed 30 requests a minute
             page.fill("#q", q)
             page.click("#ask-go")
-            page.wait_for_function("n => document.querySelectorAll('.turn').length > n && !document.querySelector('.thinking') && !document.querySelector('#ask-go').disabled", arg=n, timeout=120000)
+            page.wait_for_function("n => document.querySelectorAll('.turn').length > n && !document.querySelector('.thinking') && !document.querySelector('#ask-go').disabled && document.querySelector('#ask-go').textContent === 'Send'", arg=n, timeout=120000)
             t = page.locator(".turn").last
             ai = t.locator(".aitext").count() > 0 and t.locator(".acts.small").count() > 0
+            nexts = t.locator(".nextq button").all_inner_texts()
             text = t.locator(".aitext").first.inner_text() if t.locator(".aitext").count() else ""
             notes = " ".join(t.locator(".ainote").all_inner_texts())
             cards = [c.strip().replace("Data behind this answer: ", "") for c in t.locator("details.evidence summary").all_inner_texts()] + ["chart: " + (c or "").strip() for c in t.locator(".viz h4").all_text_contents()]
@@ -98,13 +102,27 @@ def main():
             words = len(text.split())
             print(f"\nQ: {q}\n   route: {'AI' if ai else 'built-in, no AI'}{' (FELL BACK)' if fell_back else ''}; data and charts: {cards[:4]}"
                   + (f"\n   cost: ${d['usd']:.5f} in {d['rounds']} round(s), {words} words, {d['cached']} cached input tokens" if d["rounds"] else "")
-                  + "\n   A: " + text.replace("\n", "\n      ") + f"\n   note: {notes}", flush=True)
-            return {"ai": ai and not fell_back, "text": text, "notes": notes, "cards": t.locator("details.evidence").count() + t.locator(".answer").count(), "charts": t.locator(".viz").count(), "turn": t, "words": words}
+                  + "\n   A: " + text.replace("\n", "\n      ") + f"\n   note: {notes}" + (f"\n   follow-up questions offered: {nexts}" if nexts else ""), flush=True)
+            return {"ai": ai and not fell_back, "text": text, "notes": notes, "cards": t.locator("details.evidence").count() + t.locator(".answer").count(), "charts": t.locator(".viz").count(), "turn": t, "words": words, "next": nexts,
+                    "evidence": " ".join(t.locator("details.evidence summary").all_inner_texts())}
 
         a = ask("India life expectancy")
         check("a plain lookup is answered instantly from the data, without the AI", not a["ai"] and a["turn"].locator(".answer").count() >= 1)
+        check("and it offers questions to ask next", len(a["next"]) >= 2, a["next"])
         a = ask("Why is India's life expectancy rising?")
         check("why question: AI answer built on the dataset's figure", a["ai"] and a["cards"] + a["charts"] >= 1 and (f"{india:.1f}" in a["text"] or str(round(india)) in a["text"]) and "figures were read from the datasets" in a["notes"], f"expected about {india:.1f}")
+        check("the AI's answer ends with follow-up questions as buttons, not as text", len(a["next"]) >= 2 and ">>" not in a["text"], a["next"])
+        kinds = [(r.headers.get("content-type") or "") for r in replies]
+        check("the answer was sent piece by piece as it was written", any("ndjson" in k for k in kinds), kinds[:4])
+        try:
+            last = json.loads([l for l in replies[-1].text().strip().split("\n") if l.strip()][-1])
+        except Exception as e:
+            last = {"error": str(e)}
+        check("the service has read the full list of datasets from the site", (last.get("diag") or {}).get("datasets", 0) >= 60, last.get("diag") or last)
+        a = ask("What is the typical rent for a two-bedroom home in Texas, and how does California compare?")
+        check("states: answered from the state rent table", a["ai"] and "rent" in a["evidence"].lower() and all(k in a["text"] for k in ("Texas", "California")) and re.search(r"\d,\d{3}|\d{3,4}", a["text"]), a["evidence"][:200])
+        a = ask("Which US colleges charge the most for out-of-state students? Name the top three.")
+        check("colleges: a table ranked by a column", a["ai"] and "college" in a["evidence"].lower() and re.search(r"\d\d,\d{3}", a["text"]), a["evidence"][:200])
         a = ask("Compare CO2 emissions per person in the United States, China and India, and explain the gap.")
         check("comparison: all three countries, with data", a["ai"] and a["cards"] + a["charts"] >= 1 and all(k in a["text"] for k in ("United States", "China", "India")))
         a = ask("Which five countries get the largest share of their electricity from renewables? Is that surprising?")
@@ -148,11 +166,11 @@ def main():
             fresh = False
             for _ in range(18):                                   # GitHub Pages takes a minute or two to publish a push
                 public.goto(SITE + "/open-data-company/ask.html?v=" + os.urandom(3).hex())
-                if public.locator("#mic").count() and public.locator("#chat #thread").count():      # the chat-window version
+                if public.locator("#mic").count() and public.locator("#chat #thread").count() and public.evaluate("typeof nextChips === 'function' && typeof readLines === 'function'"):      # the version that streams and offers follow-ups
                     fresh = True
                     break
                 public.wait_for_timeout(10000)
-            check("the public Data AI page is live as a chat window with the microphone", fresh, public.title())
+            check("the public Data AI page is live in its new version", fresh, public.title())
             if fresh:
                 public.wait_for_selector("#examples button")
                 try:
@@ -162,24 +180,25 @@ def main():
                 check("the public page reports AI answers are on", public.locator("#ai-state.on").count() == 1, public.inner_text("#ai-state"))
                 public.fill("#q", "Is Kenya getting more people online, and why?")
                 public.click("#ask-go")
-                public.wait_for_function("document.querySelectorAll('.turn').length > 0 && !document.querySelector('.thinking') && !document.querySelector('#ask-go').disabled", timeout=120000)
+                public.wait_for_function("document.querySelectorAll('.turn').length > 0 && !document.querySelector('.thinking') && !document.querySelector('#ask-go').disabled && document.querySelector('#ask-go').textContent === 'Send'", timeout=120000)
                 t = public.locator(".turn").last
                 text = t.locator(".aitext").first.inner_text() if t.locator(".aitext").count() else ""
                 notes = " ".join(t.locator(".ainote").all_inner_texts())
+                check("the public page offers follow-up questions under the answer", t.locator(".nextq button").count() >= 2, t.locator(".nextq button").all_inner_texts())
                 print("\nPublic page, Q: Is Kenya getting more people online, and why?\n   A: " + text.replace("\n", "\n      ") + f"\n   note: {notes}\n   calls to the service: {calls}", flush=True)
                 check("the public page gets an AI answer built on the data", t.locator(".acts.small").count() > 0 and "straight from the data" not in notes and "Kenya" in text and t.locator("details.evidence, .viz").count() >= 1)
                 public.fill("#q", "Draw a chart of Kenya's internet use and Nigeria's, and tell me who is ahead.")
                 public.click("#ask-go")
-                public.wait_for_function("document.querySelectorAll('.turn').length > 1 && !document.querySelector('.thinking') && !document.querySelector('#ask-go').disabled", timeout=120000)
+                public.wait_for_function("document.querySelectorAll('.turn').length > 1 && !document.querySelector('.thinking') && !document.querySelector('#ask-go').disabled && document.querySelector('#ask-go').textContent === 'Send'", timeout=120000)
                 t = public.locator(".turn").last
                 text = t.locator(".aitext").first.inner_text() if t.locator(".aitext").count() else ""
                 print("\nPublic page, Q: Draw a chart of Kenya's internet use and Nigeria's, and tell me who is ahead.\n   charts: " + str(t.locator(".viz h4").all_text_contents()) + "\n   A: " + text.replace("\n", "\n      "), flush=True)
                 check("the public page draws a chart inside the chat", t.locator(".viz svg, .viz .barrow").count() >= 1 and "Kenya" in text)
-                # the wider data: the service's own instructions do not list these datasets, so this shows the page's note reaches the model
+                # the wider data, which the service now reads about from the site's own list of datasets
                 def put(q, n):
                     public.fill("#q", q)
                     public.click("#ask-go")
-                    public.wait_for_function("n => document.querySelectorAll('.turn').length > n && !document.querySelector('.thinking') && !document.querySelector('#ask-go').disabled", arg=n, timeout=120000)
+                    public.wait_for_function("n => document.querySelectorAll('.turn').length > n && !document.querySelector('.thinking') && !document.querySelector('#ask-go').disabled && document.querySelector('#ask-go').textContent === 'Send'", arg=n, timeout=120000)
                     t = public.locator(".turn").last
                     text = t.locator(".aitext").first.inner_text() if t.locator(".aitext").count() else ""
                     print(f"\nPublic page, Q: {q}\n   data read: " + str(t.locator("details.evidence summary").all_text_contents()) + "\n   A: " + text.replace("\n", "\n      "), flush=True)

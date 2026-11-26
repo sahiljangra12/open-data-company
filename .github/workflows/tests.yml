@@ -1,0 +1,42 @@
+name: Tests
+
+# Checks the Data AI function and the site's pages in a real browser, against a scripted stand-in for the model.
+# No real model is called, so a run spends nothing. It runs when the pages' scripts, the function or the tests change.
+on:
+  push:
+    paths:
+      - "docs/assets/**"
+      - "docs/ask.html"
+      - "ai/**"
+      - "tests/**"
+      - ".github/workflows/tests.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Check the function against a stand-in model
+        run: |
+          cd ai && npm ci --no-audit --no-fund && cd ..
+          node tests/check_ai_service.mjs
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Check the pages in a real browser
+        run: |
+          pip install --quiet playwright pillow
+          python -m playwright install --with-deps chromium > /dev/null
+          bash tests/browser/run.sh
