@@ -94,7 +94,7 @@ How developed is Bangladesh on the UN's index?	human-development-index::human_de
 human development once pressure on the planet is counted	human-development-index::planetary_pressures_adjusted_hdi
 raw materials used per person	human-development-index::material_footprint_per_person
 share of city dwellers living in slums	poverty-and-inequality::population_living_in_slums
-how much income goes to the richest tenth	poverty-and-inequality::income_share_held_by_highest_10_pct|top-incomes::share_of_income_going_to_the_top_10_pct
+how much income goes to the richest tenth	poverty-and-inequality::income_share_held_by_highest_10_pct|top-incomes::income_share_top_10_pct
 What price do countries put on carbon?	climate-and-environment-policy::carbon_tax_price|climate-and-environment-policy::emissions_trading_price
 How high is Sweden's carbon tax?	climate-and-environment-policy::carbon_tax_price
 price in emissions trading schemes	climate-and-environment-policy::emissions_trading_price
