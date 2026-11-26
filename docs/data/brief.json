@@ -1,7 +1,7 @@
 {
  "briefs": [
   {
-   "at": "2026-11-26T20:04:44Z",
+   "at": "2026-11-26T20:05:40Z",
    "model": null,
    "tools": [],
    "markdown": "**12 datasets changed in the latest check**\n\n### What changed\n- **Earthquakes, past 30 days**: 97 rows added, 74 values revised. For example, 19 km S of Weston, Colorado, 2026-11-26 14:35 UTC: Magnitude 2.5.\n- **World trade in goods: exports and imports by country**: 3 values revised. For example, Senegal, 2025: Goods exported (UN Comtrade) 10,008,070,000.\n- **Food supply: calories and meat per person**: 233 rows added, 12,854 values revised. For example, Afghanistan, 2024: Daily calorie supply per person 2310.\n- **Research papers published each year, worldwide**: 197 values revised. For example, 2025-01-01: Research works published in the year (OpenAlex) 14,527,060.\n- **Research papers by country and year**: 406 values revised. For example, Afghanistan, 2025: Research works with an author in the country 3312.\n- **Biodiversity records by year observed (GBIF)**: 423 values revised. For example, 2025-01-01: Records of living things, by year observed (GBIF) 307,394,200.\n\n_Written from the change log alone; the AI model could not be reached for this run._"
