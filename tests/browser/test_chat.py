@@ -1,4 +1,4 @@
-"""The chat app (chat.html) in a real browser: saved chats, the side panel, and the on-device brain.
+"""The chat app (ask.html) in a real browser: saved chats, the side panel, and the on-device brain.
 The hosted model is the scripted stand-in from serve.mjs; the on-device model is a scripted stand-in for WebLLM put on
 the page before it loads, so the real loop, the real tools, the real data and the real figure check are what run."""
 import json, sys, re, os
@@ -42,7 +42,7 @@ def app(b, ai=True, standin=True, vp=(1280,900), keep=None):
     c,p,errs = make(b, ai=ai, vp=vp)
     c.add_init_script(WEBLLM if standin else NOGPU)
     if keep: c.add_init_script(keep)
-    p.goto(BASE+"chat.html"); p.wait_for_selector("#examples button"); p.wait_for_function("!/Checking/.test(document.querySelector('#ai-state').textContent)", timeout=9000)
+    p.goto(BASE+"ask.html"); p.wait_for_selector("#examples button"); p.wait_for_function("!/Checking/.test(document.querySelector('#ai-state').textContent)", timeout=9000)
     return c,p,errs
 def titles(p): return p.locator("#chatlist .t").all_inner_texts()
 def turn_on(p):
@@ -57,7 +57,7 @@ with sync_playwright() as pw:
     check("Data AI is marked in the menu and nothing is saved yet", p.inner_text("nav a.on").lower()=="data ai" and p.locator("#nochats").is_visible() and p.locator("#chatlist li").count()==0)
     check("the hosted AI is on", "AI answers are on" in p.inner_text("#ai-state"))
     t=ask(p,"Who wrote Hamlet?")
-    check("an AI answer, with the page address left alone", "Shakespeare" in t.inner_text() and "Written by AI" in t.locator(".msg.ai .stamp").inner_text() and p.url.endswith("chat.html"), p.url)
+    check("an AI answer, with the page address left alone", "Shakespeare" in t.inner_text() and "Written by AI" in t.locator(".msg.ai .stamp").inner_text() and p.url.endswith("ask.html"), p.url)
     check("the chat is saved under its first question and marked as open", titles(p)==["Who wrote Hamlet?"] and p.locator("#chatlist li.on").count()==1 and not p.locator("#nochats").is_visible())
     check("an AI answer can be tried again", t.locator(".acts.small button", has_text="Try again").count()==1)
     t=ask(p,"Why is life expectancy in India rising?")
@@ -162,8 +162,8 @@ with sync_playwright() as pw:
     c,p,errs=app(b, standin=False)
     check("without WebGPU the panel says so, and the hosted AI still works", "WebGPU" in p.inner_text("#device-note") and p.locator("#device-go").is_disabled() and "AI answers are on" in p.inner_text("#ai-state"))
     t=ask(p,"Who wrote Hamlet?"); check("no WebGPU: an AI answer from the hosted model, no errors", "Shakespeare" in t.inner_text() and not errs, errs[:3]); c.close()
-    c,p,errs=make(b); p.goto(BASE+"ask.html"); p.wait_for_selector("#examples button")
-    check("the Data AI page links to the chat app and is otherwise as before", p.locator('.chatbar a[href="chat.html"]').count()==1 and p.evaluate("!document.querySelector('script[src*=brain-local]') && !AI.local"))
+    c,p,errs=make(b); p.goto(BASE+"chat.html?q=India+life+expectancy"); p.wait_for_url("**/ask.html"); t=settled(p,0)
+    check("the short-lived chat.html address forwards to Data AI and still asks its question", p.url.endswith("ask.html") and t.locator(".answer").count()>=1 and p.locator("#side").count()==1, p.url)
     lib=p.evaluate("import('./vendor/web-llm.js').then(m=>({make:typeof m.CreateMLCEngine, has:typeof m.hasModelInCache, del:typeof m.deleteModelAllInfoInCache, ids:m.prebuiltAppConfig.model_list.map(x=>x.model_id)}))")
     check("the WebLLM library shipped with the site loads in the browser and knows both models", lib["make"]==lib["has"]==lib["del"]=="function" and all(m in lib["ids"] for m in ["Qwen2.5-1.5B-Instruct-q4f16_1-MLC","Phi-3.5-mini-instruct-q4f16_1-MLC"]), lib["make"])
     c.close()

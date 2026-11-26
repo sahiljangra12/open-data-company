@@ -1,6 +1,6 @@
-/* The chat app around Data AI (chat.html): saved chats in a side panel, and the choice of who answers.
+/* The chat app around Data AI (ask.html): saved chats in a side panel, and the choice of who answers.
 
-   The answering itself is ask.js, the same engine as ask.html. This file adds what a chat product has around it:
+   The answering itself is ask.js. This file adds what a chat product has around it:
    - Each chat is saved in this browser (localStorage) as the conversation as it looked, plus the short memory the model
      keeps, so it can be opened again and carried on. Nothing is sent to a server. When the browser's space runs out the
      oldest chats are dropped first.

@@ -1,5 +1,5 @@
 /* Data AI: questions in plain words or by voice, answered from the datasets.
-   Two engines share this page. A plain lookup ("India life expectancy") is matched by fixed rules and read straight from the
+   Two engines share this page (the chat window; chat.js adds the saved chats and brain-local.js the on-device model). A plain lookup ("India life expectancy") is matched by fixed rules and read straight from the
    data: instant, exact, no AI involved. Anything else goes to a Claude model behind a small service (see ai/ in the repo);
    when it needs a figure it asks for a tool and this page reads the value from the same data. If the AI is unavailable the
    built-in engine answers alone, so a question is never left without a way forward.
@@ -395,9 +395,9 @@ TOOLS.show_chart = async (input, used) => {                            // draws 
 
 /* ---------- the AI: a Claude model behind a small service; it asks for tools, the browser runs them ---------- */
 const AI = { url: typeof DATA_AI_URL === "string" ? DATA_AI_URL : "", state: null, memory: [], local: null, prefer: "auto", badge: null };
-/* The same engine runs two pages: ask.html, and chat.html (the full-window app with saved chats). On the chat page a second
-   brain can be switched on: a small open model that runs on the visitor's own device (brain-local.js sets AI.local). */
-const APP = document.body.dataset.page === "chat", PAGE = APP ? "chat.html" : "ask.html";
+/* A second brain can be switched on beside the hosted one: a small open model that runs on the visitor's own device
+   (brain-local.js sets AI.local). chat.js keeps the chats and the side panel. */
+const PAGE = "ask.html";
 const localOn = () => !!(AI.local && AI.local.ready());
 function aiReady() {
   if (!AI.url) return Promise.resolve(false);
@@ -667,7 +667,7 @@ function newTurn(q) {
   const status = el("p", "thinking"), dots = el("span", "dots"), words = el("span", "", "Thinking"), at = new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }), meta = el("p", "stamp", `Data AI, ${at}`), face = el("span", "avatar", "AI");
   dots.append(el("i"), el("i"), el("i")); dots.setAttribute("aria-hidden", "true"); status.append(dots, words); face.setAttribute("aria-hidden", "true");
   const steps = []; let finished = false;
-  const done = () => { status.remove(); if (finished) return; finished = true; if (!APP || !steps.length) return;                         // the chat page keeps what was done, folded under the answer's charts
+  const done = () => { status.remove(); if (finished) return; finished = true; if (!steps.length) return;                                 // what was done is kept, folded under the answer's charts
     const d = el("details", "steps"), ol = el("ol"); steps.forEach(x => ol.append(el("li", "", x))); d.append(el("summary", "", `Worked in ${steps.length} step${steps.length > 1 ? "s" : ""}`), ol); viz.after(d); };
   ub.append(el("p", "you", q)); ucol.append(ub, el("p", "stamp", `You, ${at}`)); mine.append(ucol);
   reply.append(viz, status); acol.append(reply, meta); theirs.append(face, acol); root.append(mine, theirs); $("#thread").append(root);
@@ -753,7 +753,6 @@ async function respond(text, opt = {}) {
   const q = String(text).trim(); if (!q || busy) return;
   const input = $("#q"); busy = true; input.value = ""; input.style.height = ""; $("#ask-go").disabled = true;
   const turn = newTurn(q), box = turn.box;
-  if (!APP) { history.replaceState(null, "", `ask.html?q=${encodeURIComponent(q).replace(/%20/g, "+")}`); document.title = `${q} | Data AI`; }
   try {
     const P = parse(q), count = q.split(/\s+/).length, follow = /^(and|what about|how about|same for|for|in|versus|vs|compared (to|with))\b/i.test(q), wantsVis = VIS.test(q);
     const bare = P.left.every(w => VISFILL.has(w));                                                                    // nothing in the words but "chart", "it", "since 2000" and the like
@@ -783,7 +782,7 @@ async function respond(text, opt = {}) {
         const tools = el("div", "acts small"), cp = el("button", "link", "Copy the answer"), rd = el("button", "link", "Read it aloud"); cp.type = rd.type = "button";
         cp.onclick = () => copy(cp, `${a.text.replace(/\*\*/g, "")}\n\nFrom Data AI, Open Data Company: ${SITE}ask.html?q=${encodeURIComponent(q).replace(/%20/g, "+")}`); rd.onclick = () => speak(rd, a.text);
         tools.append(cp); if ("speechSynthesis" in window) tools.append(rd);
-        if (APP) { const rt = el("button", "link", "Try again"); rt.type = "button"; rt.onclick = () => respond(q, { force: true }); tools.append(rt); }
+        const rt = el("button", "link", "Try again"); rt.type = "button"; rt.onclick = () => respond(q, { force: true }); tools.append(rt);
         box.append(tools);
         nextChips(box, a.next);
         return;
@@ -837,5 +836,5 @@ async function aiBadge() { const on = await aiReady(), b = $("#ai-state"); if (A
   voiceInput($("#mic"), input, $("#voice-note"), t => respond(t));
   $("#thread").addEventListener("click", e => { const a = e.target.closest('a[href^="ask.html?q="]'); if (!a || e.metaKey || e.ctrlKey || e.shiftKey) return; e.preventDefault(); respond(new URL(a.href).searchParams.get("q") || ""); });
   aiBadge(); document.dispatchEvent(new Event("dataai:ready"));
-  const first = new URLSearchParams(location.search).get("q"); if (first) respond(first);
+  const first = new URLSearchParams(location.search).get("q"); if (first) { history.replaceState(null, "", PAGE + location.hash); respond(first); }   // a shared link asks its question once; a reload does not ask it again
 })().catch(e => { console.error(e); $("#thread").append(el("p", "note", "This page could not load its data. Reload to try again.")); });

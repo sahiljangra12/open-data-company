@@ -876,7 +876,7 @@ main>.wrap>section.chat,.chat{border-radius:var(--r-l);overflow:hidden}
 .bar i.under{border-radius:3px 0 0 3px}
 table.heat td{border-radius:6px}
 
-/* ---------- the chat app (chat.html): a side panel of saved chats beside the conversation ---------- */
+/* ---------- the chat app (ask.html): a side panel of saved chats beside the conversation ---------- */
 .app{display:grid;grid-template-columns:300px minmax(0,1fr);height:calc(100dvh - var(--nav));min-height:500px;border-bottom:1px solid var(--line)}
 .side{display:flex;flex-direction:column;gap:22px;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:18px 16px 22px;background:var(--panel);border-right:1px solid var(--line)}
 .side h2{font-size:14px;letter-spacing:.14em;color:var(--ink3);margin:0 0 10px}
@@ -923,7 +923,6 @@ details.steps li{margin:0 0 4px}
 .savednote{margin-top:0}
 .turn.saved .acts,.turn.saved details.evidence:not([open]),.turn.saved .more-ai,.turn.saved .tip{display:none}
 .turn.saved details.evidence>summary{pointer-events:none;list-style:none}
-.chatbar .appl{margin-right:6px}
 @media(max-width:900px){
   .app{grid-template-columns:minmax(0,1fr)}
   .side{position:fixed;top:var(--nav);left:0;bottom:0;z-index:45;width:min(88vw,330px);transform:translateX(-104%);transition:transform .2s ease;box-shadow:0 0 0 1px var(--line),18px 0 40px rgba(0,0,0,.18);visibility:hidden}
@@ -932,5 +931,4 @@ details.steps li{margin:0 0 4px}
   .app .chatbar{padding-left:12px;padding-right:12px}
   .app .chatbar .avatar{display:none}
 }
-@media(max-width:640px){.chatbar .appl{display:none}}
 @media(prefers-reduced-motion:reduce){.side,.bar i{transition:none}}

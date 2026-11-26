@@ -746,8 +746,7 @@ Summer peak demand for each PJM transmission zone: the forecasts published in Ja
 
 ## Pages for people
 
-- [Data AI](https://sahiljangra12.github.io/open-data-company/ask.html): ask a question by typing or by voice; the answer gives the number with its year and source
-- [Data AI chat app](https://sahiljangra12.github.io/open-data-company/chat.html): the same assistant in a full window, with chats saved in the browser and an optional open model that runs on the visitor's device
+- [Data AI](https://sahiljangra12.github.io/open-data-company/ask.html): a chat window; ask by typing or by voice, the answer gives the number with its year and source, charts on request; chats are saved in the visitor's browser and an open model can run on the visitor's device
 - [Datasets](https://sahiljangra12.github.io/open-data-company/datasets.html): every dataset and variable
 - [Explorer](https://sahiljangra12.github.io/open-data-company/explore.html): choose variables, places and years, then download
 - [Researcher mode](https://sahiljangra12.github.io/open-data-company/research.html): test a hypothesis on the data

@@ -1,4 +1,4 @@
-/* The on-device brain for Data AI (chat page): a small open language model that runs inside the visitor's browser.
+/* The on-device brain for Data AI: a small open language model that runs inside the visitor's browser.
 
    WebLLM (vendor/web-llm.js, Apache 2.0) runs the model on the device's graphics chip through WebGPU. The model file is
    downloaded once from Hugging Face, kept in the browser's cache and never sent anywhere: questions answered by this brain
