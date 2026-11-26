@@ -95,18 +95,19 @@ def chat(messages, tools_spec):
 def run(system, task, tools_spec, call_tool, max_steps=6, log=print, check=None, fixes=2):
     """The agent loop. Returns (answer_text, model_used, trace) where trace lists each tool call.
 
-    check(text, trace) may return a correction for the model (for example "these figures match nothing you read").
-    The model then rewrites its answer, up to `fixes` times; the last version is returned for the caller to judge."""
+    check(text, trace) may return a correction for the model (for example "you have not read any values yet" or
+    "these figures match nothing you read"). The model then gets more turns, tools included, up to `fixes` times;
+    the last version is returned for the caller to judge."""
     messages = [{"role": "system", "content": system}, {"role": "user", "content": task}]
-    trace, seen = [], set()
-    for step in range(max_steps + fixes):
+    trace, seen, left = [], set(), max_steps
+    for step in range(max_steps + 3 * fixes):
         compact(messages)
-        final = step >= max_steps - 1
-        if step == max_steps - 1:
+        left -= 1
+        if left == 0:
             messages.append({"role": "user", "content": "Write the final answer now from what the tools returned. No more tool calls."})
         t0 = time.time()
         try:
-            text, calls, keep, note, cut = chat(messages, None if final else tools_spec)
+            text, calls, keep, note, cut = chat(messages, tools_spec if left > 0 else None)
         except urllib.error.HTTPError as ex:
             raise Unavailable(f"HTTP {ex.code} {ex.read()[:300].decode(errors='replace')}") from None
         except Exception as ex:  # noqa: BLE001
@@ -121,8 +122,8 @@ def run(system, task, tools_spec, call_tool, max_steps=6, log=print, check=None,
             if not wrong:
                 return text, MODEL, trace
             fixes -= 1
-            max_steps = 0                        # from here on only rewrites, no more tool calls
-            log("asking the model to correct its answer:", wrong[:300])
+            left = 3                             # room to read what was missing and write again
+            log("sent back to the model:", wrong[:200])
             messages.append({"role": "user", "content": wrong})
             continue
         for cid, name, args in calls:
@@ -132,4 +133,6 @@ def run(system, task, tools_spec, call_tool, max_steps=6, log=print, check=None,
             trace.append({"tool": name, "args": args, "out": out})
             log(f"  tool {name}({json.dumps(args, ensure_ascii=False, default=str)[:160]}) -> {len(out)} chars")
             messages.append({"role": "tool", "content": out, **({"tool_name": name} if OLLAMA else {"tool_call_id": cid})})
+        if left <= 0:
+            left = 1
     return "", MODEL, trace

@@ -32,6 +32,8 @@ class Stand(BaseHTTPRequestHandler):
         if self.path == "/api/chat":             # Ollama's own protocol, the one used in the workflow
             assert body["think"] is False and body["stream"] is False
             tools = [m for m in body["messages"] if m["role"] == "tool"]
+            if "stubborn" in body["messages"][1]["content"]:                 # a model that answers from memory whatever it is told
+                return self.send({"message": {"role": "assistant", "content": "The United States emits 15.7 t per person."}, "done_reason": "stop"})
             if not tools:
                 return self.send({"message": {"role": "assistant", "content": "", "tool_calls": [
                     {"function": {"name": "rank", "arguments": {"dataset": "co2-and-greenhouse-gases", "variable": "co2", "n": 2}}}]}, "done_reason": "stop"})
@@ -53,6 +55,8 @@ class Stand(BaseHTTPRequestHandler):
             call("get_values", {"dataset": "co2-and-greenhouse-gases", "variable": "co2_per_capita", "places": ["India", "USA"]})
         elif n == 2:
             call("no_such_tool", {})
+        elif "from memory" in body["messages"][1]["content"] and n == 0:
+            pass
         else:
             last = [m for m in body["messages"] if m["role"] == "tool"][1]["content"]
             v = json.loads(last)["values"]
@@ -76,7 +80,10 @@ def main():
     assert "error" in json.loads(tools.call("get_values", {"dataset": "nope", "variable": "x", "places": ["a"]}))
     assert "error" in json.loads(tools.call("rank", {"wrong": 1}))
     assert len(tools.call("describe_dataset", {"dataset": "co2-and-greenhouse-gases"})) <= 2520
-    assert {f["function"]["name"] for f in tools.SPEC} == set(tools.TOOLS), "SPEC and TOOLS disagree"
+    top = tools.find_variables("Which three countries emit the most CO2 per person, and how does India compare?")["variables"][0]
+    assert (top["dataset"], top["variable"]) == ("co2-and-greenhouse-gases", "co2_per_capita"), top
+    assert tools.find_variables("life expectancy")["variables"][0]["variable"].startswith("life_expectancy")
+    assert {f["function"]["name"] for f in tools.SPEC} <= set(tools.TOOLS) and tools.READS <= {f["function"]["name"] for f in tools.SPEC}
     assert tools.recent_changes(1)["checks"][0]["changed"] is not None
 
     # the loop
@@ -98,6 +105,10 @@ def main():
     # a figure that matches nothing read is sent back to the model, which corrects it
     text, model, tr3 = run.answer("Who emits how much CO2?")
     assert "12,417.5" in text and "Check before citing" not in text, text
+
+    # a model that keeps answering from memory never gets its figures published: the data answers instead
+    text, model, tr4 = run.answer("stubborn: which countries emit the most CO2 per person, and how does India compare?")
+    assert model is None and "15.7" not in text and "figure check" in text and "India" in text and "Qatar" in text, text
 
     # text that thinks aloud, or that read no tool, is never published
     assert not run.usable("Okay, let's tackle this user query step by step.", trace) and not run.usable("India 2.2 t.", [])

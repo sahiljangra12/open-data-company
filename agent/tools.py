@@ -126,21 +126,37 @@ def search_datasets(query, n=8):
             "total_datasets_on_site": len(manifest()["datasets"])}
 
 
-def find_variables(query, n=8):
-    words = [w for w in re.findall(r"[a-z0-9]+", query.lower()) if len(w) > 1]
+SAME = {"person": "capita", "people": "capita", "emit": "emissions", "emits": "emissions", "emitted": "emissions", "carbon": "co2",
+        "wealth": "gdp", "income": "gdp", "rich": "gdp", "richest": "gdp", "poorest": "gdp", "electric": "electricity", "power": "electricity",
+        "deaths": "mortality", "jobless": "unemployment", "prices": "price", "temperatures": "temperature", "quakes": "earthquakes"}
+SKIP = {"the", "and", "per", "for", "which", "what", "how", "does", "most", "least", "top", "three", "five", "ten", "countries", "country",
+        "compare", "with", "has", "have", "highest", "lowest", "are", "is", "in", "of", "to", "by", "on", "much", "many", "world"}
+
+
+def find_variables(query, n=6):
+    words = [w for w in re.findall(r"[a-z0-9]+", query.lower()) if len(w) > 1 and w not in SKIP]
+    words = list(dict.fromkeys(words + [SAME[w] for w in words if w in SAME]))
+    if re.search(r"per (person|capita|head)", query.lower()):
+        words.append("capita")
+    stem = lambda w: w[:-1] if len(w) > 3 and w.endswith("s") else w
+    words = list(dict.fromkeys(stem(w) for w in words))
     out = []
     for d in manifest()["datasets"]:
+        dw = {stem(w) for w in re.findall(r"[a-z0-9]+", d["title"].lower())}
         for c in d["columns"]:
             if c.get("type") != "num":
                 continue
-            title = (c["title"] + " " + c["name"].replace("_", " ")).lower()
-            s = sum(3 for w in words if w in title) + sum(1 for w in words if w in (c.get("description") or "").lower())
+            title = re.sub(r"[^a-z0-9 ]", " ", (c["title"] + " " + c["name"].replace("_", " ")).lower().replace("₂", "2"))
+            tw = {stem(w) for w in title.split()}
+            s = sum(3 for w in words if w in tw) + sum(1.5 for w in words if w in dw and w not in tw)
             if s:
-                out.append((s - len(title) / 400, d, c))
+                out.append((s + 0.25 * sum(1 for w in words if w in (c.get("description") or "").lower()) - len(tw) / 6, d, c))
     out.sort(key=lambda t: -t[0])
+    kind = lambda d: ("rank or get_values" if d["keys"] == ["code", "year"] else "get_series" if d["keys"] == ["date"] else "get_values")
     return {"variables": [{"dataset": d["id"], "variable": c["name"], "title": c["title"], "unit": c.get("unit", ""),
-                           "keys": d["keys"], "covers": f'{(d.get("time") or {}).get("min", "")} to {(d.get("time") or {}).get("max", "")}',
-                           "source": d["source"]} for _, d, c in out[:n]]}
+                           "covers": f'{(d.get("time") or {}).get("min", "")} to {(d.get("time") or {}).get("max", "")}',
+                           "source": d["source"], "read_with": kind(d)} for _, d, c in out[:n]],
+            "next": "These are names only, not values. Now call rank, get_values or get_series with a dataset and variable from this list."}
 
 
 def describe_dataset(dataset):
@@ -327,14 +343,12 @@ def fn(name, desc, props, required=()):
 
 S, I = {"type": "string"}, {"type": "integer"}
 SPEC = [
-    fn("search_datasets", "Find datasets on the site by topic words.", {"query": S}, ["query"]),
-    fn("find_variables", "Find variables (columns) by plain words. Returns dataset id and variable name to use in the other tools.", {"query": S}, ["query"]),
-    fn("describe_dataset", "Source, licence, years covered and the variables of one dataset.", {"dataset": S}, ["dataset"]),
-    fn("get_values", "Value of one variable for up to 8 places: the newest value, or the value in a given year.",
+    fn("find_variables", "Step 1. Find variables by plain words. Returns names only (dataset id and variable name), never values.", {"query": S}, ["query"]),
+    fn("get_values", "Step 2. Read the value of one variable for up to 8 places: the newest value, or the value in a given year.",
        {"dataset": S, "variable": S, "places": {"type": "array", "items": S}, "year": I}, ["dataset", "variable", "places"]),
-    fn("rank", "Countries ranked by one variable (regional totals left out). order: desc or asc.",
+    fn("rank", "Step 2. Read the top or bottom countries for one variable (regional totals left out). order: desc or asc.",
        {"dataset": S, "variable": S, "order": {"type": "string", "enum": ["desc", "asc"]}, "n": I, "year": I}, ["dataset", "variable"]),
-    fn("get_series", "One variable over time for one place (or a world series: leave place empty). start and end are years or dates.",
+    fn("get_series", "Step 2. Read one variable over time for one place (or a world series: leave place empty). start and end are years or dates.",
        {"dataset": S, "variable": S, "place": S, "start": S, "end": S}, ["dataset", "variable"]),
     fn("recent_changes", "What the latest daily data checks changed: rows added, values revised, newest entries.", {"checks": I}),
     fn("world_bank_live", "Live call to the World Bank API for an indicator code (e.g. SP.POP.TOTL) and an ISO3 country code.",
@@ -343,6 +357,9 @@ SPEC = [
        {"min_magnitude": {"type": "number"}, "period": S}),
     fn("weather_live", "Live current weather and a 3-day forecast for a named place (Open-Meteo).", {"place": S}, ["place"]),
 ]
+
+
+READS = {"get_values", "rank", "get_series", "recent_changes", "world_bank_live", "earthquakes_live", "weather_live"}   # tools that return figures
 
 
 def call(name, args, limit=2500):
