@@ -65,7 +65,7 @@ CADENCE = {  # how often each source itself changes; the site checks all of them
 WORLD_BANK_SETS = ["governance-indicators", "health-indicators", "education-indicators", "gender-indicators", "poverty-and-inequality", "environment-indicators",
                    "trade-and-finance", "technology-and-transport", "labour-indicators", "food-and-agriculture"]
 OWID_SETS = ["democracy-and-rights", "conflict-and-security", "emissions-by-sector", "wellbeing-and-schooling", "forests-wildlife-and-plastic", "natural-disasters",
-             "food-supply", "top-incomes", "space-and-ai", "renewable-capacity"]
+             "food-supply", "top-incomes", "space-and-ai", "renewable-capacity", "climate-and-environment-policy"]
 CADENCE.update({i: "Revised by the World Bank a few times a year" for i in WORLD_BANK_SETS})
 CADENCE.update({i: "Revised by Our World in Data about once a year" for i in OWID_SETS})
 
@@ -75,7 +75,7 @@ ORDER = ["co2-and-greenhouse-gases", "energy", "world-bank-development", "global
          "imf-world-economic-outlook", "europe-eurostat", "un-population", "health-indicators", "who-health-observatory", "human-development-index", "democracy-and-rights",
          "governance-indicators", "education-indicators", "poverty-and-inequality", "gender-indicators", "labour-indicators", "wellbeing-and-schooling", "top-incomes",
          "trade-and-finance", "world-trade-in-goods", "food-and-agriculture", "food-supply", "penn-world-table", "technology-and-transport", "environment-indicators", "emissions-by-sector",
-         "climate-trace-emissions", "forests-wildlife-and-plastic", "natural-disasters", "conflict-and-security", "renewable-capacity", "space-and-ai", "research-papers-by-year", "research-papers-by-country",
+         "climate-trace-emissions", "forests-wildlife-and-plastic", "natural-disasters", "climate-and-environment-policy", "conflict-and-security", "renewable-capacity", "space-and-ai", "research-papers-by-year", "research-papers-by-country",
          "wikipedia-pageviews", "github-activity-by-country", "biodiversity-records-by-year", "biodiversity-records-by-country", "bird-observations-daily", "clinical-trials-started",
          "world-leading-indicators-and-exchange-rates", "uk-economy-monthly", "imf-projections", "un-population-projections",
          "crude-oil-prices", "natural-gas-prices", "us-economy-monthly", "us-economy-quarterly", "us-rates-and-currencies-daily", "us-national-debt", "us-mortgage-lending", "us-grid-demand-daily", "us-states-census", "us-states-rents", "us-states-air-quality", "us-crop-production", "us-ev-charging-stations", "us-colleges", "food-nutrients",
