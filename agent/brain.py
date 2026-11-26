@@ -8,7 +8,7 @@ The model is chosen from GitHub's live catalog: the first of PREFERRED that is l
 listed model that can. Set the repository variable AGENT_MODEL to force one. AGENT_API_URL points the client at another
 OpenAI-compatible server (the test uses a stand-in).
 """
-import json, os, time, urllib.error, urllib.request
+import json, os, sys, time, urllib.error, urllib.request
 
 API = os.environ.get("AGENT_API_URL", "https://models.github.ai").rstrip("/")
 PREFERRED = ["openai/gpt-4.1-mini", "openai/gpt-4o-mini", "openai/gpt-4.1", "openai/gpt-4o", "mistral-ai/mistral-medium-2505",
@@ -19,12 +19,25 @@ class Unavailable(Exception):
     """No model could be reached: no token, no allowance left, or the service is down."""
 
 
+HEADERS = {"Accept": "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28", "User-Agent": "open-data-company-agent"}
+
+
+def _read(req, timeout):
+    with urllib.request.urlopen(req, timeout=timeout) as r:
+        raw = r.read()
+        if r.headers.get("Content-Encoding") == "gzip":
+            import gzip
+            raw = gzip.decompress(raw)
+        try:
+            return json.loads(raw.decode("utf-8-sig"))
+        except ValueError:
+            raise ValueError(f"not JSON: HTTP {r.status}, {r.headers.get('Content-Type')}, {len(raw)} bytes, starts {raw[:160]!r}") from None
+
+
 def _post(path, body, token, timeout=90):
     req = urllib.request.Request(API + path, data=json.dumps(body).encode(), method="POST",
-                                 headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json",
-                                          "Accept": "application/json", "X-GitHub-Api-Version": "2022-11-28"})
-    with urllib.request.urlopen(req, timeout=timeout) as r:
-        return json.loads(r.read().decode())
+                                 headers={**HEADERS, "Authorization": f"Bearer {token}", "Content-Type": "application/json"})
+    return _read(req, timeout)
 
 
 def models(token):
@@ -32,11 +45,10 @@ def models(token):
     if forced:
         return [forced]
     try:
-        req = urllib.request.Request(API + "/catalog/models", headers={"Authorization": f"Bearer {token}", "Accept": "application/json"})
-        with urllib.request.urlopen(req, timeout=30) as r:
-            cat = json.loads(r.read().decode())
+        cat = _read(urllib.request.Request(API + "/catalog/models", headers={**HEADERS, "Authorization": f"Bearer {token}"}), 30)
         able = [m["id"] for m in cat if "tool-calling" in (m.get("capabilities") or [])]
-    except Exception:  # noqa: BLE001 - without the catalog, fall back to the usual names
+    except Exception as ex:  # noqa: BLE001 - without the catalog, fall back to the usual names
+        print("catalog error:", ex, file=sys.stderr)
         return PREFERRED[:3]
     first = [m for m in PREFERRED if m in able]
     low = [m for m in able if m not in first and any(k in m for k in ("mini", "small", "nano", "flash"))]
