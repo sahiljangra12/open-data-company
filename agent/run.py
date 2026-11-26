@@ -98,10 +98,23 @@ def ungrounded(text, evidence):
     return list(dict.fromkeys(bad))
 
 
+def figure_check(given=""):
+    """For the loop: tells the model which of its figures match nothing it read, so it can rewrite."""
+    def check(text, trace):
+        if not trace:
+            return None
+        loose = ungrounded(text, given + " ".join(t["out"] for t in trace))
+        if loose:
+            return ("These figures in your answer match nothing in the tool results or the task: " + ", ".join(loose) + ". "
+                    "Rewrite the whole answer in the same shape. Copy each figure digit by digit from the tool results, "
+                    "or leave out any statement you cannot support. Reply with the corrected answer only.")
+    return check
+
+
 def answer(question):
     question = question.strip()[:1500]
     try:
-        text, model, trace = brain.run(SYSTEM, question, tools.SPEC, tools.call, log=log)
+        text, model, trace = brain.run(SYSTEM, question, tools.SPEC, tools.call, log=log, check=figure_check(question))
         if not usable(text, trace):
             log("unusable answer began:", repr(text[:300]))
             raise brain.Unavailable("the model's answer was not usable (empty, thinking aloud, or no tool was read)")
@@ -176,7 +189,7 @@ Under 200 words. Plain language. Copy every figure exactly as the tool gave it; 
 Say exactly what period a figure covers (a tool's "window" tells you); never widen it."""
 
 
-def fallback_brief(ch):
+def fallback_brief(ch, why="the AI model could not be reached for this run"):
     run = (ch.get("checks") or [{}])[0]
     lines = [f'**{len(run.get("changed", []))} datasets changed in the latest check**', "", "### What changed"]
     for c in run.get("changed", [])[:6]:
@@ -184,7 +197,7 @@ def fallback_brief(ch):
         ex = (c.get("examples") or [None])[0]
         eg = f' For example, {ex["where"]}: {ex["what"]} {ex.get("new", "")}.' if ex else ""
         lines.append(f'- **{c["title"]}**: {", ".join(b for b in bits if b) or "updated"}.{eg}')
-    lines += ["", "_Written from the change log alone; the AI model could not be reached for this run._"]
+    lines += ["", f"_Written from the change log alone; {why}._"]
     return "\n".join(lines)
 
 
@@ -250,7 +263,7 @@ def cmd_brief():
     ch = tools.recent_changes(1)
     changes = json.dumps(ch["checks"], ensure_ascii=False)[:3500]
     try:
-        text, model, trace = brain.run(SYSTEM, BRIEF_TASK.format(changes=changes), tools.SPEC, tools.call, max_steps=7, log=log)
+        text, model, trace = brain.run(SYSTEM, BRIEF_TASK.format(changes=changes), tools.SPEC, tools.call, max_steps=7, log=log, check=figure_check(changes))
         if not usable(text, trace) or "###" not in text:
             log("unusable brief began:", repr(text[:300]))
             raise brain.Unavailable("the model's brief was not usable (empty, thinking aloud, wrong shape, or no tool was read)")
@@ -260,7 +273,8 @@ def cmd_brief():
             raise brain.Unavailable("the brief held figures that match nothing the agent read: " + ", ".join(loose))
     except brain.Unavailable as ex:
         log("falling back to change-log brief:", ex)
-        text, model, trace = fallback_brief(ch), None, []
+        why = "the model's draft did not pass the figure check" if "figures" in str(ex) or "usable" in str(ex) else "the AI model could not be reached for this run"
+        text, model, trace = fallback_brief(ch, why), None, []
     path = ROOT / "docs" / "data" / "brief.json"
     old = json.loads(path.read_text(encoding="utf-8"))["briefs"] if path.exists() else []
     now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")

@@ -55,7 +55,7 @@ def chat(messages, tools_spec):
     """One call to the model. Returns (text, tool calls as [(id, name, args)], the assistant message to keep, note)."""
     if OLLAMA:                                   # Ollama's own protocol: the reliable way to switch thinking off
         body = {"model": MODEL, "messages": messages, "stream": False, "think": False,
-                "options": {"temperature": 0.2, "num_predict": 700}}
+                "options": {"temperature": 0, "num_predict": 700}}
         if tools_spec:
             body["tools"] = tools_spec
         try:
@@ -71,7 +71,7 @@ def chat(messages, tools_spec):
         keep = {"role": "assistant", "content": clean(msg.get("content")), **({"tool_calls": raw} if raw else {})}
         note = f"{res.get('prompt_eval_count')} tokens read, {res.get('eval_count')} written"
         return keep["content"], calls, keep, note, res.get("done_reason") == "length"
-    body = {"model": MODEL, "messages": messages, "temperature": 0.2, "max_tokens": 700}
+    body = {"model": MODEL, "messages": messages, "temperature": 0, "max_tokens": 700}
     if tools_spec:
         body["tools"] = tools_spec
     res = _post("/chat/completions", body)
@@ -92,14 +92,17 @@ def chat(messages, tools_spec):
     return keep["content"], calls, keep, f"{u.get('prompt_tokens')} tokens read, {u.get('completion_tokens')} written", choice.get("finish_reason") == "length"
 
 
-def run(system, task, tools_spec, call_tool, max_steps=6, log=print):
-    """The agent loop. Returns (answer_text, model_used, trace) where trace lists each tool call."""
+def run(system, task, tools_spec, call_tool, max_steps=6, log=print, check=None, fixes=2):
+    """The agent loop. Returns (answer_text, model_used, trace) where trace lists each tool call.
+
+    check(text, trace) may return a correction for the model (for example "these figures match nothing you read").
+    The model then rewrites its answer, up to `fixes` times; the last version is returned for the caller to judge."""
     messages = [{"role": "system", "content": system}, {"role": "user", "content": task}]
     trace, seen = [], set()
-    for step in range(max_steps):
+    for step in range(max_steps + fixes):
         compact(messages)
-        final = step == max_steps - 1
-        if final:
+        final = step >= max_steps - 1
+        if step == max_steps - 1:
             messages.append({"role": "user", "content": "Write the final answer now from what the tools returned. No more tool calls."})
         t0 = time.time()
         try:
@@ -114,7 +117,14 @@ def run(system, task, tools_spec, call_tool, max_steps=6, log=print):
             if cut:
                 log("cut-off text began:", repr(text[:300]))
                 raise Unavailable("the model ran out of room before finishing its answer")
-            return text, MODEL, trace
+            wrong = check(text, trace) if check and fixes > 0 else None
+            if not wrong:
+                return text, MODEL, trace
+            fixes -= 1
+            max_steps = 0                        # from here on only rewrites, no more tool calls
+            log("asking the model to correct its answer:", wrong[:300])
+            messages.append({"role": "user", "content": wrong})
+            continue
         for cid, name, args in calls:
             key = name + json.dumps(args, sort_keys=True, default=str)
             out = call_tool(name, args) if key not in seen else json.dumps({"note": "You already made this exact call. Use the earlier result and write the answer."})

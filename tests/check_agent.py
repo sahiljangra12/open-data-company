@@ -37,6 +37,11 @@ class Stand(BaseHTTPRequestHandler):
                     {"function": {"name": "rank", "arguments": {"dataset": "co2-and-greenhouse-gases", "variable": "co2", "n": 2}}}]}, "done_reason": "stop"})
             assert tools[0]["tool_name"] == "rank"
             top = json.loads(tools[0]["content"])["ranking"][0]
+            if "Who emits how much" in body["messages"][1]["content"]:      # first a transposed figure, then the right one
+                fixed = any("match nothing" in m["content"] for m in body["messages"] if m["role"] == "user")
+                assert "tools" not in body or not fixed
+                v = f"{top['value']:,}" if fixed else "12,471.5"
+                return self.send({"message": {"role": "assistant", "content": f"{top['place']} emitted {v} Mt."}, "done_reason": "stop"})
             return self.send({"message": {"role": "assistant", "content": f"{top['place']} emits the most."}, "done_reason": "stop", "prompt_eval_count": 9, "eval_count": 5})
         assert self.path == "/v1/chat/completions", self.path
         n = sum(1 for m in body["messages"] if m["role"] == "assistant")
@@ -90,6 +95,10 @@ def main():
     text, model, tr2 = run.answer("Who emits the most CO2?")
     assert text == "China emits the most." and [t["tool"] for t in tr2] == ["rank"], (text, tr2)
 
+    # a figure that matches nothing read is sent back to the model, which corrects it
+    text, model, tr3 = run.answer("Who emits how much CO2?")
+    assert "12,417.5" in text and "Check before citing" not in text, text
+
     # text that thinks aloud, or that read no tool, is never published
     assert not run.usable("Okay, let's tackle this user query step by step.", trace) and not run.usable("India 2.2 t.", [])
     assert run.usable("India 2.2 t, United States 14.5 t (2025).", trace)
@@ -112,6 +121,7 @@ def main():
     text, model, trace = run.answer("co2 emissions per capita")
     assert model is None and "could not be reached" in text and "Source:" in text, text
     assert "could not be reached" in run.fallback_brief(tools.recent_changes(1))
+    assert "figure check" in run.fallback_brief(tools.recent_changes(1), "the model's draft did not pass the figure check")
 
     # the brief's Markdown is escaped before it becomes HTML
     h = run.md_html("**Head** <script>x</script>\n\n### What changed\n- a [link](https://example.org/a) and [bad](javascript:alert(1))\n- _note_")
