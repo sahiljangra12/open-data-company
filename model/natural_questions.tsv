@@ -1,0 +1,107 @@
+# Questions written by hand, in everyday words, with the variable each one is really asking for.
+# They are never used for training: they are the test. Format: question <tab> dataset::variable, with | between equally good answers.
+How much carbon does India pump out each year?	co2-and-greenhouse-gases::co2
+Which nations are the biggest CO2 polluters?	co2-and-greenhouse-gases::co2
+carbon footprint of an average American	co2-and-greenhouse-gases::co2_per_capita|co2-and-greenhouse-gases::consumption_co2_per_capita
+Emissions per head in Qatar	co2-and-greenhouse-gases::co2_per_capita
+How carbon-heavy is China's economy for each dollar it makes?	co2-and-greenhouse-gases::co2_per_gdp
+Who is historically most responsible for CO2, adding up every year so far?	co2-and-greenhouse-gases::cumulative_co2|co2-and-greenhouse-gases::share_global_cumulative_co2
+CO2 from burning coal in Germany	co2-and-greenhouse-gases::coal_co2
+How much CO2 comes from making cement in China?	co2-and-greenhouse-gases::cement_co2
+Emissions caused by what the UK buys and consumes, imports included	co2-and-greenhouse-gases::consumption_co2
+methane released by Brazil	co2-and-greenhouse-gases::methane
+N2O emissions by country	co2-and-greenhouse-gases::nitrous_oxide
+all greenhouse gases put out by the United States	co2-and-greenhouse-gases::total_ghg|climate-trace-emissions::greenhouse_gas_emissions
+What slice of the world's CO2 comes from China?	co2-and-greenhouse-gases::share_global_co2
+CO2 from cutting forests and changing land use in Indonesia	co2-and-greenhouse-gases::land_use_change_co2
+gas flaring CO2 Nigeria	co2-and-greenhouse-gases::flaring_co2
+How much warming has each country caused so far?	co2-and-greenhouse-gases::temperature_change_from_ghg|co2-and-greenhouse-gases::share_of_temperature_change_from_ghg|co2-and-greenhouse-gases::temperature_change_from_co2
+CO2 from oil in Saudi Arabia	co2-and-greenhouse-gases::oil_co2
+Is India's CO2 still growing from one year to the next?	co2-and-greenhouse-gases::co2_growth_prct|co2-and-greenhouse-gases::co2_growth_abs
+How much do cars, trucks and planes emit in the US?	emissions-by-sector::ghg_transport
+greenhouse gases from farming in New Zealand	emissions-by-sector::ghg_agriculture
+emissions from heating and running buildings	emissions-by-sector::ghg_buildings
+greenhouse gases from making electricity and heat in China	emissions-by-sector::ghg_electricity_and_heat
+landfill and rubbish emissions	emissions-by-sector::ghg_waste
+factory emissions in India	emissions-by-sector::ghg_industry|emissions-by-sector::ghg_manufacturing_and_construction
+How much of Germany's power comes from wind?	energy::wind_share_elec
+solar's slice of electricity in Australia	energy::solar_share_elec
+How dependent is Poland on coal for its electricity?	energy::coal_share_elec
+France: how much power is nuclear?	energy::nuclear_share_elec
+How green is Brazil's grid?	energy::renewables_share_elec|energy::low_carbon_share_elec
+How much electricity does Norway get from dams?	energy::hydro_share_elec|energy::hydro_electricity
+grams of CO2 for each kilowatt-hour of electricity in India	energy::carbon_intensity_elec
+energy used per person in Canada	energy::energy_per_capita
+how much electricity does an average person in Japan use	energy::per_capita_electricity|energy::electricity_demand_per_capita
+What fraction of energy still comes from fossil fuels worldwide?	energy::fossil_share_energy
+total power generated in China in terawatt-hours	energy::electricity_generation
+oil pumped by Saudi Arabia	energy::oil_production
+natural gas output of Russia	energy::gas_production
+coal dug up in Indonesia	energy::coal_production
+How much energy does the US use altogether?	energy::primary_energy_consumption
+renewables as a share of all energy, not just electricity, in Sweden	energy::renewables_share_energy
+energy needed for each dollar of GDP	energy::energy_per_gdp
+gigawatts of solar panels installed in India	renewable-capacity::solar_capacity
+wind farm capacity built in China	renewable-capacity::wind_capacity
+clean electricity share, nuclear plus renewables, in France	energy::low_carbon_share_elec
+biofuel use in Brazil	energy::biofuel_consumption
+does Italy import electricity from its neighbours?	energy::net_elec_imports|energy::net_elec_imports_share_demand
+How much hotter is the planet than it used to be?	global-temperature::nasa_anomaly_c|global-temperature::noaa_anomaly_c|global-temperature::berkeley_anomaly_c
+CO2 concentration in the air right now	atmospheric-co2::mauna_loa_ppm|atmospheric-co2::global_ppm|atmospheric-co2::mauna_loa_trend_ppm|atmospheric-co2::global_trend_ppm
+parts per million of carbon dioxide, global average	atmospheric-co2::global_ppm|atmospheric-co2::mauna_loa_ppm|atmospheric-co2::global_trend_ppm
+How much of Brazil is covered by forest?	environment-indicators::forest_area
+share of land under protection in Costa Rica	environment-indicators::terrestrial_protected_areas|environment-indicators::terrestrial_and_marine_protected_areas
+how much of the sea is protected	environment-indicators::marine_protected_areas
+dirty air: fine particles people breathe in India	environment-indicators::pm2_5_air_pollution_population_exposed_to_levels
+How stretched are Egypt's water supplies?	environment-indicators::level_of_water_stress_freshwater_withdrawal_as_a
+fresh water available for each person	environment-indicators::renewable_internal_freshwater_resources_per_capita
+endangered mammals by country	environment-indicators::mammal_species_threatened
+birds at risk of dying out in Indonesia	environment-indicators::bird_species_threatened
+people living on coast land less than 5 metres above the sea	environment-indicators::population_living_in_areas_where_elevation_is_below|environment-indicators::land_area_where_elevation_is_below_5_meters
+households cooking with clean fuel in Nigeria	environment-indicators::access_to_clean_fuels_and_technologies_for_cooking
+forest cut down each year in Brazil	forests-wildlife-and-plastic::deforestation|forests-wildlife-and-plastic::tree_cover_loss
+plastic leaking into the sea from the Philippines	forests-wildlife-and-plastic::plastic_waste_emitted_to_the_ocean
+index of how close species are to extinction	forests-wildlife-and-plastic::red_list_index
+How many people die in natural disasters each year?	natural-disasters::deaths_from_natural_disasters|natural-disasters::death_rate_from_all_natural_disasters
+people hit by floods in Bangladesh	natural-disasters::people_affected_by_floods
+drought victims in Ethiopia	natural-disasters::people_affected_by_droughts
+what disasters cost as a share of the economy	natural-disasters::damage_share_of_gdp_from_all_natural_disasters
+deaths from heatwaves and cold spells per 100,000 people	natural-disasters::death_rate_from_extreme_temperatures
+people who lost their homes to disasters	natural-disasters::people_left_homeless_by_all_natural_disasters
+grain harvested per hectare in India	food-and-agriculture::cereal_yield
+how much fertiliser farmers use	food-and-agriculture::fertilizer_consumption
+How many people cannot count on having enough to eat?	food-and-agriculture::prevalence_of_moderate_or_severe_food_insecurity_in|food-and-agriculture::prevalence_of_severe_food_insecurity_in_the
+fish farming output of China	food-and-agriculture::aquaculture_production
+calories available per person per day in Nigeria	food-supply::daily_calorie_supply_per_person
+meat eaten per person in Argentina	food-supply::meat_supply_per_person
+How corrupt is Russia?	governance-indicators::control_of_corruption|governance-indicators::control_of_corruption_score_out_of_100|democracy-and-rights::corruption_perceptions_index
+Transparency International's score for Denmark	democracy-and-rights::corruption_perceptions_index
+How well does Singapore's government deliver public services?	governance-indicators::government_effectiveness|governance-indicators::government_effectiveness_score_out_of_100
+quality of rules for business in India	governance-indicators::regulatory_quality|governance-indicators::regulatory_quality_score_out_of_100
+Is the law respected and enforced in Mexico?	governance-indicators::rule_of_law|governance-indicators::rule_of_law_score_out_of_100|democracy-and-rights::rule_of_law_index
+how politically stable is Pakistan	governance-indicators::political_stability_and_absence_of_violence|governance-indicators::political_stability_and_absence_of_violence_score
+Can citizens speak freely and choose who governs them?	governance-indicators::voice_and_accountability|governance-indicators::voice_and_accountability_score_out_of_100|democracy-and-rights::electoral_democracy_index|democracy-and-rights::liberal_democracy_index
+How democratic is Hungary?	democracy-and-rights::electoral_democracy_index|democracy-and-rights::liberal_democracy_index
+freedom of journalists in Turkey	democracy-and-rights::press_freedom_index
+human rights record of China	democracy-and-rights::human_rights_index
+women's power in politics	democracy-and-rights::womens_political_empowerment_index
+How many new federal regulations did the US finalise last year?	us-federal-register::final_rules
+executive orders signed each year	us-federal-register::executive_orders
+laws passed by Congress each year	us-congress-and-rulemaking::laws_enacted
+bills put forward in Congress	us-congress-and-rulemaking::bills_introduced
+comments the public sent in on proposed regulations	us-congress-and-rulemaking::public_comments_posted
+How developed is Bangladesh on the UN's index?	human-development-index::human_development_index
+human development once pressure on the planet is counted	human-development-index::planetary_pressures_adjusted_hdi
+raw materials used per person	human-development-index::material_footprint_per_person
+share of city dwellers living in slums	poverty-and-inequality::population_living_in_slums
+how much income goes to the richest tenth	poverty-and-inequality::income_share_held_by_highest_10_pct|top-incomes::share_of_income_going_to_the_top_10_pct
+What price do countries put on carbon?	climate-and-environment-policy::carbon_tax_price|climate-and-environment-policy::emissions_trading_price
+How high is Sweden's carbon tax?	climate-and-environment-policy::carbon_tax_price
+price in emissions trading schemes	climate-and-environment-policy::emissions_trading_price
+How much does Saudi Arabia spend subsidising oil and gas?	climate-and-environment-policy::fossil_fuel_subsidies
+fossil fuel subsidies for each person in Iran	climate-and-environment-policy::fossil_fuel_subsidies_per_person
+subsidies for fossil fuels as a share of the economy	climate-and-environment-policy::fossil_fuel_subsidies_share_of_gdp
+How well are the most important wildlife sites protected?	climate-and-environment-policy::protected_key_biodiversity_areas
+money sent to poorer countries for clean energy	climate-and-environment-policy::clean_energy_finance_received
+ozone-destroying chemicals still in use	climate-and-environment-policy::ozone_depleting_substances
+Do countries have a national plan for reducing disaster risk?	climate-and-environment-policy::disaster_risk_strategy_score
