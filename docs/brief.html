@@ -5,22 +5,21 @@
 <div class="wrap">
 <div class="xhead"><h1>Daily brief</h1>
 <p>Each day, after the data is refreshed, the Data Agent reads what changed, checks the newest figures in the datasets and writes this short note. It runs on GitHub, with tools written for this site.</p></div>
-<section><div class="card brief"><p class="hint">26 November 2026, 21:12 UTC</p>
-<p><strong>Africa’s daily calorie supply dropped to 2,567.69 kilocalories in 2024</strong></p>
+<section><div class="card brief"><p class="hint">26 November 2026, 21:19 UTC</p>
+<p><strong>Africa’s daily calorie supply in 2024 is 2568</strong></p>
 <h3>What changed</h3>
 <ul>
-<li>Africa’s daily calorie supply per person was 2,567.69 kilocalories in 2024 (FAO, 2024).</li>
-<li>Armed conflicts in Africa caused 108,907 deaths in 2025 (UCDP, 2025).</li>
-<li>The top 1% income share in Africa is not available in the dataset.</li>
+<li>Africa’s daily calorie supply per person is <strong>2568</strong> in 2024 (unit: calories), from FAO data (2024), source: food-supply dataset.</li>
+<li>The strongest earthquake of the past day was <strong>5.7</strong> magnitude near Revilla Gigedo Islands region at 2026-11-26 15:26 UTC, per USGS.</li>
+<li>The global estimate of armed conflict deaths in 2025 is <strong>108,907</strong> in Africa (unit: deaths), from UCDP data (2025), source: conflict-and-security dataset.</li>
 </ul>
 <h3>Worth a look</h3>
 <ul>
-<li>Explore <em>conflict-and-security</em> for global conflict deaths by region and year.</li>
-<li>Explore <em>food-supply</em> for daily calorie and meat availability across regions.</li>
+<li>Explore <em>food-supply</em> for daily calorie and meat per person by region, updated to 2024.</li>
+<li>Check <em>democracy-and-rights</em> for electoral democracy index (V-Dem) trends from 1789 to 2025.</li>
 </ul>
-<p><a href="https://sahiljangra12.github.io/open-data-company/data/sets/food-supply.csv">Full data file</a></p>
 </div>
-<p class="hint">Written by qwen3:4b-instruct, an open model that runs on GitHub's own machines during the run (no outside AI service). Tools it called: <code>find_variables</code>, <code>get_values</code>, <code>earthquakes_live</code>. Before publishing, each figure in the note is matched against what the tools returned; a note that fails is replaced by a plain summary of the change log. A small model can still word things loosely, so check a figure in the <a href="datasets.html">datasets</a> or the <a href="updates.html">change log</a> before you cite it.</p></section>
+<p class="hint">Written by qwen3:4b-instruct, an open model that runs on GitHub's own machines during the run (no outside AI service). Tools it called: <code>find_variables</code>, <code>earthquakes_live</code>. Before publishing, each figure in the note is matched against what the tools returned; a note that fails is replaced by a plain summary of the change log. A small model can still word things loosely, so check a figure in the <a href="datasets.html">datasets</a> or the <a href="updates.html">change log</a> before you cite it.</p></section>
 <section><h2>Ask the agent yourself</h2>
 <p>The same agent answers questions posted as GitHub issues, usually within about ten minutes, with the figures, their years and their sources. For instant answers in the browser, use <a href="ask.html">Data AI</a>.</p>
 <p><a class="btn solid" href="https://github.com/sahiljangra12/open-data-company/issues/new?template=ask-data-agent.yml">Ask on GitHub</a> <a class="btn" href="https://github.com/sahiljangra12/open-data-company/tree/main/agent">How the agent is built</a></p></section>
