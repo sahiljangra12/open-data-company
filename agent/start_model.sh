@@ -15,8 +15,11 @@ mkdir -p "$LLAMA_CACHE" "$BIN"
 if [ -z "$(find "$BIN" -type f -name llama-server | head -1)" ]; then
   echo "Downloading llama.cpp (latest release, Linux x64, CPU)"
   cd "$BIN"
-  gh release download --repo ggml-org/llama.cpp --pattern '*bin-ubuntu-x64*' --clobber
-  ls -la
+  gh release view --repo ggml-org/llama.cpp --json tagName,assets -q '.tagName, (.assets[].name)' | tee assets.txt
+  ASSET="$(grep -iE '(ubuntu|linux)' assets.txt | grep -iE '(x64|x86_64|amd64)' | grep -viE 'vulkan|cuda|rocm|sycl|opencl|hip|openvino|arm|s390|riscv|android' | head -1)"
+  [ -n "$ASSET" ] || { echo "No Linux x64 CPU build among the release files above"; exit 1; }
+  echo "Using $ASSET"
+  gh release download --repo ggml-org/llama.cpp --pattern "$ASSET" --clobber
   for f in *; do case "$f" in *.zip) unzip -q -o "$f" ;; *.tar.gz|*.tgz) tar -xzf "$f" ;; esac; done
   cd - >/dev/null
 fi
