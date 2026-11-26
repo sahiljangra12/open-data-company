@@ -1,0 +1,75 @@
+name: Train the matcher
+
+# Trains the site's own small model on GitHub's machine: it learns which variable a question about sustainability or
+# policy is asking for. Free to run: no key, no outside AI service. The training questions are made from the site's
+# own datasets (model/make_examples.py), and the result is scored against the keyword search used today.
+on:
+  workflow_dispatch:
+    inputs:
+      epochs:
+        description: "How many times to go through the training questions"
+        default: "3"
+      limit:
+        description: "Quick trial: train on only this many questions (0 = all)"
+        default: "0"
+      publish:
+        description: "yes = keep the report in the repo and the trained model as a release"
+        default: "no"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: train-model
+  cancel-in-progress: false
+
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install the training libraries
+        run: |
+          pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+          pip install --quiet transformers
+      - name: Build the training and test questions from the site's datasets
+        run: python model/make_examples.py
+      - name: Train and measure
+        env:
+          EPOCHS: ${{ inputs.epochs }}
+          LIMIT: ${{ inputs.limit }}
+          MAX_MINUTES: "110"
+          HF_HUB_DISABLE_TELEMETRY: "1"
+          TOKENIZERS_PARALLELISM: "false"
+        run: python model/train.py
+      - name: Show the result on the run's page
+        if: always()
+        run: test -f model/out/REPORT.md && cat model/out/REPORT.md >> "$GITHUB_STEP_SUMMARY" || true
+      - name: Pack the trained model
+        run: cd model/out && tar -czf sustainability-matcher.tar.gz sustainability-matcher && ls -la sustainability-matcher.tar.gz
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sustainability-matcher
+          path: |
+            model/out/sustainability-matcher.tar.gz
+            model/out/REPORT.md
+            model/out/results.json
+          retention-days: 30
+      - name: Keep the report in the repo and the model as a release
+        if: inputs.publish == 'yes'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cp model/out/REPORT.md model/REPORT.md
+          cp model/out/results.json model/results.json
+          git config user.name "sahiljangra12"
+          git config user.email "sahiljangra12@users.noreply.github.com"
+          git add model/REPORT.md model/results.json
+          git commit -q -m "Matcher: results of the latest training run" || echo "nothing new to keep"
+          git pull -q --rebase origin "${GITHUB_REF_NAME}" && git push -q origin "HEAD:${GITHUB_REF_NAME}"
+          gh release view matcher-latest >/dev/null 2>&1 || gh release create matcher-latest --title "Sustainability and policy matcher" --notes "The site's own small model. It reads a question and finds the variable it asks for. Trained on GitHub from the site's datasets; see model/REPORT.md for how it scores." --latest=false
+          gh release upload matcher-latest model/out/sustainability-matcher.tar.gz --clobber
