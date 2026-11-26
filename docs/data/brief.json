@@ -1,14 +1,12 @@
 {
  "briefs": [
   {
-   "at": "2026-11-26T20:25:52Z",
+   "at": "2026-11-26T20:41:54Z",
    "model": "qwen3:4b-instruct",
    "tools": [
-    "get_series",
-    "get_values",
-    "earthquakes_live"
+    "find_variables"
    ],
-   "markdown": "**A powerful earthquake struck near Indonesia and Tonga today**\n\n### What changed\n- A 5.7-magnitude earthquake hit the Revilla Gigedo Islands region at 15:26 UTC on 26 November 2026. Source: USGS.\n- The highest recorded magnitude in the past 30 days was 5.9, on 25 November at 01:38 UTC. Source: USGS Earthquake Hazards Program.\n- Daily calorie supply in Albania (2024) was 3,348; in Angola, 2,365; in Afghanistan, 2,310. Source: Food supply dataset.\n- Senegal’s goods trade balance improved from -2.011 billion to -1.973 billion USD in 2025. Source: World trade in goods (UN Comtrade).\n\n### Worth a look\n- Explore *biodiversity-records-by-year* to see how species are being observed globally.  \n- Check *earthquakes-past-30-days* for a full timeline of seismic events."
+   "markdown": "**Africa had 108,907 deaths in armed conflicts in 2025**\n\n### What changed\n- Africa saw 108,907 deaths in armed conflicts in 2025 (deaths), source: UCDP, via Our World in Data\n- Americas had 12,346 deaths in armed conflicts in 2025 (deaths), source: UCDP, via Our World in Data\n- Asia and Oceania had 7,123 deaths in armed conflicts in 2025 (deaths), source: UCDP, via Our World in Data\n- Daily calorie supply per person in Africa was 2,568 kilocalories per day in 2024, source: FAO, via Our World in Data\n- Daily calorie supply per person in the Americas was 3,438 kilocalories per day in 2024, source: FAO, via Our World in Data\n\n### Worth a look\n- Explore *food-supply* for daily calorie and meat availability by region and year.\n- Explore *conflict-and-security* for global conflict deaths and trends over time."
   }
  ]
 }
