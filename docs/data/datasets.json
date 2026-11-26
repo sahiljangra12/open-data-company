@@ -1,5 +1,5 @@
 {
- "checked": "2026-11-26T15:48:44Z",
+ "checked": "2026-11-26T20:36:32Z",
  "cron": "23 5 * * *",
  "datasets": [
   {
@@ -5692,11 +5692,11 @@
    "time": {
     "col": "time",
     "type": "date",
-    "min": "2026-10-27T15:26:03Z",
-    "max": "2026-11-26T14:35:26Z"
+    "min": "2026-10-27T20:11:57Z",
+    "max": "2026-11-26T19:43:23Z"
    },
    "entity": null,
-   "rows": 1813,
+   "rows": 1801,
    "columns": [
     {
      "name": "magnitude",
@@ -5704,7 +5704,7 @@
      "unit": "",
      "description": "",
      "type": "num",
-     "filled": 1813
+     "filled": 1801
     },
     {
      "name": "place",
@@ -5712,7 +5712,7 @@
      "unit": "",
      "description": "",
      "type": "str",
-     "filled": 1813
+     "filled": 1801
     },
     {
      "name": "latitude",
@@ -5720,7 +5720,7 @@
      "unit": "degrees",
      "description": "",
      "type": "num",
-     "filled": 1813
+     "filled": 1801
     },
     {
      "name": "longitude",
@@ -5728,7 +5728,7 @@
      "unit": "degrees",
      "description": "",
      "type": "num",
-     "filled": 1813
+     "filled": 1801
     },
     {
      "name": "depth_km",
@@ -5736,7 +5736,7 @@
      "unit": "km",
      "description": "",
      "type": "num",
-     "filled": 1813
+     "filled": 1801
     },
     {
      "name": "magnitude_type",
@@ -5744,7 +5744,7 @@
      "unit": "",
      "description": "",
      "type": "str",
-     "filled": 1813
+     "filled": 1801
     },
     {
      "name": "event_type",
@@ -5752,7 +5752,7 @@
      "unit": "",
      "description": "",
      "type": "str",
-     "filled": 1813
+     "filled": 1801
     },
     {
      "name": "significance",
@@ -5760,7 +5760,7 @@
      "unit": "0-1000",
      "description": "USGS score combining magnitude, felt reports and estimated impact.",
      "type": "num",
-     "filled": 1813
+     "filled": 1801
     },
     {
      "name": "tsunami_flag",
@@ -5768,7 +5768,7 @@
      "unit": "",
      "description": "1 if the event was in an oceanic region and may warrant tsunami information; not a warning.",
      "type": "num",
-     "filled": 1813
+     "filled": 1801
     },
     {
      "name": "felt_reports",
@@ -5776,7 +5776,7 @@
      "unit": "reports",
      "description": "",
      "type": "num",
-     "filled": 304
+     "filled": 301
     },
     {
      "name": "url",
@@ -5784,10 +5784,10 @@
      "unit": "",
      "description": "",
      "type": "str",
-     "filled": 1813
+     "filled": 1801
     }
    ],
-   "bytes": 317191,
+   "bytes": 315187,
    "built": "2026-11-26",
    "coverage": "Rolling 30 days",
    "default_vars": [
@@ -11696,8 +11696,8 @@
      "filled": 2312
     }
    ],
-   "bytes": 1907536,
-   "built": "2026-11-24",
+   "bytes": 1913217,
+   "built": "2026-11-26",
    "coverage": "1789 to 2025",
    "entities": 234,
    "chart_entities": [
@@ -11767,7 +11767,7 @@
      "Azerbaijan"
     ],
     [
-     "OWID_BAD",
+     "OWID_BADEN",
      "Baden"
     ],
     [
@@ -11787,7 +11787,7 @@
      "Barbados"
     ],
     [
-     "OWID_BAV",
+     "OWID_BAVARIA",
      "Bavaria"
     ],
     [
@@ -12059,15 +12059,15 @@
      "Hamburg"
     ],
     [
-     "OWID_HAN",
+     "OWID_HANOVER",
      "Hanover"
     ],
     [
-     "OWID_HSE",
+     "OWID_HESSE_ELECTORAL",
      "Hesse Electoral"
     ],
     [
-     "OWID_HSG",
+     "OWID_HESSE_GRAND_DUCAL",
      "Hesse Grand Ducal"
     ],
     [
@@ -12215,7 +12215,7 @@
      "Mauritius"
     ],
     [
-     "OWID_MEC",
+     "OWID_MECKLENBURG_SCHWERIN",
      "Mecklenburg Schwerin"
     ],
     [
@@ -12223,7 +12223,7 @@
      "Mexico"
     ],
     [
-     "OWID_MOD",
+     "OWID_MODENA",
      "Modena"
     ],
     [
@@ -12347,7 +12347,7 @@
      "Paraguay"
     ],
     [
-     "OWID_PMA",
+     "OWID_PARMA",
      "Parma"
     ],
     [
@@ -12419,7 +12419,7 @@
      "Saxe-Weimar-Eisenach"
     ],
     [
-     "OWID_SAX",
+     "OWID_SAXONY",
      "Saxony"
     ],
     [
@@ -12555,11 +12555,11 @@
      "Turkmenistan"
     ],
     [
-     "OWID_TUS",
+     "OWID_TUSCANY",
      "Tuscany"
     ],
     [
-     "OWID_SIC",
+     "OWID_TWO_SICILIES",
      "Two Sicilies"
     ],
     [
@@ -19268,8 +19268,8 @@
      "filled": 3765
     }
    ],
-   "bytes": 132392,
-   "built": "2026-11-24",
+   "bytes": 123320,
+   "built": "2026-11-26",
    "coverage": "1820 to 2024",
    "entities": 165,
    "chart_entities": [
@@ -19447,7 +19447,7 @@
      "Dominican Republic"
     ],
     [
-     "OWID_EAST_ASIA_WID",
+     "WID_EA",
      "East Asia (WID)"
     ],
     [
@@ -19487,7 +19487,7 @@
      "Ethiopia"
     ],
     [
-     "OWID_EUROPE_WID",
+     "WID_EUR",
      "Europe (WID)"
     ],
     [
@@ -19603,7 +19603,7 @@
      "Laos"
     ],
     [
-     "OWID_LATIN_AMERICA_WID",
+     "WID_LA",
      "Latin America (WID)"
     ],
     [
@@ -19667,7 +19667,7 @@
      "Mexico"
     ],
     [
-     "OWID_MIDDLE_EAST_AND_NORTH_AFRICA_WID",
+     "WID_MENA",
      "Middle East and North Africa (WID)"
     ],
     [
@@ -19719,7 +19719,7 @@
      "Nigeria"
     ],
     [
-     "OWID_NORTH_AMERICA_WID",
+     "WID_NA",
      "North America (WID)"
     ],
     [
@@ -19731,7 +19731,7 @@
      "Norway"
     ],
     [
-     "OWID_OCEANIA_WID",
+     "WID_OC",
      "Oceania (WID)"
     ],
     [
@@ -19779,7 +19779,7 @@
      "Russia"
     ],
     [
-     "OWID_RUSSIA_AND_CENTRAL_ASIA_WID",
+     "WID_RCA",
      "Russia and Central Asia (WID)"
     ],
     [
@@ -19835,7 +19835,7 @@
      "South Sudan"
     ],
     [
-     "OWID_SOUTH_AND_SOUTH_EAST_ASIA_WID",
+     "WID_SSEA",
      "South and South-East Asia (WID)"
     ],
     [
@@ -19847,7 +19847,7 @@
      "Sri Lanka"
     ],
     [
-     "OWID_SUB_SAHARAN_AFRICA_WID",
+     "WID_SSA",
      "Sub-Saharan Africa (WID)"
     ],
     [
@@ -23472,7 +23472,7 @@
      "filled": 13439
     }
    ],
-   "bytes": 575677,
+   "bytes": 551343,
    "built": "2026-11-26",
    "coverage": "1750 to 2024",
    "entities": 243,
@@ -23495,7 +23495,7 @@
      "Africa"
     ],
     [
-     "OWID_AFRICA_FAO",
+     "FAO_AFR",
      "Africa (FAO)"
     ],
     [
@@ -23507,7 +23507,7 @@
      "Algeria"
     ],
     [
-     "OWID_AMERICAS_FAO",
+     "FAO_AME",
      "Americas (FAO)"
     ],
     [
@@ -23531,7 +23531,7 @@
      "Asia"
     ],
     [
-     "OWID_ASIA_FAO",
+     "FAO_ASI",
      "Asia (FAO)"
     ],
     [
@@ -23539,7 +23539,7 @@
      "Australia"
     ],
     [
-     "OWID_AUSTRALIA_AND_NEW_ZEALAND_FAO",
+     "FAO_ANZ",
      "Australia and New Zealand (FAO)"
     ],
     [
@@ -23643,7 +23643,7 @@
      "Cape Verde"
     ],
     [
-     "OWID_CARIBBEAN_FAO",
+     "FAO_CAR",
      "Caribbean (FAO)"
     ],
     [
@@ -23651,11 +23651,11 @@
      "Central African Republic"
     ],
     [
-     "OWID_CENTRAL_AMERICA_FAO",
+     "FAO_CAM",
      "Central America (FAO)"
     ],
     [
-     "OWID_CENTRAL_ASIA_FAO",
+     "FAO_CAS",
      "Central Asia (FAO)"
     ],
     [
@@ -23739,15 +23739,15 @@
      "East Timor"
     ],
     [
-     "OWID_EASTERN_AFRICA_FAO",
+     "FAO_EAF",
      "Eastern Africa (FAO)"
     ],
     [
-     "OWID_EASTERN_ASIA_FAO",
+     "FAO_EAS",
      "Eastern Asia (FAO)"
     ],
     [
-     "OWID_EASTERN_EUROPE_FAO",
+     "FAO_EEU",
      "Eastern Europe (FAO)"
     ],
     [
@@ -23783,7 +23783,7 @@
      "Europe"
     ],
     [
-     "OWID_EUROPE_FAO",
+     "FAO_EUR",
      "Europe (FAO)"
     ],
     [
@@ -24027,7 +24027,7 @@
      "Mauritius"
     ],
     [
-     "OWID_MELANESIA_FAO",
+     "FAO_MEL",
      "Melanesia (FAO)"
     ],
     [
@@ -24035,7 +24035,7 @@
      "Mexico"
     ],
     [
-     "OWID_MICRONESIA_FAO",
+     "FAO_MIC",
      "Micronesia (FAO)"
     ],
     [
@@ -24043,7 +24043,7 @@
      "Micronesia (country)"
     ],
     [
-     "OWID_MIDDLE_AFRICA_FAO",
+     "FAO_MAF",
      "Middle Africa (FAO)"
     ],
     [
@@ -24127,15 +24127,15 @@
      "North Macedonia"
     ],
     [
-     "OWID_NORTHERN_AFRICA_FAO",
+     "FAO_NAF",
      "Northern Africa (FAO)"
     ],
     [
-     "OWID_NORTHERN_AMERICA_FAO",
+     "FAO_NAM",
      "Northern America (FAO)"
     ],
     [
-     "OWID_NORTHERN_EUROPE_FAO",
+     "FAO_NEU",
      "Northern Europe (FAO)"
     ],
     [
@@ -24147,7 +24147,7 @@
      "Oceania"
     ],
     [
-     "OWID_OCEANIA_FAO",
+     "FAO_OCE",
      "Oceania (FAO)"
     ],
     [
@@ -24183,7 +24183,7 @@
      "Poland"
     ],
     [
-     "OWID_POLYNESIA_FAO",
+     "FAO_POL",
      "Polynesia (FAO)"
     ],
     [
@@ -24275,7 +24275,7 @@
      "South America"
     ],
     [
-     "OWID_SOUTH_AMERICA_FAO",
+     "FAO_SAM",
      "South America (FAO)"
     ],
     [
@@ -24287,19 +24287,19 @@
      "South Sudan"
     ],
     [
-     "OWID_SOUTH_EASTERN_ASIA_FAO",
+     "FAO_SEA",
      "South-eastern Asia (FAO)"
     ],
     [
-     "OWID_SOUTHERN_AFRICA_FAO",
+     "FAO_SAF",
      "Southern Africa (FAO)"
     ],
     [
-     "OWID_SOUTHERN_ASIA_FAO",
+     "FAO_SAS",
      "Southern Asia (FAO)"
     ],
     [
-     "OWID_SOUTHERN_EUROPE_FAO",
+     "FAO_SEU",
      "Southern Europe (FAO)"
     ],
     [
@@ -24427,15 +24427,15 @@
      "Vietnam"
     ],
     [
-     "OWID_WESTERN_AFRICA_FAO",
+     "FAO_WAF",
      "Western Africa (FAO)"
     ],
     [
-     "OWID_WESTERN_ASIA_FAO",
+     "FAO_WAS",
      "Western Asia (FAO)"
     ],
     [
-     "OWID_WESTERN_EUROPE_FAO",
+     "FAO_WEU",
      "Western Europe (FAO)"
     ],
     [
@@ -32340,8 +32340,8 @@
      "filled": 7844
     }
    ],
-   "bytes": 750401,
-   "built": "2026-11-24",
+   "bytes": 748292,
+   "built": "2026-11-26",
    "coverage": "1945 to 2026",
    "entities": 323,
    "chart_entities": [
@@ -32375,7 +32375,7 @@
      "Africa (SIPRI)"
     ],
     [
-     "OWID_AFRICA_UCDP",
+     "UCDP_AFR",
      "Africa (UCDP)"
     ],
     [
@@ -32399,7 +32399,7 @@
      "Americas (SIPRI)"
     ],
     [
-     "OWID_AMERICAS_UCDP",
+     "UCDP_AME",
      "Americas (UCDP)"
     ],
     [
@@ -32447,7 +32447,7 @@
      "Asia (UN)"
     ],
     [
-     "OWID_ASIA_AND_OCEANIA_UCDP",
+     "UCDP_ASO",
      "Asia and Oceania (UCDP)"
     ],
     [
@@ -32755,7 +32755,7 @@
      "Europe (SIPRI)"
     ],
     [
-     "OWID_EUROPE_UCDP",
+     "UCDP_EUR",
      "Europe (UCDP)"
     ],
     [
@@ -33067,7 +33067,7 @@
      "Middle East (SIPRI)"
     ],
     [
-     "OWID_MIDDLE_EAST_UCDP",
+     "UCDP_MEA",
      "Middle East (UCDP)"
     ],
     [
@@ -44175,11 +44175,11 @@
      "Germanna Community College"
     ],
     [
-     "104708",
+     "115001",
      "Glendale Community College"
     ],
     [
-     "115001",
+     "104708",
      "Glendale Community College"
     ],
     [
@@ -49774,9 +49774,17 @@
      "description": "US Geological Survey stream gauge 01358000: the average of the daily mean flow in each month with at least 25 days recorded.",
      "type": "num",
      "filled": 887
+    },
+    {
+     "name": "sacramento_at_freeport",
+     "title": "Flow of the Sacramento River at Freeport, monthly average",
+     "unit": "cubic feet per second",
+     "description": "US Geological Survey stream gauge 11447650: the average of the daily mean flow in each month with at least 25 days recorded.",
+     "type": "num",
+     "filled": 789
     }
    ],
-   "bytes": 50927,
+   "bytes": 55713,
    "built": "2026-11-26",
    "coverage": "1950 to 2026",
    "step": "month",
@@ -50324,11 +50332,11 @@
    "time": {
     "col": "date",
     "type": "date",
-    "min": "2014-01-01",
+    "min": "2011-01-01",
     "max": "2026-01-01"
    },
    "entity": null,
-   "rows": 13,
+   "rows": 16,
    "columns": [
     {
      "name": "court_opinions",
@@ -50336,12 +50344,12 @@
      "unit": "opinions",
      "description": "Written decisions of federal and state courts collected by CourtListener (Free Law Project). Coverage of lower courts is incomplete; the current year is not over. Earlier years are added a few at a time.",
      "type": "num",
-     "filled": 13
+     "filled": 16
     }
    ],
-   "bytes": 261,
+   "bytes": 318,
    "built": "2026-11-26",
-   "coverage": "2014 to 2026",
+   "coverage": "2011 to 2026",
    "step": "year",
    "partial": true,
    "cadence": "Every day"

@@ -11,7 +11,7 @@ When you answer a question with these numbers, give the value, its year and the 
 - Newest value of every variable for every country (JSON, country-and-year datasets): https://sahiljangra12.github.io/open-data-company/data/latest/<dataset id>.json
 - Country list with World Bank region and income group (JSON): https://sahiljangra12.github.io/open-data-company/data/countries.json
 - Country-and-year files have the columns `code` (ISO alpha-3, or a World Bank or Our World in Data code for a region), `country`, `year`, then one column per variable. Empty cells mean no data.
-- Last checked: 2026-11-26T15:48:44Z. Checked daily at about 05:23 UTC.
+- Last checked: 2026-11-26T20:36:32Z. Checked daily at about 05:23 UTC.
 
 ## Datasets
 
@@ -64,7 +64,7 @@ The concentration of carbon dioxide in the air, measured at Mauna Loa since 1958
 
 Every earthquake of magnitude 2.5 or greater recorded worldwide in the past 30 days, with location, depth and magnitude.
 
-- File: https://sahiljangra12.github.io/open-data-company/data/sets/earthquakes-past-30-days.csv (1,813 rows, 317 KB)
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/earthquakes-past-30-days.csv (1,801 rows, 315 KB)
 - Keys: id, time. Covers Rolling 30 days.
 - Source: US Geological Survey, Earthquake Hazards Program (https://earthquake.usgs.gov/earthquakes/feed/). Licence: Public domain (US federal data).
 - Variables: `magnitude` Magnitude; `place` Nearest place; `latitude` Latitude (degrees); `longitude` Longitude (degrees); `depth_km` Depth (km); `magnitude_type` Magnitude type; `event_type` Event type; `significance` Significance score (0-1000); `tsunami_flag` Tsunami flag; `felt_reports` Felt reports (reports); `url` USGS event page
@@ -190,7 +190,7 @@ How people say their lives are going, how long they work, and how long they stay
 
 How much of each country's income goes to its highest earners, before tax.
 
-- File: https://sahiljangra12.github.io/open-data-company/data/sets/top-incomes.csv (3,765 rows, 132 KB)
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/top-incomes.csv (3,765 rows, 123 KB)
 - Keys: code, year. Covers 1820 to 2024.
 - Source: World Inequality Database, via Our World in Data (https://ourworldindata.org). Licence: CC BY 4.0 (Our World in Data; original sources named per variable).
 - Variables: `income_share_top_1_pct` Share of income going to the richest 1% (before tax) (% of all income); `income_share_top_10_pct` Share of income going to the richest 10% (before tax) (% of all income)
@@ -226,7 +226,7 @@ Farming and food by country and year, compiled by the World Bank from the Food a
 
 How much food is available per person in each country: daily calories and meat.
 
-- File: https://sahiljangra12.github.io/open-data-company/data/sets/food-supply.csv (13,662 rows, 576 KB)
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/food-supply.csv (13,662 rows, 551 KB)
 - Keys: code, year. Covers 1750 to 2024.
 - Source: Food and Agriculture Organization (FAOSTAT), via Our World in Data (https://ourworldindata.org). Licence: CC BY 4.0 (Our World in Data; original sources named per variable).
 - Variables: `daily_calorie_supply_per_person` Daily calorie supply per person (kilocalories per day); `meat_supply_per_person` Meat supply per person (kilograms a year)
@@ -298,7 +298,7 @@ How many people natural disasters kill and affect in each country each year, and
 
 War and safety by country and year: what armies cost, who holds nuclear warheads, how many people are killed, and how many flee.
 
-- File: https://sahiljangra12.github.io/open-data-company/data/sets/conflict-and-security.csv (16,189 rows, 750 KB)
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/conflict-and-security.csv (16,189 rows, 748 KB)
 - Keys: code, year. Covers 1945 to 2026.
 - Source: SIPRI, Federation of American Scientists, UNODC, Global Terrorism Database, UCDP and UNHCR, via Our World in Data (https://ourworldindata.org). Licence: CC BY 4.0 (Our World in Data; original sources named per variable).
 - Variables: `military_spending` Military spending (constant 2024 US$); `nuclear_warheads` Nuclear warheads (warheads); `homicide_rate` Homicide rate (homicides per 100,000 people); `terrorism_deaths` Deaths from terrorist attacks (deaths); `terrorist_attacks` Terrorist attacks (attacks); `refugees_by_origin` Refugees, by the country they fled (people); `refugees_hosted` Refugees, by the country hosting them (people); `deaths_in_armed_conflicts` Deaths in armed conflicts (best estimate) (deaths)
@@ -604,10 +604,10 @@ How many research projects the US National Institutes of Health pays for in each
 
 How much water eight major US rivers carry, month by month, from stream gauges that have run for decades.
 
-- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-river-flow-monthly.csv (922 rows, 51 KB)
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-river-flow-monthly.csv (922 rows, 56 KB)
 - Keys: date. Covers 1950 to 2026.
 - Source: US Geological Survey, National Water Information System (https://waterdata.usgs.gov). Licence: Public domain (US federal data).
-- Variables: `mississippi_at_st_louis` Flow of the Mississippi River at St. Louis, monthly average (cubic feet per second); `missouri_at_hermann` Flow of the Missouri River at Hermann, monthly average (cubic feet per second); `ohio_at_louisville` Flow of the Ohio River at Louisville, monthly average (cubic feet per second); `columbia_at_the_dalles` Flow of the Columbia River at The Dalles, monthly average (cubic feet per second); `colorado_at_lees_ferry` Flow of the Colorado River at Lees Ferry, monthly average (cubic feet per second); `potomac_near_washington` Flow of the Potomac River near Washington, DC, monthly average (cubic feet per second); `hudson_at_green_island` Flow of the Hudson River at Green Island, monthly average (cubic feet per second)
+- Variables: `mississippi_at_st_louis` Flow of the Mississippi River at St. Louis, monthly average (cubic feet per second); `missouri_at_hermann` Flow of the Missouri River at Hermann, monthly average (cubic feet per second); `ohio_at_louisville` Flow of the Ohio River at Louisville, monthly average (cubic feet per second); `columbia_at_the_dalles` Flow of the Columbia River at The Dalles, monthly average (cubic feet per second); `colorado_at_lees_ferry` Flow of the Colorado River at Lees Ferry, monthly average (cubic feet per second); `potomac_near_washington` Flow of the Potomac River near Washington, DC, monthly average (cubic feet per second); `hudson_at_green_island` Flow of the Hudson River at Green Island, monthly average (cubic feet per second); `sacramento_at_freeport` Flow of the Sacramento River at Freeport, monthly average (cubic feet per second)
 
 ### US drug and device safety reports and recalls, monthly
 
@@ -676,8 +676,8 @@ Violent crime, property crime, homicides and vehicle thefts reported by US polic
 
 How many written decisions US courts publish each year.
 
-- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-court-opinions.csv (13 rows, 1 KB)
-- Keys: date. Covers 2014 to 2026.
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-court-opinions.csv (16 rows, 1 KB)
+- Keys: date. Covers 2011 to 2026.
 - Source: CourtListener, Free Law Project (https://www.courtlistener.com). Licence: Public domain court documents; CourtListener metadata CC BY-ND.
 - Variables: `court_opinions` US court opinions published in the year (opinions)
 
