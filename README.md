@@ -66,9 +66,24 @@ speech recognition), and charts drawn inside the replies. Two engines share the 
 - **The AI** takes everything else: why and how questions, follow-ups, unclear wording, topics outside the data. It is a
   Claude model behind one small serverless function in `ai/` (hosted on Netlify, credentials supplied by Netlify AI
   Gateway, so no key is stored anywhere). The model never holds the data. When it needs a figure it asks for a tool
-  (`find_variables`, `get_values`, `rank`, `get_series`, `show_chart`, `recent_earthquakes`); the visitor's browser runs
-  the tool against the same files the rest of the site uses and sends the result back. `show_chart` draws a line, bar,
-  scatter or map straight into the reply. "Data behind this answer" under an AI reply opens what was read.
+  (`find_variables`, `get_values`, `rank`, `get_series`, `get_rows`, `show_chart`, `recent_earthquakes`); the visitor's
+  browser runs the tool against the same files the rest of the site uses and sends the result back. `show_chart` draws
+  a line, bar, scatter or map straight into the reply, and `get_rows` reads the tables that have one row for each state,
+  college, food, agency or event. "Data behind this answer" under an AI reply opens what was read.
+
+How an AI answer reaches the page:
+
+- **It appears as it is written.** The page asks for a streamed reply and the function sends one line of JSON for each
+  piece of text, then a last line with the whole reply and its cost. The Send button reads Stop while this happens;
+  pressing it ends the model call. A service that does not stream is still understood, so the page and the function can
+  be updated in either order.
+- **It knows every dataset.** The function reads `docs/data/datasets.json` from the public site (kept for six hours) and
+  lists each dataset in the model's instructions, so a dataset added by the daily refresh is known without a redeploy.
+  If the site cannot be reached it falls back to a short list built into the function.
+- **It leads on.** The model ends an answer with a line of two or three follow-up questions, which the page turns into
+  buttons. Answers from the built-in lookup get the same, worked out from the variable that was read.
+- **It can hold a small table.** A Markdown table in an answer is drawn as a table; nothing else in the reply is
+  treated as markup.
 
 One function, `visual()` in `docs/assets/ask.js`, draws every chart for both engines; each chart can be saved as a PNG
 with its title and source, and its numbers downloaded as CSV.
@@ -95,7 +110,8 @@ that change nothing in `ai/`, so the daily data refresh costs no deploys).
 
 | Check | What it covers |
 |---|---|
-| `tests/check_ai_service.mjs` | The real function and the real Anthropic SDK against a stand-in model server: request shape, input checks, budget guard. Spends nothing. |
+| `tests/check_ai_service.mjs` | The real function and the real Anthropic SDK against a stand-in model server: request shape, input checks, streamed replies, budget guard. Spends nothing. |
+| `tests/browser/run.sh` | The pages in headless Chromium against the real function and a scripted stand-in model: the chat window, streaming, Stop, follow-up questions, tables, charts, voice, limits, failures (`test_ai.py`), and the wider data on the other pages (`test_data.py`). Spends nothing. Runs on GitHub from `.github/workflows/tests.yml` whenever the scripts, the function or the tests change. |
 | `tests/check_ai_live.py` | The real page in a headless browser against the live service: health, cross-site rules, and a set of questions answered end to end. Spends a fraction of a cent. |
 
 **Site search for the other sites.** The same function also serves the "Ask" box on Sahil's other websites
@@ -213,7 +229,7 @@ A dataset has one of three shapes, and the shape decides what the site can do wi
 |---|---|---|---|
 | Country table | `code`, `year` | `country_year(...)` | Lookups, rankings, maps, scatters, Researcher mode, Data AI |
 | Series | `date` (with a step: day, week, month, quarter or year) | `series(...)` | "What is it now", history, charts, trends, Data AI |
-| List or table | anything else | `table(...)` | The explorer only |
+| List or table | anything else | `table(...)` | The explorer, and Data AI's AI answers (through `get_rows`) |
 
 1. In `scripts/sources.py`, write a function that fetches the data and returns one of the helpers above (or a list of them).
 2. Add it to `BUILDERS` and its name to `NAMES`; give it a place in `ORDER` and a line in `CADENCE` in `scripts/build_datasets.py`.
