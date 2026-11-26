@@ -561,6 +561,17 @@ OWID_TIDY = [  # (what their title looks like, our column prefix, our title, uni
     (r"Annual number of people left homeless by (.+)$", "people_left_homeless_by_", "People left homeless by {}", "people"),
     (r"Annual economic damages as a share of GDP from (.+)$", "damage_share_of_gdp_from_", "Economic damage from {}, share of GDP", "% of GDP"),
 ]
+OWID_RENAME = [  # (how their title starts, our column, our title, unit): for long titles that would otherwise give clumsy column names
+    (r"Average price on emissions covered by a carbon tax", "carbon_tax_price", "Carbon tax: average price, weighted by the share of emissions it covers", "2021 US$ per tonne of CO₂ equivalent"),
+    (r"Average price on emissions covered by an ETS", "emissions_trading_price", "Emissions trading (ETS): average price, weighted by the share of emissions it covers", "2021 US$ per tonne of CO₂ equivalent"),
+    (r"Fossil-fuel subsidies \(consumption and production\) per capita", "fossil_fuel_subsidies_per_person", "Fossil fuel subsidies per person", "US$"),
+    (r"Fossil-fuel subsidies \(consumption and production\) as a proportion of total GDP", "fossil_fuel_subsidies_share_of_gdp", "Fossil fuel subsidies as a share of GDP", "% of GDP"),
+    (r"Fossil-fuel subsidies \(consumption and production\)", "fossil_fuel_subsidies", "Fossil fuel subsidies", "billion US$"),
+    (r"International financial flows to developing countries in support of clean energy", "clean_energy_finance_received", "International finance received for clean energy", "million US$, constant prices"),
+    (r"Consumption of controlled substance .*Ozone-depleting", "ozone_depleting_substances", "Ozone-depleting substances consumed (Montreal Protocol)", "ODP tonnes"),
+    (r"Average proportion of Terrestrial Key Biodiversity Areas", "protected_key_biodiversity_areas", "Key biodiversity areas on land that are protected", "%"),
+    (r"Score of adoption and implementation of national DRR strategies", "disaster_risk_strategy_score", "National disaster risk reduction strategy score (Sendai Framework)", "score, 0 to 1"),
+]
 MAIN_HAZARDS = r"all natural disasters|floods|storms|droughts|earthquakes|extreme temperatures|wildfires"
 OWID_KEEP = {"conflict-and-security": lambda t: t not in ("High estimate", "Low estimate"),
              "natural-disasters": lambda t: t == "Deaths from natural disasters" or re.search(r"^(People affected by|Death rate from) (" + MAIN_HAZARDS + ")$", t) or "all natural disasters" in t}
@@ -594,6 +605,10 @@ def owid_charts(id, title, description, domain, source, slugs, licence="CC BY 4.
                 if col in OWID_NAMES:
                     col, t, u = OWID_NAMES[col]
                     unit = u or unit
+                for pattern, c2, t2, u2 in OWID_RENAME:
+                    if re.match(pattern, t):
+                        col, t, unit = c2, t2, u2
+                        break
                 for pattern, c2, t2, u2 in OWID_TIDY:
                     hit = re.match(pattern, t)
                     if hit:
