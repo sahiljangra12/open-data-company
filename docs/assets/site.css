@@ -19,6 +19,8 @@
   --display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;--body:"Barlow","Helvetica Neue",Arial,sans-serif;
   --pad:clamp(20px,5vw,72px);--nav:64px;
   --muted:var(--ink2);
+  /* corner radii: one scale for every box. xs marks and swatches, s chips and small controls, m buttons, fields and cards, l large panels */
+  --r-xs:4px;--r-s:10px;--r-m:14px;--r-l:20px;
 }
 :root[data-theme=dark]{
   color-scheme:dark;
@@ -81,7 +83,7 @@ nav a:hover,nav a:focus-visible,nav a.on{background-size:100% 2px}
 .btn small{font:inherit;opacity:.8;margin-left:6px;letter-spacing:.08em}
 .link{background:none;border:0;padding:0;color:var(--ink2);font:500 13.5px var(--display);letter-spacing:.12em;text-transform:uppercase;cursor:pointer;text-decoration:underline;text-underline-offset:4px;text-decoration-color:var(--line2)}
 .link:hover{color:var(--accent-text);text-decoration-color:var(--accent-text)}
-input,select{font:inherit;color:var(--ink);background:var(--wash);border:1px solid var(--line2);border-radius:0;padding:10px 12px;min-width:0}
+input,select{font:inherit;color:var(--ink);background:var(--wash);border:1px solid var(--line2);border-radius:var(--r-s);padding:10px 12px;min-width:0}
 input:focus,select:focus{outline:0;border-color:var(--accent-text)}
 input::placeholder{color:var(--ink3)}
 input[type=checkbox],input[type=radio]{accent-color:var(--accent);width:16px;height:16px;padding:0;flex:none}
@@ -110,7 +112,7 @@ input[type=checkbox],input[type=radio]{accent-color:var(--accent);width:16px;hei
 .search .btn{height:60px;padding:0 30px;font-size:15px;border-width:2px;margin-left:-2px}
 .search input{width:100%;height:60px;padding:0 20px;font-size:18px;border:2px solid var(--ink);background:var(--bg)}
 .search input:focus{border-color:var(--accent-text)}
-.results{position:absolute;left:0;right:0;top:100%;z-index:20;background:var(--menu);border:2px solid var(--ink);border-top:0;max-height:min(420px,52vh);overflow:auto;box-shadow:0 18px 34px rgba(0,0,0,.16)}
+.results{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:20;background:var(--menu);border:2px solid var(--ink);border-radius:var(--r-m);max-height:min(420px,52vh);overflow:auto;box-shadow:0 18px 34px rgba(0,0,0,.16)}
 .res{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:12px 20px;text-decoration:none;border-top:1px solid var(--line)}
 .res:first-child{border-top:0}
 .res:hover,.res.act{background:var(--wash)}
@@ -278,7 +280,7 @@ tr.region td{font-weight:600;border-top:1px solid var(--line2)}
 button.chip.more{cursor:pointer;color:var(--ink);font:inherit;font-size:14.5px;padding:7px 12px}
 .combo{position:relative;flex:1 1 240px;min-width:200px;max-width:420px}
 .combo input{width:100%;padding:8px 12px;font-size:14.5px}
-.menu{position:absolute;left:0;top:100%;z-index:25;width:max(100%,340px);max-width:92vw;max-height:300px;overflow:auto;background:var(--menu);box-shadow:0 12px 30px rgba(0,0,0,.3);border:1px solid var(--ink);border-top:0}
+.menu{position:absolute;left:0;top:100%;z-index:25;width:max(100%,340px);max-width:92vw;max-height:300px;overflow:auto;background:var(--menu);box-shadow:0 12px 30px rgba(0,0,0,.3);border:1px solid var(--ink);border-radius:var(--r-s);margin-top:4px}
 .opt{display:flex;gap:10px;align-items:flex-start;padding:8px 12px;font-size:14.5px;line-height:1.35;cursor:pointer;border-top:1px solid var(--line)}
 .opt:first-child{border-top:0}
 .opt:hover,.opt.act{background:var(--wash)}
@@ -507,8 +509,6 @@ details.code p{color:var(--ink2);font-size:15px;max-width:86ch}
 .hyp input[type=search]{-webkit-appearance:none;appearance:none}
 #examples button{font:500 13.5px var(--display);letter-spacing:.1em;text-transform:uppercase;padding:7px 12px;border:1px solid var(--line2);background:var(--bg);color:var(--ink);cursor:pointer}
 #examples button:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
-#read{margin-top:18px}
-#read a{color:var(--accent-text)}
 .answer{padding:30px 0 34px;border-top:2px solid var(--ink);margin-top:34px}
 .answer .kick{color:var(--accent-text)}
 .ans-q{font:500 clamp(17px,1.5vw,20px) var(--body);color:var(--ink2);margin:10px 0 2px}
@@ -585,15 +585,15 @@ textarea{font:14px/1.45 ui-monospace,"SF Mono",Menlo,Consolas,monospace;color:va
 .tag.k-num{border-color:var(--s1);color:var(--accent-text)}
 .tag.k-cat{border-color:var(--s4)}
 .tag.k-date{border-color:var(--s3)}
-.tools{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:0;border-top:1px solid var(--line2);border-left:1px solid var(--line2)}
-.tools button{text-align:left;background:none;border:0;border-right:1px solid var(--line2);border-bottom:1px solid var(--line2);padding:14px 16px;cursor:pointer;color:var(--ink);font:inherit}
+.tools{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.tools button{text-align:left;background:none;border:1px solid var(--line2);border-radius:var(--r-m);padding:14px 16px;cursor:pointer;color:var(--ink);font:inherit}
 .tools button b{display:block;font:600 17px var(--display);letter-spacing:.06em;text-transform:uppercase}
 .tools button span{display:block;color:var(--ink2);font-size:14px;margin-top:4px;line-height:1.4}
 .tools button:hover:not(:disabled){background:var(--wash)}
-.tools button[aria-pressed=true]{background:var(--accent);color:#fff}
+.tools button[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:#fff}
 .tools button[aria-pressed=true] span{color:#e6efff}
 .tools button:disabled{opacity:.45;cursor:not-allowed}
-.toolform{border:1px solid var(--line2);border-top:0;border-left:4px solid var(--accent);padding:22px 24px;background:var(--accent-soft)}
+.toolform{border:1px solid var(--line2);border-left:4px solid var(--accent);border-radius:var(--r-m);margin-top:12px;padding:22px 24px;background:var(--accent-soft)}
 .toolform h3{font-size:24px}
 .toolform .hint{margin:6px 0 16px}
 .toolform select{width:100%;font-size:15px;padding:9px 10px;background:var(--bg)}
@@ -757,7 +757,7 @@ details.evidence[open] summary{margin-bottom:12px}
 .askbar{flex:0 0 auto;border-top:1px solid var(--line2);padding:12px 18px max(10px,env(safe-area-inset-bottom));background:var(--bg)}
 .askbar .voice-note{margin:0 0 10px;max-width:none}
 .composer{display:flex;gap:10px;align-items:flex-end}
-.composer textarea{flex:1 1 auto;width:auto;min-width:0;height:52px;min-height:52px;max-height:168px;resize:none;padding:12px 16px;font:400 17px/1.5 var(--body);color:var(--ink);background:var(--bg);border:2px solid var(--line2);border-radius:0}
+.composer textarea{flex:1 1 auto;width:auto;min-width:0;height:52px;min-height:52px;max-height:168px;resize:none;padding:12px 16px;font:400 17px/1.5 var(--body);color:var(--ink);background:var(--bg);border:2px solid var(--line2);border-radius:var(--r-m)}
 .composer textarea:focus{outline:0;border-color:var(--accent-text)}
 .composer textarea::placeholder{color:var(--ink3)}
 .composer .mic{width:52px;height:52px}
@@ -838,3 +838,40 @@ td.stand .tag{white-space:normal}
 .nextq button{font:400 15px/1.35 var(--body);text-align:left;padding:9px 13px;border:1px solid var(--line2);background:var(--bg);color:var(--ink);cursor:pointer;min-height:42px}
 .nextq button:hover{border-color:var(--accent);background:var(--accent);color:#fff}
 .nextq button:focus-visible{outline:2px solid var(--accent-text);outline-offset:2px}
+
+/* ---------- rounded corners ----------
+   Every box on the site takes its corners from the four sizes set at the top (--r-xs, --r-s, --r-m, --r-l).
+   Controls that are joined in a row share one rounded outline instead of each having its own. */
+/* buttons and fields */
+.btn,.mic,.hyp input{border-radius:var(--r-m)}
+textarea,.theme,.menu-btn,.tip,.chip,.presets button,.rule button,.quick a,.quick button,.toc a,#examples button,#samples button,#suggest button,.standrow button,.nextq button,.tag{border-radius:var(--r-s)}
+.opt .box{border-radius:var(--r-xs)}
+.mic.live::after{border-radius:calc(var(--r-m) + 6px)}
+/* the home search: field, microphone and button are one shape */
+.search input{border-radius:var(--r-m) 0 0 var(--r-m);-webkit-appearance:none;appearance:none}
+.search .mic,.search .mic.live::after{border-radius:0}
+.search .btn{border-radius:0 var(--r-m) var(--r-m) 0}
+/* joined rows of choices: the outline is rounded and the choices are clipped to it */
+.seg,.pills,.tabs{border-radius:var(--r-s);overflow:hidden}
+.kinds{border-radius:var(--r-m);overflow:hidden}
+.duo{border-radius:var(--r-l);overflow:hidden}
+.grid{border-radius:var(--r-l)}
+.seg button:focus-visible,.pill:focus-visible,.tabs button:focus-visible,.kinds button:focus-visible,.duo a:focus-visible{outline-offset:-4px;outline-color:currentColor}
+/* cards and panels */
+.note,.rec,.card.brief,pre,.gstep img,.topics button,.drop.small{border-radius:var(--r-m)}
+.voice-note{border-radius:var(--r-s)}
+.way,.drop{border-radius:var(--r-l)}
+.way{overflow:hidden}
+@media(max-width:1060px){header.top nav{border-radius:0 0 var(--r-l) var(--r-l)}}
+/* the chat window */
+main>.wrap>section.chat,.chat{border-radius:var(--r-l);overflow:hidden}
+.avatar{border-radius:50%}
+.bubble{border-radius:18px}
+.msg.user .bubble{border-bottom-right-radius:6px}
+.msg.ai .bubble{border-top-left-radius:6px}
+@media(max-width:700px){main>.wrap>section.chat,.chat{border-radius:0}}
+/* small marks: legend swatches, scorecard bars, the cells of a correlation grid */
+.legend b,.maplegend i,.ds .where::before{border-radius:3px}
+.bar i.over{border-radius:0 3px 3px 0}
+.bar i.under{border-radius:3px 0 0 3px}
+table.heat td{border-radius:6px}
