@@ -119,7 +119,7 @@ def run(system, task, tools_spec, call_tool, max_steps=6, log=print):
             key = name + json.dumps(args, sort_keys=True, default=str)
             out = call_tool(name, args) if key not in seen else json.dumps({"note": "You already made this exact call. Use the earlier result and write the answer."})
             seen.add(key)
-            trace.append({"tool": name, "args": args})
+            trace.append({"tool": name, "args": args, "out": out})
             log(f"  tool {name}({json.dumps(args, ensure_ascii=False, default=str)[:160]}) -> {len(out)} chars")
             messages.append({"role": "tool", "content": out, **({"tool_name": name} if OLLAMA else {"tool_call_id": cid})})
     return "", MODEL, trace

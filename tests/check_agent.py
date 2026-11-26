@@ -94,6 +94,12 @@ def main():
     assert not run.usable("Okay, let's tackle this user query step by step.", trace) and not run.usable("India 2.2 t.", [])
     assert run.usable("India 2.2 t, United States 14.5 t (2025).", trace)
 
+    # every figure in a text must match something the agent read
+    ev = '{"value": 2.188, "when": "2025"} {"value": -1973487000} {"value": 14.5} {"rows": 1813, "mag": 5.7, "share": 0.4312}'
+    assert run.ungrounded("India 2.19 t and the US 14.5 t in 2025; balance -1.973 billion; 1,813 rows; magnitude 5.7 at 15:26 UTC on 26 November 2026; 43.1%", ev) == []
+    assert run.ungrounded("India emitted 3.4 t per person and 9,999 rows changed.", ev) == ["3.4", "9999"]
+    assert json.loads(tools.call("get_values", {"dataset": "co2-and-greenhouse-gases", "variable": "CO₂ emissions per capita", "places": ["India"]}))["values"][0]["value"]
+
     # history is kept inside the free tier's input limit
     msgs = [{"role": "system", "content": "s"}, {"role": "user", "content": "q"}] + [{"role": "tool", "tool_call_id": str(i), "content": "x" * 2500} for i in range(12)]
     brain.compact(msgs)

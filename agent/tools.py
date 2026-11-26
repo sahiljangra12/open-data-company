@@ -65,8 +65,10 @@ def ds_or_error(ds_id):
 
 
 def column(d, var):
+    """A variable by its column name; a small model sometimes passes the title instead, so that is accepted too."""
+    v = (var or "").strip().lower()
     for c in d["columns"]:
-        if c["name"] == var:
+        if c["name"].lower() == v or c["title"].lower() == v or c["name"].lower() == v.replace(" ", "_"):
             return c
     return None
 
@@ -156,6 +158,7 @@ def get_values(dataset, variable, places, year=None):
     c = column(d, variable)
     if not c:
         return {"error": f"'{variable}' is not a variable of {dataset}.", "variables": [x["name"] for x in d["columns"]][:40]}
+    variable = c["name"]
     col, lab = entity_cols(d)
     t = time_col(d)
     if not col:
@@ -185,7 +188,8 @@ def rank(dataset, variable, order="desc", n=10, year=None):
         return err
     c = column(d, variable)
     if not c:
-        return {"error": f"'{variable}' is not a variable of {dataset}."}
+        return {"error": f"'{variable}' is not a variable of {dataset}.", "variables": [x["name"] for x in d["columns"]][:40]}
+    variable = c["name"]
     col, lab = entity_cols(d)
     t = time_col(d)
     if not col:
@@ -213,7 +217,8 @@ def get_series(dataset, variable, place=None, start=None, end=None):
         return err
     c = column(d, variable)
     if not c:
-        return {"error": f"'{variable}' is not a variable of {dataset}."}
+        return {"error": f"'{variable}' is not a variable of {dataset}.", "variables": [x["name"] for x in d["columns"]][:40]}
+    variable = c["name"]
     col, lab = entity_cols(d)
     t = time_col(d)
     code = None
@@ -238,6 +243,7 @@ def get_series(dataset, variable, place=None, start=None, end=None):
         sample.append(pts[-1])
     lo, hi = min(pts, key=lambda p: p[1]), max(pts, key=lambda p: p[1])
     return {"variable": c["title"], "unit": c.get("unit", ""), "place": place or ("World" if col else None),
+            "window": f"{pts[0][0]} to {pts[-1][0]} (lowest and highest are within this window only)",
             "first": {"when": pts[0][0], "value": tidy(pts[0][1])}, "last": {"when": pts[-1][0], "value": tidy(pts[-1][1])},
             "lowest": {"when": lo[0], "value": tidy(lo[1])}, "highest": {"when": hi[0], "value": tidy(hi[1])},
             "points": [[w, tidy(v)] for w, v in sample], "count": len(pts), **source_of(d)}
