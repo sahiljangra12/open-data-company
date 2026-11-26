@@ -30,6 +30,10 @@ const CONCEPTS_FIRST = [
   [/energy (use|consumption) per (capita|person|head)/, "energy::energy_per_capita"], [/population growth/, "un-population::population_growth_rate"], [/death rate from (all )?(natural )?disasters?/, "natural-disasters::death_rate_from_all_natural_disasters"],
 ];
 const CONCEPTS_MORE = [
+  [/fossil[ -]fuel subsid\w* (per (person|capita|head))/, "climate-and-environment-policy::fossil_fuel_subsidies_per_person"], [/fossil[ -]fuel subsid\w* (as a )?(share|percent\w*|%) of (gdp|the economy)/, "climate-and-environment-policy::fossil_fuel_subsidies_share_of_gdp"],
+  [/fossil[ -]fuel subsid\w*|subsid\w* (for|to|on) (fossil fuels|oil|coal|petrol|gasoline)/, "climate-and-environment-policy::fossil_fuel_subsidies"], [/carbon tax\w*|carbon pric\w*|price (on|of) carbon/, "climate-and-environment-policy::carbon_tax_price"],
+  [/emissions? trading|\bets\b|cap and trade|carbon market/, "climate-and-environment-policy::emissions_trading_price"], [/ozone/, "climate-and-environment-policy::ozone_depleting_substances"], [/clean energy financ\w*|climate financ\w*/, "climate-and-environment-policy::clean_energy_finance_received"],
+  [/key biodiversity/, "climate-and-environment-policy::protected_key_biodiversity_areas"], [/disaster risk (reduction|strateg\w*|plan\w*)|sendai/, "climate-and-environment-policy::disaster_risk_strategy_score"],
   [/democra/, "democracy-and-rights::electoral_democracy_index"], [/human rights/, "democracy-and-rights::human_rights_index"], [/press freedom|free press|media freedom|freedom of the press/, "democracy-and-rights::press_freedom_index"],
   [/corrupt/, "democracy-and-rights::corruption_perceptions_index"], [/rule of law/, "governance-indicators::rule_of_law"], [/political stability/, "governance-indicators::political_stability_and_absence_of_violence"],
   [/government effectiveness|best governed|well governed/, "governance-indicators::government_effectiveness"], [/regulatory quality/, "governance-indicators::regulatory_quality"],
