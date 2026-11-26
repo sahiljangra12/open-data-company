@@ -120,6 +120,15 @@ def main():
     assert run.ungrounded("India emitted 3.4 t per person and 9,999 rows changed.", ev) == ["3.4", "9999"]
     assert json.loads(tools.call("get_values", {"dataset": "co2-and-greenhouse-gases", "variable": "CO₂ emissions per capita", "places": ["India"]}))["values"][0]["value"]
 
+    # a claimed rise or fall needs two figures; a country the question names must have been read
+    chk = run.figure_check("", question="How does India compare with the US?")
+    tr = [{"tool": "rank", "args": {}, "out": '{"place": "Qatar", "value": 31.471}'}]
+    assert "India" in chk("Qatar leads with 31.471 t.", tr) and "United States" in chk("Qatar leads with 31.471 t.", tr)
+    tr.append({"tool": "get_values", "args": {}, "out": '{"place": "India", "value": 2.188} {"place": "United States", "value": 14.5}'})
+    assert chk("Qatar 31.471 t; India 2.188 t; United States 14.5 t.", tr) is None
+    assert "claims a change" in chk("India's emissions dropped to 2.188 t.", tr)
+    assert chk("India's figure fell from 14.5 t to 2.188 t.", tr) is None
+
     # history is kept inside the free tier's input limit
     msgs = [{"role": "system", "content": "s"}, {"role": "user", "content": "q"}] + [{"role": "tool", "tool_call_id": str(i), "content": "x" * 2500} for i in range(12)]
     brain.compact(msgs)
