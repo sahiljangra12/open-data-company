@@ -122,6 +122,30 @@ best one. When this service reports allowance left (`"site_search": true` and `"
 `{mode: "site", site, question, passages}` and shows the model's short answer instead. One answer is one small call with no
 tools, paid from the same daily and monthly budget; when the budget is used the box keeps answering from the passages.
 
+## The chat app: one window, two brains
+
+`docs/chat.html` is Data AI as a full-window chat product, built from the same parts as the large assistants: a
+conversation window, saved chats, a model that asks for tools, visible steps, and a choice of which model answers.
+It runs the same engine as `ask.html` (`docs/assets/ask.js`), so every lookup, chart, tool and test there applies here too.
+
+| Part | File | What it does |
+|---|---|---|
+| Window | `docs/chat.html`, the "chat app" block of `site.css` | Side panel of chats beside the conversation; a drawer on a phone |
+| Saved chats | `docs/assets/chat.js` | Each chat is kept in the visitor's browser (localStorage, newest 40): how it looked, plus the short memory the model carries, so it can be reopened and carried on. Nothing is stored on a server. Saved HTML is cleaned before it is shown again |
+| Hosted brain | `ai/` (unchanged) | The Claude model behind the Netlify function, with its budget limits |
+| On-device brain | `docs/assets/brain-local.js`, `docs/vendor/web-llm.js` | A small open model (Qwen2.5 1.5B, Apache 2.0, or Phi-3.5 mini, MIT) that runs in the visitor's browser on WebGPU. Downloaded once from Hugging Face on request, kept in the browser, free, and questions it answers do not leave the device |
+| Switch | `brainTurn()` in `ask.js` | **Automatic:** the hosted model answers; if its allowance is used up or it cannot be reached and the on-device model is on, that one takes over. **This device only:** the hosted model is never called |
+
+The on-device model is small, so it works under the Data Agent's rules. It reads data only through the page's own tools,
+asked for with one line (`CALL {"tool": ..., "args": ...}`), and every figure it writes is matched against what the tools
+returned (allowing for rounding and for thousands, millions and billions). Unmatched figures go back to the model twice at
+most; an answer that still fails is dropped and the page answers straight from the data.
+
+`bash tests/browser/run.sh chat` checks the app in headless Chromium: saving, reopening, renaming and deleting chats,
+tampered storage, the phone layout, and the on-device loop against a scripted stand-in for WebLLM (tool calls, the figure
+check, Stop, falling back from the hosted model, and "this device only" sending nothing). A real model download is not
+part of the tests: it needs a graphics chip and about 1 GB.
+
 ## Data Agent: the site's own AI system, run on GitHub
 
 `agent/` is a small AI agent that lives in this repository and runs on GitHub Actions. It is separate from Data AI

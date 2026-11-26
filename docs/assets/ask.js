@@ -394,7 +394,11 @@ TOOLS.show_chart = async (input, used) => {                            // draws 
 };
 
 /* ---------- the AI: a Claude model behind a small service; it asks for tools, the browser runs them ---------- */
-const AI = { url: typeof DATA_AI_URL === "string" ? DATA_AI_URL : "", state: null, memory: [] };
+const AI = { url: typeof DATA_AI_URL === "string" ? DATA_AI_URL : "", state: null, memory: [], local: null, prefer: "auto", badge: null };
+/* The same engine runs two pages: ask.html, and chat.html (the full-window app with saved chats). On the chat page a second
+   brain can be switched on: a small open model that runs on the visitor's own device (brain-local.js sets AI.local). */
+const APP = document.body.dataset.page === "chat", PAGE = APP ? "chat.html" : "ask.html";
+const localOn = () => !!(AI.local && AI.local.ready());
 function aiReady() {
   if (!AI.url) return Promise.resolve(false);
   return AI.state || (AI.state = (async () => { try { const c = new AbortController(), t = setTimeout(() => c.abort(), 5000), r = await fetch(AI.url, { signal: c.signal }); clearTimeout(t); const j = await r.json(); AI.can = j || {}; return !!(j && j.ok && j.ai); } catch (e) { return false; } })());
@@ -455,6 +459,19 @@ async function aiTurn(question, say, box, live) {
     messages.push({ role: "user", content: results });
   }
   throw Object.assign(new Error("Too many steps"), { reason: "error" });
+}
+/* One answer from whichever brain is on. The hosted model goes first unless the visitor chose the on-device one; if the
+   hosted model cannot answer (allowance used up, busy, unreachable) and the on-device model is loaded, that one takes over. */
+async function brainTurn(question, say, box, live) {
+  const only = AI.prefer === "local", hosted = !only && (await aiReady()), viaLocal = async why => Object.assign(await AI.local.turn(question, say, box, live), { brain: "local", why });
+  if (localOn() && (only || !hosted)) return viaLocal("");
+  if (only) throw Object.assign(new Error("The on-device model is not loaded"), { reason: "error" });                  // "this device only" never falls back to the hosted model
+  try { return Object.assign(await aiTurn(question, say, box, live), { brain: "hosted" }); }
+  catch (e) {
+    if (e.reason === "stopped" || !localOn()) throw e;
+    console.warn("hosted AI unavailable, using the on-device model", e); if (e.reason === "budget" || e.reason === "off") { AI.state = Promise.resolve(false); aiBadge(); }
+    if (live) live(""); box.replaceChildren(); return viaLocal(e.reason || "error");
+  }
 }
 /* the model writes plain text with **bold** and "-" lists: turn that into elements, never into raw HTML */
 function mdLite(text) {
@@ -649,10 +666,13 @@ function newTurn(q) {
   const root = el("article", "turn"), mine = el("div", "msg user"), theirs = el("div", "msg ai"), ucol = el("div", "col"), acol = el("div", "col"), ub = el("div", "bubble"), reply = el("div", "bubble reply"), viz = el("div", "vizzes");
   const status = el("p", "thinking"), dots = el("span", "dots"), words = el("span", "", "Thinking"), at = new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }), meta = el("p", "stamp", `Data AI, ${at}`), face = el("span", "avatar", "AI");
   dots.append(el("i"), el("i"), el("i")); dots.setAttribute("aria-hidden", "true"); status.append(dots, words); face.setAttribute("aria-hidden", "true");
+  const steps = []; let finished = false;
+  const done = () => { status.remove(); if (finished) return; finished = true; if (!APP || !steps.length) return;                         // the chat page keeps what was done, folded under the answer's charts
+    const d = el("details", "steps"), ol = el("ol"); steps.forEach(x => ol.append(el("li", "", x))); d.append(el("summary", "", `Worked in ${steps.length} step${steps.length > 1 ? "s" : ""}`), ol); viz.after(d); };
   ub.append(el("p", "you", q)); ucol.append(ub, el("p", "stamp", `You, ${at}`)); mine.append(ucol);
   reply.append(viz, status); acol.append(reply, meta); theirs.append(face, acol); root.append(mine, theirs); $("#thread").append(root);
   $("#fresh-chat").hidden = false; toEnd();
-  return { root, box: reply, viz, say: t => { status.hidden = false; words.textContent = t; toEnd(); }, quiet: () => { status.hidden = true; }, done: () => status.remove(), label: t => { meta.textContent = `Data AI, ${at}. ${t}`; },
+  return { root, box: reply, viz, say: t => { status.hidden = false; words.textContent = t; if (steps[steps.length - 1] !== t) steps.push(t); toEnd(); }, quiet: () => { status.hidden = true; }, done, label: t => { meta.textContent = `Data AI, ${at}. ${t}`; },
     settle: () => { const t = $("#thread"); t.scrollTop = Math.max(0, root.offsetTop - 14); } };          // show the question at the top with its answer under it
 }
 const SMALL = [[/^(hi|hello|hey|hola|namaste|good (morning|afternoon|evening))\b/i, "Hello. Ask me for a number, a comparison, a ranking or a chart, for example \"India life expectancy\", \"top 10 CO2 emitters\" or \"chart oil price since 2020\". I'll answer with the year and the source."],
@@ -733,7 +753,7 @@ async function respond(text, opt = {}) {
   const q = String(text).trim(); if (!q || busy) return;
   const input = $("#q"); busy = true; input.value = ""; input.style.height = ""; $("#ask-go").disabled = true;
   const turn = newTurn(q), box = turn.box;
-  history.replaceState(null, "", `ask.html?q=${encodeURIComponent(q).replace(/%20/g, "+")}`); document.title = `${q} | Data AI`;
+  if (!APP) { history.replaceState(null, "", `ask.html?q=${encodeURIComponent(q).replace(/%20/g, "+")}`); document.title = `${q} | Data AI`; }
   try {
     const P = parse(q), count = q.split(/\s+/).length, follow = /^(and|what about|how about|same for|for|in|versus|vs|compared (to|with))\b/i.test(q), wantsVis = VIS.test(q);
     const bare = P.left.every(w => VISFILL.has(w));                                                                    // nothing in the words but "chart", "it", "since 2000" and the like
@@ -741,14 +761,14 @@ async function respond(text, opt = {}) {
     if (P.vars.length && !P.places.length && !P.rank && last.places.length && follow && isCountry(V.get(P.vars[0]))) P.places = last.places;   // "and its population?" keeps the places
     const small = count <= 6 && !P.vars.length && !P.places.length && !P.quake && SMALL.find(([re]) => re.test(q));
     if (small && !opt.force) { turn.done(); box.append(el("p", "aitext", small[1])); return; }                       // a greeting needs no model
-    const general = GENERAL.test(q), plan = wantsVis && !general ? visualPlan(q, P) : null, ai = await aiReady();
+    const general = GENERAL.test(q), plan = wantsVis && !general ? visualPlan(q, P) : null, ai = AI.prefer === "local" ? localOn() : (await aiReady()) || localOn();
     const drawable = plan && !WHY.test(q) && !P.weak && P.left.every(w => VISFILL.has(w));                                  // the words name data we hold and nothing more: draw it without the AI
     const simple = drawable || (!wantsVis && (P.quake || P.vars.length > 0) && !EXPLAIN.test(q) && !general && !P.weak && P.left.length === 0 && !(follow && last.ai));   // a follow-up to an AI answer stays with the AI
     if (ai && (opt.force || !simple)) {
       const ans = el("div", "aitext"), go = $("#ask-go"); go.disabled = false; go.textContent = "Stop"; go.setAttribute("aria-label", "Stop this answer");
       const live = t => { if (!t) { ans.remove(); return; } ans.replaceChildren(mdLite(t.replace(/(?:^|\n)[ \t]*>[^\n]*$/, ""))); if (!ans.isConnected) { turn.quiet(); box.append(ans); } toEnd(); };   // a half-written line of follow-up questions is not shown
       try {
-        const a = await aiTurn(opt.prompt || q, turn.say, turn.viz, live); turn.done(); last.ai = true; turn.label("Written by AI");
+        const a = await brainTurn(opt.prompt || q, turn.say, turn.viz, live), onDevice = a.brain === "local"; turn.done(); last.ai = true; turn.label(onDevice ? "Written by the on-device model" : "Written by AI"); turn.root.dataset.brain = a.brain;
         turn.root.dataset.rounds = a.cost.rounds; turn.root.dataset.usd = a.cost.usd.toFixed(6); turn.root.dataset.cached = a.cost.cached;
         ans.replaceChildren(mdLite(a.text)); box.append(ans);
         const seen = new Set(), drawn = new Set(a.used.filter(u => u.kind === "viz" && u.v).map(u => u.v.id)); let shown = 0;
@@ -757,17 +777,21 @@ async function respond(text, opt = {}) {
           const key = u.kind + (u.v ? u.v.id : u.d ? u.d.id : "") + (u.places || []).join() + (u.order || ""); if (u.kind === "viz" || seen.has(key) || shown >= 3 || (u.v && drawn.has(u.v.id))) continue; seen.add(key); shown++;
           evidence(u, q, box);
         }
-        box.append(el("p", "ainote", a.used.length ? "Written by an AI model. The figures were read from the datasets named here; any explanation around them is general knowledge and can be wrong." : "Written by an AI model from general knowledge, not from this site's data. It can be wrong or out of date, so check anything that matters."));
+        if (onDevice) box.append(el("p", "ainote", (a.why === "budget" ? "The hosted AI's allowance for now is used up, so a small open model on this device wrote this. " : a.why ? "The hosted AI could not answer just now, so a small open model on this device wrote this. " : "Written by a small open model running on this device. ")
+          + (a.used.length ? "Each figure was matched against the data it read before being shown; the wording around the figures can still be loose." : "It answered from general knowledge, not from this site's data, and a small model is often wrong there, so check anything that matters.")));
+        else box.append(el("p", "ainote", a.used.length ? "Written by an AI model. The figures were read from the datasets named here; any explanation around them is general knowledge and can be wrong." : "Written by an AI model from general knowledge, not from this site's data. It can be wrong or out of date, so check anything that matters."));
         const tools = el("div", "acts small"), cp = el("button", "link", "Copy the answer"), rd = el("button", "link", "Read it aloud"); cp.type = rd.type = "button";
         cp.onclick = () => copy(cp, `${a.text.replace(/\*\*/g, "")}\n\nFrom Data AI, Open Data Company: ${SITE}ask.html?q=${encodeURIComponent(q).replace(/%20/g, "+")}`); rd.onclick = () => speak(rd, a.text);
-        tools.append(cp); if ("speechSynthesis" in window) tools.append(rd); box.append(tools);
+        tools.append(cp); if ("speechSynthesis" in window) tools.append(rd);
+        if (APP) { const rt = el("button", "link", "Try again"); rt.type = "button"; rt.onclick = () => respond(q, { force: true }); tools.append(rt); }
+        box.append(tools);
         nextChips(box, a.next);
         return;
       } catch (e) {
         if (e.reason === "stopped") { turn.done(); turn.viz.replaceChildren(); turn.label("Stopped"); if (!ans.isConnected || !ans.textContent.trim()) ans.remove(); box.append(el("p", "ainote", ans.isConnected ? "Stopped here, so this answer is not complete." : "Stopped before an answer was written.")); return; }
         ans.remove(); console.warn("AI unavailable, using the built-in lookup", e); if (e.reason === "budget" || e.reason === "off") AI.state = Promise.resolve(false); aiBadge();
         turn.viz.replaceChildren();
-        box.append(el("p", "ainote", e.reason === "budget" ? "The AI's allowance for now is used up, so this answer comes straight from the data." : e.reason === "busy" ? "The AI is busy right now, so this answer comes straight from the data." : "The AI could not be reached just now, so this answer comes straight from the data."));
+        box.append(el("p", "ainote", e.reason === "budget" ? "The AI's allowance for now is used up, so this answer comes straight from the data." : e.reason === "busy" ? "The AI is busy right now, so this answer comes straight from the data." : e.reason === "check" ? "The on-device model's answer did not pass the figure check, so this answer comes straight from the data." : "The AI could not be reached just now, so this answer comes straight from the data."));
       }
     }
     turn.done(); last.ai = false; turn.label("Read straight from the data");
@@ -792,9 +816,9 @@ async function respond(text, opt = {}) {
       .forEach(([label, ask]) => { const b = el("button", "", label); b.type = "button"; b.onclick = () => respond(ask); picks.append(b); });
     p.append(picks); const more = el("p", "hint"); more.append("Or ", Object.assign(el("a", "", "search the list of every variable"), { href: `datasets.html?q=${encodeURIComponent(P.words.filter(w => !VISFILL.has(w)).join(" "))}` }), "."); p.append(more); box.append(p);
   } catch (e) { console.error(e); turn.done(); box.append(note("Something went wrong while answering. Please ask again.")); }
-  finally { busy = false; AI.stop = null; const go = $("#ask-go"); go.disabled = false; go.textContent = "Send"; go.removeAttribute("aria-label"); turn.settle(); if (matchMedia("(pointer:fine)").matches) input.focus({ preventScroll: true }); }
+  finally { busy = false; AI.stop = null; const go = $("#ask-go"); go.disabled = false; go.textContent = "Send"; go.removeAttribute("aria-label"); turn.settle(); document.dispatchEvent(new CustomEvent("dataai:turn", { detail: { q, root: turn.root } })); if (matchMedia("(pointer:fine)").matches) input.focus({ preventScroll: true }); }
 }
-async function aiBadge() { const on = await aiReady(), b = $("#ai-state"); b.textContent = on ? "AI answers are on. Figures come from the datasets." : "Answering straight from the datasets. The AI part is resting."; b.classList.toggle("on", on); }
+async function aiBadge() { const on = await aiReady(), b = $("#ai-state"); if (AI.badge) return AI.badge(on, b); b.textContent = on ? "AI answers are on. Figures come from the datasets." : "Answering straight from the datasets. The AI part is resting."; b.classList.toggle("on", on); }
 
 (async () => {
   const [man, countries, pulse] = await Promise.all([getJSON("data/datasets.json"), getJSON("data/countries.json").catch(() => ({ countries: {} })), getJSON("data/pulse.json").catch(() => ({}))]);
@@ -809,9 +833,9 @@ async function aiBadge() { const on = await aiReady(), b = $("#ai-state"); b.tex
   input.addEventListener("keydown", e => { if (e.key === "Enter" && !e.shiftKey && !e.isComposing) { e.preventDefault(); respond(input.value); } });   // Enter sends, Shift+Enter starts a new line
   ["India life expectancy", "Top 10 CO2 emitters", "Chart India's CO2 emissions since 1990", "Map of life expectancy", "Which countries are the happiest?", "US unemployment rate", "Why is the world getting warmer?", "Earthquakes today"]
     .forEach(t => { const b = el("button", "", t); b.type = "button"; b.onclick = () => respond(t); $("#examples").append(b); });
-  $("#fresh-chat").onclick = () => { $$(".turn", $("#thread")).forEach(t => t.remove()); AI.memory = []; last.v = null; last.places = []; last.ai = false; $("#fresh-chat").hidden = true; history.replaceState(null, "", "ask.html"); document.title = "Data AI | Open Data Company"; if ("speechSynthesis" in window) speechSynthesis.cancel(); $("#thread").scrollTop = 0; input.focus(); };
+  $("#fresh-chat").onclick = () => { $$(".turn", $("#thread")).forEach(t => t.remove()); AI.memory = []; last.v = null; last.places = []; last.ai = false; $("#fresh-chat").hidden = true; history.replaceState(null, "", PAGE); document.title = "Data AI | Open Data Company"; if ("speechSynthesis" in window) speechSynthesis.cancel(); $("#thread").scrollTop = 0; input.focus(); document.dispatchEvent(new Event("dataai:fresh")); };
   voiceInput($("#mic"), input, $("#voice-note"), t => respond(t));
   $("#thread").addEventListener("click", e => { const a = e.target.closest('a[href^="ask.html?q="]'); if (!a || e.metaKey || e.ctrlKey || e.shiftKey) return; e.preventDefault(); respond(new URL(a.href).searchParams.get("q") || ""); });
-  aiBadge();
+  aiBadge(); document.dispatchEvent(new Event("dataai:ready"));
   const first = new URLSearchParams(location.search).get("q"); if (first) respond(first);
 })().catch(e => { console.error(e); $("#thread").append(el("p", "note", "This page could not load its data. Reload to try again.")); });

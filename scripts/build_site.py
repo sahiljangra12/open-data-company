@@ -21,13 +21,14 @@ e = html.escape
 
 def header(page):
     on = ' class="on" aria-current="page"'
+    page = "ask" if page == "chat" else page                                    # the chat app is Data AI in its own window
     links = "".join(f'<a href="{h}"{on if k == page else ""}>{t}</a>' for h, t, k in NAV)
     return ('<header class="top"><div class="wrap"><a class="brand" href="index.html">Open Data<span class="wide"> Company</span></a>'
             '<button class="menu-btn" id="menu" type="button" aria-expanded="false" aria-controls="nav">Menu</button>'
             f'<nav id="nav" aria-label="Main">{links}</nav><button class="theme" id="theme" type="button">Dark</button></div></header>')
 
 
-FOOTER = ('<footer><div class="wrap"><nav aria-label="Footer"><a href="ask.html">Data AI</a><a href="datasets.html">Datasets</a><a href="explore.html">Explorer</a>'
+FOOTER = ('<footer><div class="wrap"><nav aria-label="Footer"><a href="ask.html">Data AI</a><a href="chat.html">Data AI chat app</a><a href="datasets.html">Datasets</a><a href="explore.html">Explorer</a>'
           '<a href="research.html">Researcher mode</a><a href="mydata.html">Your data</a><a href="updates.html">Updates</a><a href="brief.html">Daily brief</a><a href="guide.html">Guide</a>'
           '<a href="catalog.html">Sources we are working through</a><a href="scorecard.html">Case study: grid forecast scorecard</a>'
           f'<a href="llms.txt">Plain-text index for AI systems</a><a href="{REPO}">GitHub</a></nav>'
@@ -172,6 +173,7 @@ def llms(man):
                 "- Variables: " + "; ".join(f"`{c['name']}` {c['title']}" + (f" ({c['unit']})" if c.get("unit") else "") for c in d["columns"]), ""]
     out += ["## Pages for people", "",
             f"- [Data AI]({SITE}ask.html): ask a question by typing or by voice; the answer gives the number with its year and source",
+            f"- [Data AI chat app]({SITE}chat.html): the same assistant in a full window, with chats saved in the browser and an optional open model that runs on the visitor's device",
             f"- [Datasets]({SITE}datasets.html): every dataset and variable",
             f"- [Explorer]({SITE}explore.html): choose variables, places and years, then download",
             f"- [Researcher mode]({SITE}research.html): test a hypothesis on the data",
@@ -183,7 +185,7 @@ def llms(man):
 
 def sitemap(man):
     day = man.get("checked", "")[:10]
-    pages = ["", "ask.html", "datasets.html", "explore.html", "research.html", "mydata.html", "updates.html", "brief.html", "guide.html", "catalog.html", "scorecard.html"]
+    pages = ["", "ask.html", "chat.html", "datasets.html", "explore.html", "research.html", "mydata.html", "updates.html", "brief.html", "guide.html", "catalog.html", "scorecard.html"]
     mod = f"<lastmod>{day}</lastmod>" if day else ""
     urls = "".join(f"<url><loc>{SITE}{p}</loc>{mod}</url>" for p in pages if p == "" or (DOCS / p).exists())
     return f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{urls}</urlset>\n'
