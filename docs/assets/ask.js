@@ -73,6 +73,9 @@ const PLACE_SERIES = { USA: { "world-bank-development::unemployment": "us-econom
 const SERIES_BACK = {}; Object.entries(PLACE_SERIES).forEach(([code, m]) => Object.entries(m).forEach(([a, b]) => { SERIES_BACK[b] = { id: a, code }; }));
 function futureOf(id) { const [d, c] = id.split("::"), twin = FUTURE[id] || (d === "un-population" ? `un-population-projections::${c}` : d === "imf-world-economic-outlook" ? `imf-projections::${c}` : null); return twin && V.has(twin) ? twin : null; }
 
+let TITLES = null;                                                    // full titles that belong to one variable only, longest first
+const titles = () => TITLES || (TITLES = (() => { const by = new Map(); V.forEach(v => { if (!v.ok || !(isCountrySet(v.d) || isSeriesSet(v.d))) return; const t = norm(v.c.title); if (t.split(" ").length >= 3) by.set(t, by.has(t) ? null : v.id); });
+  return [...by].filter(x => x[1]).sort((a, b) => b[0].length - a[0].length); })());
 function parse(text) {
   let s = ` ${norm(text)} `; const places = [], s0 = s;
   for (const [n, code] of NAMES) { const k = s.indexOf(` ${n} `); if (k >= 0) { places.push({ code, at: k }); s = s.slice(0, k + 1) + "~".repeat(n.length) + s.slice(k + 1 + n.length); } }
@@ -84,6 +87,7 @@ function parse(text) {
   const rank = BOTTOM.test(s) ? "bottom" : TOP.test(s) || WHICH.test(s) ? "top" : null;
   const quake = /earthquake|quake|seismic|tremor/.test(s);
   const found = [];
+  for (const [t, id] of titles()) { const k = s.indexOf(` ${t} `); if (k >= 0) { found.push({ id, at: k, text: t }); s = s.slice(0, k + 1) + " ".repeat(t.length) + s.slice(k + 1 + t.length); break; } }   // a variable's own full title is the plainest way to name it, so it is read before the synonyms
   [ASK_FIRST, CONCEPTS_MORE, CONCEPTS].forEach(listOf => listOf.forEach(([re, id]) => {
     if (!V.has(id)) return; const m = re.exec(s);
     if (m && !found.some(f => f.id === id)) { found.push({ id, at: m.index, text: m[0].trim() }); s = s.replace(new RegExp(`[a-z0-9]*(?:${re.source})[a-z0-9]*`, "g"), x => " ".repeat(x.length)); }      // every mention of the same idea is used up, so "CO2 emitters" is one variable, not two
@@ -704,12 +708,26 @@ function nextChips(box, list) {                                       // questio
   if (!list || !list.length) return; const nx = el("div", "nextq"); nx.setAttribute("aria-label", "Questions you could ask next");
   list.forEach(t => { const b = el("button", "", t); b.type = "button"; b.onclick = () => respond(t); nx.append(b); }); box.append(nx);
 }
+let COMMON_WORDS = null;                                              // words seen in lower case inside some title: safe to write without a capital
+const lowerFirst = T => {
+  COMMON_WORDS = COMMON_WORDS || (() => { const set = new Set(); V.forEach(v => String(v.c.title).split(/\s+/).slice(1).forEach(w => { if (/^[a-z]{3,}$/.test(w)) set.add(w); })); return set; })();
+  const m = /^([A-Z][a-z]+)(\s+(\S+))?/.exec(T); if (!m || (m[3] && /^[A-Z][a-z]/.test(m[3])) || !COMMON_WORDS.has(m[1].toLowerCase())) return T;   // "Brent spot price" and "Corruption Perceptions Index" keep their capitals
+  return T[0].toLowerCase() + T.slice(1);
+};
 function nextFor(q, P) {                                              // after an answer read straight from the data: only questions the same reading of the words would answer
   const v = V.get(P.vars[0]); if (!v || P.quake) return [];
-  const t = v.c.title, vis = VIS.test(q), names = (P.places.length ? P.places : []).slice(0, 3).map(placeName), out = [];
-  if (isCountry(v)) { if (names.length && !vis) out.push(`Chart ${t} ${names.join(" ")}`); if (!P.rank) out.push(`Top 10 ${t}`); if (!/\bmaps?\b/i.test(q)) out.push(`Map of ${t}`); if (names.length === 1 && vis) out.push(`${t} ${names[0]}`); }
-  else if (!vis) out.push(`Chart ${t}`, `Chart ${t} since 2015`);
-  return out.filter(x => { try { return norm(x) !== norm(q) && parse(x).vars[0] === v.id; } catch (e) { return false; } }).slice(0, 3);
+  const T = v.c.title, t = lowerFirst(T), vis = VIS.test(q), places = P.places.slice(0, 3), names = places.map(placeName), list = names.length > 1 ? `${names.slice(0, -1).join(", ")} and ${names[names.length - 1]}` : names[0];
+  const reads = (x, want, rank) => { try { const R = parse(x); return norm(x) !== norm(q) && R.vars[0] === v.id && (!want || (R.places.length === want.length && want.every(c => R.places.includes(c)))) && (!rank || R.rank === rank); } catch (e) { return false; } };
+  const pick = (cands, want, rank) => cands.find(x => reads(x, want, rank));   // the most natural wording that is read the same way
+  const out = [];
+  if (isCountry(v)) {
+    if (names.length && !vis) out.push(pick([`Chart ${t} in ${list}`, `Chart ${T} ${names.join(" ")}`], places));
+    if (names.length) out.push(pick([`Top 10 countries by ${t}`, `Top 10 ${T}`], null, "top"));                        // with no place named the answer was already a ranking
+    else if (P.rank !== "bottom" && !/corrupt/i.test(q)) out.push(pick([`Lowest 10 countries by ${t}`, `Bottom 10 ${T}`], null, "bottom"));
+    if (!/\bmaps?\b/i.test(q)) out.push(pick([`Map of ${t}`, `Map of ${T}`]));
+    if (names.length === 1 && vis) out.push(pick([`${T} in ${names[0]}`, `${T} ${names[0]}`], places));
+  } else if (!vis) out.push(pick([`Chart ${t}`, `Chart ${T}`]), pick([`Chart ${t} since 2015`, `Chart ${T} since 2015`]));
+  return out.filter(Boolean).slice(0, 3);
 }
 async function respond(text, opt = {}) {
   const q = String(text).trim(); if (!q || busy) return;

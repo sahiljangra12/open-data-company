@@ -96,7 +96,8 @@ limits its own spending four ways: a per-visitor rate limit (30 requests a minut
 all visitors (40), a cap on reply length, and a daily and monthly budget kept as an append-only log in Netlify Blobs. A
 call's cost is set aside before the model is called and corrected afterwards, so requests arriving together cannot run
 past the budget. Defaults: 0.04 USD a day and 0.30 USD a month, which is 54 Netlify credits at most. In the live check an
-AI answer cost about 0.00035 USD, so that is roughly 110 AI answers a day; plain lookups never touch the AI and cost
+AI answer cost about 0.0006 USD (the instructions now list every dataset, and most of that text is read from the model's
+cache at a tenth of the price), so that is roughly 70 AI answers a day; plain lookups never touch the AI and cost
 nothing. Change the limits with the environment variables `DATA_AI_DAILY_USD`, `DATA_AI_MONTHLY_USD` and
 `DATA_AI_PER_MINUTE` on the Netlify project and redeploy; `DATA_AI_MODEL`, `DATA_AI_PRICE_IN` and `DATA_AI_PRICE_OUT`
 switch the model. Setting `DATA_AI_URL` to an empty string in `docs/assets/core.js` turns AI answers off.
