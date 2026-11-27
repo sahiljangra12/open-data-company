@@ -5,20 +5,21 @@
 <div class="wrap">
 <div class="xhead"><h1>Daily brief</h1>
 <p>Each day, after the data is refreshed, the Data Agent reads what changed, checks the newest figures in the datasets and writes this short note. It runs on GitHub, with tools written for this site.</p></div>
-<section><div class="card brief"><p class="hint">27 November 2026, 01:14 UTC</p>
-<p><strong>6 datasets changed in the latest check</strong></p>
+<section><div class="card brief"><p class="hint">27 November 2026, 15:49 UTC</p>
+<p><strong>A 5.1-magnitude earthquake struck 107 km SSE of Auki, Solomon Islands, on 2026-11-27</strong></p>
 <h3>What changed</h3>
 <ul>
-<li><strong>Earthquakes, past 30 days</strong>: 3 rows added, 1 values revised. For example, 107 km SSE of Auki, Solomon Islands, 2026-11-27 00:07 UTC: Magnitude 5.1.</li>
-<li><strong>Birds seen each day: eBird checklists and species</strong>: 5 values revised. For example, 2026-11-24: Bird checklists sent in from the United States that day 14,215.</li>
-<li><strong>US electricity demand by grid operator, daily</strong>: 13 values revised. For example, 2026-11-24: Electricity demand in the lower 48 states, daily 11,455,100.</li>
-<li><strong>US electric vehicle charging stations, monthly</strong>: 271 values revised. For example, 2026-10-01: US public electric vehicle charging stations 83,870.</li>
-<li><strong>Flow of major US rivers, monthly</strong>: updated.</li>
-<li><strong>US court opinions, year by year</strong>: 3 rows added. For example, 1999-01-01: US court opinions published in the year 94,792.</li>
+<li>Animal records observed in 2025: 282,486,100 (records), date: 2025-01-01, source: GBIF</li>
+<li>Plant records observed in 2025: 21,737,200 (records), date: 2025-01-01, source: GBIF</li>
+<li>Human Development Index: Afghanistan 0.502 (2025), Angola 0.624 (2025), Albania 0.864 (2025), source: UNDP</li>
 </ul>
-<p><em>Written from the change log alone; the model's draft did not pass the figure check.</em></p>
+<h3>Worth a look</h3>
+<ul>
+<li><em>biodiversity-records-by-year</em>: Tracks animal and plant records by year, with full historical data. Shows trends in species observation over time.</li>
+<li><em>human-development-index</em>: Compares national development across countries with HDI scores from 1990 to 2025.</li>
+</ul>
 </div>
-<p class="hint">Written by the change log alone (no model was reachable). Tools it called: none. Before publishing, each figure in the note is matched against what the tools returned; a note that fails is replaced by a plain summary of the change log. A small model can still word things loosely, so check a figure in the <a href="datasets.html">datasets</a> or the <a href="updates.html">change log</a> before you cite it.</p></section>
+<p class="hint">Written by qwen3:4b-instruct, an open model that runs on GitHub's own machines during the run (no outside AI service). Tools it called: <code>find_variables</code>, <code>get_series</code>, <code>get_values</code>, <code>earthquakes_live</code>. Before publishing, each figure in the note is matched against what the tools returned; a note that fails is replaced by a plain summary of the change log. A small model can still word things loosely, so check a figure in the <a href="datasets.html">datasets</a> or the <a href="updates.html">change log</a> before you cite it.</p></section>
 <section><h2>Ask the agent yourself</h2>
 <p>The same agent answers questions posted as GitHub issues, usually within about ten minutes, with the figures, their years and their sources. For instant answers in the browser, use <a href="ask.html">Data AI</a>.</p>
 <p><a class="btn solid" href="https://github.com/sahiljangra12/open-data-company/issues/new?template=ask-data-agent.yml">Ask on GitHub</a> <a class="btn" href="https://github.com/sahiljangra12/open-data-company/tree/main/agent">How the agent is built</a></p></section>

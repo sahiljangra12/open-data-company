@@ -1,10 +1,15 @@
 {
  "briefs": [
   {
-   "at": "2026-11-27T01:14:17Z",
-   "model": null,
-   "tools": [],
-   "markdown": "**6 datasets changed in the latest check**\n\n### What changed\n- **Earthquakes, past 30 days**: 3 rows added, 1 values revised. For example, 107 km SSE of Auki, Solomon Islands, 2026-11-27 00:07 UTC: Magnitude 5.1.\n- **Birds seen each day: eBird checklists and species**: 5 values revised. For example, 2026-11-24: Bird checklists sent in from the United States that day 14,215.\n- **US electricity demand by grid operator, daily**: 13 values revised. For example, 2026-11-24: Electricity demand in the lower 48 states, daily 11,455,100.\n- **US electric vehicle charging stations, monthly**: 271 values revised. For example, 2026-10-01: US public electric vehicle charging stations 83,870.\n- **Flow of major US rivers, monthly**: updated.\n- **US court opinions, year by year**: 3 rows added. For example, 1999-01-01: US court opinions published in the year 94,792.\n\n_Written from the change log alone; the model's draft did not pass the figure check._"
+   "at": "2026-11-27T15:49:14Z",
+   "model": "qwen3:4b-instruct",
+   "tools": [
+    "find_variables",
+    "get_series",
+    "get_values",
+    "earthquakes_live"
+   ],
+   "markdown": "**A 5.1-magnitude earthquake struck 107 km SSE of Auki, Solomon Islands, on 2026-11-27**\n\n### What changed\n- Animal records observed in 2025: 282,486,100 (records), date: 2025-01-01, source: GBIF\n- Plant records observed in 2025: 21,737,200 (records), date: 2025-01-01, source: GBIF\n- Human Development Index: Afghanistan 0.502 (2025), Angola 0.624 (2025), Albania 0.864 (2025), source: UNDP\n\n### Worth a look\n- *biodiversity-records-by-year*: Tracks animal and plant records by year, with full historical data. Shows trends in species observation over time.\n- *human-development-index*: Compares national development across countries with HDI scores from 1990 to 2025."
   },
   {
    "at": "2026-11-26T21:27:33Z",
