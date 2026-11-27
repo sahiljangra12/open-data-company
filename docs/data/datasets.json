@@ -1,5 +1,5 @@
 {
- "checked": "2026-11-26T20:36:32Z",
+ "checked": "2026-11-27T00:22:21Z",
  "cron": "23 5 * * *",
  "datasets": [
   {
@@ -5692,8 +5692,8 @@
    "time": {
     "col": "time",
     "type": "date",
-    "min": "2026-10-27T20:11:57Z",
-    "max": "2026-11-26T19:43:23Z"
+    "min": "2026-10-27T23:51:13Z",
+    "max": "2026-11-26T22:40:25Z"
    },
    "entity": null,
    "rows": 1801,
@@ -5776,7 +5776,7 @@
      "unit": "reports",
      "description": "",
      "type": "num",
-     "filled": 301
+     "filled": 300
     },
     {
      "name": "url",
@@ -5787,7 +5787,7 @@
      "filled": 1801
     }
    ],
-   "bytes": 315187,
+   "bytes": 315172,
    "built": "2026-11-26",
    "coverage": "Rolling 30 days",
    "default_vars": [
@@ -38856,10 +38856,10 @@
     "col": "date",
     "type": "date",
     "min": "2026-10-22",
-    "max": "2026-11-23"
+    "max": "2026-11-24"
    },
    "entity": null,
-   "rows": 33,
+   "rows": 34,
    "columns": [
     {
      "name": "checklists_us",
@@ -38867,7 +38867,7 @@
      "unit": "checklists",
      "description": "eBird, Cornell Lab of Ornithology: lists of birds seen, sent in by birdwatchers. The newest three days are left out because lists are still arriving.",
      "type": "num",
-     "filled": 33
+     "filled": 34
     },
     {
      "name": "species_us",
@@ -38875,7 +38875,7 @@
      "unit": "species",
      "description": "eBird, Cornell Lab of Ornithology.",
      "type": "num",
-     "filled": 33
+     "filled": 34
     },
     {
      "name": "checklists_india",
@@ -38883,7 +38883,7 @@
      "unit": "checklists",
      "description": "eBird, Cornell Lab of Ornithology: lists of birds seen, sent in by birdwatchers. The newest three days are left out because lists are still arriving.",
      "type": "num",
-     "filled": 33
+     "filled": 34
     },
     {
      "name": "species_india",
@@ -38891,7 +38891,7 @@
      "unit": "species",
      "description": "eBird, Cornell Lab of Ornithology.",
      "type": "num",
-     "filled": 33
+     "filled": 34
     },
     {
      "name": "checklists_uk",
@@ -38899,7 +38899,7 @@
      "unit": "checklists",
      "description": "eBird, Cornell Lab of Ornithology: lists of birds seen, sent in by birdwatchers. The newest three days are left out because lists are still arriving.",
      "type": "num",
-     "filled": 33
+     "filled": 34
     },
     {
      "name": "species_uk",
@@ -38907,11 +38907,11 @@
      "unit": "species",
      "description": "eBird, Cornell Lab of Ornithology.",
      "type": "num",
-     "filled": 33
+     "filled": 34
     }
    ],
-   "bytes": 1397,
-   "built": "2026-11-26",
+   "bytes": 1436,
+   "built": "2026-11-27",
    "coverage": "2026",
    "step": "day",
    "cadence": "Every day"
@@ -42010,10 +42010,10 @@
     "col": "date",
     "type": "date",
     "min": "2019-01-01",
-    "max": "2026-11-23"
+    "max": "2026-11-24"
    },
    "entity": null,
-   "rows": 2884,
+   "rows": 2885,
    "columns": [
     {
      "name": "demand_us48",
@@ -42021,7 +42021,7 @@
      "unit": "megawatt-hours in the day",
      "description": "US Energy Information Administration, Hourly Electric Grid Monitor, balancing authority US48.",
      "type": "num",
-     "filled": 2884
+     "filled": 2885
     },
     {
      "name": "demand_pjm",
@@ -42029,7 +42029,7 @@
      "unit": "megawatt-hours in the day",
      "description": "US Energy Information Administration, Hourly Electric Grid Monitor, balancing authority PJM.",
      "type": "num",
-     "filled": 2883
+     "filled": 2884
     },
     {
      "name": "demand_miso",
@@ -42037,7 +42037,7 @@
      "unit": "megawatt-hours in the day",
      "description": "US Energy Information Administration, Hourly Electric Grid Monitor, balancing authority MISO.",
      "type": "num",
-     "filled": 2884
+     "filled": 2885
     },
     {
      "name": "demand_erco",
@@ -42045,7 +42045,7 @@
      "unit": "megawatt-hours in the day",
      "description": "US Energy Information Administration, Hourly Electric Grid Monitor, balancing authority ERCO.",
      "type": "num",
-     "filled": 2884
+     "filled": 2885
     },
     {
      "name": "demand_ciso",
@@ -42053,7 +42053,7 @@
      "unit": "megawatt-hours in the day",
      "description": "US Energy Information Administration, Hourly Electric Grid Monitor, balancing authority CISO.",
      "type": "num",
-     "filled": 2884
+     "filled": 2885
     },
     {
      "name": "demand_swpp",
@@ -42061,7 +42061,7 @@
      "unit": "megawatt-hours in the day",
      "description": "US Energy Information Administration, Hourly Electric Grid Monitor, balancing authority SWPP.",
      "type": "num",
-     "filled": 2884
+     "filled": 2885
     },
     {
      "name": "demand_nyis",
@@ -42069,7 +42069,7 @@
      "unit": "megawatt-hours in the day",
      "description": "US Energy Information Administration, Hourly Electric Grid Monitor, balancing authority NYIS.",
      "type": "num",
-     "filled": 2884
+     "filled": 2885
     },
     {
      "name": "demand_isne",
@@ -42077,11 +42077,11 @@
      "unit": "megawatt-hours in the day",
      "description": "US Energy Information Administration, Hourly Electric Grid Monitor, balancing authority ISNE.",
      "type": "num",
-     "filled": 2884
+     "filled": 2885
     }
    ],
-   "bytes": 209605,
-   "built": "2026-11-26",
+   "bytes": 209678,
+   "built": "2026-11-27",
    "coverage": "2019 to 2026",
    "step": "day",
    "cadence": "Every day"
@@ -44175,11 +44175,11 @@
      "Germanna Community College"
     ],
     [
-     "115001",
+     "104708",
      "Glendale Community College"
     ],
     [
-     "104708",
+     "115001",
      "Glendale Community College"
     ],
     [
@@ -49774,18 +49774,10 @@
      "description": "US Geological Survey stream gauge 01358000: the average of the daily mean flow in each month with at least 25 days recorded.",
      "type": "num",
      "filled": 887
-    },
-    {
-     "name": "sacramento_at_freeport",
-     "title": "Flow of the Sacramento River at Freeport, monthly average",
-     "unit": "cubic feet per second",
-     "description": "US Geological Survey stream gauge 11447650: the average of the daily mean flow in each month with at least 25 days recorded.",
-     "type": "num",
-     "filled": 789
     }
    ],
-   "bytes": 55713,
-   "built": "2026-11-26",
+   "bytes": 50927,
+   "built": "2026-11-27",
    "coverage": "1950 to 2026",
    "step": "month",
    "cadence": "A new month every month"
@@ -50332,11 +50324,11 @@
    "time": {
     "col": "date",
     "type": "date",
-    "min": "2011-01-01",
+    "min": "2003-01-01",
     "max": "2026-01-01"
    },
    "entity": null,
-   "rows": 16,
+   "rows": 24,
    "columns": [
     {
      "name": "court_opinions",
@@ -50344,12 +50336,12 @@
      "unit": "opinions",
      "description": "Written decisions of federal and state courts collected by CourtListener (Free Law Project). Coverage of lower courts is incomplete; the current year is not over. Earlier years are added a few at a time.",
      "type": "num",
-     "filled": 16
+     "filled": 24
     }
    ],
-   "bytes": 318,
-   "built": "2026-11-26",
-   "coverage": "2011 to 2026",
+   "bytes": 470,
+   "built": "2026-11-27",
+   "coverage": "2003 to 2026",
    "step": "year",
    "partial": true,
    "cadence": "Every day"
