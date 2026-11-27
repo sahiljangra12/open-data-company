@@ -1,48 +1,48 @@
 {
  "facts": {
   "when": "2026-11-27",
-  "minutes": 23.4,
+  "minutes": 31.1,
   "base": "sentence-transformers/all-MiniLM-L6-v2",
-  "variables": 980,
-  "focus": 611,
-  "pairs": 7443,
-  "steps": 699,
+  "variables": 989,
+  "focus": 620,
+  "pairs": 7540,
+  "steps": 708,
   "epochs": 3
  },
  "keyword": {
   "test_natural": {
-   "questions": 95,
-   "first_right": 42.1,
-   "in_first_five": 62.1
+   "questions": 105,
+   "first_right": 42.9,
+   "in_first_five": 64.8
   },
   "test_synthetic": {
-   "questions": 611,
-   "first_right": 84.1,
-   "in_first_five": 94.1
+   "questions": 620,
+   "first_right": 84.4,
+   "in_first_five": 94.5
   }
  },
  "before": {
   "test_natural": {
-   "questions": 95,
-   "first_right": 47.4,
-   "in_first_five": 81.1
+   "questions": 105,
+   "first_right": 51.4,
+   "in_first_five": 81.9
   },
   "test_synthetic": {
-   "questions": 611,
-   "first_right": 60.2,
-   "in_first_five": 86.1
+   "questions": 620,
+   "first_right": 61.1,
+   "in_first_five": 86.5
   }
  },
  "after": {
   "test_natural": {
-   "questions": 95,
-   "first_right": 70.5,
-   "in_first_five": 89.5
+   "questions": 105,
+   "first_right": 74.3,
+   "in_first_five": 88.6
   },
   "test_synthetic": {
-   "questions": 611,
-   "first_right": 89.2,
-   "in_first_five": 96.1
+   "questions": 620,
+   "first_right": 88.4,
+   "in_first_five": 96.3
   }
  }
 }
