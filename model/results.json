@@ -1,0 +1,48 @@
+{
+ "facts": {
+  "when": "2026-11-27",
+  "minutes": 23.4,
+  "base": "sentence-transformers/all-MiniLM-L6-v2",
+  "variables": 980,
+  "focus": 611,
+  "pairs": 7443,
+  "steps": 699,
+  "epochs": 3
+ },
+ "keyword": {
+  "test_natural": {
+   "questions": 95,
+   "first_right": 42.1,
+   "in_first_five": 62.1
+  },
+  "test_synthetic": {
+   "questions": 611,
+   "first_right": 84.1,
+   "in_first_five": 94.1
+  }
+ },
+ "before": {
+  "test_natural": {
+   "questions": 95,
+   "first_right": 47.4,
+   "in_first_five": 81.1
+  },
+  "test_synthetic": {
+   "questions": 611,
+   "first_right": 60.2,
+   "in_first_five": 86.1
+  }
+ },
+ "after": {
+  "test_natural": {
+   "questions": 95,
+   "first_right": 70.5,
+   "in_first_five": 89.5
+  },
+  "test_synthetic": {
+   "questions": 611,
+   "first_right": 89.2,
+   "in_first_five": 96.1
+  }
+ }
+}
