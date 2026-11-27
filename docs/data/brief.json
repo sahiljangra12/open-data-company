@@ -1,10 +1,10 @@
 {
  "briefs": [
   {
-   "at": "2026-11-27T00:31:59Z",
+   "at": "2026-11-27T00:53:25Z",
    "model": null,
    "tools": [],
-   "markdown": "**10 datasets changed in the latest check**\n\n### What changed\n- **Earthquakes, past 30 days**: 19 rows added, 11 values revised. For example, 55 km NE of Valmy, Nevada, 2026-11-26 22:40 UTC: Magnitude 2.9.\n- **Research papers published each year, worldwide**: 20 values revised. For example, 2025-01-01: Scholarly records registered with Crossref, by year published 9,983,959.\n- **Biodiversity records by year observed (GBIF)**: 360 values revised. For example, 2025-01-01: Records of living things, by year observed (GBIF) 307,412,800.\n- **Biodiversity records by country (GBIF)**: 223 values revised. For example, Argentina, 2026: Records of living things located in the country (GBIF) 16,468,910.\n- **Birds seen each day: eBird checklists and species**: 1 rows added, 14 values revised. For example, 2026-11-24: Bird checklists sent in from the United States that day 14,211.\n- **US electricity demand by grid operator, daily**: 1 rows added, 8 values revised. For example, 2026-11-24: Electricity demand in the lower 48 states, daily 11,455,100.\n\n_Written from the change log alone; the model's draft did not pass the figure check._"
+   "markdown": "**8 datasets changed in the latest check**\n\n### What changed\n- **Earthquakes, past 30 days**: 3 rows added. For example, 64 km SSE of Kaş, Turkey, 2026-11-26 23:31 UTC: Magnitude 4.1.\n- **Climate and environment policy: carbon prices, fossil fuel subsidies, net-zero targets, treaties**: updated.\n- **Research papers published each year, worldwide**: 12 values revised. For example, 2025-01-01: Scholarly records registered with Crossref, by year published 9,983,961.\n- **Birds seen each day: eBird checklists and species**: 6 values revised. For example, 2026-11-24: Bird checklists sent in from the United States that day 14,213.\n- **US electricity demand by grid operator, daily**: 14 values revised. For example, 2026-11-24: Electricity demand in the lower 48 states, daily .\n- **US electric vehicle charging stations, monthly**: 144 values revised. For example, 2026-10-01: US public electric vehicle charging stations 83,876.\n\n_Written from the change log alone; the model's draft did not pass the figure check._"
   },
   {
    "at": "2026-11-26T21:27:33Z",
