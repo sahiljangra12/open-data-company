@@ -26,7 +26,7 @@ if(window.speechSynthesis){const real=window.speechSynthesis;Object.defineProper
 """
 NOSR = "Object.defineProperty(window,'webkitSpeechRecognition',{value:undefined,configurable:true});Object.defineProperty(window,'SpeechRecognition',{value:undefined,configurable:true});"
 def make(browser, ai=True, sr=SR, vp=(1280,900), dark=False):
-    c=browser.new_context(viewport={"width":vp[0],"height":vp[1]})
+    c=browser.new_context(viewport={"width":vp[0],"height":vp[1]}, service_workers="block")
     c.add_init_script(sr)
     if dark: c.add_init_script("try{localStorage.setItem('theme','dark')}catch(e){}")
     target = FN+"/api/data-ai" if ai else "http://localhost:8799/api/data-ai"

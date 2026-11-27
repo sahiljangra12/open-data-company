@@ -18,14 +18,21 @@ const cssVar = name => getComputedStyle(document.documentElement).getPropertyVal
     label(); document.dispatchEvent(new Event("themechange"));
   };
   label();
-  // the menu button that replaces the row of links on narrow screens
-  const menu = $("#menu"), nav = $("#nav");
-  if (menu && nav) {
-    const set = open => { nav.classList.toggle("open", open); menu.setAttribute("aria-expanded", open); menu.textContent = open ? "Close" : "Menu"; };
-    menu.onclick = () => set(!nav.classList.contains("open"));
+  // on a phone, the last tab opens a sheet with the rest of the pages
+  const menu = $("#menu"), more = $("#more");
+  if (menu && more) {
+    const set = open => { more.hidden = !open; menu.setAttribute("aria-expanded", open); menu.classList.toggle("on", open); };
+    menu.onclick = e => { e.stopPropagation(); set(more.hidden); };
+    more.onclick = () => set(false);                                   // a tap on a page, or anywhere outside the sheet, closes it
     document.addEventListener("keydown", e => { if (e.key === "Escape") set(false); });
-    document.addEventListener("click", e => { if (!e.target.closest("header.top")) set(false); });
   }
+  // the app can be installed: the button appears only when this browser offers it
+  const install = $("#install"); let offer = null;
+  window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); offer = e; if (install) install.hidden = false; });
+  window.addEventListener("appinstalled", () => { offer = null; if (install) install.hidden = true; });
+  if (install) install.onclick = async () => { if (!offer) return; offer.prompt(); await offer.userChoice.catch(() => null); offer = null; install.hidden = true; };
+  // the helper that lets the installed app open offline runs only on the public site, never on a developer's machine or in tests
+  if ("serviceWorker" in navigator && location.hostname.endsWith("github.io")) window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => null));
 })();
 const SITE = "https://sahiljangra12.github.io/open-data-company/";
 const DATA_AI_URL = "https://open-data-ai.netlify.app/api/data-ai";      // the assistant's service (ai/ in the repo). Empty string turns AI answers off.

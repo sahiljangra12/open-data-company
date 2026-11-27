@@ -1,0 +1,51 @@
+{
+ "name": "Open Data Company",
+ "short_name": "Open Data",
+ "description": "The world's open data in one app: ask Data AI, take a dataset, test an idea, analyse your own file.",
+ "start_url": "./index.html",
+ "scope": "./",
+ "display": "standalone",
+ "orientation": "any",
+ "background_color": "#ffffff",
+ "theme_color": "#ffffff",
+ "categories": [
+  "education",
+  "productivity",
+  "utilities"
+ ],
+ "icons": [
+  {
+   "src": "img/icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "img/icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png"
+  },
+  {
+   "src": "img/icon-maskable-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ],
+ "shortcuts": [
+  {
+   "name": "Ask Data AI",
+   "short_name": "Data AI",
+   "url": "./ask.html"
+  },
+  {
+   "name": "Explore a dataset",
+   "short_name": "Explorer",
+   "url": "./explore.html"
+  },
+  {
+   "name": "Analyse your own file",
+   "short_name": "Your data",
+   "url": "./mydata.html"
+  }
+ ]
+}

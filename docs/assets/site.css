@@ -47,26 +47,53 @@ p{margin:0 0 1em}
 .wrap{max-width:1360px;margin:0 auto;padding:0 var(--pad)}
 .up{font-family:var(--display);font-weight:500;text-transform:uppercase;letter-spacing:.12em;font-size:14px}
 
-/* ---------- navigation ---------- */
-header.top{position:sticky;top:0;z-index:50;height:var(--nav);background:var(--navbg);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
-header.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;height:100%}
-.brand{font-family:var(--display);font-weight:700;font-size:19px;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;white-space:nowrap}
-nav{display:flex;gap:clamp(12px,1.9vw,30px);align-items:center}
-header.top nav{margin-left:auto}
-nav a{font-family:var(--display);font-weight:500;font-size:14.5px;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;white-space:nowrap;padding:6px 0;background:linear-gradient(var(--accent-text),var(--accent-text)) 0 100%/0 2px no-repeat;transition:background-size .3s}
-.theme{font:500 13px var(--display);letter-spacing:.12em;text-transform:uppercase;background:none;color:var(--ink);border:1px solid var(--line2);padding:6px 10px;cursor:pointer;white-space:nowrap}
+/* ---------- the app's frame ----------
+   Wide screens: a side bar that lists every page. Phones and tablets: a slim bar on top, and four tabs plus More along the foot.
+   --rail is the side bar's width, --nav the top bar's height and --tab the foot bar's height; each is 0 where that part is absent. */
+:root{--rail:236px;--nav:0px;--tab:0px}
+.ic{flex:none;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+body{padding-left:var(--rail)}
+header.top{position:fixed;inset:0 auto 0 0;z-index:50;width:var(--rail);background:var(--panel);border-right:1px solid var(--line)}
+header.top .wrap{display:flex;flex-direction:column;gap:4px;height:100%;max-width:none;margin:0;padding:18px 12px 14px;overflow-y:auto}
+.brand{display:flex;align-items:center;gap:10px;padding:6px 10px 18px;font:600 18px/1.1 var(--body);letter-spacing:-.01em;text-decoration:none;white-space:nowrap}
+.brand .ic{width:30px;height:30px;padding:5px;border-radius:9px;background:var(--accent);color:#fff;stroke-width:1.9}
+nav{display:flex;flex-wrap:wrap;gap:8px 22px;align-items:center}
+header.top nav{flex-direction:column;flex-wrap:nowrap;align-items:stretch;gap:2px}
+header.top nav a,.sheet a{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:var(--r-s);font:500 15.5px/1.2 var(--body);color:var(--ink2);text-decoration:none;white-space:nowrap}
+header.top nav a:hover,.sheet a:hover{background:var(--wash);color:var(--ink)}
+header.top nav a.on,.sheet a.on{background:var(--accent-soft);color:var(--accent-text);font-weight:600}
+.menu-btn,.sheet{display:none}
+.apptools{margin-top:auto;display:flex;flex-direction:column;gap:8px;padding-top:12px}
+.theme,.install{display:flex;align-items:center;justify-content:center;gap:8px;font:600 14px/1 var(--body);padding:10px 12px;border:1px solid var(--line2);border-radius:var(--r-s);background:var(--bg);color:var(--ink);cursor:pointer;white-space:nowrap}
 .theme:hover{border-color:var(--accent-text);color:var(--accent-text)}
-nav a:hover,nav a:focus-visible,nav a.on{background-size:100% 2px}
-.menu-btn{display:none;font:500 13px var(--display);letter-spacing:.12em;text-transform:uppercase;background:var(--ink);color:var(--bg);border:1px solid var(--ink);padding:6px 12px;cursor:pointer;margin-left:auto}
+.install{background:var(--accent);border-color:var(--accent);color:#fff}
+.install:hover{background:var(--accent-2);border-color:var(--accent-2)}
+.install .ic{width:18px;height:18px}
+footer nav a{font:500 13.5px var(--body);color:var(--ink2);text-decoration:none}
+footer nav a:hover{color:var(--accent-text);text-decoration:underline}
 @media(max-width:1060px){
-  .menu-btn{display:block}
-  header.top nav{display:none;position:absolute;left:0;right:0;top:var(--nav);margin:0;flex-direction:column;align-items:stretch;gap:0;background:var(--menu);border-bottom:1px solid var(--line2);box-shadow:0 18px 30px rgba(0,0,0,.14);padding:6px var(--pad) 14px}
-  header.top nav.open{display:flex}
-  header.top nav a{padding:14px 0;border-top:1px solid var(--line);font-size:16px;background:none}
-  header.top nav a:first-child{border-top:0}
-  header.top nav a.on{color:var(--accent-text)}
+  :root{--rail:0px;--nav:54px;--tab:calc(58px + env(safe-area-inset-bottom,0px))}
+  body{padding-bottom:var(--tab)}
+  header.top{position:sticky;inset:auto;top:0;width:auto;height:var(--nav);background:var(--bg);border-right:0;border-bottom:1px solid var(--line)}   /* no blur here: it would trap the foot bar inside this box */
+  header.top .wrap{flex-direction:row;align-items:center;gap:10px;padding:0 var(--pad);overflow:visible}
+  .brand{padding:0;font-size:17px}
+  header.top nav{position:fixed;left:0;right:0;bottom:0;z-index:55;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0;height:var(--tab);padding:0 6px env(safe-area-inset-bottom,0px);background:var(--navbg);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-top:1px solid var(--line)}
+  header.top nav a.more{display:none}
+  header.top nav a,.menu-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-width:0;padding:6px 2px;border:0;border-radius:var(--r-s);background:none;font:500 11.5px/1.1 var(--body);color:var(--ink3);cursor:pointer}
+  header.top nav a span,.menu-btn span{max-width:100%;overflow:hidden;text-overflow:ellipsis}
+  header.top nav a:hover{background:none}
+  header.top nav a.on,.menu-btn.on{background:none;color:var(--accent-text)}
+  .menu-btn .ic{stroke-width:3}
+  .apptools{margin:0 0 0 auto;flex-direction:row;padding:0}
+  .theme,.install{min-height:38px;padding:8px 12px}
+  .sheet{display:block;position:fixed;inset:0;z-index:54;background:rgba(0,0,0,.42)}
+  .sheet-in{position:absolute;left:8px;right:8px;bottom:calc(var(--tab) + 8px);display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:10px;background:var(--menu);border:1px solid var(--line);border-radius:var(--r-l);box-shadow:0 18px 40px rgba(0,0,0,.28)}
+  .sheet a{padding:14px 12px;font-size:16px;color:var(--ink)}
 }
-@media(max-width:760px){.brand{font-size:16px;letter-spacing:.14em}.wide{display:none}.theme{font-size:12px;padding:5px 8px}}
+@media(max-width:420px){.brand .wide{display:none}}
+/* each page eases in under the frame, which stays where it is */
+@media(prefers-reduced-motion:no-preference){main{animation:pagein .22s ease-out}}
+@keyframes pagein{from{opacity:0}}   /* opacity only: moving the page would drag its fixed bars along */
 
 /* ---------- buttons, links, form controls ---------- */
 .btn{position:relative;z-index:0;display:inline-block;overflow:hidden;padding:13px 26px;border:2px solid var(--ink);background:none;color:var(--ink);font:500 14px/1.2 var(--display);letter-spacing:.14em;text-transform:uppercase;text-decoration:none;cursor:pointer;white-space:nowrap;transition:color .45s,border-color .45s}
@@ -98,7 +125,7 @@ input[type=checkbox],input[type=radio]{accent-color:var(--accent);width:16px;hei
    It is sized to sit whole beside the text: never cut by the edge of the screen, never under the words. */
 .hero{--g:min(44vw,78vh,720px);position:relative;min-height:min(calc(100svh - var(--nav)),940px);display:flex;flex-direction:column;justify-content:space-between;border-bottom:1px solid var(--line)}
 .hero-art{position:absolute;inset:0;overflow:hidden}
-.globe{position:absolute;right:calc(max(var(--pad),(100vw - 1360px)/2 + var(--pad)) - var(--g)*.04);top:45%;width:var(--g);aspect-ratio:1;transform:translateY(-50%)}
+.globe{position:absolute;right:calc(max(var(--pad),(100vw - var(--rail) - 1360px)/2 + var(--pad)) - var(--g)*.04);top:50%;width:var(--g);aspect-ratio:1;transform:translateY(-50%)}
 .globe canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
 .globe canvas.earth{pointer-events:none}
 .globe canvas.marks{cursor:grab;touch-action:pan-y}
@@ -328,7 +355,7 @@ details.brow[open] summary::after{content:"–"}
 .chartctl{display:flex;gap:18px;flex-wrap:wrap;align-items:center;margin-bottom:12px;font-size:14.5px;color:var(--ink2)}
 .chartctl select{font-size:14.5px;padding:8px 10px;max-width:100%}
 .chartctl label{display:flex;gap:8px;align-items:center}
-.dock{position:fixed;left:0;right:0;bottom:0;z-index:40;background:var(--navbg);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-top:1px solid var(--line2)}
+.dock{position:fixed;left:var(--rail);right:0;bottom:var(--tab);z-index:40;background:var(--navbg);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-top:1px solid var(--line2)}
 .dock .wrap{display:flex;gap:12px 22px;align-items:center;flex-wrap:wrap;padding-top:12px;padding-bottom:12px}
 #summary{flex:1 1 200px;font:500 17px var(--display);letter-spacing:.08em;text-transform:uppercase}
 #summary strong{font-weight:700}
@@ -648,7 +675,6 @@ table.xtab td.num{padding-left:12px}
 /* Phones: every control is at least a finger wide and tall */
 @media(max-width:760px){
   .brand{display:inline-flex;align-items:center;min-height:44px}
-  .menu-btn,.theme{min-height:44px;padding:0 14px;font-size:13px}
   .quick a,.quick button,.toc a,.seg button,.pill,.presets button,.tabs button{display:inline-flex;align-items:center;justify-content:center;min-height:44px}
   .quick a,.quick button,.toc a{padding-top:0;padding-bottom:0;text-align:left}
   .toc a{padding-top:6px;padding-bottom:6px}
@@ -844,7 +870,7 @@ td.stand .tag{white-space:normal}
    Controls that are joined in a row share one rounded outline instead of each having its own. */
 /* buttons and fields */
 .btn,.mic,.hyp input{border-radius:var(--r-m)}
-textarea,.theme,.menu-btn,.tip,.chip,.presets button,.rule button,.quick a,.quick button,.toc a,#examples button,#samples button,#suggest button,.standrow button,.nextq button,.tag{border-radius:var(--r-s)}
+textarea,.tip,.chip,.presets button,.rule button,.quick a,.quick button,.toc a,#examples button,#samples button,#suggest button,.standrow button,.nextq button,.tag{border-radius:var(--r-s)}
 .opt .box{border-radius:var(--r-xs)}
 .mic.live::after{border-radius:calc(var(--r-m) + 6px)}
 /* the home search: field, microphone and button are one shape */
@@ -862,7 +888,6 @@ textarea,.theme,.menu-btn,.tip,.chip,.presets button,.rule button,.quick a,.quic
 .voice-note{border-radius:var(--r-s)}
 .way,.drop{border-radius:var(--r-l)}
 .way{overflow:hidden}
-@media(max-width:1060px){header.top nav{border-radius:0 0 var(--r-l) var(--r-l)}}
 /* the chat window */
 main>.wrap>section.chat,.chat{border-radius:var(--r-l);overflow:hidden}
 .avatar{border-radius:50%}
@@ -877,7 +902,7 @@ main>.wrap>section.chat,.chat{border-radius:var(--r-l);overflow:hidden}
 table.heat td{border-radius:6px}
 
 /* ---------- the chat app (ask.html): a side panel of saved chats beside the conversation ---------- */
-.app{display:grid;grid-template-columns:300px minmax(0,1fr);height:calc(100dvh - var(--nav));min-height:500px;border-bottom:1px solid var(--line)}
+.app{display:grid;grid-template-columns:300px minmax(0,1fr);height:calc(100dvh - var(--nav) - var(--tab));min-height:500px;border-bottom:1px solid var(--line)}
 .side{display:flex;flex-direction:column;gap:22px;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:18px 16px 22px;background:var(--panel);border-right:1px solid var(--line)}
 .side h2{font-size:14px;letter-spacing:.14em;color:var(--ink3);margin:0 0 10px}
 .side h3{font-size:15px;letter-spacing:.08em;margin:0 0 6px}
@@ -925,10 +950,38 @@ details.steps li{margin:0 0 4px}
 .turn.saved details.evidence>summary{pointer-events:none;list-style:none}
 @media(max-width:900px){
   .app{grid-template-columns:minmax(0,1fr)}
-  .side{position:fixed;top:var(--nav);left:0;bottom:0;z-index:45;width:min(88vw,330px);transform:translateX(-104%);transition:transform .2s ease;box-shadow:0 0 0 1px var(--line),18px 0 40px rgba(0,0,0,.18);visibility:hidden}
+  .side{position:fixed;top:var(--nav);left:0;bottom:var(--tab);z-index:45;width:min(88vw,330px);transform:translateX(-104%);transition:transform .2s ease;box-shadow:0 0 0 1px var(--line),18px 0 40px rgba(0,0,0,.18);visibility:hidden}
   .side.open{transform:none;visibility:visible}
   .side-toggle{display:inline-flex;align-items:center;min-height:44px}
   .app .chatbar{padding-left:12px;padding-right:12px}
   .app .chatbar .avatar{display:none}
 }
 @media(prefers-reduced-motion:reduce){.side,.bar i{transition:none}}
+
+/* ---------- the app's look: calmer type, tighter screens ----------
+   Headings are written as sentences instead of in capitals, buttons read like buttons in an app, and the space
+   between parts of a screen is closer to a dashboard than to a poster. Small labels keep their capitals. */
+h1,h2,h3{text-transform:none;letter-spacing:0;line-height:1.08}
+h1{font-size:clamp(32px,3.6vw,48px)}
+h2{font-size:clamp(24px,2.4vw,32px)}
+h3{font-size:20px}
+.bubble .answer h3,.side h2,.side h3,.steps h3{text-transform:uppercase}
+.btn,.quick a,.quick button,.toc a,.presets button,.seg button,.pill,.tabs button,#examples button,#samples button,#suggest button,.link,.side-toggle{font-family:var(--body);font-weight:600;letter-spacing:0;text-transform:none}
+.btn{font-size:15px;padding:12px 20px}
+.bubble .btn{font-size:13.5px;letter-spacing:0}
+.quick a,.quick button,.toc a,.presets button,.seg button,.pill,.tabs button,#examples button,#samples button,#suggest button{font-size:14px}
+.link{font-size:14px;font-weight:500}
+.sec{padding:clamp(34px,5vh,56px) 0}
+.sec-head{margin-bottom:22px}
+main>.wrap>section:first-child{padding-top:clamp(24px,4vh,44px)}
+.xhead{padding:clamp(20px,3vh,34px) 0 18px}
+.xhead h1{font-size:clamp(28px,3vw,40px)}
+.ds h3{font-size:22px;letter-spacing:0}
+.ds{padding:22px 0}
+/* home: the opening screen is a place to ask, with the live globe beside it */
+.hero{--g:min(34vw,60vh,520px);min-height:0}
+.hero-in{padding:clamp(28px,5vh,56px) 0 22px;max-width:min(680px,calc(100% - var(--g)*.9 - 20px))}
+.hero h1{font-size:clamp(36px,4.4vw,60px);max-width:15ch}
+.lede{margin:16px 0 24px}
+@media(max-width:900px){.hero{--g:min(86vw,420px)}.hero-in{max-width:none;padding:22px 0 8px}}
+

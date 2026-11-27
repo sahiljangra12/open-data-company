@@ -43,6 +43,14 @@ Five things a visitor can do:
 | `.github/workflows/try-sources.yml` | Run by hand: tries chosen builders on GitHub's servers and prints what came back, without saving anything; on a branch it can also rehearse the whole refresh |
 | `.github/workflows/check-stats.yml` | Runs both test suites when the statistics, the readers or the vendored libraries change |
 
+## It is an app
+
+The site is laid out as an app and can be installed as one. On a wide screen every page is in a side bar; on a phone there is a slim
+bar on top and four tabs plus More along the foot. The frame is written once, in `header()` in `scripts/build_site.py`, and stamped
+into every page. `docs/manifest.webmanifest` and the icons in `docs/img/` make it installable, and `docs/sw.js` lets the installed
+app open offline with the last figures it saw: it always asks the network first, so nothing is stale while you are online, and it
+never keeps whole datasets or AI answers. The helper runs only on the public site, never on a developer's machine or in the tests.
+
 ## How the portal works
 
 Each dataset is one tidy CSV plus a manifest entry (keys, time column, every variable with its

@@ -53,7 +53,7 @@ with sync_playwright() as pw:
     # ---------------- the app window and saved chats (hosted brain) ----------------
     c,p,errs=app(b)
     g=p.evaluate("(()=>{const a=document.querySelector('#app').getBoundingClientRect(),s=document.querySelector('#side').getBoundingClientRect(),k=document.querySelector('#askbar').getBoundingClientRect();return {top:a.top,bottom:a.bottom,vh:innerHeight,side:s.width,bar:k.bottom,over:document.documentElement.scrollWidth-document.documentElement.clientWidth}})()")
-    check("the app fills the window: side panel on the left, composer at the foot", abs(g["bottom"]-g["vh"])<=2 and g["top"]>=60 and g["side"]>=280 and abs(g["bar"]-g["bottom"])<=3 and g["over"]<=0, g)
+    check("the app fills the window: side panel on the left, composer at the foot", abs(g["bottom"]-g["vh"])<=2 and g["top"]>=0 and g["side"]>=280 and abs(g["bar"]-g["bottom"])<=3 and g["over"]<=0, g)
     check("Data AI is marked in the menu and nothing is saved yet", p.inner_text("nav a.on").lower()=="data ai" and p.locator("#nochats").is_visible() and p.locator("#chatlist li").count()==0)
     check("the hosted AI is on", "AI answers are on" in p.inner_text("#ai-state"))
     t=ask(p,"Who wrote Hamlet?")

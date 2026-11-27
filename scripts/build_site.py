@@ -13,18 +13,45 @@ ROOT = Path(__file__).resolve().parents[1]
 DOCS = ROOT / "docs"
 SITE = "https://sahiljangra12.github.io/open-data-company/"
 REPO = "https://github.com/sahiljangra12/open-data-company"
-NAV = [("ask.html", "Data AI", "ask"), ("datasets.html", "Datasets", "datasets"), ("explore.html", "Explorer", "explore"), ("research.html", "Research", "research"),
-       ("mydata.html", "Your data", "mydata"), ("updates.html", "Updates", "updates"), ("guide.html", "Guide", "guide")]
+# The pages of the app, in the order they appear in the side bar. The first four are also the tabs along the foot of a phone screen.
+NAV = [("index.html", "Home", "home"), ("ask.html", "Data AI", "ask"), ("datasets.html", "Datasets", "datasets"), ("explore.html", "Explorer", "explore"),
+       ("research.html", "Research", "research"), ("mydata.html", "Your data", "mydata"), ("updates.html", "Updates", "updates"),
+       ("brief.html", "Daily brief", "brief"), ("guide.html", "Guide", "guide")]
+TABS = 4
+ICON = {  # line drawings on a 24 by 24 grid, one path each
+    "mark": "M12 3.5a8.5 8.5 0 1 0 0 17 8.5 8.5 0 0 0 0-17zM3.5 12h17M12 3.5c2.6 2.4 3.9 5.2 3.9 8.5s-1.3 6.1-3.9 8.5c-2.6-2.4-3.9-5.2-3.9-8.5S9.4 5.9 12 3.5z",
+    "home": "M4 11.5 12 4l8 7.5M6.5 10v9.5h11V10M10 19.5v-5h4v5",
+    "ask": "M5 5.5h14A1.5 1.5 0 0 1 20.5 7v8a1.5 1.5 0 0 1-1.5 1.5h-6L8.5 20v-3.5H5A1.5 1.5 0 0 1 3.5 15V7A1.5 1.5 0 0 1 5 5.5zM8 9h8M8 12.5h5",
+    "datasets": "M5 6.5C5 5.1 8.1 4 12 4s7 1.1 7 2.5S15.9 9 12 9 5 7.9 5 6.5zM5 6.5V12c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5V6.5M5 12v5.5C5 18.9 8.1 20 12 20s7-1.1 7-2.5V12",
+    "explore": "M4 7h9M17 7h3M4 12h3M11 12h9M4 17h11M19 17h1M15 5v4M9 10v4M17 15v4",
+    "research": "M9.5 4h5M10.5 4v5.5L5.5 18a1.5 1.5 0 0 0 1.3 2.2h10.4a1.5 1.5 0 0 0 1.3-2.2l-5-8.5V4M8 15h8",
+    "mydata": "M7.5 3.5H14l4 4V19a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 6 19V5a1.5 1.5 0 0 1 1.5-1.5zM14 3.5V8h4M12 17v-5.5M9.5 13.5 12 11l2.5 2.5",
+    "updates": "M12 4a8 8 0 1 0 0 16 8 8 0 0 0 0-16zM12 8v4.5l3 2",
+    "brief": "M5 5h11v14H6.5A1.5 1.5 0 0 1 5 17.5zM16 9h3v8.5a1.5 1.5 0 0 1-3 0M8 9h5M8 12.5h5M8 16h3",
+    "guide": "M5 5.5A1.5 1.5 0 0 1 6.5 4H19v13.5H6.5A1.5 1.5 0 0 0 5 19zM5 19a1.5 1.5 0 0 0 1.5 1.5H19M9 8h6M9 11.5h4",
+    "more": "M5.5 12h.01M12 12h.01M18.5 12h.01",
+    "install": "M12 4v10M8 10.5l4 4 4-4M5 19h14",
+}
 THEME = '<script>try{document.documentElement.dataset.theme=localStorage.getItem("theme")==="dark"?"dark":"light"}catch(e){document.documentElement.dataset.theme="light"}</script>'
 e = html.escape
 
 
+def icon(name):
+    return f'<svg class="ic" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="{ICON[name]}"/></svg>'
+
+
 def header(page):
-    on = ' class="on" aria-current="page"'
-    links = "".join(f'<a href="{h}"{on if k == page else ""}>{t}</a>' for h, t, k in NAV)
-    return ('<header class="top"><div class="wrap"><a class="brand" href="index.html">Open Data<span class="wide"> Company</span></a>'
-            '<button class="menu-btn" id="menu" type="button" aria-expanded="false" aria-controls="nav">Menu</button>'
-            f'<nav id="nav" aria-label="Main">{links}</nav><button class="theme" id="theme" type="button">Dark</button></div></header>')
+    """The app's frame: a side bar on a wide screen; on a phone, a slim bar on top and tabs along the foot."""
+    def link(h, t, k, more=False):
+        cls = " ".join(c for c in ("more" if more else "", "on" if k == page else "") if c)
+        return f'<a href="{h}"' + (f' class="{cls}"' if cls else "") + (' aria-current="page"' if k == page else "") + f'>{icon(k)}<span>{t}</span></a>'
+    links = "".join(link(h, t, k, i >= TABS) for i, (h, t, k) in enumerate(NAV))
+    sheet = "".join(link(h, t, k) for h, t, k in NAV[TABS:])
+    return ('<header class="top"><div class="wrap"><a class="brand" href="index.html">' + icon("mark") + '<span>Open Data<span class="wide"> Company</span></span></a>'
+            f'<nav id="nav" aria-label="Main">{links}<button class="menu-btn" id="menu" type="button" aria-expanded="false" aria-controls="more">{icon("more")}<span>More</span></button></nav>'
+            f'<div class="sheet" id="more" hidden><div class="sheet-in" role="group" aria-label="More pages">{sheet}</div></div>'
+            '<div class="apptools"><button class="install" id="install" type="button" hidden>' + icon("install") + '<span>Install app</span></button>'
+            '<button class="theme" id="theme" type="button">Dark</button></div></div></header>')
 
 
 FOOTER = ('<footer><div class="wrap"><nav aria-label="Footer"><a href="ask.html">Data AI</a><a href="datasets.html">Datasets</a><a href="explore.html">Explorer</a>'
@@ -51,7 +78,10 @@ def stamp(s, name):
     seo = (f'<!--seo--><link rel="canonical" href="{url}"><meta property="og:type" content="website"><meta property="og:site_name" content="Open Data Company">'
            f'<meta property="og:title" content="{e(title)}"><meta property="og:description" content="{e(desc)}"><meta property="og:url" content="{url}">'
            f'<meta property="og:image" content="{SITE}img/share.jpg"><meta name="twitter:card" content="summary_large_image">'
-           f'<link rel="alternate" type="text/plain" href="{SITE}llms.txt" title="Plain-text index of the data"><!--/seo-->')
+           f'<link rel="alternate" type="text/plain" href="{SITE}llms.txt" title="Plain-text index of the data">'
+           '<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="img/icon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="img/icon-180.png">'
+           '<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">'
+           '<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Open Data"><!--/seo-->')
     s = re.sub(r"<!--seo-->.*?<!--/seo-->", "", s, flags=re.S)
     s = re.sub(r'(<meta name="description" content="[^"]*">)', lambda m: m[1] + seo, s, count=1)
     s = re.sub(r"<script>try\{document\.documentElement\.dataset\.theme=.*?</script>", lambda m: THEME, s, count=1, flags=re.S)
@@ -60,7 +90,7 @@ def stamp(s, name):
 
 
 def page(name, title, desc, data_page, body, scripts=("assets/core.js",), head=""):
-    return ('<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">\n'
+    return ('<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">\n'
             f'<title>{e(title)}</title><meta name="description" content="{e(desc)}">{THEME}\n'
             '<link rel="preload" href="fonts/barlow-condensed-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="assets/site.css">'
             f'{head}</head>\n<body data-page="{data_page}"><header class="top"></header><main>\n{body}\n</main><footer></footer>'
