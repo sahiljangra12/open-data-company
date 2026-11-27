@@ -11,7 +11,7 @@ When you answer a question with these numbers, give the value, its year and the 
 - Newest value of every variable for every country (JSON, country-and-year datasets): https://sahiljangra12.github.io/open-data-company/data/latest/<dataset id>.json
 - Country list with World Bank region and income group (JSON): https://sahiljangra12.github.io/open-data-company/data/countries.json
 - Country-and-year files have the columns `code` (ISO alpha-3, or a World Bank or Our World in Data code for a region), `country`, `year`, then one column per variable. Empty cells mean no data.
-- Last checked: 2026-11-27T01:06:20Z. Checked daily at about 05:23 UTC.
+- Last checked: 2026-11-27T15:35:38Z. Checked daily at about 05:23 UTC.
 
 ## Datasets
 
@@ -64,7 +64,7 @@ The concentration of carbon dioxide in the air, measured at Mauna Loa since 1958
 
 Every earthquake of magnitude 2.5 or greater recorded worldwide in the past 30 days, with location, depth and magnitude.
 
-- File: https://sahiljangra12.github.io/open-data-company/data/sets/earthquakes-past-30-days.csv (1,804 rows, 316 KB)
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/earthquakes-past-30-days.csv (1,771 rows, 310 KB)
 - Keys: id, time. Covers Rolling 30 days.
 - Source: US Geological Survey, Earthquake Hazards Program (https://earthquake.usgs.gov/earthquakes/feed/). Licence: Public domain (US federal data).
 - Variables: `magnitude` Magnitude; `place` Nearest place; `latitude` Latitude (degrees); `longitude` Longitude (degrees); `depth_km` Depth (km); `magnitude_type` Magnitude type; `event_type` Event type; `significance` Significance score (0-1000); `tsunami_flag` Tsunami flag; `felt_reports` Felt reports (reports); `url` USGS event page
@@ -118,8 +118,8 @@ Health measures published by the World Health Organization itself, by country an
 
 The UN's measure of how well people live: health, schooling and income in one index, with versions adjusted for inequality, gender and pressure on the planet.
 
-- File: https://sahiljangra12.github.io/open-data-company/data/sets/human-development-index.csv (6,567 rows, 481 KB)
-- Keys: code, year. Covers 1990 to 2023.
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/human-development-index.csv (6,957 rows, 518 KB)
+- Keys: code, year. Covers 1990 to 2025.
 - Source: United Nations Development Programme, Human Development Report (https://hdr.undp.org/data-center). Licence: CC BY 3.0 IGO.
 - Variables: `human_development_index` Human Development Index (index, 0 to 1); `expected_years_of_schooling` Expected years of schooling (years); `mean_years_of_schooling` Mean years of schooling (years); `gni_per_person_ppp` Gross national income per person (UNDP) (2021 PPP $); `inequality_adjusted_hdi` Inequality-adjusted Human Development Index (index, 0 to 1); `gender_inequality_index` Gender Inequality Index (index, 0 (equal) to 1); `gender_development_index` Gender Development Index (ratio of women's HDI to men's); `planetary_pressures_adjusted_hdi` Planetary pressures-adjusted Human Development Index (index, 0 to 1); `material_footprint_per_person` Material footprint per person (tonnes)
 
@@ -505,10 +505,10 @@ How many home loans US lenders made each year, how much they lent, and how many 
 
 How much electricity the main US power grids deliver each day, from the grid operators' own reports.
 
-- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-grid-demand-daily.csv (2,885 rows, 210 KB)
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-grid-demand-daily.csv (2,885 rows, 167 KB)
 - Keys: date. Covers 2019 to 2026.
 - Source: US Energy Information Administration, Hourly Electric Grid Monitor (data from PJM, MISO, ERCOT, CAISO, SPP, NYISO and ISO New England) (https://www.eia.gov/electricity/gridmonitor/). Licence: Public domain (US federal data).
-- Variables: `demand_us48` Electricity demand in the lower 48 states, daily (megawatt-hours in the day); `demand_pjm` Electricity demand in PJM (mid-Atlantic and Midwest), daily (megawatt-hours in the day); `demand_miso` Electricity demand in MISO (Midwest and South), daily (megawatt-hours in the day); `demand_erco` Electricity demand in ERCOT (Texas), daily (megawatt-hours in the day); `demand_ciso` Electricity demand in California ISO, daily (megawatt-hours in the day); `demand_swpp` Electricity demand in Southwest Power Pool, daily (megawatt-hours in the day); `demand_nyis` Electricity demand in New York ISO, daily (megawatt-hours in the day); `demand_isne` Electricity demand in ISO New England, daily (megawatt-hours in the day)
+- Variables: `demand_us48` Electricity demand in the lower 48 states, daily (megawatt-hours in the day); `demand_pjm` Electricity demand in PJM (mid-Atlantic and Midwest), daily (megawatt-hours in the day); `demand_miso` Electricity demand in MISO (Midwest and South), daily (megawatt-hours in the day); `demand_swpp` Electricity demand in Southwest Power Pool, daily (megawatt-hours in the day); `demand_nyis` Electricity demand in New York ISO, daily (megawatt-hours in the day); `demand_isne` Electricity demand in ISO New England, daily (megawatt-hours in the day)
 
 ### US states: people, income, housing and business
 
@@ -613,10 +613,10 @@ How many research projects the US National Institutes of Health pays for in each
 
 How much water eight major US rivers carry, month by month, from stream gauges that have run for decades.
 
-- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-river-flow-monthly.csv (922 rows, 51 KB)
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-river-flow-monthly.csv (922 rows, 56 KB)
 - Keys: date. Covers 1950 to 2026.
 - Source: US Geological Survey, National Water Information System (https://waterdata.usgs.gov). Licence: Public domain (US federal data).
-- Variables: `mississippi_at_st_louis` Flow of the Mississippi River at St. Louis, monthly average (cubic feet per second); `missouri_at_hermann` Flow of the Missouri River at Hermann, monthly average (cubic feet per second); `ohio_at_louisville` Flow of the Ohio River at Louisville, monthly average (cubic feet per second); `columbia_at_the_dalles` Flow of the Columbia River at The Dalles, monthly average (cubic feet per second); `colorado_at_lees_ferry` Flow of the Colorado River at Lees Ferry, monthly average (cubic feet per second); `potomac_near_washington` Flow of the Potomac River near Washington, DC, monthly average (cubic feet per second); `hudson_at_green_island` Flow of the Hudson River at Green Island, monthly average (cubic feet per second)
+- Variables: `mississippi_at_st_louis` Flow of the Mississippi River at St. Louis, monthly average (cubic feet per second); `missouri_at_hermann` Flow of the Missouri River at Hermann, monthly average (cubic feet per second); `ohio_at_louisville` Flow of the Ohio River at Louisville, monthly average (cubic feet per second); `columbia_at_the_dalles` Flow of the Columbia River at The Dalles, monthly average (cubic feet per second); `colorado_at_lees_ferry` Flow of the Colorado River at Lees Ferry, monthly average (cubic feet per second); `potomac_near_washington` Flow of the Potomac River near Washington, DC, monthly average (cubic feet per second); `hudson_at_green_island` Flow of the Hudson River at Green Island, monthly average (cubic feet per second); `sacramento_at_freeport` Flow of the Sacramento River at Freeport, monthly average (cubic feet per second)
 
 ### US drug and device safety reports and recalls, monthly
 
@@ -685,8 +685,8 @@ Violent crime, property crime, homicides and vehicle thefts reported by US polic
 
 How many written decisions US courts publish each year.
 
-- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-court-opinions.csv (30 rows, 1 KB)
-- Keys: date. Covers 1997 to 2026.
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-court-opinions.csv (33 rows, 1 KB)
+- Keys: date. Covers 1994 to 2026.
 - Source: CourtListener, Free Law Project (https://www.courtlistener.com). Licence: Public domain court documents; CourtListener metadata CC BY-ND.
 - Variables: `court_opinions` US court opinions published in the year (opinions)
 
