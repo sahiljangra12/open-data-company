@@ -11,7 +11,7 @@ When you answer a question with these numbers, give the value, its year and the 
 - Newest value of every variable for every country (JSON, country-and-year datasets): https://sahiljangra12.github.io/open-data-company/data/latest/<dataset id>.json
 - Country list with World Bank region and income group (JSON): https://sahiljangra12.github.io/open-data-company/data/countries.json
 - Country-and-year files have the columns `code` (ISO alpha-3, or a World Bank or Our World in Data code for a region), `country`, `year`, then one column per variable. Empty cells mean no data.
-- Last checked: 2026-11-27T00:22:21Z. Checked daily at about 05:23 UTC.
+- Last checked: 2026-11-27T00:43:32Z. Checked daily at about 05:23 UTC.
 
 ## Datasets
 
@@ -293,6 +293,15 @@ How many people natural disasters kill and affect in each country each year, and
 - Keys: code, year. Covers 1900 to 2025.
 - Source: EM-DAT, CRED, UCLouvain, via Our World in Data (https://ourworldindata.org). Licence: CC BY 4.0 (Our World in Data; original sources named per variable).
 - Variables: `deaths_from_natural_disasters` Deaths from natural disasters (deaths); `people_affected_by_droughts` People affected by droughts (people); `people_affected_by_earthquakes` People affected by earthquakes (people); `people_affected_by_floods` People affected by floods (people); `people_affected_by_storms` People affected by storms (people); `people_affected_by_wildfires` People affected by wildfires (people); `people_affected_by_extreme_temperatures` People affected by extreme temperatures (people); `people_affected_by_all_natural_disasters` People affected by all natural disasters (people); `death_rate_from_droughts` Death rate from droughts (deaths per 100,000 people); `death_rate_from_earthquakes` Death rate from earthquakes (deaths per 100,000 people); `death_rate_from_floods` Death rate from floods (deaths per 100,000 people); `death_rate_from_storms` Death rate from storms (deaths per 100,000 people); `death_rate_from_wildfires` Death rate from wildfires (deaths per 100,000 people); `death_rate_from_extreme_temperatures` Death rate from extreme temperatures (deaths per 100,000 people); `death_rate_from_all_natural_disasters` Death rate from all natural disasters (deaths per 100,000 people); `people_left_homeless_by_all_natural_disasters` People left homeless by all natural disasters (people); `damage_share_of_gdp_from_all_natural_disasters` Economic damage from all natural disasters, share of GDP (% of GDP)
+
+### Climate and environment policy: carbon prices, fossil fuel subsidies, net-zero targets, treaties
+
+What governments have done about climate and the environment, by country and year: the price they put on carbon, what they spend subsidising fossil fuels, whether they have set a net-zero target, clean energy finance given to poorer countries, ozone-depleting substances phased out under the Montreal Protocol, biodiversity sites under protection and disaster risk laws.
+
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/climate-and-environment-policy.csv (9,501 rows, 437 KB)
+- Keys: code, year. Covers 1986 to 2025.
+- Source: World Carbon Pricing Database, IMF, Net Zero Tracker, UN Environment Programme, OECD and IRENA, BirdLife International and UNDRR, via Our World in Data (https://ourworldindata.org). Licence: CC BY 4.0 (Our World in Data; original sources named per variable).
+- Variables: `carbon_tax_price` Carbon tax: average price, weighted by the share of emissions it covers (2021 US$ per tonne of CO₂ equivalent); `emissions_trading_price` Emissions trading (ETS): average price, weighted by the share of emissions it covers (2021 US$ per tonne of CO₂ equivalent); `fossil_fuel_subsidies` Fossil fuel subsidies (billion US$); `fossil_fuel_subsidies_per_person` Fossil fuel subsidies per person (US$); `fossil_fuel_subsidies_share_of_gdp` Fossil fuel subsidies as a share of GDP (% of GDP); `clean_energy_finance_received` International finance received for clean energy (million US$, constant prices); `ozone_depleting_substances` Ozone-depleting substances consumed (Montreal Protocol) (ODP tonnes); `protected_key_biodiversity_areas` Key biodiversity areas on land that are protected (%); `disaster_risk_strategy_score` National disaster risk reduction strategy score (Sendai Framework) (score, 0 to 1)
 
 ### Military spending, nuclear weapons, homicide, terrorism and refugees
 
@@ -604,10 +613,10 @@ How many research projects the US National Institutes of Health pays for in each
 
 How much water eight major US rivers carry, month by month, from stream gauges that have run for decades.
 
-- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-river-flow-monthly.csv (922 rows, 51 KB)
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-river-flow-monthly.csv (922 rows, 56 KB)
 - Keys: date. Covers 1950 to 2026.
 - Source: US Geological Survey, National Water Information System (https://waterdata.usgs.gov). Licence: Public domain (US federal data).
-- Variables: `mississippi_at_st_louis` Flow of the Mississippi River at St. Louis, monthly average (cubic feet per second); `missouri_at_hermann` Flow of the Missouri River at Hermann, monthly average (cubic feet per second); `ohio_at_louisville` Flow of the Ohio River at Louisville, monthly average (cubic feet per second); `columbia_at_the_dalles` Flow of the Columbia River at The Dalles, monthly average (cubic feet per second); `colorado_at_lees_ferry` Flow of the Colorado River at Lees Ferry, monthly average (cubic feet per second); `potomac_near_washington` Flow of the Potomac River near Washington, DC, monthly average (cubic feet per second); `hudson_at_green_island` Flow of the Hudson River at Green Island, monthly average (cubic feet per second)
+- Variables: `mississippi_at_st_louis` Flow of the Mississippi River at St. Louis, monthly average (cubic feet per second); `missouri_at_hermann` Flow of the Missouri River at Hermann, monthly average (cubic feet per second); `ohio_at_louisville` Flow of the Ohio River at Louisville, monthly average (cubic feet per second); `columbia_at_the_dalles` Flow of the Columbia River at The Dalles, monthly average (cubic feet per second); `colorado_at_lees_ferry` Flow of the Colorado River at Lees Ferry, monthly average (cubic feet per second); `potomac_near_washington` Flow of the Potomac River near Washington, DC, monthly average (cubic feet per second); `hudson_at_green_island` Flow of the Hudson River at Green Island, monthly average (cubic feet per second); `sacramento_at_freeport` Flow of the Sacramento River at Freeport, monthly average (cubic feet per second)
 
 ### US drug and device safety reports and recalls, monthly
 
@@ -676,8 +685,8 @@ Violent crime, property crime, homicides and vehicle thefts reported by US polic
 
 How many written decisions US courts publish each year.
 
-- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-court-opinions.csv (24 rows, 1 KB)
-- Keys: date. Covers 2003 to 2026.
+- File: https://sahiljangra12.github.io/open-data-company/data/sets/us-court-opinions.csv (27 rows, 1 KB)
+- Keys: date. Covers 2000 to 2026.
 - Source: CourtListener, Free Law Project (https://www.courtlistener.com). Licence: Public domain court documents; CourtListener metadata CC BY-ND.
 - Variables: `court_opinions` US court opinions published in the year (opinions)
 
