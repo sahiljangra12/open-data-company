@@ -1,5 +1,5 @@
 {
- "checked": "2026-11-27T15:35:38Z",
+ "checked": "2026-11-28T14:41:00Z",
  "cron": "23 5 * * *",
  "datasets": [
   {
@@ -5692,11 +5692,11 @@
    "time": {
     "col": "time",
     "type": "date",
-    "min": "2026-10-28T15:19:25Z",
-    "max": "2026-11-27T14:18:33Z"
+    "min": "2026-10-29T14:20:38Z",
+    "max": "2026-11-28T13:15:06Z"
    },
    "entity": null,
-   "rows": 1771,
+   "rows": 1755,
    "columns": [
     {
      "name": "magnitude",
@@ -5704,7 +5704,7 @@
      "unit": "",
      "description": "",
      "type": "num",
-     "filled": 1771
+     "filled": 1755
     },
     {
      "name": "place",
@@ -5712,7 +5712,7 @@
      "unit": "",
      "description": "",
      "type": "str",
-     "filled": 1771
+     "filled": 1755
     },
     {
      "name": "latitude",
@@ -5720,7 +5720,7 @@
      "unit": "degrees",
      "description": "",
      "type": "num",
-     "filled": 1771
+     "filled": 1755
     },
     {
      "name": "longitude",
@@ -5728,7 +5728,7 @@
      "unit": "degrees",
      "description": "",
      "type": "num",
-     "filled": 1771
+     "filled": 1755
     },
     {
      "name": "depth_km",
@@ -5736,7 +5736,7 @@
      "unit": "km",
      "description": "",
      "type": "num",
-     "filled": 1771
+     "filled": 1755
     },
     {
      "name": "magnitude_type",
@@ -5744,7 +5744,7 @@
      "unit": "",
      "description": "",
      "type": "str",
-     "filled": 1771
+     "filled": 1755
     },
     {
      "name": "event_type",
@@ -5752,7 +5752,7 @@
      "unit": "",
      "description": "",
      "type": "str",
-     "filled": 1771
+     "filled": 1755
     },
     {
      "name": "significance",
@@ -5760,7 +5760,7 @@
      "unit": "0-1000",
      "description": "USGS score combining magnitude, felt reports and estimated impact.",
      "type": "num",
-     "filled": 1771
+     "filled": 1755
     },
     {
      "name": "tsunami_flag",
@@ -5768,7 +5768,7 @@
      "unit": "",
      "description": "1 if the event was in an oceanic region and may warrant tsunami information; not a warning.",
      "type": "num",
-     "filled": 1771
+     "filled": 1755
     },
     {
      "name": "felt_reports",
@@ -5776,7 +5776,7 @@
      "unit": "reports",
      "description": "",
      "type": "num",
-     "filled": 293
+     "filled": 297
     },
     {
      "name": "url",
@@ -5784,11 +5784,11 @@
      "unit": "",
      "description": "",
      "type": "str",
-     "filled": 1771
+     "filled": 1755
     }
    ],
-   "bytes": 310051,
-   "built": "2026-11-27",
+   "bytes": 307558,
+   "built": "2026-11-28",
    "coverage": "Rolling 30 days",
    "default_vars": [
     "magnitude",
@@ -36843,8 +36843,8 @@
      "filled": 35
     }
    ],
-   "bytes": 3060,
-   "built": "2026-11-27",
+   "bytes": 3064,
+   "built": "2026-11-28",
    "coverage": "1950 to 2025",
    "step": "year",
    "cadence": "Counts grow every day as papers are indexed"
@@ -40060,10 +40060,10 @@
     "col": "date",
     "type": "date",
     "min": "2026-10-22",
-    "max": "2026-11-24"
+    "max": "2026-11-25"
    },
    "entity": null,
-   "rows": 34,
+   "rows": 35,
    "columns": [
     {
      "name": "checklists_us",
@@ -40071,7 +40071,7 @@
      "unit": "checklists",
      "description": "eBird, Cornell Lab of Ornithology: lists of birds seen, sent in by birdwatchers. The newest three days are left out because lists are still arriving.",
      "type": "num",
-     "filled": 34
+     "filled": 35
     },
     {
      "name": "species_us",
@@ -40079,7 +40079,7 @@
      "unit": "species",
      "description": "eBird, Cornell Lab of Ornithology.",
      "type": "num",
-     "filled": 34
+     "filled": 35
     },
     {
      "name": "checklists_india",
@@ -40087,7 +40087,7 @@
      "unit": "checklists",
      "description": "eBird, Cornell Lab of Ornithology: lists of birds seen, sent in by birdwatchers. The newest three days are left out because lists are still arriving.",
      "type": "num",
-     "filled": 34
+     "filled": 35
     },
     {
      "name": "species_india",
@@ -40095,7 +40095,7 @@
      "unit": "species",
      "description": "eBird, Cornell Lab of Ornithology.",
      "type": "num",
-     "filled": 34
+     "filled": 35
     },
     {
      "name": "checklists_uk",
@@ -40103,7 +40103,7 @@
      "unit": "checklists",
      "description": "eBird, Cornell Lab of Ornithology: lists of birds seen, sent in by birdwatchers. The newest three days are left out because lists are still arriving.",
      "type": "num",
-     "filled": 34
+     "filled": 35
     },
     {
      "name": "species_uk",
@@ -40111,11 +40111,11 @@
      "unit": "species",
      "description": "eBird, Cornell Lab of Ornithology.",
      "type": "num",
-     "filled": 34
+     "filled": 35
     }
    ],
-   "bytes": 1436,
-   "built": "2026-11-27",
+   "bytes": 1475,
+   "built": "2026-11-28",
    "coverage": "2026",
    "step": "day",
    "cadence": "Every day"
@@ -42999,10 +42999,10 @@
     "col": "date",
     "type": "date",
     "min": "1954-07-01",
-    "max": "2026-11-25"
+    "max": "2026-11-27"
    },
    "entity": null,
-   "rows": 26446,
+   "rows": 26448,
    "columns": [
     {
      "name": "federal_funds_rate_daily",
@@ -43010,7 +43010,7 @@
      "unit": "% a year",
      "description": "Published by Federal Reserve; FRED series DFF.",
      "type": "num",
-     "filled": 26445
+     "filled": 26447
     },
     {
      "name": "treasury_2_year",
@@ -43018,7 +43018,7 @@
      "unit": "% a year",
      "description": "Published by Federal Reserve; FRED series DGS2.",
      "type": "num",
-     "filled": 12617
+     "filled": 12618
     },
     {
      "name": "treasury_10_year",
@@ -43026,7 +43026,7 @@
      "unit": "% a year",
      "description": "Published by Federal Reserve; FRED series DGS10.",
      "type": "num",
-     "filled": 16209
+     "filled": 16210
     },
     {
      "name": "treasury_30_year",
@@ -43034,7 +43034,7 @@
      "unit": "% a year",
      "description": "Published by Federal Reserve; FRED series DGS30.",
      "type": "num",
-     "filled": 12439
+     "filled": 12440
     },
     {
      "name": "yield_curve_10_year_minus_2_year",
@@ -43042,7 +43042,7 @@
      "unit": "percentage points",
      "description": "Published by Federal Reserve; FRED series T10Y2Y.",
      "type": "num",
-     "filled": 12618
+     "filled": 12619
     },
     {
      "name": "expected_inflation_10_year",
@@ -43050,7 +43050,7 @@
      "unit": "% a year",
      "description": "Published by Federal Reserve; FRED series T10YIE.",
      "type": "num",
-     "filled": 5979
+     "filled": 5980
     },
     {
      "name": "dollars_per_euro",
@@ -43085,8 +43085,8 @@
      "filled": 14008
     }
    ],
-   "bytes": 1167036,
-   "built": "2026-11-26",
+   "bytes": 1167108,
+   "built": "2026-11-28",
    "coverage": "1954 to 2026",
    "step": "day",
    "cadence": "Every business day"
@@ -43108,10 +43108,10 @@
     "col": "date",
     "type": "date",
     "min": "1993-04-01",
-    "max": "2026-11-24"
+    "max": "2026-11-25"
    },
    "entity": null,
-   "rows": 8441,
+   "rows": 8442,
    "columns": [
     {
      "name": "total_public_debt",
@@ -43119,7 +43119,7 @@
      "unit": "current US$",
      "description": "Total public debt outstanding: everything the federal government owes.",
      "type": "num",
-     "filled": 8441
+     "filled": 8442
     },
     {
      "name": "debt_held_by_the_public",
@@ -43127,7 +43127,7 @@
      "unit": "current US$",
      "description": "Federal debt held by investors outside the government.",
      "type": "num",
-     "filled": 5483
+     "filled": 5484
     },
     {
      "name": "intragovernmental_holdings",
@@ -43135,11 +43135,11 @@
      "unit": "current US$",
      "description": "Federal debt held by government trust funds such as Social Security.",
      "type": "num",
-     "filled": 5483
+     "filled": 5484
     }
    ],
-   "bytes": 387362,
-   "built": "2026-11-26",
+   "bytes": 387418,
+   "built": "2026-11-28",
    "coverage": "1993 to 2026",
    "step": "day",
    "cadence": "Every business day"
@@ -43214,10 +43214,10 @@
     "col": "date",
     "type": "date",
     "min": "2019-01-01",
-    "max": "2026-11-24"
+    "max": "2026-11-27"
    },
    "entity": null,
-   "rows": 2885,
+   "rows": 2888,
    "columns": [
     {
      "name": "demand_us48",
@@ -43225,7 +43225,7 @@
      "unit": "megawatt-hours in the day",
      "description": "US Energy Information Administration, Hourly Electric Grid Monitor, balancing authority US48.",
      "type": "num",
-     "filled": 2885
+     "filled": 2888
     },
     {
      "name": "demand_pjm",
@@ -43233,7 +43233,7 @@
      "unit": "megawatt-hours in the day",
      "description": "US Energy Information Administration, Hourly Electric Grid Monitor, balancing authority PJM.",
      "type": "num",
-     "filled": 2884
+     "filled": 2887
     },
     {
      "name": "demand_miso",
@@ -43241,7 +43241,23 @@
      "unit": "megawatt-hours in the day",
      "description": "US Energy Information Administration, Hourly Electric Grid Monitor, balancing authority MISO.",
      "type": "num",
-     "filled": 2885
+     "filled": 2888
+    },
+    {
+     "name": "demand_erco",
+     "title": "Electricity demand in ERCOT (Texas), daily",
+     "unit": "megawatt-hours in the day",
+     "description": "US Energy Information Administration, Hourly Electric Grid Monitor, balancing authority ERCO.",
+     "type": "num",
+     "filled": 2888
+    },
+    {
+     "name": "demand_ciso",
+     "title": "Electricity demand in California ISO, daily",
+     "unit": "megawatt-hours in the day",
+     "description": "US Energy Information Administration, Hourly Electric Grid Monitor, balancing authority CISO.",
+     "type": "num",
+     "filled": 2888
     },
     {
      "name": "demand_swpp",
@@ -43249,7 +43265,7 @@
      "unit": "megawatt-hours in the day",
      "description": "US Energy Information Administration, Hourly Electric Grid Monitor, balancing authority SWPP.",
      "type": "num",
-     "filled": 2885
+     "filled": 2888
     },
     {
      "name": "demand_nyis",
@@ -43257,7 +43273,7 @@
      "unit": "megawatt-hours in the day",
      "description": "US Energy Information Administration, Hourly Electric Grid Monitor, balancing authority NYIS.",
      "type": "num",
-     "filled": 2885
+     "filled": 2888
     },
     {
      "name": "demand_isne",
@@ -43265,11 +43281,11 @@
      "unit": "megawatt-hours in the day",
      "description": "US Energy Information Administration, Hourly Electric Grid Monitor, balancing authority ISNE.",
      "type": "num",
-     "filled": 2885
+     "filled": 2888
     }
    ],
-   "bytes": 167040,
-   "built": "2026-11-27",
+   "bytes": 209897,
+   "built": "2026-11-28",
    "coverage": "2019 to 2026",
    "step": "day",
    "cadence": "Every day"
@@ -45363,11 +45379,11 @@
      "Germanna Community College"
     ],
     [
-     "104708",
+     "115001",
      "Glendale Community College"
     ],
     [
-     "115001",
+     "104708",
      "Glendale Community College"
     ],
     [
@@ -50962,18 +50978,10 @@
      "description": "US Geological Survey stream gauge 01358000: the average of the daily mean flow in each month with at least 25 days recorded.",
      "type": "num",
      "filled": 887
-    },
-    {
-     "name": "sacramento_at_freeport",
-     "title": "Flow of the Sacramento River at Freeport, monthly average",
-     "unit": "cubic feet per second",
-     "description": "US Geological Survey stream gauge 11447650: the average of the daily mean flow in each month with at least 25 days recorded.",
-     "type": "num",
-     "filled": 789
     }
    ],
-   "bytes": 55713,
-   "built": "2026-11-27",
+   "bytes": 50927,
+   "built": "2026-11-28",
    "coverage": "1950 to 2026",
    "step": "month",
    "cadence": "A new month every month"
@@ -51206,10 +51214,10 @@
     "col": "declared",
     "type": "date",
     "min": "1953-05-02",
-    "max": "2026-11-24"
+    "max": "2026-11-26"
    },
    "entity": null,
-   "rows": 5288,
+   "rows": 5289,
    "columns": [
     {
      "name": "declared",
@@ -51217,7 +51225,7 @@
      "unit": "",
      "description": "",
      "type": "str",
-     "filled": 5288
+     "filled": 5289
     },
     {
      "name": "state",
@@ -51225,7 +51233,7 @@
      "unit": "",
      "description": "",
      "type": "str",
-     "filled": 5288
+     "filled": 5289
     },
     {
      "name": "declaration_type",
@@ -51233,7 +51241,7 @@
      "unit": "",
      "description": "DR major disaster, EM emergency, FM fire management.",
      "type": "str",
-     "filled": 5288
+     "filled": 5289
     },
     {
      "name": "incident_type",
@@ -51241,7 +51249,7 @@
      "unit": "",
      "description": "",
      "type": "str",
-     "filled": 5288
+     "filled": 5289
     },
     {
      "name": "name",
@@ -51249,11 +51257,11 @@
      "unit": "",
      "description": "",
      "type": "str",
-     "filled": 5288
+     "filled": 5289
     }
    ],
-   "bytes": 297218,
-   "built": "2026-11-25",
+   "bytes": 297274,
+   "built": "2026-11-28",
    "coverage": "1953 to 2026",
    "cadence": "Whenever a disaster is declared"
   },
@@ -51520,11 +51528,11 @@
    "time": {
     "col": "date",
     "type": "date",
-    "min": "1994-01-01",
+    "min": "1991-01-01",
     "max": "2026-01-01"
    },
    "entity": null,
-   "rows": 33,
+   "rows": 36,
    "columns": [
     {
      "name": "court_opinions",
@@ -51532,12 +51540,12 @@
      "unit": "opinions",
      "description": "Written decisions of federal and state courts collected by CourtListener (Free Law Project). Coverage of lower courts is incomplete; the current year is not over. Earlier years are added a few at a time.",
      "type": "num",
-     "filled": 33
+     "filled": 36
     }
    ],
-   "bytes": 636,
-   "built": "2026-11-27",
-   "coverage": "1994 to 2026",
+   "bytes": 691,
+   "built": "2026-11-28",
+   "coverage": "1991 to 2026",
    "step": "year",
    "partial": true,
    "cadence": "Every day"
