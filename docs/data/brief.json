@@ -1,6 +1,15 @@
 {
  "briefs": [
   {
+   "at": "2026-11-28T14:49:50Z",
+   "model": "qwen3:4b-instruct",
+   "tools": [
+    "find_variables",
+    "earthquakes_live"
+   ],
+   "markdown": "**A 6.7-magnitude earthquake struck 62 km NNW of Yelizovo, Russia, on 2026-11-28 at 13:15 UTC**\n\n### What changed\n- 307,439,400 records of living things were observed in 2025 (GBIF), up from 307,421,900. Unit: records, date: 2025-01-01, source: GBIF\n- 14,548,790 research works were published in 2025 (OpenAlex), up from 14,532,580. Unit: works, date: 2025-01-01, source: OpenAlex\n- 282,495,600 animal records were observed in 2025 (GBIF), up from 282,486,100. Unit: records, date: 2025-01-01, source: GBIF\n\n### Worth a look\n- **biodiversity-records-by-year**: Tracks global animal and plant records over time. Shows how species observations grow annually.\n- **research-papers-by-year**: Reveals trends in global scientific output, including AI and open-access research.\n\n[Full dataset file](https://sahiljangra12.github.io/open-data-company/datasets/biodiversity-records-by-year.csv)"
+  },
+  {
    "at": "2026-11-27T15:49:14Z",
    "model": "qwen3:4b-instruct",
    "tools": [

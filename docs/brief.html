@@ -5,8 +5,26 @@
 <div class="wrap">
 <div class="xhead"><h1>Daily brief</h1>
 <p>Each day, after the data is refreshed, the Data Agent reads what changed, checks the newest figures in the datasets and writes this short note. It runs on GitHub, with tools written for this site.</p></div>
-<section><div class="card brief"><p class="hint">27 November 2026, 15:49 UTC</p>
-<p><strong>A 5.1-magnitude earthquake struck 107 km SSE of Auki, Solomon Islands, on 2026-11-27</strong></p>
+<section><div class="card brief"><p class="hint">28 November 2026, 14:49 UTC</p>
+<p><strong>A 6.7-magnitude earthquake struck 62 km NNW of Yelizovo, Russia, on 2026-11-28 at 13:15 UTC</strong></p>
+<h3>What changed</h3>
+<ul>
+<li>307,439,400 records of living things were observed in 2025 (GBIF), up from 307,421,900. Unit: records, date: 2025-01-01, source: GBIF</li>
+<li>14,548,790 research works were published in 2025 (OpenAlex), up from 14,532,580. Unit: works, date: 2025-01-01, source: OpenAlex</li>
+<li>282,495,600 animal records were observed in 2025 (GBIF), up from 282,486,100. Unit: records, date: 2025-01-01, source: GBIF</li>
+</ul>
+<h3>Worth a look</h3>
+<ul>
+<li><strong>biodiversity-records-by-year</strong>: Tracks global animal and plant records over time. Shows how species observations grow annually.</li>
+<li><strong>research-papers-by-year</strong>: Reveals trends in global scientific output, including AI and open-access research.</li>
+</ul>
+<p><a href="https://sahiljangra12.github.io/open-data-company/datasets/biodiversity-records-by-year.csv">Full dataset file</a></p>
+</div>
+<p class="hint">Written by qwen3:4b-instruct, an open model that runs on GitHub's own machines during the run (no outside AI service). Tools it called: <code>find_variables</code>, <code>earthquakes_live</code>. Before publishing, each figure in the note is matched against what the tools returned; a note that fails is replaced by a plain summary of the change log. A small model can still word things loosely, so check a figure in the <a href="datasets.html">datasets</a> or the <a href="updates.html">change log</a> before you cite it.</p></section>
+<section><h2>Ask the agent yourself</h2>
+<p>The same agent answers questions posted as GitHub issues, usually within about ten minutes, with the figures, their years and their sources. For instant answers in the browser, use <a href="ask.html">Data AI</a>.</p>
+<p><a class="btn solid" href="https://github.com/sahiljangra12/open-data-company/issues/new?template=ask-data-agent.yml">Ask on GitHub</a> <a class="btn" href="https://github.com/sahiljangra12/open-data-company/tree/main/agent">How the agent is built</a></p></section>
+<section><h2>Earlier briefs</h2><div class="faq" style="margin-top:18px"><details><summary>2026-11-27</summary><p><strong>A 5.1-magnitude earthquake struck 107 km SSE of Auki, Solomon Islands, on 2026-11-27</strong></p>
 <h3>What changed</h3>
 <ul>
 <li>Animal records observed in 2025: 282,486,100 (records), date: 2025-01-01, source: GBIF</li>
@@ -17,13 +35,7 @@
 <ul>
 <li><em>biodiversity-records-by-year</em>: Tracks animal and plant records by year, with full historical data. Shows trends in species observation over time.</li>
 <li><em>human-development-index</em>: Compares national development across countries with HDI scores from 1990 to 2025.</li>
-</ul>
-</div>
-<p class="hint">Written by qwen3:4b-instruct, an open model that runs on GitHub's own machines during the run (no outside AI service). Tools it called: <code>find_variables</code>, <code>get_series</code>, <code>get_values</code>, <code>earthquakes_live</code>. Before publishing, each figure in the note is matched against what the tools returned; a note that fails is replaced by a plain summary of the change log. A small model can still word things loosely, so check a figure in the <a href="datasets.html">datasets</a> or the <a href="updates.html">change log</a> before you cite it.</p></section>
-<section><h2>Ask the agent yourself</h2>
-<p>The same agent answers questions posted as GitHub issues, usually within about ten minutes, with the figures, their years and their sources. For instant answers in the browser, use <a href="ask.html">Data AI</a>.</p>
-<p><a class="btn solid" href="https://github.com/sahiljangra12/open-data-company/issues/new?template=ask-data-agent.yml">Ask on GitHub</a> <a class="btn" href="https://github.com/sahiljangra12/open-data-company/tree/main/agent">How the agent is built</a></p></section>
-<section><h2>Earlier briefs</h2><div class="faq" style="margin-top:18px"><details><summary>2026-11-26</summary><p><strong>Africa’s daily calorie supply in 2024 is 2568</strong></p>
+</ul></details><details><summary>2026-11-26</summary><p><strong>Africa’s daily calorie supply in 2024 is 2568</strong></p>
 <h3>What changed</h3>
 <ul>
 <li>Africa’s daily calorie supply per person is <strong>2568</strong> in 2024 (unit: calories), from FAO data (2024), source: food-supply dataset.</li>
